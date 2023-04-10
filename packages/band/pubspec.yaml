@@ -1,0 +1,15 @@
+name: band
+description: A sample command-line application.
+version: 1.0.0
+repository: https://github.com/exaby73/band/tree/main/packages/band
+
+environment:
+  sdk: '>=2.19.5 <3.0.0'
+
+dependencies:
+  band_annotation:
+    path: ../band_annotation
+
+dev_dependencies:
+  lint: ^2.0.1
+  test: ^1.21.0

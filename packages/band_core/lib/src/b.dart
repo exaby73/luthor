@@ -11,28 +11,28 @@ class _Validator {
 
   final List<Validation> _validations = [];
 
-  _Validator required() {
-    _validations.add(RequiredValidation());
+  _Validator required([String? message]) {
+    _validations.add(RequiredValidation(message: message));
     return this;
   }
 
-  _Validator string() {
-    _validations.add(StringValidation());
+  _Validator string([String? message]) {
+    _validations.add(StringValidation(message: message));
     return this;
   }
 
-  _Validator email() {
-    _validations.add(EmailValidation());
+  _Validator email([String? message]) {
+    _validations.add(EmailValidation(message: message));
     return this;
   }
 
-  _Validator number() {
-    _validations.add(NumberValidation());
+  _Validator number([String? message]) {
+    _validations.add(NumberValidation(message: message));
     return this;
   }
 
-  _Validator int() {
-    _validations.add(IntValidation());
+  _Validator int([String? message]) {
+    _validations.add(IntValidation(message: message));
     return this;
   }
 

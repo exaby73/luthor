@@ -1,5 +1,6 @@
 import 'package:band_core/src/validation.dart';
 import 'package:band_core/src/validation_result.dart';
+import 'package:band_core/src/validations/bool_validation.dart';
 import 'package:band_core/src/validations/email_validation.dart';
 import 'package:band_core/src/validations/int_validation.dart';
 import 'package:band_core/src/validations/number_validation.dart';
@@ -28,6 +29,11 @@ class _Validator {
 
   _Validator number([String? message]) {
     _validations.add(NumberValidation(message: message));
+    return this;
+  }
+
+  _Validator bool([String? message]) {
+    _validations.add(BoolValidation(message: message));
     return this;
   }
 

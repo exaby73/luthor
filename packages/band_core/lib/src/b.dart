@@ -1,5 +1,6 @@
 import 'package:band_core/src/validation.dart';
 import 'package:band_core/src/validation_result.dart';
+import 'package:band_core/src/validations/email_validation.dart';
 import 'package:band_core/src/validations/int_validation.dart';
 import 'package:band_core/src/validations/number_validation.dart';
 import 'package:band_core/src/validations/required_validation.dart';
@@ -17,6 +18,11 @@ class _Validator {
 
   _Validator string() {
     _validations.add(StringValidation());
+    return this;
+  }
+
+  _Validator email() {
+    _validations.add(EmailValidation());
     return this;
   }
 
@@ -56,4 +62,4 @@ class _Validator {
   }
 }
 
-final b = _Validator();
+_Validator get b => _Validator();

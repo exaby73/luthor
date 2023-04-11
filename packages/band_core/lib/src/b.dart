@@ -2,6 +2,7 @@ import 'package:band_core/src/validation.dart';
 import 'package:band_core/src/validation_result.dart';
 import 'package:band_core/src/validations/bool_validation.dart';
 import 'package:band_core/src/validations/date_time_validation.dart';
+import 'package:band_core/src/validations/double_validation.dart';
 import 'package:band_core/src/validations/email_validation.dart';
 import 'package:band_core/src/validations/int_validation.dart';
 import 'package:band_core/src/validations/number_validation.dart';
@@ -38,13 +39,18 @@ class _Validator {
     return this;
   }
 
-  _Validator bool([String? message]) {
-    _validations.add(BoolValidation(message: message));
+  _Validator int([String? message]) {
+    _validations.add(IntValidation(message: message));
     return this;
   }
 
-  _Validator int([String? message]) {
-    _validations.add(IntValidation(message: message));
+  _Validator double([String? message]) {
+    _validations.add(DoubleValidation(message: message));
+    return this;
+  }
+
+  _Validator bool([String? message]) {
+    _validations.add(BoolValidation(message: message));
     return this;
   }
 

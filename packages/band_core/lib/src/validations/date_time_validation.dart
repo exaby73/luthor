@@ -15,7 +15,7 @@ class DateTimeValidation extends Validation {
     if (value is DateTime) return true;
 
     final isString = StringValidation(message: customMessage)(fieldName, value);
-    if (!isString)  return false;
+    if (!isString) return false;
 
     final date = DateTime.tryParse(value as String);
     return date != null;

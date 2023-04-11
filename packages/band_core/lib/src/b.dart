@@ -1,5 +1,6 @@
 import 'package:band_core/src/validation.dart';
 import 'package:band_core/src/validation_result.dart';
+import 'package:band_core/src/validations/any_validation.dart';
 import 'package:band_core/src/validations/bool_validation.dart';
 import 'package:band_core/src/validations/date_time_validation.dart';
 import 'package:band_core/src/validations/double_validation.dart';
@@ -14,6 +15,11 @@ class _Validator {
   _Validator();
 
   final List<Validation> _validations = [];
+
+  _Validator any([String? message]) {
+    _validations.add(AnyValidation(message: message));
+    return this;
+  }
 
   _Validator required([String? message]) {
     _validations.add(RequiredValidation(message: message));

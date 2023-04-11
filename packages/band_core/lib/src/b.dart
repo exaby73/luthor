@@ -5,6 +5,7 @@ import 'package:band_core/src/validations/date_time_validation.dart';
 import 'package:band_core/src/validations/double_validation.dart';
 import 'package:band_core/src/validations/email_validation.dart';
 import 'package:band_core/src/validations/int_validation.dart';
+import 'package:band_core/src/validations/null_validation.dart';
 import 'package:band_core/src/validations/number_validation.dart';
 import 'package:band_core/src/validations/required_validation.dart';
 import 'package:band_core/src/validations/string_validation.dart';
@@ -16,6 +17,11 @@ class _Validator {
 
   _Validator required([String? message]) {
     _validations.add(RequiredValidation(message: message));
+    return this;
+  }
+
+  _Validator nullValue([String? message]) {
+    _validations.add(NullValidation(message: message));
     return this;
   }
 

@@ -1,7 +1,8 @@
 name: luthor
-description: A sample command-line application.
-version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+description: A Dart validation library inspired by zod
+version: 0.0.1
+repository: https://github.com/exaby73/luthor/tree/main/packages/luthor
+homepage: https://github.com/exaby73/luthor/tree/main/packages/luthor
 
 environment:
   sdk: '>=2.19.5 <3.0.0'

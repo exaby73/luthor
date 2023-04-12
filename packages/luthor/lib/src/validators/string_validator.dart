@@ -3,6 +3,7 @@ import 'package:luthor/src/validations/strings/string_email_validation.dart';
 import 'package:luthor/src/validations/strings/string_length_validation.dart';
 import 'package:luthor/src/validations/strings/string_max_validation.dart';
 import 'package:luthor/src/validations/strings/string_min_validation.dart';
+import 'package:luthor/src/validations/strings/string_uri_validation.dart';
 import 'package:luthor/src/validator.dart';
 
 class StringValidator extends Validator {
@@ -32,6 +33,11 @@ class StringValidator extends Validator {
 
   StringValidator length(int length, [String? message]) {
     validations.add(StringLengthValidation(length: length, message: message));
+    return this;
+  }
+
+  StringValidator uri([List<String>? allowedSchemes, String? message]) {
+    validations.add(StringUriValidation(allowedSchemes: allowedSchemes, message: message));
     return this;
   }
 }

@@ -8,12 +8,17 @@ class SchemaValidation extends Validation {
   SchemaValidation(this.validatorSchema);
 
   @override
-  bool call(String fieldName, covariant Map<String, dynamic> value) {
+  bool call(String? fieldName, covariant Map<String, dynamic> value) {
     for (final entry in validatorSchema.entries) {
-      final fieldName = entry.key;
+      var name = entry.key;
       final validator = entry.value;
-      final fieldValue = value[fieldName];
-      final result = validator.validateWithFieldName(fieldName, fieldValue);
+      final fieldValue = value[name];
+
+      if (fieldName != null) {
+        name = '$fieldName.$name';
+      }
+      
+      final result = validator.validateWithFieldName(name, fieldValue);
 
       if (!result.isValid) {
         failedMessage = result.message;

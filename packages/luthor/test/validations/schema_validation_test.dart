@@ -7,6 +7,13 @@ void main() {
     'password': l.string().required(),
   });
 
+  final nestedSchema = l.schema({
+    'address': l.schema({
+      'city': l.string().required(),
+      'state': l.string().required(),
+    }).required(),
+  });
+
   test('should return true for a valid schema', () {
     final result = schema.validate({
       'email': 'user@example.com',
@@ -32,5 +39,37 @@ void main() {
     });
     expect(result.isValid, isFalse);
     expect(result.message, 'password must be a string');
+  });
+
+  test('should return false for an invalid nested schema', () {
+    final result = nestedSchema.validate({
+      'address': {
+        'city': 'New York',
+      },
+    });
+    expect(result.isValid, isFalse);
+    expect(result.message, 'address.state is required');
+  });
+
+  test('should return false for an invalid nested schema', () {
+    final result = nestedSchema.validate({
+      'address': {
+        'city': 'New York',
+        'state': 1,
+      },
+    });
+    expect(result.isValid, isFalse);
+    expect(result.message, 'address.state must be a string');
+  });
+
+  test('should return true for a valid nested schema', () {
+    final result = nestedSchema.validate({
+      'address': {
+        'city': 'New York',
+        'state': 'NY',
+      },
+    });
+    expect(result.isValid, isTrue);
+    expect(result.message, isNull);
   });
 }

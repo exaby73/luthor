@@ -62,7 +62,7 @@ class Validator {
     return this;
   }
 
-  String? _isValid(String fieldName, dynamic value) {
+  String? _isValid(String? fieldName, dynamic value) {
     for (final validation in validations) {
       if (!validation(fieldName, value)) {
         return validation.message;
@@ -71,19 +71,21 @@ class Validator {
     return null;
   }
 
-  ValidationResult validate(dynamic value) {
-    final errorMessage = _isValid('value', value);
+  ValidationResult<T> validate<T>(T value) {
+    final errorMessage = _isValid(null, value);
     return ValidationResult(
       isValid: errorMessage == null,
       message: errorMessage,
+      data: value,
     );
   }
 
-  ValidationResult validateWithFieldName(String fieldName, dynamic value) {
+  ValidationResult<T> validateWithFieldName<T>(String fieldName, T value) {
     final errorMessage = _isValid(fieldName, value);
     return ValidationResult(
       isValid: errorMessage == null,
       message: errorMessage,
+      data: value,
     );
   }
 }

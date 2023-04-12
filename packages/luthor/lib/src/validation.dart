@@ -5,5 +5,5 @@ abstract class Validation {
 
   String? get message;
 
-  bool call(String fieldName, dynamic value);
+  bool call(String? fieldName, dynamic value);
 }

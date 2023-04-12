@@ -11,7 +11,7 @@ class StringMinValidation extends Validation {
         customMessage = message;
 
   @override
-  bool call(String fieldName, covariant String? value) {
+  bool call(String? fieldName, covariant String? value) {
     this.fieldName = fieldName;
     return value != null && value.length >= minLength;
   }

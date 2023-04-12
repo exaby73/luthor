@@ -8,7 +8,7 @@ class NumberValidation extends Validation {
   }) : customMessage = message;
 
   @override
-  bool call(String fieldName, dynamic value) {
+  bool call(String? fieldName, dynamic value) {
     this.fieldName = fieldName;
     return value is num?;
   }

@@ -13,7 +13,8 @@ class StringMinValidation extends Validation {
   @override
   bool call(String? fieldName, covariant String? value) {
     this.fieldName = fieldName;
-    return value != null && value.length >= minLength;
+    if (value == null) return true;
+    return value.length >= minLength;
   }
 
   @override

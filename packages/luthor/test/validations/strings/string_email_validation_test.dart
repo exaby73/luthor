@@ -14,6 +14,12 @@ void main() {
     expect(result.message, 'value must be a valid email address');
   });
 
+  test('should return true when value is null', () {
+    final result = l.string().email().validate(null);
+    expect(result.isValid, isTrue);
+    expect(result.message, isNull);
+  });
+
   test('should return false if the value is null with required()', () {
     final result = l.string().email().required().validate(null);
     expect(result.isValid, isFalse);

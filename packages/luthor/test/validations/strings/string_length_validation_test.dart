@@ -12,6 +12,15 @@ void main() {
   );
 
   test(
+    'should return true when the value is null',
+    () {
+      final result = l.string().length(3).validate(null);
+      expect(result.isValid, isTrue);
+      expect(result.message, isNull);
+    },
+  );
+
+  test(
     'should return false if the string length is less than or greater than length specified',
     () {
       final lessThenResult = l.string().length(3).validate('ab');

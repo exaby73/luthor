@@ -13,7 +13,8 @@ class StringMaxValidation extends Validation {
   @override
   bool call(String? fieldName, covariant String? value) {
     this.fieldName = fieldName;
-    return value != null && value.length <= maxLength;
+    if (value == null) return true;
+    return value.length <= maxLength;
   }
 
   @override

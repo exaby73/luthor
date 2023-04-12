@@ -7,8 +7,11 @@ environment:
   sdk: '>=2.19.5 <3.0.0'
 
 dependencies:
-  band_annotation:
-    path: ../band_annotation
+  luthor_annotation: any
+
+dependency_overrides:
+  luthor_annotation:
+    path: ../luthor_annotation
 
 dev_dependencies:
   lint: ^2.0.1

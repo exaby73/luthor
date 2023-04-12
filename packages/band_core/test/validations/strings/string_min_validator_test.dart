@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   test(
-    'should return true if the string length is greater or equal to minLength',
+    'should return true if the string length is greater than or equal to minLength',
     () {
       final result = b.string().min(3).validate('abc');
       expect(result.isValid, isTrue);

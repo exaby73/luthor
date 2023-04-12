@@ -3,7 +3,6 @@ import 'package:band_core/src/validation_result.dart';
 import 'package:band_core/src/validations/any_validation.dart';
 import 'package:band_core/src/validations/bool_validation.dart';
 import 'package:band_core/src/validations/double_validation.dart';
-import 'package:band_core/src/validations/email_validation.dart';
 import 'package:band_core/src/validations/int_validation.dart';
 import 'package:band_core/src/validations/null_validation.dart';
 import 'package:band_core/src/validations/number_validation.dart';
@@ -36,11 +35,6 @@ class Validator {
   StringValidator string([String? message]) {
     validations.add(StringValidation(message: message));
     return StringValidator(initialValidations: validations);
-  }
-
-  Validator email([String? message]) {
-    validations.add(EmailValidation(message: message));
-    return this;
   }
 
   Validator number([String? message]) {

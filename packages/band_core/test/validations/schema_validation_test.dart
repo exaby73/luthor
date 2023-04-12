@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   final schema = b.schema({
-    'email': b.email().required(),
+    'email': b.string().email().required(),
     'password': b.string().required(),
   });
 

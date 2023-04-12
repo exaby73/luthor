@@ -1,10 +1,9 @@
 import 'package:band_core/src/validation.dart';
-import 'package:band_core/src/validations/string_validation.dart';
 
-class EmailValidation extends Validation {
+class StringEmailValidation extends Validation {
   String? customMessage;
 
-  EmailValidation({
+  StringEmailValidation({
     String? message,
   }) : customMessage = message;
 
@@ -14,10 +13,8 @@ class EmailValidation extends Validation {
   @override
   bool call(String fieldName, dynamic value) {
     this.fieldName = fieldName;
-    final isValidString =
-        StringValidation(message: customMessage)(fieldName, value);
-    if (!isValidString || value == null) return false;
 
+    if (value == null) return true;
     return RegExp(_regex).hasMatch(value as String);
   }
 

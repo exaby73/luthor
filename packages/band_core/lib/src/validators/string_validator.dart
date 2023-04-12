@@ -1,4 +1,5 @@
 import 'package:band_core/src/validations/strings/string_date_time_validation.dart';
+import 'package:band_core/src/validations/strings/string_email_validation.dart';
 import 'package:band_core/src/validations/strings/string_length_validation.dart';
 import 'package:band_core/src/validations/strings/string_max_validation.dart';
 import 'package:band_core/src/validations/strings/string_min_validation.dart';
@@ -9,6 +10,11 @@ class StringValidator extends Validator {
 
   Validator dateTime([String? message]) {
     validations.add(StringDateTimeValidation(message: message));
+    return this;
+  }
+
+  Validator email([String? message]) {
+    validations.add(StringEmailValidation(message: message));
     return this;
   }
 

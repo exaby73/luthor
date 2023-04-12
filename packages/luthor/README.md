@@ -35,7 +35,7 @@ void main() {
   print(invalidResult.message); // 'value must be a string'
   print(invalidResult.data); // 123
   
-  // Strings can have extra validations applied to them
+  // Strings can have extra validations that can be applied to them
   l.string().email();
   l.string().min(3);
   l.string().max(3);

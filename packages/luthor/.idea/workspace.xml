@@ -4,19 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="611eb94e-24bf-4952-b937-7cecac18f38b" name="Changes" comment="Move email validation to strings only">
-      <change afterPath="$PROJECT_DIR$/lib/src/l.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/band_core.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/band_core.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/b.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/validator.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/validator.dart" afterDir="false" />
-    </list>
+    <list default="true" id="611eb94e-24bf-4952-b937-7cecac18f38b" name="Changes" comment="Rename to luthor" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -187,7 +175,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681259478508</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Rename to luthor">
+      <created>1681260327246</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1681260327246</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -214,6 +209,7 @@
     <MESSAGE value="Add max length validation to strings" />
     <MESSAGE value="Add length validation to strings" />
     <MESSAGE value="Move email validation to strings only" />
-    <option name="LAST_COMMIT_MESSAGE" value="Move email validation to strings only" />
+    <MESSAGE value="Rename to luthor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Rename to luthor" />
   </component>
 </project>

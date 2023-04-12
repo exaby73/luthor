@@ -1,4 +1,5 @@
 import 'package:band_core/src/validations/strings/string_date_time_validation.dart';
+import 'package:band_core/src/validations/strings/string_length_validation.dart';
 import 'package:band_core/src/validations/strings/string_max_validation.dart';
 import 'package:band_core/src/validations/strings/string_min_validation.dart';
 import 'package:band_core/src/validator.dart';
@@ -12,12 +13,19 @@ class StringValidator extends Validator {
   }
 
   StringValidator min(int minLength, [String? message]) {
-    validations.add(StringMinValidation(minLength: minLength, message: message));
+    validations
+        .add(StringMinValidation(minLength: minLength, message: message));
     return this;
   }
 
   StringValidator max(int maxLength, [String? message]) {
-    validations.add(StringMaxValidation(maxLength: maxLength, message: message));
+    validations
+        .add(StringMaxValidation(maxLength: maxLength, message: message));
+    return this;
+  }
+
+  StringValidator length(int length, [String? message]) {
+    validations.add(StringLengthValidation(length: length, message: message));
     return this;
   }
 }

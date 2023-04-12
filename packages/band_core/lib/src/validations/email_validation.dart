@@ -23,5 +23,5 @@ class EmailValidation extends Validation {
 
   @override
   String get message =>
-      customMessage ?? '${fieldName ?? 'value'} must be a valid email';
+      customMessage ?? '${fieldName ?? 'value'} must be a valid email address';
 }

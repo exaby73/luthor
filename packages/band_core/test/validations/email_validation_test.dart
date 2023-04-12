@@ -11,7 +11,7 @@ void main() {
   test('should return false when value is not a valid email', () {
     final result = b.email().validate('user');
     expect(result.isValid, isFalse);
-    expect(result.message, 'value must be a valid email');
+    expect(result.message, 'value must be a valid email address');
   });
 
   test('should return false if the value is null with required()', () {

@@ -1,4 +1,4 @@
-import 'package:band_core/src/b.dart';
+import 'package:band_core/band_core.dart';
 import 'package:test/test.dart';
 
 void main() {

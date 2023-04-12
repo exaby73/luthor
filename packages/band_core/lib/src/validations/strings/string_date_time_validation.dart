@@ -1,10 +1,9 @@
 import 'package:band_core/src/validation.dart';
-import 'package:band_core/src/validations/string_validation.dart';
 
-class DateTimeValidation extends Validation {
+class StringDateTimeValidation extends Validation {
   String? customMessage;
 
-  DateTimeValidation({
+  StringDateTimeValidation({
     String? message,
   }) : customMessage = message;
 
@@ -12,10 +11,7 @@ class DateTimeValidation extends Validation {
   bool call(String fieldName, dynamic value) {
     this.fieldName = fieldName;
 
-    if (value is DateTime) return true;
-
-    final isString = StringValidation(message: customMessage)(fieldName, value);
-    if (!isString) return false;
+    if (value == null) return true;
 
     final date = DateTime.tryParse(value as String);
     return date != null;

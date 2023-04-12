@@ -2,7 +2,6 @@ import 'package:band_core/src/validation.dart';
 import 'package:band_core/src/validation_result.dart';
 import 'package:band_core/src/validations/any_validation.dart';
 import 'package:band_core/src/validations/bool_validation.dart';
-import 'package:band_core/src/validations/date_time_validation.dart';
 import 'package:band_core/src/validations/double_validation.dart';
 import 'package:band_core/src/validations/email_validation.dart';
 import 'package:band_core/src/validations/int_validation.dart';
@@ -11,69 +10,66 @@ import 'package:band_core/src/validations/number_validation.dart';
 import 'package:band_core/src/validations/required_validation.dart';
 import 'package:band_core/src/validations/schema_validation.dart';
 import 'package:band_core/src/validations/string_validation.dart';
+import 'package:band_core/src/validators/string_validator.dart';
 
 class Validator {
-  Validator();
+  Validator({List<Validation> initialValidations = const []})
+      : validations = List.from(initialValidations);
 
-  final List<Validation> _validations = [];
+  final List<Validation> validations;
 
   Validator any([String? message]) {
-    _validations.add(AnyValidation(message: message));
+    validations.add(AnyValidation(message: message));
     return this;
   }
 
   Validator required([String? message]) {
-    _validations.add(RequiredValidation(message: message));
+    validations.add(RequiredValidation(message: message));
     return this;
   }
 
   Validator nullValue([String? message]) {
-    _validations.add(NullValidation(message: message));
+    validations.add(NullValidation(message: message));
     return this;
   }
 
-  Validator string([String? message]) {
-    _validations.add(StringValidation(message: message));
-    return this;
+  StringValidator string([String? message]) {
+    validations.add(StringValidation(message: message));
+    return StringValidator(initialValidations: validations);
   }
 
   Validator email([String? message]) {
-    _validations.add(EmailValidation(message: message));
-    return this;
-  }
-
-  Validator dateTime([String? message]) {
-    _validations.add(DateTimeValidation(message: message));
+    validations.add(EmailValidation(message: message));
     return this;
   }
 
   Validator number([String? message]) {
-    _validations.add(NumberValidation(message: message));
+    validations.add(NumberValidation(message: message));
     return this;
   }
 
   Validator int([String? message]) {
-    _validations.add(IntValidation(message: message));
+    validations.add(IntValidation(message: message));
     return this;
   }
 
   Validator double([String? message]) {
-    _validations.add(DoubleValidation(message: message));
+    validations.add(DoubleValidation(message: message));
     return this;
   }
 
   Validator bool([String? message]) {
-    _validations.add(BoolValidation(message: message));
+    validations.add(BoolValidation(message: message));
     return this;
   }
 
   Validator schema(Map<String, Validator> validatorSchema) {
-    _validations.add(SchemaValidation(validatorSchema));
+    validations.add(SchemaValidation(validatorSchema));
     return this;
   }
 
   String? _isValid(String fieldName, dynamic value) {
-    for (final validation in _validations) {
+    for (final validation in validations) {
       if (!validation(fieldName, value)) {
         return validation.message;
       }
@@ -97,4 +93,3 @@ class Validator {
     );
   }
 }
-

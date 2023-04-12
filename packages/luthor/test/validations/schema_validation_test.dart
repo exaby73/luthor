@@ -1,10 +1,10 @@
-import 'package:band_core/band_core.dart';
+import 'package:luthor/luthor.dart';
 import 'package:test/test.dart';
 
 void main() {
-  final schema = b.schema({
-    'email': b.string().email().required(),
-    'password': b.string().required(),
+  final schema = l.schema({
+    'email': l.string().email().required(),
+    'password': l.string().required(),
   });
 
   test('should return true for a valid schema', () {

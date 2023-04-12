@@ -1,4 +1,4 @@
-import 'package:band_core/src/validation.dart';
+import 'package:luthor/src/validation.dart';
 
 class StringLengthValidation extends Validation {
   int length;

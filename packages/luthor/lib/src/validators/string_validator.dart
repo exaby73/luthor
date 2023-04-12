@@ -1,9 +1,9 @@
-import 'package:band_core/src/validations/strings/string_date_time_validation.dart';
-import 'package:band_core/src/validations/strings/string_email_validation.dart';
-import 'package:band_core/src/validations/strings/string_length_validation.dart';
-import 'package:band_core/src/validations/strings/string_max_validation.dart';
-import 'package:band_core/src/validations/strings/string_min_validation.dart';
-import 'package:band_core/src/validator.dart';
+import 'package:luthor/src/validations/strings/string_date_time_validation.dart';
+import 'package:luthor/src/validations/strings/string_email_validation.dart';
+import 'package:luthor/src/validations/strings/string_length_validation.dart';
+import 'package:luthor/src/validations/strings/string_max_validation.dart';
+import 'package:luthor/src/validations/strings/string_min_validation.dart';
+import 'package:luthor/src/validator.dart';
 
 class StringValidator extends Validator {
   StringValidator({super.initialValidations});

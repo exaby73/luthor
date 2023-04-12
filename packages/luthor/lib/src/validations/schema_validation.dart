@@ -1,5 +1,5 @@
-import 'package:band_core/src/validation.dart';
-import 'package:band_core/src/validator.dart';
+import 'package:luthor/src/validation.dart';
+import 'package:luthor/src/validator.dart';
 
 class SchemaValidation extends Validation {
   String? failedMessage;

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="611eb94e-24bf-4952-b937-7cecac18f38b" name="Changes" comment="Move email validation to strings only">
+      <change afterPath="$PROJECT_DIR$/lib/src/l.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/band_core.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/band_core.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/b.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/validator.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/validator.dart" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2ODPw5Km9kCV8M1p6WeTQWiYXJj" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "last_opened_file_path": "/Users/nabeelparkar/dev/luthor/packages/luthor",
+    "settings.editor.selected.configurable": "preferences.general",
+    "show.migrate.to.gradle.popup": "false"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test/validations/strings" />
+      <recent name="$PROJECT_DIR$/lib/src/validations/strings" />
+      <recent name="$PROJECT_DIR$/test/validations" />
+      <recent name="$PROJECT_DIR$/lib/src/validations" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test/validations/strings" />
+      <recent name="$PROJECT_DIR$/lib/src/validations/strings" />
+      <recent name="$PROJECT_DIR$/lib/src" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Dart Test.All tests">
+    <configuration name="All tests" type="DartTestRunConfigurationType" factoryName="Dart Test">
+      <option name="filePath" value="$PROJECT_DIR$/test" />
+      <option name="scope" value="FOLDER" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Tests in string_validation_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/validations/string_validation_test.dart" />
+      <option name="testName" value="string_test.dart" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Dart Test.All tests" />
+      <item itemvalue="Dart Test.Tests in string_validation_test.dart" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Dart Test.Tests in string_validation_test.dart" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="611eb94e-24bf-4952-b937-7cecac18f38b" name="Changes" comment="" />
+      <created>1681092414888</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1681092414888</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Add email validation">
+      <created>1681150976157</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1681150976157</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Add custom messages">
+      <created>1681151124937</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1681151124937</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Add bool validation">
+      <created>1681151388182</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1681151388182</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Add DateTime validation">
+      <created>1681254650390</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1681254650390</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Add double validation">
+      <created>1681254829257</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1681254829257</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Add double validation">
+      <created>1681254850325</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1681254850325</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Add null validation">
+      <created>1681254998885</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1681254998885</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Add any validation">
+      <created>1681255277442</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1681255277442</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Add schema validation">
+      <created>1681257924646</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1681257924646</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Move dateTime validation to strings&#10;Add min length validation to strings">
+      <created>1681258868967</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1681258868967</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Add max length validation to strings">
+      <created>1681259079157</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1681259079157</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Add length validation to strings">
+      <created>1681259284823</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1681259284823</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Move email validation to strings only">
+      <created>1681259478508</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1681259478508</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Add email validation" />
+    <MESSAGE value="Add custom messages" />
+    <MESSAGE value="Add bool validation" />
+    <MESSAGE value="Add DateTime validation" />
+    <MESSAGE value="Add double validation" />
+    <MESSAGE value="Add null validation" />
+    <MESSAGE value="Add any validation" />
+    <MESSAGE value="Add schema validation" />
+    <MESSAGE value="Move dateTime validation to strings&#10;Add min length validation to strings" />
+    <MESSAGE value="Add max length validation to strings" />
+    <MESSAGE value="Add length validation to strings" />
+    <MESSAGE value="Move email validation to strings only" />
+    <option name="LAST_COMMIT_MESSAGE" value="Move email validation to strings only" />
+  </component>
+</project>

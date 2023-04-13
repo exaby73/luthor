@@ -3,7 +3,7 @@ abstract class Validation {
 
   Validation();
 
-  String? get message;
+  String get message;
 
   bool call(String? fieldName, dynamic value);
 }

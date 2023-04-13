@@ -17,7 +17,7 @@ class SchemaValidation extends Validation {
       if (fieldName != null) {
         name = '$fieldName.$name';
       }
-      
+
       final result = validator.validateWithFieldName(name, fieldValue);
 
       if (!result.isValid) {

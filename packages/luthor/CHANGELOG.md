@@ -1,3 +1,8 @@
+# 0.0.2
+
+- Add string validation for Uris
+- Add list validation
+
 # 0.0.1+2
 
 - Export `Validator` and `StringValidator` classes

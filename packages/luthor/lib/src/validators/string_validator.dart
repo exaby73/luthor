@@ -37,7 +37,8 @@ class StringValidator extends Validator {
   }
 
   StringValidator uri([List<String>? allowedSchemes, String? message]) {
-    validations.add(StringUriValidation(allowedSchemes: allowedSchemes, message: message));
+    validations.add(
+        StringUriValidation(allowedSchemes: allowedSchemes, message: message));
     return this;
   }
 }

@@ -4,6 +4,7 @@ import 'package:luthor/src/validations/any_validation.dart';
 import 'package:luthor/src/validations/bool_validation.dart';
 import 'package:luthor/src/validations/double_validation.dart';
 import 'package:luthor/src/validations/int_validation.dart';
+import 'package:luthor/src/validations/list_validation.dart';
 import 'package:luthor/src/validations/null_validation.dart';
 import 'package:luthor/src/validations/number_validation.dart';
 import 'package:luthor/src/validations/required_validation.dart';
@@ -54,6 +55,13 @@ class Validator {
 
   Validator bool([String? message]) {
     validations.add(BoolValidation(message: message));
+    return this;
+  }
+
+  Validator list([List<Validator>? validations, String? message]) {
+    this
+        .validations
+        .add(ListValidation(validations: validations, message: message));
     return this;
   }
 

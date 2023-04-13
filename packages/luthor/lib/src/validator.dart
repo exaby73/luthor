@@ -18,50 +18,48 @@ class Validator {
 
   final List<Validation> validations;
 
-  Validator any([String? message]) {
+  Validator any({String? message}) {
     validations.add(AnyValidation(message: message));
     return this;
   }
 
-  Validator required([String? message]) {
+  Validator required({String? message}) {
     validations.add(RequiredValidation(message: message));
     return this;
   }
 
-  Validator nullValue([String? message]) {
+  Validator nullValue({String? message}) {
     validations.add(NullValidation(message: message));
     return this;
   }
 
-  StringValidator string([String? message]) {
+  StringValidator string({String? message}) {
     validations.add(StringValidation(message: message));
     return StringValidator(initialValidations: validations);
   }
 
-  Validator number([String? message]) {
+  Validator number({String? message}) {
     validations.add(NumberValidation(message: message));
     return this;
   }
 
-  Validator int([String? message]) {
+  Validator int({String? message}) {
     validations.add(IntValidation(message: message));
     return this;
   }
 
-  Validator double([String? message]) {
+  Validator double({String? message}) {
     validations.add(DoubleValidation(message: message));
     return this;
   }
 
-  Validator bool([String? message]) {
+  Validator bool({String? message}) {
     validations.add(BoolValidation(message: message));
     return this;
   }
 
-  Validator list([List<Validator>? validations, String? message]) {
-    this
-        .validations
-        .add(ListValidation(validations: validations, message: message));
+  Validator list({List<Validator>? validators, String? message}) {
+    validations.add(ListValidation(validations: validators, message: message));
     return this;
   }
 

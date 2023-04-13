@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('should return the custom message when provided', () {
-    final result = l.string('custom message').validate(1);
+    final result = l.string(message: 'custom message').validate(1);
     expect(result.isValid, isFalse);
     expect(result.message, 'custom message');
   });

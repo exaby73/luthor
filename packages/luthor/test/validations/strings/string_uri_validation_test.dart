@@ -10,7 +10,8 @@ void main() {
 
   test('should return true when value is a valid uri and matches the scheme',
       () {
-    final result = l.string().uri(['https']).validate('https://dart.dev');
+    final result =
+        l.string().uri(allowedSchemes: ['https']).validate('https://dart.dev');
     expect(result.isValid, isTrue);
     expect(result.message, isNull);
   });
@@ -18,7 +19,8 @@ void main() {
   test(
     'should return false when value is a valid uri but does not match the scheme',
     () {
-      final result = l.string().uri(['https']).validate('http://dart.dev');
+      final result =
+          l.string().uri(allowedSchemes: ['https']).validate('http://dart.dev');
       expect(result.isValid, isFalse);
       expect(
         result.message,

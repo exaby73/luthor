@@ -9,36 +9,37 @@ import 'package:luthor/src/validator.dart';
 class StringValidator extends Validator {
   StringValidator({super.initialValidations});
 
-  Validator dateTime([String? message]) {
+  Validator dateTime({String? message}) {
     validations.add(StringDateTimeValidation(message: message));
     return this;
   }
 
-  Validator email([String? message]) {
+  Validator email({String? message}) {
     validations.add(StringEmailValidation(message: message));
     return this;
   }
 
-  StringValidator min(int minLength, [String? message]) {
+  StringValidator min(int minLength, {String? message}) {
     validations
         .add(StringMinValidation(minLength: minLength, message: message));
     return this;
   }
 
-  StringValidator max(int maxLength, [String? message]) {
+  StringValidator max(int maxLength, {String? message}) {
     validations
         .add(StringMaxValidation(maxLength: maxLength, message: message));
     return this;
   }
 
-  StringValidator length(int length, [String? message]) {
+  StringValidator length(int length, {String? message}) {
     validations.add(StringLengthValidation(length: length, message: message));
     return this;
   }
 
-  StringValidator uri([List<String>? allowedSchemes, String? message]) {
+  StringValidator uri({List<String>? allowedSchemes, String? message}) {
     validations.add(
-        StringUriValidation(allowedSchemes: allowedSchemes, message: message));
+      StringUriValidation(allowedSchemes: allowedSchemes, message: message),
+    );
     return this;
   }
 }

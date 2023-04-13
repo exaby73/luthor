@@ -15,7 +15,7 @@ void main() {
   });
 
   test('should return true if the list contains only specified types', () {
-    final result = l.list([l.string(), l.int()]).validate(['a', 1]);
+    final result = l.list(validators: [l.string(), l.int()]).validate(['a', 1]);
     expect(result.isValid, true);
     expect(result.message, isNull);
   });
@@ -23,7 +23,8 @@ void main() {
   test(
       'should return false if the list contains an item that does not match the specified type',
       () {
-    final result = l.list([l.string(), l.int()]).validate(['a', 1.1]);
+    final result =
+        l.list(validators: [l.string(), l.int()]).validate(['a', 1.1]);
     expect(result.isValid, false);
     expect(
       result.message,
@@ -34,10 +35,10 @@ void main() {
   test(
       'should return false if the list contains an item that is null and all types are required',
       () {
-    final result = l.list([
+    final result = l.list(validators: [
       l.string().required(),
       l.int().required(),
-    ]).validate(['a', null]);
+    ],).validate(['a', null]);
 
     expect(result.isValid, false);
     expect(

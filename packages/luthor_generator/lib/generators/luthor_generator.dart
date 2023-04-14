@@ -2,8 +2,8 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:collection/collection.dart';
 import 'package:luthor_annotation/luthor_annotation.dart';
-import 'package:luthor_generator/helpers/validations/base_validations.dart';
 import 'package:luthor_generator/helpers/string_extension.dart';
+import 'package:luthor_generator/helpers/validations/base_validations.dart';
 import 'package:source_gen/source_gen.dart';
 
 class LuthorGenerator extends GeneratorForAnnotation<Luthor> {

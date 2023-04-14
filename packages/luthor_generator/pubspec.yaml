@@ -1,7 +1,7 @@
 name: luthor_generator
-description: A sample command-line application.
-version: 1.0.0
-repository: https://github.com/exaby73/band/tree/main/packages/band
+description: Generate luthor schemas with Freezed
+version: 0.0.1
+repository: https://github.com/exaby73/luthor/tree/main/packages/luthor_generator
 
 environment:
   sdk: '>=2.19.5 <3.0.0'
@@ -10,12 +10,8 @@ dependencies:
   analyzer: ^5.10.0
   build: ^2.3.1
   collection: ^1.17.1
-  luthor_annotation: any
+  luthor_annotation: ^0.0.1
   source_gen: ^1.2.7
-
-dependency_overrides:
-  luthor_annotation:
-    path: ../luthor_annotation
 
 dev_dependencies:
   lint: ^2.0.1

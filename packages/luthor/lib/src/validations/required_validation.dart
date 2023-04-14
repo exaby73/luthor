@@ -10,7 +10,7 @@ class RequiredValidation extends Validation {
   @override
   bool call(String? fieldName, dynamic value) {
     this.fieldName = fieldName;
-    return value != null && value != '';
+    return value != null;
   }
 
   @override

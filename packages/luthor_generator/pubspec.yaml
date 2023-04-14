@@ -7,7 +7,11 @@ environment:
   sdk: '>=2.19.5 <3.0.0'
 
 dependencies:
+  analyzer: ^5.10.0
+  build: ^2.3.1
+  collection: ^1.17.1
   luthor_annotation: any
+  source_gen: ^1.2.7
 
 dependency_overrides:
   luthor_annotation:

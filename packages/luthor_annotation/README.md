@@ -1,2 +1,4 @@
-A sample command-line application with an entrypoint in `bin/`, library code
-in `lib/`, and example unit test in `test/`.
+# luthor_annotation
+
+See the [`luthor_generator`](https://pub.dev/packages/luthor_generator) package
+for more information.

@@ -79,19 +79,17 @@ class Validator {
 
   ValidationResult<T> validate<T>(T value) {
     final errorMessage = _isValid(null, value);
-    return ValidationResult(
-      isValid: errorMessage == null,
-      message: errorMessage,
-      data: value,
-    );
+    if (errorMessage != null) {
+      return ValidationResult.error(errorMessage);
+    }
+    return ValidationResult.success(value);
   }
 
   ValidationResult<T> validateWithFieldName<T>(String fieldName, T value) {
     final errorMessage = _isValid(fieldName, value);
-    return ValidationResult(
-      isValid: errorMessage == null,
-      message: errorMessage,
-      data: value,
-    );
+    if (errorMessage != null) {
+      return ValidationResult.error(errorMessage);
+    }
+    return ValidationResult.success(value);
   }
 }

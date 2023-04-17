@@ -21,7 +21,7 @@ class SchemaValidation extends Validation {
       final result = validator.validateWithFieldName(name, fieldValue);
 
       if (!result.isValid) {
-        failedMessage = result.message;
+        failedMessage = result.whenOrNull(error: (message) => message);
         return false;
       }
     }

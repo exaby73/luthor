@@ -7,7 +7,10 @@ void main() {
     () {
       final result = l.string().length(3).validate('abc');
       expect(result.isValid, isTrue);
-      expect(result.message, isNull);
+
+      result.whenOrNull(
+        error: (_) => fail('should not be error'),
+      );
     },
   );
 
@@ -16,7 +19,10 @@ void main() {
     () {
       final result = l.string().length(3).validate(null);
       expect(result.isValid, isTrue);
-      expect(result.message, isNull);
+
+      result.whenOrNull(
+        error: (_) => fail('should not be error'),
+      );
     },
   );
 
@@ -24,14 +30,21 @@ void main() {
     'should return false if the string length is less than or greater than length specified',
     () {
       final lessThenResult = l.string().length(3).validate('ab');
-      expect(lessThenResult.isValid, isFalse);
-      expect(lessThenResult.message, 'value must be exactly 3 characters long');
+
+      lessThenResult.when(
+        error: (message) {
+          expect(message, 'value must be exactly 3 characters long');
+        },
+        success: (_) => fail('should not be success'),
+      );
 
       final greaterThenResult = l.string().length(3).validate('abcd');
-      expect(greaterThenResult.isValid, isFalse);
-      expect(
-        greaterThenResult.message,
-        'value must be exactly 3 characters long',
+
+      greaterThenResult.when(
+        error: (message) {
+          expect(message, 'value must be exactly 3 characters long');
+        },
+        success: (_) => fail('should not be success'),
       );
     },
   );

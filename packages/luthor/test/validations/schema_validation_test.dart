@@ -20,7 +20,10 @@ void main() {
       'password': 'password',
     });
     expect(result.isValid, isTrue);
-    expect(result.message, isNull);
+
+    result.whenOrNull(
+      error: (_) => fail('should not be error'),
+    );
   });
 
   test('should return false for an invalid email', () {
@@ -28,8 +31,13 @@ void main() {
       'email': 'abc',
       'password': 'password',
     });
-    expect(result.isValid, isFalse);
-    expect(result.message, 'email must be a valid email address');
+
+    result.when(
+      error: (message) {
+        expect(message, 'email must be a valid email address');
+      },
+      success: (_) => fail('should not be success'),
+    );
   });
 
   test('should return false for an invalid password', () {
@@ -37,8 +45,13 @@ void main() {
       'email': 'user@example.com',
       'password': 1,
     });
-    expect(result.isValid, isFalse);
-    expect(result.message, 'password must be a string');
+
+    result.when(
+      error: (message) {
+        expect(message, 'password must be a string');
+      },
+      success: (_) => fail('should not be success'),
+    );
   });
 
   test('should return false for an invalid nested schema', () {
@@ -47,8 +60,13 @@ void main() {
         'city': 'New York',
       },
     });
-    expect(result.isValid, isFalse);
-    expect(result.message, 'address.state is required');
+
+    result.when(
+      error: (message) {
+        expect(message, 'address.state is required');
+      },
+      success: (_) => fail('should not be success'),
+    );
   });
 
   test('should return false for an invalid nested schema', () {
@@ -58,8 +76,13 @@ void main() {
         'state': 1,
       },
     });
-    expect(result.isValid, isFalse);
-    expect(result.message, 'address.state must be a string');
+
+    result.when(
+      error: (message) {
+        expect(message, 'address.state must be a string');
+      },
+      success: (_) => fail('should not be success'),
+    );
   });
 
   test('should return true for a valid nested schema', () {
@@ -70,6 +93,9 @@ void main() {
       },
     });
     expect(result.isValid, isTrue);
-    expect(result.message, isNull);
+
+    result.whenOrNull(
+      error: (_) => fail('should not be error'),
+    );
   });
 }

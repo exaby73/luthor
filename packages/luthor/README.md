@@ -26,14 +26,18 @@ void main() {
   final validResult = schema.validate('hello');
 
   print(validResult.isValid); // true
-  print(validResult.message); // null
-  print(validResult.data); // 'hello'
+  validResult.when(
+    success: (data) => print(data), // 'hello'
+    failure: (message) => print(message), // Never called
+  );
 
   final invalidResult = schema.validate(123);
 
   print(invalidResult.isValid); // false
-  print(invalidResult.message); // 'value must be a string'
-  print(invalidResult.data); // 123
+  invalidResult.when(
+    success: (data) => print(data), // Never called
+    failure: (message) => print(message), // 'value must be a string'
+  );
 
   // Strings can have extra validations that can be applied to them
   l.string().email();

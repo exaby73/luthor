@@ -1,3 +1,7 @@
+# 0.1.0
+
+- (Breaking change) Migrate `ValidationResult` to freezed's union type for better type safety
+
 # 0.0.2
 
 - Add string validation for Uris

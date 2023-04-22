@@ -28,5 +28,7 @@ class Sample with _$Sample {
     @IsUri(allowedSchemes: ['https']) String? httpsLink,
   }) = _Sample;
 
+  static Validator schema = _$SampleSchema;
+
   factory Sample.fromJson(Map<String, dynamic> json) => _$SampleFromJson(json);
 }

@@ -2,7 +2,6 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:collection/collection.dart';
 import 'package:luthor_annotation/luthor_annotation.dart';
-import 'package:luthor_generator/helpers/string_extension.dart';
 import 'package:luthor_generator/helpers/validations/base_validations.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -36,11 +35,19 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
       );
     }
 
-    final name = element.name.pascalToCamelCase();
+    final schemaField = element.getField('schema');
+    if (schemaField == null || !schemaField.isStatic) {
+      throw InvalidGenerationSourceError(
+        'Luthor can only be applied to classes with a static schema field.',
+        element: element,
+      );
+    }
+
+    final name = element.name;
     final params = constructor.parameters;
 
     final buffer = StringBuffer();
-    buffer.write('Validator ${name}Schema = l.schema({\n');
+    buffer.write('Validator _\$${name}Schema = l.schema({\n');
 
     for (final param in params) {
       buffer.write("'${param.name}': l");

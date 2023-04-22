@@ -6,7 +6,7 @@ part of 'sample.dart';
 // LuthorGenerator
 // **************************************************************************
 
-Validator sampleSchema = l.schema({
+Validator _$SampleSchema = l.schema({
   'anyValue': l.any(),
   'boolValue': l.bool().required(),
   'doubleValue': l.double().required(),

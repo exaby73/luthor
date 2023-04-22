@@ -20,6 +20,8 @@ _$_Sample _$$_SampleFromJson(Map<String, dynamic> json) => _$_Sample(
       exactly10Characters: json['exactly10Characters'] as String?,
       minAndMax: json['minAndMax'] as String,
       httpsLink: json['httpsLink'] as String?,
+      anotherSample:
+          AnotherSample.fromJson(json['anotherSample'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_SampleToJson(_$_Sample instance) => <String, dynamic>{
@@ -35,4 +37,5 @@ Map<String, dynamic> _$$_SampleToJson(_$_Sample instance) => <String, dynamic>{
       'exactly10Characters': instance.exactly10Characters,
       'minAndMax': instance.minAndMax,
       'httpsLink': instance.httpsLink,
+      'anotherSample': instance.anotherSample,
     };

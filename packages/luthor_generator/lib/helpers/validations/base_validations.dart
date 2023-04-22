@@ -1,6 +1,7 @@
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
+import 'package:luthor_generator/checkers.dart';
 import 'package:luthor_generator/errors/unsupported_type_error.dart';
 import 'package:luthor_generator/helpers/validations/string_validations.dart';
 import 'package:source_gen/source_gen.dart';
@@ -17,19 +18,19 @@ String getValidations(ParameterElement param) {
   }
 
   if (param.type.isDynamic) {
-    buffer.write('.any()');
+    buffer.write('l.any()');
   }
 
   if (param.type.isDartCoreBool) {
-    buffer.write('.bool()');
+    buffer.write('l.bool()');
   }
 
   if (param.type.isDartCoreDouble) {
-    buffer.write('.double()');
+    buffer.write('l.double()');
   }
 
   if (param.type.isDartCoreInt) {
-    buffer.write('.int()');
+    buffer.write('l.int()');
   }
 
   if (param.type.isDartCoreList) {
@@ -37,31 +38,51 @@ String getValidations(ParameterElement param) {
   }
 
   if (param.type.isDartCoreNull) {
-    buffer.write('.nullValue()');
+    buffer.write('l.nullValue()');
   }
 
   if (param.type.isDartCoreNum) {
-    buffer.write('.number()');
+    buffer.write('l.number()');
   }
 
   if (param.type.isDartCoreString) {
-    buffer.write('.string()');
+    buffer.write('l.string()');
     buffer.write(getStringValidations(param));
   }
 
-  if (buffer.toString().endsWith('l')) buffer.write('any()');
+  if (buffer.isEmpty) {
+    _checkAndAddCustomSchema(buffer, param);
+  }
 
   if (!param.type.isDynamic && !isNullable) buffer.write('.required()');
 
   return buffer.toString();
 }
 
-DartObject? getAnnotation(TypeChecker checker, ParameterElement field) {
+void _checkAndAddCustomSchema(StringBuffer buffer, ParameterElement param) {
+  final element = param.type.element;
+  if (element == null) {
+    throw UnsupportedTypeError(
+      'Cannot determine type of ${param.type.getDisplayString(withNullability: false)}',
+    );
+  }
+
+  final hasLuthorAnnotation = getAnnotation(luthorChecker, element) != null;
+  if (!hasLuthorAnnotation) {
+    throw UnsupportedTypeError(
+      'Type ${param.type.getDisplayString(withNullability: false)} '
+      'does not have @luthor annotation.',
+    );
+  }
+  buffer.write('${param.type.getDisplayString(withNullability: false)}.schema');
+}
+
+DartObject? getAnnotation(TypeChecker checker, Element field) {
   return checker.firstAnnotationOf(field);
 }
 
 void _writeListValidations(StringBuffer buffer, ParameterElement param) {
-  buffer.write('.list(validators: [');
+  buffer.write('l.list(validators: [');
   final listType = param.type
       .getDisplayString(withNullability: false)
       .replaceFirst('List<', '')

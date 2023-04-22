@@ -38,13 +38,15 @@ class Sample
     @HasMin(8) @HasMax(200) required String minAndMax,
     @IsUri(allowedSchemes: ['https']) String? httpsLink,
   }) = _Sample;
+  
+  static final Validator schema = _$SampleSchema;
 
   factory Sample.fromJson(Map<String, dynamic> json) => _$SampleFromJson(json);
 }
 
 // Generates
 
-Validator sampleSchema = l.schema({
+Validator _$SampleSchema = l.schema({
   'anyValue': l.any(),
   'boolValue': l.bool().required(),
   'doubleValue': l.double().required(),

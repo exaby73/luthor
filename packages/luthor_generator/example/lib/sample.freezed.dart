@@ -40,6 +40,7 @@ mixin _$Sample {
   String get minAndMax => throw _privateConstructorUsedError;
   @IsUri(allowedSchemes: ['https'])
   String? get httpsLink => throw _privateConstructorUsedError;
+  AnotherSample get anotherSample => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -63,7 +64,10 @@ abstract class $SampleCopyWith<$Res> {
       @isDateTime String date,
       @HasLength(10) String? exactly10Characters,
       @HasMin(8) @HasMax(200) String minAndMax,
-      @IsUri(allowedSchemes: ['https']) String? httpsLink});
+      @IsUri(allowedSchemes: ['https']) String? httpsLink,
+      AnotherSample anotherSample});
+
+  $AnotherSampleCopyWith<$Res> get anotherSample;
 }
 
 /// @nodoc
@@ -91,6 +95,7 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
     Object? exactly10Characters = freezed,
     Object? minAndMax = null,
     Object? httpsLink = freezed,
+    Object? anotherSample = null,
   }) {
     return _then(_value.copyWith(
       anyValue: freezed == anyValue
@@ -141,7 +146,19 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
           ? _value.httpsLink
           : httpsLink // ignore: cast_nullable_to_non_nullable
               as String?,
+      anotherSample: null == anotherSample
+          ? _value.anotherSample
+          : anotherSample // ignore: cast_nullable_to_non_nullable
+              as AnotherSample,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AnotherSampleCopyWith<$Res> get anotherSample {
+    return $AnotherSampleCopyWith<$Res>(_value.anotherSample, (value) {
+      return _then(_value.copyWith(anotherSample: value) as $Val);
+    });
   }
 }
 
@@ -163,7 +180,11 @@ abstract class _$$_SampleCopyWith<$Res> implements $SampleCopyWith<$Res> {
       @isDateTime String date,
       @HasLength(10) String? exactly10Characters,
       @HasMin(8) @HasMax(200) String minAndMax,
-      @IsUri(allowedSchemes: ['https']) String? httpsLink});
+      @IsUri(allowedSchemes: ['https']) String? httpsLink,
+      AnotherSample anotherSample});
+
+  @override
+  $AnotherSampleCopyWith<$Res> get anotherSample;
 }
 
 /// @nodoc
@@ -188,6 +209,7 @@ class __$$_SampleCopyWithImpl<$Res>
     Object? exactly10Characters = freezed,
     Object? minAndMax = null,
     Object? httpsLink = freezed,
+    Object? anotherSample = null,
   }) {
     return _then(_$_Sample(
       anyValue: freezed == anyValue
@@ -238,6 +260,10 @@ class __$$_SampleCopyWithImpl<$Res>
           ? _value.httpsLink
           : httpsLink // ignore: cast_nullable_to_non_nullable
               as String?,
+      anotherSample: null == anotherSample
+          ? _value.anotherSample
+          : anotherSample // ignore: cast_nullable_to_non_nullable
+              as AnotherSample,
     ));
   }
 }
@@ -257,7 +283,8 @@ class _$_Sample implements _Sample {
       @isDateTime required this.date,
       @HasLength(10) this.exactly10Characters,
       @HasMin(8) @HasMax(200) required this.minAndMax,
-      @IsUri(allowedSchemes: ['https']) this.httpsLink})
+      @IsUri(allowedSchemes: ['https']) this.httpsLink,
+      required this.anotherSample})
       : _listValue = listValue;
 
   factory _$_Sample.fromJson(Map<String, dynamic> json) =>
@@ -301,10 +328,12 @@ class _$_Sample implements _Sample {
   @override
   @IsUri(allowedSchemes: ['https'])
   final String? httpsLink;
+  @override
+  final AnotherSample anotherSample;
 
   @override
   String toString() {
-    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, exactly10Characters: $exactly10Characters, minAndMax: $minAndMax, httpsLink: $httpsLink)';
+    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, exactly10Characters: $exactly10Characters, minAndMax: $minAndMax, httpsLink: $httpsLink, anotherSample: $anotherSample)';
   }
 
   @override
@@ -332,7 +361,9 @@ class _$_Sample implements _Sample {
             (identical(other.minAndMax, minAndMax) ||
                 other.minAndMax == minAndMax) &&
             (identical(other.httpsLink, httpsLink) ||
-                other.httpsLink == httpsLink));
+                other.httpsLink == httpsLink) &&
+            (identical(other.anotherSample, anotherSample) ||
+                other.anotherSample == anotherSample));
   }
 
   @JsonKey(ignore: true)
@@ -350,7 +381,8 @@ class _$_Sample implements _Sample {
       date,
       exactly10Characters,
       minAndMax,
-      httpsLink);
+      httpsLink,
+      anotherSample);
 
   @JsonKey(ignore: true)
   @override
@@ -379,7 +411,8 @@ abstract class _Sample implements Sample {
       @isDateTime required final String date,
       @HasLength(10) final String? exactly10Characters,
       @HasMin(8) @HasMax(200) required final String minAndMax,
-      @IsUri(allowedSchemes: ['https']) final String? httpsLink}) = _$_Sample;
+      @IsUri(allowedSchemes: ['https']) final String? httpsLink,
+      required final AnotherSample anotherSample}) = _$_Sample;
 
   factory _Sample.fromJson(Map<String, dynamic> json) = _$_Sample.fromJson;
 
@@ -414,6 +447,8 @@ abstract class _Sample implements Sample {
   @override
   @IsUri(allowedSchemes: ['https'])
   String? get httpsLink;
+  @override
+  AnotherSample get anotherSample;
   @override
   @JsonKey(ignore: true)
   _$$_SampleCopyWith<_$_Sample> get copyWith =>

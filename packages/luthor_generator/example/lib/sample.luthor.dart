@@ -19,4 +19,5 @@ Validator _$SampleSchema = l.schema({
   'exactly10Characters': l.string().length(10),
   'minAndMax': l.string().max(200).min(8).required(),
   'httpsLink': l.string().uri(allowedSchemes: ['https']),
+  'anotherSample': AnotherSample.schema.required(),
 });

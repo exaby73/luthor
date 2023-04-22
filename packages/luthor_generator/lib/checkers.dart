@@ -1,6 +1,8 @@
 import 'package:luthor_annotation/luthor_annotation.dart';
 import 'package:source_gen/source_gen.dart';
 
+const luthorChecker = TypeChecker.fromRuntime(Luthor);
+
 const isEmailChecker = TypeChecker.fromRuntime(IsEmail);
 const isDateTimeChecker = TypeChecker.fromRuntime(IsDateTime);
 const hasLengthChecker = TypeChecker.fromRuntime(HasLength);

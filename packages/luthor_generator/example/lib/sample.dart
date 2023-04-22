@@ -1,3 +1,4 @@
+import 'package:example/another_sample.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:luthor/luthor.dart';
 import 'package:luthor_annotation/luthor_annotation.dart';
@@ -26,6 +27,7 @@ class Sample with _$Sample {
     @HasLength(10) String? exactly10Characters,
     @HasMin(8) @HasMax(200) required String minAndMax,
     @IsUri(allowedSchemes: ['https']) String? httpsLink,
+    required AnotherSample anotherSample,
   }) = _Sample;
 
   static Validator schema = _$SampleSchema;

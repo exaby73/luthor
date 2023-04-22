@@ -45,12 +45,11 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
 
     final name = element.name;
     final params = constructor.parameters;
-
     final buffer = StringBuffer();
     buffer.write('Validator _\$${name}Schema = l.schema({\n');
 
     for (final param in params) {
-      buffer.write("'${param.name}': l");
+      buffer.write("'${param.name}': ");
       buffer.write(getValidations(param));
       buffer.write(',\n');
     }

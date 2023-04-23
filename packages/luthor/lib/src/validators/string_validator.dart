@@ -1,3 +1,5 @@
+import 'package:luthor/src/validations/strings/string_cuid_2_validation.dart';
+import 'package:luthor/src/validations/strings/string_cuid_validation.dart';
 import 'package:luthor/src/validations/strings/string_date_time_validation.dart';
 import 'package:luthor/src/validations/strings/string_email_validation.dart';
 import 'package:luthor/src/validations/strings/string_emoji_validation.dart';
@@ -52,6 +54,16 @@ class StringValidator extends Validator {
 
   StringValidator uuid({String? message}) {
     validations.add(StringUuidValidation(message: message));
+    return this;
+  }
+
+  StringValidator cuid({String? message}) {
+    validations.add(StringCuidValidation(message: message));
+    return this;
+  }
+
+  StringValidator cuid2({String? message}) {
+    validations.add(StringCuid2Validation(message: message));
     return this;
   }
 }

@@ -1,3 +1,8 @@
+# 0.1.1
+
+- Add support for validating emojis with `l.string().emoji()`
+- Add support for validating uuids with `l.string().uuid()`
+
 # 0.1.0
 
 - (Breaking change) Migrate `ValidationResult` to freezed's union type for better type safety

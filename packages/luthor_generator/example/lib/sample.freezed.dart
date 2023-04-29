@@ -40,6 +40,8 @@ mixin _$Sample {
   String get minAndMax => throw _privateConstructorUsedError;
   @IsUri(allowedSchemes: ['https'])
   String? get httpsLink => throw _privateConstructorUsedError;
+  @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
+  String get luthorPath => throw _privateConstructorUsedError;
   AnotherSample get anotherSample => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -65,6 +67,7 @@ abstract class $SampleCopyWith<$Res> {
       @HasLength(10) String? exactly10Characters,
       @HasMin(8) @HasMax(200) String minAndMax,
       @IsUri(allowedSchemes: ['https']) String? httpsLink,
+      @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor') String luthorPath,
       AnotherSample anotherSample});
 
   $AnotherSampleCopyWith<$Res> get anotherSample;
@@ -95,6 +98,7 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
     Object? exactly10Characters = freezed,
     Object? minAndMax = null,
     Object? httpsLink = freezed,
+    Object? luthorPath = null,
     Object? anotherSample = null,
   }) {
     return _then(_value.copyWith(
@@ -146,6 +150,10 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
           ? _value.httpsLink
           : httpsLink // ignore: cast_nullable_to_non_nullable
               as String?,
+      luthorPath: null == luthorPath
+          ? _value.luthorPath
+          : luthorPath // ignore: cast_nullable_to_non_nullable
+              as String,
       anotherSample: null == anotherSample
           ? _value.anotherSample
           : anotherSample // ignore: cast_nullable_to_non_nullable
@@ -181,6 +189,7 @@ abstract class _$$_SampleCopyWith<$Res> implements $SampleCopyWith<$Res> {
       @HasLength(10) String? exactly10Characters,
       @HasMin(8) @HasMax(200) String minAndMax,
       @IsUri(allowedSchemes: ['https']) String? httpsLink,
+      @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor') String luthorPath,
       AnotherSample anotherSample});
 
   @override
@@ -209,6 +218,7 @@ class __$$_SampleCopyWithImpl<$Res>
     Object? exactly10Characters = freezed,
     Object? minAndMax = null,
     Object? httpsLink = freezed,
+    Object? luthorPath = null,
     Object? anotherSample = null,
   }) {
     return _then(_$_Sample(
@@ -260,6 +270,10 @@ class __$$_SampleCopyWithImpl<$Res>
           ? _value.httpsLink
           : httpsLink // ignore: cast_nullable_to_non_nullable
               as String?,
+      luthorPath: null == luthorPath
+          ? _value.luthorPath
+          : luthorPath // ignore: cast_nullable_to_non_nullable
+              as String,
       anotherSample: null == anotherSample
           ? _value.anotherSample
           : anotherSample // ignore: cast_nullable_to_non_nullable
@@ -279,11 +293,19 @@ class _$_Sample implements _Sample {
       required final List<String> listValue,
       required this.numValue,
       required this.stringValue,
-      @isEmail required this.email,
-      @isDateTime required this.date,
-      @HasLength(10) this.exactly10Characters,
-      @HasMin(8) @HasMax(200) required this.minAndMax,
-      @IsUri(allowedSchemes: ['https']) this.httpsLink,
+      @isEmail
+          required this.email,
+      @isDateTime
+          required this.date,
+      @HasLength(10)
+          this.exactly10Characters,
+      @HasMin(8)
+      @HasMax(200)
+          required this.minAndMax,
+      @IsUri(allowedSchemes: ['https'])
+          this.httpsLink,
+      @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
+          required this.luthorPath,
       required this.anotherSample})
       : _listValue = listValue;
 
@@ -329,11 +351,14 @@ class _$_Sample implements _Sample {
   @IsUri(allowedSchemes: ['https'])
   final String? httpsLink;
   @override
+  @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
+  final String luthorPath;
+  @override
   final AnotherSample anotherSample;
 
   @override
   String toString() {
-    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, exactly10Characters: $exactly10Characters, minAndMax: $minAndMax, httpsLink: $httpsLink, anotherSample: $anotherSample)';
+    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, exactly10Characters: $exactly10Characters, minAndMax: $minAndMax, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample)';
   }
 
   @override
@@ -362,6 +387,8 @@ class _$_Sample implements _Sample {
                 other.minAndMax == minAndMax) &&
             (identical(other.httpsLink, httpsLink) ||
                 other.httpsLink == httpsLink) &&
+            (identical(other.luthorPath, luthorPath) ||
+                other.luthorPath == luthorPath) &&
             (identical(other.anotherSample, anotherSample) ||
                 other.anotherSample == anotherSample));
   }
@@ -382,6 +409,7 @@ class _$_Sample implements _Sample {
       exactly10Characters,
       minAndMax,
       httpsLink,
+      luthorPath,
       anotherSample);
 
   @JsonKey(ignore: true)
@@ -407,11 +435,19 @@ abstract class _Sample implements Sample {
       required final List<String> listValue,
       required final num numValue,
       required final String stringValue,
-      @isEmail required final String email,
-      @isDateTime required final String date,
-      @HasLength(10) final String? exactly10Characters,
-      @HasMin(8) @HasMax(200) required final String minAndMax,
-      @IsUri(allowedSchemes: ['https']) final String? httpsLink,
+      @isEmail
+          required final String email,
+      @isDateTime
+          required final String date,
+      @HasLength(10)
+          final String? exactly10Characters,
+      @HasMin(8)
+      @HasMax(200)
+          required final String minAndMax,
+      @IsUri(allowedSchemes: ['https'])
+          final String? httpsLink,
+      @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
+          required final String luthorPath,
       required final AnotherSample anotherSample}) = _$_Sample;
 
   factory _Sample.fromJson(Map<String, dynamic> json) = _$_Sample.fromJson;
@@ -447,6 +483,9 @@ abstract class _Sample implements Sample {
   @override
   @IsUri(allowedSchemes: ['https'])
   String? get httpsLink;
+  @override
+  @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
+  String get luthorPath;
   @override
   AnotherSample get anotherSample;
   @override

@@ -27,6 +27,7 @@ class Sample with _$Sample {
     @HasLength(10) String? exactly10Characters,
     @HasMin(8) @HasMax(200) required String minAndMax,
     @IsUri(allowedSchemes: ['https']) String? httpsLink,
+    @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor') required String luthorPath,
     required AnotherSample anotherSample,
   }) = _Sample;
 

@@ -19,5 +19,7 @@ Validator _$SampleSchema = l.schema({
   'exactly10Characters': l.string().length(10),
   'minAndMax': l.string().max(200).min(8).required(),
   'httpsLink': l.string().uri(allowedSchemes: ['https']),
+  'luthorPath':
+      l.string().regex(r"^https:\/\/pub\.dev\/packages\/luthor").required(),
   'anotherSample': AnotherSample.schema.required(),
 });

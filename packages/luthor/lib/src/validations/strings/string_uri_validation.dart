@@ -10,7 +10,7 @@ class StringUriValidation extends Validation {
   }) : customMessage = message;
 
   @override
-  bool call(String? fieldName, dynamic value) {
+  bool call(String? fieldName, Object? value) {
     super.call(fieldName, value);
 
     if (value == null) return true;

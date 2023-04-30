@@ -29,7 +29,7 @@ class SchemaValidationResult<T> with _$SchemaValidationResult<T> {
   const SchemaValidationResult._();
 
   bool get isValid => maybeWhen(
-    success: (_) => true,
-    orElse: () => false,
-  );
+        success: (_) => true,
+        orElse: () => false,
+      );
 }

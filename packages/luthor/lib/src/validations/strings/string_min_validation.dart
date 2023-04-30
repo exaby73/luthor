@@ -12,9 +12,11 @@ class StringMinValidation extends Validation {
 
   @override
   bool call(String? fieldName, Object? value) {
-    this.fieldName = fieldName;
+    super.call(fieldName, value);
+
     if (value == null) return true;
     if (value is! String) return false;
+
     return value.length >= minLength;
   }
 

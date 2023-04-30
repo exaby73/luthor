@@ -11,7 +11,7 @@ class StringEmojiValidation extends Validation {
       r'''(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])''';
 
   @override
-  bool call(String? fieldName, dynamic value) {
+  bool call(String? fieldName, Object? value) {
     super.call(fieldName, value);
 
     if (value == null) return true;

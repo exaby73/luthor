@@ -10,7 +10,7 @@ class StringCuidValidation extends Validation {
   static const String _regex = r'''c[^\s-]{8,}$''';
 
   @override
-  bool call(String? fieldName, dynamic value) {
+  bool call(String? fieldName, Object? value) {
     super.call(fieldName, value);
 
     if (value == null) return true;

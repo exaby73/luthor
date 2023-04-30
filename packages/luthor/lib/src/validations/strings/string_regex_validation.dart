@@ -10,11 +10,12 @@ class StringRegexValidation extends Validation {
   }) : customMessage = message;
 
   @override
-  bool call(String? fieldName, dynamic value) {
+  bool call(String? fieldName, Object? value) {
     this.fieldName = fieldName;
 
     if (value == null) return true;
-    return RegExp(pattern).allMatches(value as String).isNotEmpty;
+    if (value is! String) return false; 
+    return RegExp(pattern).hasMatch(value);
   }
 
   @override

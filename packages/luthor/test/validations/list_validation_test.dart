@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('should return true for an empty list', () {
-    final result = l.list().validate([]);
+    final result = l.list().validateValue([]);
     expect(result.isValid, true);
 
     result.whenOrNull(
@@ -12,7 +12,7 @@ void main() {
   });
 
   test('should return true for a list of any items', () {
-    final result = l.list().validate(['a', 1.1, 1]);
+    final result = l.list().validateValue(['a', 1.1, 1]);
     expect(result.isValid, true);
 
     result.whenOrNull(
@@ -21,7 +21,8 @@ void main() {
   });
 
   test('should return true if the list contains only specified types', () {
-    final result = l.list(validators: [l.string(), l.int()]).validate(['a', 1]);
+    final result =
+        l.list(validators: [l.string(), l.int()]).validateValue(['a', 1]);
     expect(result.isValid, true);
 
     result.whenOrNull(
@@ -33,13 +34,13 @@ void main() {
       'should return false if the list contains an item that does not match the specified type',
       () {
     final result =
-        l.list(validators: [l.string(), l.int()]).validate(['a', 1.1]);
+        l.list(validators: [l.string(), l.int()]).validateValue(['a', 1.1]);
 
     result.when(
-      error: (message) {
+      error: (errors) {
         expect(
-          message,
-          'value must be a list or does not match the validations',
+          errors,
+          ['value must be a list or does not match the validations'],
         );
       },
       success: (_) => fail('should not be success'),
@@ -54,13 +55,13 @@ void main() {
         l.string().required(),
         l.int().required(),
       ],
-    ).validate(['a', null]);
+    ).validateValue(['a', null]);
 
     result.when(
-      error: (message) {
+      error: (errors) {
         expect(
-          message,
-          'value must be a list or does not match the validations',
+          errors,
+          ['value must be a list or does not match the validations'],
         );
       },
       success: (_) => fail('should not be success'),

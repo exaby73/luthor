@@ -16,4 +16,7 @@ class NumberValidation extends Validation {
   @override
   String get message =>
       customMessage ?? '${fieldName ?? 'value'} must be a number';
+
+  @override
+  Map<String, List<String>>? get errors => null;
 }

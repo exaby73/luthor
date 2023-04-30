@@ -5,7 +5,7 @@ void main() {
   test(
     'should return true if the string length is greater than or equal to minLength',
     () {
-      final result = l.string().min(3).validate('abc');
+      final result = l.string().min(3).validateValue('abc');
       expect(result.isValid, isTrue);
 
       result.whenOrNull(
@@ -17,11 +17,11 @@ void main() {
   test(
     'should return false if the string length is less than minLength',
     () {
-      final result = l.string().min(3).validate('ab');
+      final result = l.string().min(3).validateValue('ab');
 
       result.when(
-        error: (message) {
-          expect(message, 'value must be at least 3 characters long');
+        error: (errors) {
+          expect(errors, ['value must be at least 3 characters long']);
         },
         success: (_) => fail('should not be success'),
       );
@@ -31,7 +31,7 @@ void main() {
   test(
     'should return true when the value is null',
     () {
-      final result = l.string().min(3).validate(null);
+      final result = l.string().min(3).validateValue(null);
       expect(result.isValid, isTrue);
 
       result.whenOrNull(
@@ -43,11 +43,11 @@ void main() {
   test(
     'should return false if the value is null with required()',
     () {
-      final result = l.string().min(3).required().validate(null);
+      final result = l.string().min(3).required().validateValue(null);
 
       result.when(
-        error: (message) {
-          expect(message, 'value is required');
+        error: (errors) {
+          expect(errors, ['value is required']);
         },
         success: (_) => fail('should not be success'),
       );

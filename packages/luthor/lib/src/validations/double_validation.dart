@@ -16,4 +16,7 @@ class DoubleValidation extends Validation {
   @override
   String get message =>
       customMessage ?? '${fieldName ?? 'value'} must be a double';
+
+  @override
+  Map<String, List<String>>? get errors => null;
 }

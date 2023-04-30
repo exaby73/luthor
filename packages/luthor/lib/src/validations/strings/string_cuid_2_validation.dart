@@ -11,13 +11,17 @@ class StringCuid2Validation extends Validation {
 
   @override
   bool call(String? fieldName, dynamic value) {
-    this.fieldName = fieldName;
+    super.call(fieldName, value);
 
     if (value == null) return true;
+    if (value is! String) return false;
     return RegExp(_regex).hasMatch(value as String);
   }
 
   @override
   String get message =>
       customMessage ?? '${fieldName ?? 'value'} must be a valid cuid2';
+
+  @override
+  Map<String, List<String>>? get errors => null;
 }

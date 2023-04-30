@@ -16,4 +16,7 @@ class BoolValidation extends Validation {
   @override
   String get message =>
       customMessage ?? '${fieldName ?? 'value'} must be a bool';
+
+  @override
+  Map<String, List<String>>? get errors => null;
 }

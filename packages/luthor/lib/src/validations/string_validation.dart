@@ -9,11 +9,14 @@ class StringValidation extends Validation {
 
   @override
   bool call(String? fieldName, dynamic value) {
-    this.fieldName = fieldName;
+    super.call(fieldName, value);
     return value is String?;
   }
 
   @override
   String get message =>
       customMessage ?? '${fieldName ?? 'value'} must be a string';
+
+  @override
+  Map<String, List<String>>? get errors => null;
 }

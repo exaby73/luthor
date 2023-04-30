@@ -15,4 +15,7 @@ class RequiredValidation extends Validation {
 
   @override
   String get message => customMessage ?? '${fieldName ?? 'value'} is required';
+
+  @override
+  Map<String, List<String>>? get errors => null;
 }

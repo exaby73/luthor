@@ -16,4 +16,7 @@ class AnyValidation extends Validation {
   @override
   String get message =>
       throw StateError('AnyValidation does not have a message');
+
+  @override
+  Map<String, List<String>>? get errors => null;
 }

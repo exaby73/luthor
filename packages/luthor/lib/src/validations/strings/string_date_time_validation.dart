@@ -9,9 +9,11 @@ class StringDateTimeValidation extends Validation {
 
   @override
   bool call(String? fieldName, dynamic value) {
+    super.call(fieldName, value);
     this.fieldName = fieldName;
 
     if (value == null) return true;
+    if (value is! String) return false;
 
     final date = DateTime.tryParse(value as String);
     return date != null;
@@ -20,4 +22,7 @@ class StringDateTimeValidation extends Validation {
   @override
   String get message =>
       customMessage ?? '${fieldName ?? 'value'} must be a valid date';
+
+  @override
+  Map<String, List<String>>? get errors => null;
 }

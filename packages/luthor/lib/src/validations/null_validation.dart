@@ -15,4 +15,7 @@ class NullValidation extends Validation {
 
   @override
   String get message => customMessage ?? '${fieldName ?? 'value'} must be null';
+
+  @override
+  Map<String, List<String>>? get errors => null;
 }

@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('should return true when value is any value', () {
-    final result = l.any().validate('user');
+    final result = l.any().validateValue('user');
     expect(result.isValid, isTrue);
 
     result.whenOrNull(
@@ -12,7 +12,7 @@ void main() {
   });
 
   test('should return true when value is null', () {
-    final result = l.any().validate(null);
+    final result = l.any().validateValue(null);
     expect(result.isValid, isTrue);
 
     result.whenOrNull(
@@ -21,11 +21,11 @@ void main() {
   });
 
   test('should return false if the value is null with required()', () {
-    final result = l.bool().required().validate(null);
+    final result = l.bool().required().validateValue(null);
 
     result.when(
       error: (message) {
-        expect(message, 'value is required');
+        expect(message, ['value is required']);
       },
       success: (_) => fail('should not be success'),
     );

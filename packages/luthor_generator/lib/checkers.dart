@@ -9,3 +9,4 @@ const hasLengthChecker = TypeChecker.fromRuntime(HasLength);
 const hasMaxChecker = TypeChecker.fromRuntime(HasMax);
 const hasMinChecker = TypeChecker.fromRuntime(HasMin);
 const isUriChecker = TypeChecker.fromRuntime(IsUri);
+const matchRegexChecker = TypeChecker.fromRuntime(MatchRegex);

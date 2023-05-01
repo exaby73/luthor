@@ -6,6 +6,7 @@ import 'package:luthor/src/validations/strings/string_emoji_validation.dart';
 import 'package:luthor/src/validations/strings/string_length_validation.dart';
 import 'package:luthor/src/validations/strings/string_max_validation.dart';
 import 'package:luthor/src/validations/strings/string_min_validation.dart';
+import 'package:luthor/src/validations/strings/string_regex_validation.dart';
 import 'package:luthor/src/validations/strings/string_uri_validation.dart';
 import 'package:luthor/src/validations/strings/string_uuid_validation.dart';
 import 'package:luthor/src/validator.dart';
@@ -64,6 +65,11 @@ class StringValidator extends Validator {
 
   StringValidator cuid2({String? message}) {
     validations.add(StringCuid2Validation(message: message));
+    return this;
+  }
+
+  StringValidator regex(String pattern, {String? message}) {
+    validations.add(StringRegexValidation(pattern, message: message));
     return this;
   }
 }

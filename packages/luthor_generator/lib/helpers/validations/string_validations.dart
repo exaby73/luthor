@@ -11,6 +11,7 @@ String getStringValidations(ParameterElement param) {
   _checkAndWriteMaxValidation(buffer, param);
   _checkAndWriteMinValidation(buffer, param);
   _checkAndWriteUriValidation(buffer, param);
+  _checkAndWriteRegexValidation(buffer, param);
 
   return buffer.toString();
 }
@@ -109,6 +110,22 @@ void _checkAndWriteUriValidation(
     }
 
     if (message != null) buffer.write("message: '$message'");
+    buffer.write(')');
+  }
+}
+
+void _checkAndWriteRegexValidation(
+  StringBuffer buffer,
+  ParameterElement param,
+) {
+  final regexAnnotation = getAnnotation(matchRegexChecker, param);
+  if (regexAnnotation != null) {
+    buffer.write('.regex(');
+
+    final pattern = regexAnnotation.getField('pattern')!.toStringValue();
+    final message = regexAnnotation.getField('message')?.toStringValue();
+    buffer.write('r"$pattern"');
+    if (message != null) buffer.write(", message: '$message'");
     buffer.write(')');
   }
 }

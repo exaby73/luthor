@@ -68,28 +68,63 @@ class Validator {
     return this;
   }
 
-  String? _isValid(String? fieldName, dynamic value) {
+  Map<String, dynamic>? _isValid(String? fieldName, dynamic value) {
+    final errors = <String, dynamic>{};
+
     for (final validation in validations) {
       if (!validation(fieldName, value)) {
-        return validation.message;
+        if (validation is SchemaValidation) {
+          errors.addAll(validation.errors);
+        } else {
+          (errors.putIfAbsent(fieldName ?? '[DEFAULT]', () => []) as List)
+              .add(validation.message);
+        }
       }
     }
-    return null;
+
+    if (errors.isEmpty) return null;
+    return errors;
   }
 
-  ValidationResult<T> validate<T>(T value) {
+  SingleValidationResult<T> validateValue<T>(T value) {
     final errorMessage = _isValid(null, value);
     if (errorMessage != null) {
-      return ValidationResult.error(errorMessage);
+      return SingleValidationResult.error(
+        (errorMessage['[DEFAULT]']! as List).cast(),
+      );
     }
-    return ValidationResult.success(value);
+    return SingleValidationResult.success(value);
   }
 
-  ValidationResult<T> validateWithFieldName<T>(String fieldName, T value) {
-    final errorMessage = _isValid(fieldName, value);
-    if (errorMessage != null) {
-      return ValidationResult.error(errorMessage);
+  SingleValidationResult<T> validateValueWithFieldName<T>(
+    String fieldName,
+    T value,
+  ) {
+    final errors = _isValid(fieldName, value);
+    if (errors != null) {
+      return SingleValidationResult.error((errors[fieldName]! as List).cast());
     }
-    return ValidationResult.success(value);
+    return SingleValidationResult.success(value);
+  }
+
+  SchemaValidationResult<Map<String, Object?>> validateSchema(
+    Map<String, Object?> value,
+  ) {
+    final errors = _isValid(null, value);
+    if (errors != null) {
+      return SchemaValidationResult.error(errors);
+    }
+    return SchemaValidationResult.success(value);
+  }
+
+  SchemaValidationResult<Map<String, Object?>> validateSchemaWithFieldName(
+    String fieldName,
+    Map<String, Object?> value,
+  ) {
+    final errors = _isValid(fieldName, value);
+    if (errors != null) {
+      return SchemaValidationResult.error(errors);
+    }
+    return SchemaValidationResult.success(value);
   }
 }

@@ -11,9 +11,12 @@ class StringMinValidation extends Validation {
         customMessage = message;
 
   @override
-  bool call(String? fieldName, covariant String? value) {
-    this.fieldName = fieldName;
+  bool call(String? fieldName, Object? value) {
+    super.call(fieldName, value);
+
     if (value == null) return true;
+    if (value is! String) return false;
+
     return value.length >= minLength;
   }
 
@@ -23,4 +26,7 @@ class StringMinValidation extends Validation {
     return '${fieldName ?? 'value'} must be at least '
         '$minLength character${minLength != 1 ? 's' : ''} long';
   }
+
+  @override
+  Map<String, List<String>>? get errors => null;
 }

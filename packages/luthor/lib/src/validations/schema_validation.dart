@@ -2,33 +2,54 @@ import 'package:luthor/src/validation.dart';
 import 'package:luthor/src/validator.dart';
 
 class SchemaValidation extends Validation {
-  String? failedMessage;
+  Map<String, dynamic>? failedMessage;
   final Map<String, Validator> validatorSchema;
 
   SchemaValidation(this.validatorSchema);
 
   @override
   bool call(String? fieldName, covariant Map<String, dynamic> value) {
+    super.call(fieldName, value);
+
     for (final entry in validatorSchema.entries) {
-      var name = entry.key;
+      final name = entry.key;
       final validator = entry.value;
       final fieldValue = value[name];
 
-      if (fieldName != null) {
-        name = '$fieldName.$name';
-      }
+      if (fieldValue is Map<String, Object?>) {
+        final result = validator.validateSchemaWithFieldName(name, fieldValue);
 
-      final result = validator.validateWithFieldName(name, fieldValue);
+        if (!result.isValid) {
+          failedMessage ??= {};
+          (failedMessage!.putIfAbsent(name, () => {}) as Map).addAll(
+            result.whenOrNull(
+                  error: (errors) => errors,
+                ) ??
+                {},
+          );
+        }
+      } else {
+        failedMessage ??= {};
+        final result = validator.validateValueWithFieldName(name, fieldValue);
 
-      if (!result.isValid) {
-        failedMessage = result.whenOrNull(error: (message) => message);
-        return false;
+        if (!result.isValid) {
+          failedMessage ??= {};
+          (failedMessage!.putIfAbsent(name, () => []) as List).addAll(
+            result.whenOrNull(
+                  error: (errors) => errors,
+                ) ??
+                [],
+          );
+        }
       }
     }
 
-    return true;
+    return failedMessage == null;
   }
 
   @override
-  String get message => failedMessage!;
+  Map<String, dynamic> get errors => failedMessage!;
+
+  @override
+  String? get message => null;
 }

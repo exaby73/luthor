@@ -8,12 +8,15 @@ class AnyValidation extends Validation {
   }) : customMessage = message;
 
   @override
-  bool call(String? fieldName, dynamic value) {
-    this.fieldName = fieldName;
+  bool call(String? fieldName, Object? value) {
+    super.call(fieldName, value);
     return true;
   }
 
   @override
   String get message =>
       throw StateError('AnyValidation does not have a message');
+
+  @override
+  Map<String, List<String>>? get errors => null;
 }

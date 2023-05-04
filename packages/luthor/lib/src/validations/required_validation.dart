@@ -8,11 +8,14 @@ class RequiredValidation extends Validation {
   }) : customMessage = message;
 
   @override
-  bool call(String? fieldName, dynamic value) {
-    this.fieldName = fieldName;
+  bool call(String? fieldName, Object? value) {
+    super.call(fieldName, value);
     return value != null;
   }
 
   @override
   String get message => customMessage ?? '${fieldName ?? 'value'} is required';
+
+  @override
+  Map<String, List<String>>? get errors => null;
 }

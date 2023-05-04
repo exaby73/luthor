@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('should return true when value is a valid bool', () {
-    final result = l.bool().validate(true);
+    final result = l.bool().validateValue(true);
     expect(result.isValid, isTrue);
 
     result.whenOrNull(
@@ -12,22 +12,22 @@ void main() {
   });
 
   test('should return false when value is not a valid bool', () {
-    final result = l.bool().validate('user');
+    final result = l.bool().validateValue('user');
 
     result.when(
-      error: (message) {
-        expect(message, 'value must be a bool');
+      error: (errors) {
+        expect(errors, ['value must be a bool']);
       },
       success: (_) => fail('should not be success'),
     );
   });
 
   test('should return false if the value is null with required()', () {
-    final result = l.required().bool().validate(null);
+    final result = l.required().bool().validateValue(null);
 
     result.when(
-      error: (message) {
-        expect(message, 'value is required');
+      error: (errors) {
+        expect(errors, ['value is required']);
       },
       success: (_) => fail('should not be success'),
     );

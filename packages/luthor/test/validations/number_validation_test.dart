@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('should return true when value is an int', () {
-    final result = l.number().validate(1);
+    final result = l.number().validateValue(1);
     expect(result.isValid, isTrue);
 
     result.whenOrNull(
@@ -12,7 +12,7 @@ void main() {
   });
 
   test('should return true when value is a floating point', () {
-    final result = l.number().validate(1.1);
+    final result = l.number().validateValue(1.1);
     expect(result.isValid, isTrue);
 
     result.whenOrNull(
@@ -21,18 +21,18 @@ void main() {
   });
 
   test('should return false when value is not a number', () {
-    final result = l.number().validate('a');
+    final result = l.number().validateValue('a');
 
     result.when(
-      error: (message) {
-        expect(message, 'value must be a number');
+      error: (errors) {
+        expect(errors, ['value must be a number']);
       },
       success: (_) => fail('should not be success'),
     );
   });
 
   test('should return true when value is null', () {
-    final result = l.number().validate(null);
+    final result = l.number().validateValue(null);
     expect(result.isValid, isTrue);
 
     result.whenOrNull(
@@ -41,11 +41,11 @@ void main() {
   });
 
   test('should return false if the value is null with required()', () {
-    final result = l.required().number().validate(null);
+    final result = l.required().number().validateValue(null);
 
     result.when(
-      error: (message) {
-        expect(message, 'value is required');
+      error: (errors) {
+        expect(errors, ['value is required']);
       },
       success: (_) => fail('should not be success'),
     );

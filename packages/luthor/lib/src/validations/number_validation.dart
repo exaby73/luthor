@@ -8,12 +8,15 @@ class NumberValidation extends Validation {
   }) : customMessage = message;
 
   @override
-  bool call(String? fieldName, dynamic value) {
-    this.fieldName = fieldName;
+  bool call(String? fieldName, Object? value) {
+    super.call(fieldName, value);
     return value is num?;
   }
 
   @override
   String get message =>
       customMessage ?? '${fieldName ?? 'value'} must be a number';
+
+  @override
+  Map<String, List<String>>? get errors => null;
 }

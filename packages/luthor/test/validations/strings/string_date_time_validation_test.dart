@@ -3,7 +3,8 @@ import 'package:test/test.dart';
 
 void main() {
   test('should return true when value is a valid date', () {
-    final result = l.string().dateTime().validate(DateTime.now().toString());
+    final result =
+        l.string().dateTime().validateValue(DateTime.now().toString());
     expect(result.isValid, isTrue);
 
     result.whenOrNull(
@@ -12,18 +13,18 @@ void main() {
   });
 
   test('should return false when value is not a valid date', () {
-    final result = l.string().dateTime().validate('user');
+    final result = l.string().dateTime().validateValue('user');
 
     result.when(
-      error: (message) {
-        expect(message, 'value must be a valid date');
+      error: (errors) {
+        expect(errors, ['value must be a valid date']);
       },
       success: (_) => fail('should not be success'),
     );
   });
 
   test('should return true when value is null', () {
-    final result = l.string().dateTime().validate(null);
+    final result = l.string().dateTime().validateValue(null);
     expect(result.isValid, isTrue);
 
     result.whenOrNull(
@@ -32,11 +33,11 @@ void main() {
   });
 
   test('should return false if the value is null with required()', () {
-    final result = l.string().dateTime().required().validate(null);
+    final result = l.string().dateTime().required().validateValue(null);
 
     result.when(
-      error: (message) {
-        expect(message, 'value is required');
+      error: (errors) {
+        expect(errors, ['value is required']);
       },
       success: (_) => fail('should not be success'),
     );

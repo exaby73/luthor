@@ -5,12 +5,14 @@ abstract class Validation {
 
   Validation();
 
-  String? get message;
-  Map<String, dynamic>? get errors;
+  String? message;
+  Map<String, dynamic>? errors;
 
   @mustCallSuper
   bool call(String? fieldName, Object? value) {
     this.fieldName = fieldName;
+    message = null;
+    errors = null;
     return true;
   }
 }

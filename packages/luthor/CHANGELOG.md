@@ -1,3 +1,7 @@
+# 0.1.4
+
+- Fixed a bug where errors from previous validations are persisted
+
 # 0.1.3
 
 - Fixes with previous release

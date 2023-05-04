@@ -1,3 +1,7 @@
+## 0.1.1+2
+
+- Update `luthor_annotation` version in pubspec.yaml
+
 ## 0.1.1+1
 
 - Change collect to `^1.17.0` to make it compatible with Flutter 3.7

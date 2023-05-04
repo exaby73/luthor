@@ -1,3 +1,7 @@
+# 0.1.2
+
+- Fixes with previous release
+
 # 0.1.1
 
 - Add support for validating emojis with `l.string().emoji()`

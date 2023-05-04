@@ -10,6 +10,7 @@ class SchemaValidation extends Validation {
   @override
   bool call(String? fieldName, covariant Map<String, dynamic> value) {
     super.call(fieldName, value);
+    failedMessage = null;
 
     for (final entry in validatorSchema.entries) {
       final name = entry.key;

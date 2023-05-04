@@ -11,14 +11,17 @@ class StringRegexValidation extends Validation {
 
   @override
   bool call(String? fieldName, Object? value) {
-    this.fieldName = fieldName;
+    super.call(fieldName, value);
 
     if (value == null) return true;
-    if (value is! String) return false; 
+    if (value is! String) return false;
     return RegExp(pattern).hasMatch(value);
   }
 
   @override
   String get message =>
       customMessage ?? '${fieldName ?? 'value'} must match regex';
+
+  @override
+  Map<String, List<String>>? get errors => null;
 }

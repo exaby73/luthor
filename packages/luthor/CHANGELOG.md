@@ -3,6 +3,8 @@
 - Add support for validating emojis with `l.string().emoji()`
 - Add support for validating uuids with `l.string().uuid()`
 - Add support for validating cuids with `l.string().cuid()` and `l.string().cuid2()`
+- Add support for validating regexs with `l.string().regex()` and `l.string().cuid2()`
+- Add better errors
 
 # 0.1.0
 

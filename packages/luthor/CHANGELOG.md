@@ -1,4 +1,4 @@
-# 0.1.4
+# 0.1.5
 
 - Fixed a bug where errors from previous validations are persisted
 

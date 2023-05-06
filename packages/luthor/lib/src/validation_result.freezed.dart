@@ -117,7 +117,10 @@ class _$_SingleValidationResultError<T>
       : _errors = errors,
         super._();
 
+  /// List of all errors from all validations.
   final List<String> _errors;
+
+  /// List of all errors from all validations.
   @override
   List<String> get errors {
     if (_errors is EqualUnmodifiableListView) return _errors;
@@ -218,6 +221,7 @@ abstract class _SingleValidationResultError<T>
       _$_SingleValidationResultError<T>;
   const _SingleValidationResultError._() : super._();
 
+  /// List of all errors from all validations.
   List<String> get errors;
   @JsonKey(ignore: true)
   _$$_SingleValidationResultErrorCopyWith<T, _$_SingleValidationResultError<T>>
@@ -264,6 +268,7 @@ class _$_SingleValidationResultSuccess<T>
     extends _SingleValidationResultSuccess<T> {
   const _$_SingleValidationResultSuccess(this.data) : super._();
 
+  /// The validated data (same as input data).
   @override
   final T data;
 
@@ -361,6 +366,7 @@ abstract class _SingleValidationResultSuccess<T>
       _$_SingleValidationResultSuccess<T>;
   const _SingleValidationResultSuccess._() : super._();
 
+  /// The validated data (same as input data).
   T get data;
   @JsonKey(ignore: true)
   _$$_SingleValidationResultSuccessCopyWith<T,
@@ -471,7 +477,10 @@ class _$_SchemaValidationResultError<T>
       : _errors = errors,
         super._();
 
+  /// Map of all errors from all validations.
   final Map<String, dynamic> _errors;
+
+  /// Map of all errors from all validations.
   @override
   Map<String, dynamic> get errors {
     if (_errors is EqualUnmodifiableMapView) return _errors;
@@ -572,6 +581,7 @@ abstract class _SchemaValidationResultError<T>
       final Map<String, dynamic> errors) = _$_SchemaValidationResultError<T>;
   const _SchemaValidationResultError._() : super._();
 
+  /// Map of all errors from all validations.
   Map<String, dynamic> get errors;
   @JsonKey(ignore: true)
   _$$_SchemaValidationResultErrorCopyWith<T, _$_SchemaValidationResultError<T>>
@@ -618,6 +628,7 @@ class _$_SchemaValidationResultSuccess<T>
     extends _SchemaValidationResultSuccess<T> {
   const _$_SchemaValidationResultSuccess(this.data) : super._();
 
+  /// The validated data (same as input data).
   @override
   final T data;
 
@@ -715,6 +726,7 @@ abstract class _SchemaValidationResultSuccess<T>
       _$_SchemaValidationResultSuccess<T>;
   const _SchemaValidationResultSuccess._() : super._();
 
+  /// The validated data (same as input data).
   T get data;
   @JsonKey(ignore: true)
   _$$_SchemaValidationResultSuccessCopyWith<T,

@@ -15,33 +15,39 @@ import 'package:luthor/src/validator.dart';
 class StringValidator extends Validator {
   StringValidator({super.initialValidations});
 
+  /// Validates that the string is a valid date.
   Validator dateTime({String? message}) {
     validations.add(StringDateTimeValidation(message: message));
     return this;
   }
 
+  /// Validates that the string is a valid email.
   Validator email({String? message}) {
     validations.add(StringEmailValidation(message: message));
     return this;
   }
 
+  /// Validates that the string has a minimum character length.
   StringValidator min(int minLength, {String? message}) {
     validations
         .add(StringMinValidation(minLength: minLength, message: message));
     return this;
   }
 
+  /// Validates that the string has a maximum character length.
   StringValidator max(int maxLength, {String? message}) {
     validations
         .add(StringMaxValidation(maxLength: maxLength, message: message));
     return this;
   }
 
+  /// Validates that the string has a specific character length.
   StringValidator length(int length, {String? message}) {
     validations.add(StringLengthValidation(length: length, message: message));
     return this;
   }
 
+  /// Validates that the string is a valid URI.
   StringValidator uri({List<String>? allowedSchemes, String? message}) {
     validations.add(
       StringUriValidation(allowedSchemes: allowedSchemes, message: message),
@@ -49,26 +55,31 @@ class StringValidator extends Validator {
     return this;
   }
 
+  /// Validates that the string is a valid emoji.
   StringValidator emoji({String? message}) {
     validations.add(StringEmojiValidation(message: message));
     return this;
   }
 
+  /// Validates that the string is a valid UUID.
   StringValidator uuid({String? message}) {
     validations.add(StringUuidValidation(message: message));
     return this;
   }
 
+  /// Validates that the string is a valid CUID.
   StringValidator cuid({String? message}) {
     validations.add(StringCuidValidation(message: message));
     return this;
   }
 
+  /// Validates that the string is a valid CUID2.
   StringValidator cuid2({String? message}) {
     validations.add(StringCuid2Validation(message: message));
     return this;
   }
 
+  /// Validates that the string matches a regular expression.
   StringValidator regex(String pattern, {String? message}) {
     validations.add(StringRegexValidation(pattern, message: message));
     return this;

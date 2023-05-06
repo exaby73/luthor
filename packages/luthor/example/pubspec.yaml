@@ -1,0 +1,14 @@
+name: example
+description: An example package for luthor
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: '>=2.19.6 <3.0.0'
+
+dependencies:
+  luthor:
+    path: ..
+
+dev_dependencies:
+  lints: ^2.0.0

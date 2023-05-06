@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+/// Abstract class for implementing a validation.
 abstract class Validation {
   String? fieldName;
 

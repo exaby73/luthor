@@ -11,6 +11,7 @@ import 'package:luthor/src/validations/strings/string_uri_validation.dart';
 import 'package:luthor/src/validations/strings/string_uuid_validation.dart';
 import 'package:luthor/src/validator.dart';
 
+/// Validator for strings.
 class StringValidator extends Validator {
   StringValidator({super.initialValidations});
 

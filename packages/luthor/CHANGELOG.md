@@ -1,3 +1,7 @@
+# 0.1.6
+
+- Added better documentation and examples
+
 # 0.1.5
 
 - Fixed a bug where errors from previous validations are persisted

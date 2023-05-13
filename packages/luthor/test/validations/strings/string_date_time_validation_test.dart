@@ -4,8 +4,7 @@ import 'package:test/test.dart';
 void main() {
   test('should return true when value is a valid date', () {
     final dateString = DateTime.fromMillisecondsSinceEpoch(0).toString();
-    final result =
-        l.string().dateTime().validateValue(dateString);
+    final result = l.string().dateTime().validateValue(dateString);
 
     switch (result) {
       case SingleValidationSuccess(data: _):

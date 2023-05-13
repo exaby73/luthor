@@ -69,7 +69,7 @@ class Validator {
 
   /// Validates that the value is a list.
   Validator list({List<Validator>? validators, String? message}) {
-    validations.add(ListValidation(validations: validators, message: message));
+    validations.add(ListValidation(validators: validators, message: message));
     return this;
   }
 

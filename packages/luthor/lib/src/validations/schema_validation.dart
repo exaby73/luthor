@@ -8,9 +8,12 @@ class SchemaValidation extends Validation {
   SchemaValidation(this.validatorSchema);
 
   @override
-  bool call(String? fieldName, covariant Map<String, dynamic> value) {
+  bool call(String? fieldName, Object? value) {
     super.call(fieldName, value);
     failedMessage = null;
+
+    if (value == null) return true;
+    if (value is! Map) return false;
 
     for (final entry in validatorSchema.entries) {
       final name = entry.key;

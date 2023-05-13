@@ -133,4 +133,19 @@ void main() {
         fail('should not have errors');
     }
   });
+
+  group('Issues', () {
+    test('#41', () {
+      final result = nestedSchema.validateSchema({});
+
+      switch (result) {
+        case SchemaValidationSuccess(data: _):
+          fail('should not be a success');
+        case SchemaValidationError(data: _, errors: final errors):
+          expect(errors, {
+            'address': ['address is required'],
+          });
+      }
+    });
+  });
 }

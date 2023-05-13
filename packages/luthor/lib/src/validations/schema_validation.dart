@@ -1,6 +1,5 @@
 import 'package:luthor/luthor.dart';
 import 'package:luthor/src/validation.dart';
-import 'package:luthor/src/validator.dart';
 
 class SchemaValidation extends Validation {
   Map<String, dynamic>? failedMessage;

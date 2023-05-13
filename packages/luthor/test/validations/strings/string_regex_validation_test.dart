@@ -7,11 +7,13 @@ void main() {
         .string()
         .regex(r'^luthor(?:_(annotation|generator))?$')
         .validateValue('luthor');
-    expect(result.isValid, isTrue);
 
-    result.whenOrNull(
-      error: (_) => fail('should not be error'),
-    );
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        expect(result.data, 'luthor');
+      case SingleValidationError(data: _, errors: _):
+        fail('should not have errors');
+    }
   });
 
   test("should return false when value didn't match regex", () {
@@ -20,31 +22,33 @@ void main() {
         .regex(r'^luthor(?:_(annotation|generator))?$')
         .validateValue('bad value');
 
-    result.when(
-      error: (errors) {
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
         expect(errors, ['value must match regex']);
-      },
-      success: (_) => fail('should not be success'),
-    );
+    }
   });
 
   test('should return true when value is null', () {
     final result = l.string().regex('pattern').validateValue(null);
-    expect(result.isValid, isTrue);
 
-    result.whenOrNull(
-      error: (_) => fail('should not be error'),
-    );
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        expect(result.data, isNull);
+      case SingleValidationError(data: _, errors: _):
+        fail('should not have errors');
+    }
   });
 
   test('should return false if the value is null with required()', () {
     final result = l.string().regex('pattern').required().validateValue(null);
 
-    result.when(
-      error: (errors) {
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
         expect(errors, ['value is required']);
-      },
-      success: (_) => fail('should not be success'),
-    );
+    }
   });
 }

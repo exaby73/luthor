@@ -1,47 +1,53 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-part 'validation_result.freezed.dart';
-
 /// Validation result for any single validation.
-@freezed
-class SingleValidationResult<T> with _$SingleValidationResult<T> {
-  const factory SingleValidationResult.error(
-    /// List of all errors from all validations.
-    List<String> errors,
-  ) = _SingleValidationResultError;
+sealed class SingleValidationResult<Data> {
+  Data get data;
 
-  const factory SingleValidationResult.success(
-    /// The validated data (same as input data).
-    T data,
-  ) = _SingleValidationResultSuccess;
+  bool get isValid {
+    return switch (this) {
+      SingleValidationSuccess(data: _) => true,
+      SingleValidationError(data: _, errors: _) => false,
+    };
+  }
+}
 
-  const SingleValidationResult._();
+class SingleValidationSuccess<T> extends SingleValidationResult<T> {
+  @override
+  final T data;
 
-  /// Returns true if the validation was successful.
-  bool get isValid => maybeWhen(
-        success: (_) => true,
-        orElse: () => false,
-      );
+  SingleValidationSuccess({required this.data});
+}
+
+class SingleValidationError<T> extends SingleValidationResult<T> {
+  @override
+  final T data;
+  final List<String> errors;
+
+  SingleValidationError({required this.data, required this.errors});
 }
 
 /// Validation result for a schema validation.
-@freezed
-class SchemaValidationResult<T> with _$SchemaValidationResult<T> {
-  const factory SchemaValidationResult.error(
-    /// Map of all errors from all validations.
-    Map<String, dynamic> errors,
-  ) = _SchemaValidationResultError;
+sealed class SchemaValidationResult {
+  Map<String, Object?> get data;
 
-  const factory SchemaValidationResult.success(
-    /// The validated data (same as input data).
-    T data,
-  ) = _SchemaValidationResultSuccess;
+  bool get isValid {
+    return switch (this) {
+      SchemaValidationSuccess(data: _) => true,
+      SchemaValidationError(data: _, errors: _) => false,
+    };
+  }
+}
 
-  const SchemaValidationResult._();
+class SchemaValidationSuccess extends SchemaValidationResult {
+  @override
+  final Map<String, Object?> data;
 
-  /// Returns true if the validation was successful.
-  bool get isValid => maybeWhen(
-        success: (_) => true,
-        orElse: () => false,
-      );
+  SchemaValidationSuccess({required this.data});
+}
+
+class SchemaValidationError extends SchemaValidationResult {
+  @override
+  final Map<String, Object?> data;
+  final Map<String, dynamic> errors;
+
+  SchemaValidationError({required this.data, required this.errors});
 }

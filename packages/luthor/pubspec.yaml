@@ -7,15 +7,12 @@ repository: https://github.com/exaby73/luthor/tree/main/packages/luthor
 homepage: https://github.com/exaby73/luthor/tree/main/packages/luthor
 
 environment:
-  sdk: '>=2.19.5 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
-# dependencies:
-#   path: ^1.8.0
+dependencies:
+  meta: ^1.9.1
 
 dev_dependencies:
   build_runner: ^2.3.3
-  freezed: ^2.3.2
   lint: ^2.0.1
   test: ^1.21.0
-dependencies:
-  freezed_annotation: ^2.2.0

@@ -5,41 +5,45 @@ void main() {
   test('should return true when value is a valid uuid', () {
     final result =
         l.string().uuid().validateValue('b058f7f6-e1e1-11ed-b5ea-0242ac120002');
-    expect(result.isValid, isTrue);
 
-    result.whenOrNull(
-      error: (_) => fail('should not be error'),
-    );
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        expect(result.data, 'b058f7f6-e1e1-11ed-b5ea-0242ac120002');
+      case SingleValidationError(data: _, errors: _):
+        fail('should not have errors');
+    }
   });
 
   test('should return false when value is not a valid uuid', () {
     final result = l.string().uuid().validateValue('user');
 
-    result.when(
-      error: (errors) {
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
         expect(errors, ['value must be a valid uuid']);
-      },
-      success: (_) => fail('should not be success'),
-    );
+    }
   });
 
   test('should return true when value is null', () {
     final result = l.string().uuid().validateValue(null);
-    expect(result.isValid, isTrue);
 
-    result.whenOrNull(
-      error: (_) => fail('should not be error'),
-    );
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        expect(result.data, isNull);
+      case SingleValidationError(data: _, errors: _):
+        fail('should not have errors');
+    }
   });
 
   test('should return false if the value is null with required()', () {
     final result = l.string().uuid().required().validateValue(null);
 
-    result.when(
-      error: (errors) {
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
         expect(errors, ['value is required']);
-      },
-      success: (_) => fail('should not be success'),
-    );
+    }
   });
 }

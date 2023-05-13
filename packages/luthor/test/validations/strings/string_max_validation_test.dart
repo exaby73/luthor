@@ -6,11 +6,13 @@ void main() {
     'should return true if the string length is less than or equal to maxLength',
     () {
       final result = l.string().max(3).validateValue('abc');
-      expect(result.isValid, isTrue);
 
-      result.whenOrNull(
-        error: (_) => fail('should not be error'),
-      );
+      switch (result) {
+        case SingleValidationSuccess(data: _):
+          expect(result.data, 'abc');
+        case SingleValidationError(data: _, errors: _):
+          fail('should not have errors');
+      }
     },
   );
 
@@ -19,12 +21,12 @@ void main() {
     () {
       final result = l.string().max(3).validateValue('abcd');
 
-      result.when(
-        error: (errors) {
+      switch (result) {
+        case SingleValidationSuccess(data: _):
+          fail('should not be a success');
+        case SingleValidationError(data: _, errors: final errors):
           expect(errors, ['value must not be more than 3 characters long']);
-        },
-        success: (_) => fail('should not be success'),
-      );
+      }
     },
   );
 
@@ -32,11 +34,13 @@ void main() {
     'should return true when the value is null',
     () {
       final result = l.string().max(3).validateValue(null);
-      expect(result.isValid, isTrue);
 
-      result.whenOrNull(
-        error: (_) => fail('should not be error'),
-      );
+      switch (result) {
+        case SingleValidationSuccess(data: _):
+          expect(result.data, isNull);
+        case SingleValidationError(data: _, errors: _):
+          fail('should not have errors');
+      }
     },
   );
 
@@ -45,12 +49,15 @@ void main() {
     () {
       final result = l.string().max(3).required().validateValue(null);
 
-      result.when(
-        error: (errors) {
+      switch (result) {
+        case SingleValidationSuccess(data: _):
+          fail('should not be a success');
+        case SingleValidationError(data: _, errors: final errors):
           expect(errors, ['value is required']);
-        },
-        success: (_) => fail('should not be success'),
-      );
+      }
+      expect(result.isValid, isFalse);
+      expect(result.data, isNull);
+      expect(result.errors, ['value is required']);
     },
   );
 }

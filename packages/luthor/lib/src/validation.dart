@@ -1,4 +1,4 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:meta/meta.dart';
 
 /// Abstract class for implementing a validation.
 abstract class Validation {

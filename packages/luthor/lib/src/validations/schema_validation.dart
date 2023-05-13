@@ -1,3 +1,4 @@
+import 'package:luthor/luthor.dart';
 import 'package:luthor/src/validation.dart';
 import 'package:luthor/src/validator.dart';
 
@@ -20,27 +21,17 @@ class SchemaValidation extends Validation {
       if (fieldValue is Map<String, Object?>) {
         final result = validator.validateSchemaWithFieldName(name, fieldValue);
 
-        if (!result.isValid) {
+        if (result case SchemaValidationError(data: _, errors: final errors)) {
           failedMessage ??= {};
-          (failedMessage!.putIfAbsent(name, () => {}) as Map).addAll(
-            result.whenOrNull(
-                  error: (errors) => errors,
-                ) ??
-                {},
-          );
+          (failedMessage!.putIfAbsent(name, () => {}) as Map).addAll(errors);
         }
       } else {
         failedMessage ??= {};
         final result = validator.validateValueWithFieldName(name, fieldValue);
 
-        if (!result.isValid) {
+        if (result case SingleValidationError(data: _, errors: final errors)) {
           failedMessage ??= {};
-          (failedMessage!.putIfAbsent(name, () => []) as List).addAll(
-            result.whenOrNull(
-                  error: (errors) => errors,
-                ) ??
-                [],
-          );
+          (failedMessage!.putIfAbsent(name, () => []) as List).addAll(errors);
         }
       }
     }

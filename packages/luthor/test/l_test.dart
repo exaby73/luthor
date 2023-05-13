@@ -5,12 +5,12 @@ void main() {
   test('should return the custom message when provided', () {
     final result = l.string(message: 'custom message').validateValue(1);
 
-    result.when(
-      error: (errors) {
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
         expect(errors, ['custom message']);
-      },
-      success: (_) => fail('should not be success'),
-    );
+    }
   });
 
   group('validateWithFieldName', () {
@@ -18,12 +18,12 @@ void main() {
       final result =
           l.required().string().validateValueWithFieldName('name', null);
 
-      result.when(
-        error: (errors) {
+      switch (result) {
+        case SingleValidationSuccess(data: _):
+          fail('should not be a success');
+        case SingleValidationError(data: _, errors: final errors):
           expect(errors, ['name is required']);
-        },
-        success: (_) => fail('should not be success'),
-      );
+      }
     });
   });
 }

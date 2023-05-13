@@ -4,30 +4,36 @@ import 'package:test/test.dart';
 void main() {
   test('should return true for an empty list', () {
     final result = l.list().validateValue([]);
-    expect(result.isValid, true);
 
-    result.whenOrNull(
-      error: (_) => fail('should not be error'),
-    );
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        expect(result.data, []);
+      case SingleValidationError(data: _, errors: _):
+        fail('should not have errors');
+    }
   });
 
   test('should return true for a list of any items', () {
     final result = l.list().validateValue(['a', 1.1, 1]);
-    expect(result.isValid, true);
 
-    result.whenOrNull(
-      error: (_) => fail('should not be error'),
-    );
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        expect(result.data, ['a', 1.1, 1]);
+      case SingleValidationError(data: _, errors: _):
+        fail('should not have errors');
+    }
   });
 
   test('should return true if the list contains only specified types', () {
     final result =
         l.list(validators: [l.string(), l.int()]).validateValue(['a', 1]);
-    expect(result.isValid, true);
 
-    result.whenOrNull(
-      error: (_) => fail('should not be error'),
-    );
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        expect(result.data, ['a', 1]);
+      case SingleValidationError(data: _, errors: _):
+        fail('should not have errors');
+    }
   });
 
   test(
@@ -36,15 +42,15 @@ void main() {
     final result =
         l.list(validators: [l.string(), l.int()]).validateValue(['a', 1.1]);
 
-    result.when(
-      error: (errors) {
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
         expect(
           errors,
           ['value must be a list or does not match the validations'],
         );
-      },
-      success: (_) => fail('should not be success'),
-    );
+    }
   });
 
   test(
@@ -57,14 +63,14 @@ void main() {
       ],
     ).validateValue(['a', null]);
 
-    result.when(
-      error: (errors) {
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
         expect(
           errors,
           ['value must be a list or does not match the validations'],
         );
-      },
-      success: (_) => fail('should not be success'),
-    );
+    }
   });
 }

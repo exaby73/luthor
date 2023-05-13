@@ -101,11 +101,12 @@ class Validator {
   SingleValidationResult<T> validateValue<T>(T value) {
     final errorMessage = _isValid(null, value);
     if (errorMessage != null) {
-      return SingleValidationResult.error(
-        (errorMessage['[DEFAULT]']! as List).cast(),
+      return SingleValidationError(
+        data: value,
+        errors: (errorMessage['[DEFAULT]']! as List).cast(),
       );
     }
-    return SingleValidationResult.success(value);
+    return SingleValidationSuccess(data: value);
   }
 
   /// Validates a single value with a field name.
@@ -115,31 +116,34 @@ class Validator {
   ) {
     final errors = _isValid(fieldName, value);
     if (errors != null) {
-      return SingleValidationResult.error((errors[fieldName]! as List).cast());
+      return SingleValidationError(
+        data: value,
+        errors: (errors[fieldName]! as List).cast(),
+      );
     }
-    return SingleValidationResult.success(value);
+    return SingleValidationSuccess(data: value);
   }
 
   /// Validates a schema.
-  SchemaValidationResult<Map<String, Object?>> validateSchema(
+  SchemaValidationResult validateSchema(
     Map<String, Object?> value,
   ) {
     final errors = _isValid(null, value);
     if (errors != null) {
-      return SchemaValidationResult.error(errors);
+      return SchemaValidationError(data: value, errors: errors);
     }
-    return SchemaValidationResult.success(value);
+    return SchemaValidationSuccess(data: value);
   }
 
   /// Validates a schema with a field name.
-  SchemaValidationResult<Map<String, Object?>> validateSchemaWithFieldName(
+  SchemaValidationResult validateSchemaWithFieldName(
     String fieldName,
     Map<String, Object?> value,
   ) {
     final errors = _isValid(fieldName, value);
     if (errors != null) {
-      return SchemaValidationResult.error(errors);
+      return SchemaValidationError(data: value, errors: errors);
     }
-    return SchemaValidationResult.success(value);
+    return SchemaValidationSuccess(data: value);
   }
 }

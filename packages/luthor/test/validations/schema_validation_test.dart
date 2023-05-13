@@ -20,103 +20,117 @@ void main() {
   });
 
   test('should return true for a valid schema', () {
-    final result = schema.validateSchema({
+    const data = {
       'email': 'user@example.com',
       'password': 'password',
-    });
-    expect(result.isValid, isTrue);
+    };
+    final result = schema.validateSchema(data);
 
-    result.whenOrNull(
-      error: (_) => fail('should not be error'),
-    );
+    switch (result) {
+      case SchemaValidationSuccess(data: _):
+        expect(result.data, data);
+      case SchemaValidationError(data: _, errors: _):
+        fail('should not have errors');
+    }
   });
 
   test('should return false for an invalid email', () {
-    final result = schema.validateSchema({
+    const data = {
       'email': 'abc',
       'password': 'password',
-    });
+    };
+    final result = schema.validateSchema(data);
 
-    result.when(
-      error: (errors) {
+    switch (result) {
+      case SchemaValidationSuccess(data: _):
+        fail('should not be a success');
+      case SchemaValidationError(data: _, errors: final errors):
+        expect(result.data, data);
         expect(errors, {
           'email': ['email must be a valid email address']
         });
-      },
-      success: (_) => fail('should not be success'),
-    );
+    }
   });
 
   test('should return false for an invalid password and email', () {
-    final result = schema.validateSchema({
+    const data = {
       'email': 1,
       'password': 1,
-    });
+    };
+    final result = schema.validateSchema(data);
 
-    result.when(
-      error: (errors) {
+    switch (result) {
+      case SchemaValidationSuccess(data: _):
+        fail('should not be a success');
+      case SchemaValidationError(data: _, errors: final errors):
+        expect(result.data, data);
         expect(errors, {
           'email': [
             'email must be a string',
-            'email must be a valid email address'
+            'email must be a valid email address',
           ],
           'password': ['password must be a string']
         });
-      },
-      success: (_) => fail('should not be success'),
-    );
+    }
   });
 
   test('should return false for an invalid nested schema', () {
-    final result = nestedSchema.validateSchema({
+    const data = {
       'address': {
         'city': 'New York',
       },
-    });
+    };
+    final result = nestedSchema.validateSchema(data);
 
-    result.when(
-      error: (errors) {
+    switch (result) {
+      case SchemaValidationSuccess(data: _):
+        fail('should not be a success');
+      case SchemaValidationError(data: _, errors: final errors):
+        expect(result.data, data);
         expect(errors, {
           'address': {
-            'state': ['state is required']
+            'state': ['state is required'],
           }
         });
-      },
-      success: (_) => fail('should not be success'),
-    );
+    }
   });
 
   test('should return false for an invalid nested schema', () {
-    final result = nestedSchema.validateSchema({
+    const data = {
       'address': {
         'city': 'New York',
         'state': 1,
       },
-    });
+    };
+    final result = nestedSchema.validateSchema(data);
 
-    result.when(
-      error: (errors) {
+    switch (result) {
+      case SchemaValidationSuccess(data: _):
+        fail('should not be a success');
+      case SchemaValidationError(data: _, errors: final errors):
+        expect(result.data, data);
         expect(errors, {
           'address': {
-            'state': ['state must be a string']
+            'state': ['state must be a string'],
           }
         });
-      },
-      success: (_) => fail('should not be success'),
-    );
+    }
   });
 
   test('should return true for a valid nested schema', () {
-    final result = nestedSchema.validateSchema({
+    const data = {
       'address': {
         'city': 'New York',
         'state': 'NY',
       },
-    });
-    expect(result.isValid, isTrue);
+    };
+    final result = nestedSchema.validateSchema(data);
 
-    result.whenOrNull(
-      error: (_) => fail('should not be error'),
-    );
+    switch (result) {
+      case SchemaValidationSuccess(data: _):
+        expect(result.data, data);
+      case SchemaValidationError(data: _, errors: _):
+        fail('should not have errors');
+    }
   });
 }

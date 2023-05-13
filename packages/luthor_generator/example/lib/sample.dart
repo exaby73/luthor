@@ -36,3 +36,8 @@ class Sample with _$Sample {
 
   factory Sample.fromJson(Map<String, dynamic> json) => _$SampleFromJson(json);
 }
+
+void main() {
+  final v = Sample.schema.validateSchema({});
+  print(v);
+}

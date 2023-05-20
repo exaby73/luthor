@@ -16,7 +16,10 @@ class AnotherSample with _$AnotherSample {
     String? name,
   }) = _AnotherSample;
 
-  static final Validator schema = _$AnotherSampleSchema;
+  static SchemaValidationResult<AnotherSample> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$validate(json);
 
   factory AnotherSample.fromJson(Map<String, dynamic> json) =>
       _$AnotherSampleFromJson(json);

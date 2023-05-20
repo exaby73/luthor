@@ -26,6 +26,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
       );
     }
 
+    final name = element.name;
     final constructor =
         element.constructors.firstWhereOrNull((c) => c.isFactory);
     if (constructor == null) {
@@ -35,18 +36,25 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
       );
     }
 
-    final schemaField = element.getField('schema');
-    if (schemaField == null || !schemaField.isStatic) {
+    final validateMethod = element.getMethod('validate');
+    final isInvalidMethod = validateMethod == null ||
+        !validateMethod.isStatic ||
+        validateMethod.parameters.length != 1 ||
+        validateMethod.parameters.first.type.toString() !=
+            'Map<String, dynamic>' ||
+        validateMethod.returnType.toString() != 'SchemaValidationResult<$name>';
+    if (isInvalidMethod) {
       throw InvalidGenerationSourceError(
-        'Luthor can only be applied to classes with a static schema field.',
+        'Luthor can only be applied to classes with a static validate method. '
+        'Add the following code to your class:\n'
+        'static SchemaValidationResult<$name> validate(Map<String, dynamic> json) => _validate(json);',
         element: element,
       );
     }
 
-    final name = element.name;
     final params = constructor.parameters;
     final buffer = StringBuffer();
-    buffer.write('Validator _\$${name}Schema = l.schema({\n');
+    buffer.write('Validator \$${name}Schema = l.schema({\n');
 
     for (final param in params) {
       buffer.write("'${param.name}': ");
@@ -54,8 +62,17 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
       buffer.write(',\n');
     }
 
-    buffer.write('});');
+    buffer.write('});\n\n');
+
+    _writeValidateMethod(buffer, name);
 
     return buffer.toString();
+  }
+
+  void _writeValidateMethod(StringBuffer buffer, String name) {
+    buffer.write(
+      'SchemaValidationResult<$name> _\$validate(Map<String, dynamic> json) => '
+      '\$${name}Schema.validateSchema(json, fromJson: $name.fromJson);',
+    );
   }
 }

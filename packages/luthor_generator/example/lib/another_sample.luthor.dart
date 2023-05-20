@@ -6,7 +6,10 @@ part of 'another_sample.dart';
 // LuthorGenerator
 // **************************************************************************
 
-Validator _$AnotherSampleSchema = l.schema({
+Validator $AnotherSampleSchema = l.schema({
   'id': l.int().required(),
   'name': l.string(),
 });
+
+SchemaValidationResult<AnotherSample> _$validate(Map<String, dynamic> json) =>
+    $AnotherSampleSchema.validateSchema(json, fromJson: AnotherSample.fromJson);

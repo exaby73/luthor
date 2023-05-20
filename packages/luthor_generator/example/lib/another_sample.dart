@@ -6,8 +6,6 @@ part 'another_sample.freezed.dart';
 
 part 'another_sample.g.dart';
 
-part 'another_sample.luthor.dart';
-
 @luthor
 @freezed
 class AnotherSample with _$AnotherSample {

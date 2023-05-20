@@ -294,14 +294,14 @@ packages:
       path: "../../luthor_annotation"
       relative: true
     source: path
-    version: "0.1.0"
+    version: "0.2.0"
   luthor_generator:
     dependency: "direct dev"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.1.1+2"
+    version: "0.2.0"
   matcher:
     dependency: transitive
     description:

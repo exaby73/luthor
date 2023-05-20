@@ -17,3 +17,15 @@ Map<String, dynamic> _$$_AnotherSampleToJson(_$_AnotherSample instance) =>
       'id': instance.id,
       'name': instance.name,
     };
+
+// **************************************************************************
+// LuthorGenerator
+// **************************************************************************
+
+Validator $AnotherSampleSchema = l.schema({
+  'id': l.int().required(),
+  'name': l.string(),
+});
+
+SchemaValidationResult<AnotherSample> _$validate(Map<String, dynamic> json) =>
+    $AnotherSampleSchema.validateSchema(json, fromJson: AnotherSample.fromJson);

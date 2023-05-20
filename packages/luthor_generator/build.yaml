@@ -2,6 +2,6 @@ builders:
   luthor:
     import: "package:luthor_generator/builder.dart"
     builder_factories: [ "luthorBuilder" ]
-    build_extensions: { ".dart": [ ".luthor.dart" ] }
+    build_extensions: { ".dart": [ ".luthor.g.part" ] }
     auto_apply: dependents
-    build_to: source
+    build_to: cache

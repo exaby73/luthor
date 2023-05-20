@@ -6,7 +6,7 @@ part of 'sample.dart';
 // LuthorGenerator
 // **************************************************************************
 
-Validator _$SampleSchema = l.schema({
+Validator $SampleSchema = l.schema({
   'anyValue': l.any(),
   'boolValue': l.bool().required(),
   'doubleValue': l.double().required(),
@@ -21,5 +21,8 @@ Validator _$SampleSchema = l.schema({
   'httpsLink': l.string().uri(allowedSchemes: ['https']),
   'luthorPath':
       l.string().regex(r"^https:\/\/pub\.dev\/packages\/luthor").required(),
-  'anotherSample': AnotherSample.schema.required(),
+  'anotherSample': $AnotherSampleSchema.required(),
 });
+
+SchemaValidationResult<Sample> _$validate(Map<String, dynamic> json) =>
+    $SampleSchema.validateSchema(json, fromJson: Sample.fromJson);

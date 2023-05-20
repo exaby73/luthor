@@ -38,12 +38,13 @@ class Sample with _$Sample {
     required AnotherSample anotherSample,
   }) = _Sample;
 
-  static final Validator schema = _$SampleSchema;
+  static SchemaValidationResult<Sample> validate(Map<String, dynamic> json) =>
+      _$validate(json);
 
   factory Sample.fromJson(Map<String, dynamic> json) => _$SampleFromJson(json);
 }
 
 void main() {
-  final v = Sample.schema.validateSchema({});
+  final v = Sample.validate({});
   print(v);
 }

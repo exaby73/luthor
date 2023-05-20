@@ -4,7 +4,7 @@ version: 0.1.1+2
 repository: https://github.com/exaby73/luthor/tree/main/packages/luthor_generator
 
 environment:
-  sdk: '>=2.19.5 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   analyzer: ^5.10.0

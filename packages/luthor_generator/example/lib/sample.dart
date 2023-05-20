@@ -22,11 +22,17 @@ class Sample with _$Sample {
     // Null? nullValue,
     required num numValue,
     required String stringValue,
-    @isEmail required String email,
-    @isDateTime required String date,
-    @HasLength(10) String? exactly10Characters,
-    @HasMin(8) @HasMax(200) required String minAndMax,
-    @IsUri(allowedSchemes: ['https']) String? httpsLink,
+    @isEmail
+        required String email,
+    @isDateTime
+        required String date,
+    @HasLength(10)
+        String? exactly10Characters,
+    @HasMin(8)
+    @HasMax(200)
+        required String minAndMax,
+    @IsUri(allowedSchemes: ['https'])
+        String? httpsLink,
     @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
         required String luthorPath,
     required AnotherSample anotherSample,

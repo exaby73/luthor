@@ -1,3 +1,11 @@
+# 0.2.0
+
+- Upgrade minimum Dart SDK version to 3.0.0
+- `validate` and `validateSchema` now return sealed classes instead of Freezed unions
+- Add `fromJson` argument to `validateSchema` to allow for custom JSON deserialization
+- Fix a bug where `l.list()` does not validated inner values correctly ([#33](https://github.com/exaby73/luthor/issues/33))
+- Fix a bug where nested schemas throw a null error when the data is empty ([#41](https://github.com/exaby73/luthor/issues/41))
+
 # 0.1.6
 
 - Added better documentation and examples

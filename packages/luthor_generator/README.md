@@ -16,8 +16,6 @@ part 'sample.freezed.dart';
 
 part 'sample.g.dart';
 
-part 'sample.luthor.dart';
-
 @luthor
 @freezed
 class Sample
@@ -38,15 +36,16 @@ class Sample
     @HasMin(8) @HasMax(200) required String minAndMax,
     @IsUri(allowedSchemes: ['https']) String? httpsLink,
   }) = _Sample;
-  
-  static final Validator schema = _$SampleSchema;
+
+  static SchemaValidationResult<Sample> validate(Map<String, dynamic> json) =>
+      _$validate(json);
 
   factory Sample.fromJson(Map<String, dynamic> json) => _$SampleFromJson(json);
 }
 
 // Generates
 
-Validator _$SampleSchema = l.schema({
+Validator $SampleSchema = l.schema({
   'anyValue': l.any(),
   'boolValue': l.bool().required(),
   'doubleValue': l.double().required(),
@@ -60,4 +59,7 @@ Validator _$SampleSchema = l.schema({
   'minAndMax': l.string().max(200).min(8).required(),
   'httpsLink': l.string().uri(allowedSchemes: ['https']),
 });
+
+SchemaValidationResult<Sample> _$validate(Map<String, dynamic> json) =>
+    $SampleSchema.validateSchema(json, fromJson: Sample.fromJson);
 ```

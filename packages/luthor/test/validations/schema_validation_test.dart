@@ -1,6 +1,23 @@
 import 'package:luthor/luthor.dart';
 import 'package:test/test.dart';
 
+class Sample {
+  final String? email;
+  final String? password;
+
+  Sample({
+    this.email,
+    this.password,
+  });
+
+  factory Sample.fromJson(Map<String, dynamic> json) {
+    return Sample(
+      email: json['email'] as String?,
+      password: json['password'] as String?,
+    );
+  }
+}
+
 void main() {
   late Validator schema;
   late Validator nestedSchema;
@@ -133,6 +150,26 @@ void main() {
         fail('should not have errors');
     }
   });
+
+  test(
+    'should return an instance of object when fromJson is passed',
+    () {
+      const data = {
+        'email': 'user@example.com',
+        'password': 'password',
+      };
+      final result = schema.validateSchema(data, fromJson: Sample.fromJson);
+
+      switch (result) {
+        case SchemaValidationSuccess(data: final data):
+          expect(data, isA<Sample>());
+          expect(data.email, 'user@example.com');
+          expect(data.password, 'password');
+        case SchemaValidationError(data: _, errors: _):
+          fail('should not have errors');
+      }
+    },
+  );
 
   group('Issues', () {
     test('#41', () {

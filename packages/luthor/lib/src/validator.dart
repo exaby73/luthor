@@ -12,6 +12,8 @@ import 'package:luthor/src/validations/schema_validation.dart';
 import 'package:luthor/src/validations/string_validation.dart';
 import 'package:luthor/src/validators/string_validator.dart';
 
+typedef FromJson<T> = T Function(Map<String, Object?> json);
+
 /// Base validator class.
 class Validator {
   Validator({List<Validation> initialValidations = const []})
@@ -125,25 +127,33 @@ class Validator {
   }
 
   /// Validates a schema.
-  SchemaValidationResult validateSchema(
-    Map<String, Object?> value,
-  ) {
+  SchemaValidationResult<T> validateSchema<T>(
+    Map<String, Object?> value, {
+    FromJson<T>? fromJson,
+  }) {
     final errors = _isValid(null, value);
     if (errors != null) {
-      return SchemaValidationError(data: value, errors: errors);
+      return SchemaValidationError(
+        data: fromJson?.call(value) ?? value as T,
+        errors: errors,
+      );
     }
-    return SchemaValidationSuccess(data: value);
+    return SchemaValidationSuccess(data: fromJson?.call(value) ?? value as T);
   }
 
   /// Validates a schema with a field name.
-  SchemaValidationResult validateSchemaWithFieldName(
+  SchemaValidationResult<T> validateSchemaWithFieldName<T>(
     String fieldName,
-    Map<String, Object?> value,
-  ) {
+    Map<String, Object?> value, {
+    FromJson<T>? fromJson,
+  }) {
     final errors = _isValid(fieldName, value);
     if (errors != null) {
-      return SchemaValidationError(data: value, errors: errors);
+      return SchemaValidationError(
+        data: fromJson?.call(value) ?? value as T,
+        errors: errors,
+      );
     }
-    return SchemaValidationSuccess(data: value);
+    return SchemaValidationSuccess(data: fromJson?.call(value) ?? value as T);
   }
 }

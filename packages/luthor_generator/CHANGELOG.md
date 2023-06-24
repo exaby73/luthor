@@ -1,6 +1,6 @@
-## 0.2.1
+## 0.2.2
 
-- Update `luthor_generator` dependency to `^0.2.1`
+- Update `luthor_annotation` dependency to `^0.2.1`
 
 ## 0.2.0
 

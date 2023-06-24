@@ -1,3 +1,7 @@
+## 0.2.1
+
+- Update `luthor_generator` dependency to `^0.2.1`
+
 ## 0.2.0
 
 - Minimum Dart SDK version is now 3.0.0

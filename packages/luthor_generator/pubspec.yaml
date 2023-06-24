@@ -1,6 +1,6 @@
 name: luthor_generator
 description: Generate luthor schemas with Freezed
-version: 0.2.0
+version: 0.2.1
 repository: https://github.com/exaby73/luthor/tree/main/packages/luthor_generator
 
 environment:

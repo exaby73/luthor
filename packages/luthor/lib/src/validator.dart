@@ -134,7 +134,7 @@ class Validator {
     final errors = _isValid(null, value);
     if (errors != null) {
       return SchemaValidationError(
-        data: fromJson?.call(value) ?? value as T,
+        data: fromJson != null ? null : value as T,
         errors: errors,
       );
     }
@@ -150,7 +150,7 @@ class Validator {
     final errors = _isValid(fieldName, value);
     if (errors != null) {
       return SchemaValidationError(
-        data: fromJson?.call(value) ?? value as T,
+        data: fromJson != null ? null : value as T,
         errors: errors,
       );
     }

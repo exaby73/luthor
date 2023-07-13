@@ -184,5 +184,22 @@ void main() {
           });
       }
     });
+
+    test('#47', () {
+      const json = {
+        'email': 'user@example.com',
+      };
+      final result = schema.validateSchema(json, fromJson: Sample.fromJson);
+
+      switch (result) {
+        case SchemaValidationSuccess(data: _):
+          fail('should not be a success');
+        case SchemaValidationError(data: final data, errors: final errors):
+          expect(errors, {
+            'password': ['password is required'],
+          });
+          expect(data, null);
+      }
+    });
   });
 }

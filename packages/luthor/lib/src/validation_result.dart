@@ -27,7 +27,7 @@ class SingleValidationError<T> extends SingleValidationResult<T> {
 
 /// Validation result for a schema validation.
 sealed class SchemaValidationResult<T> {
-  T get data;
+  T? get data;
 
   bool get isValid {
     return switch (this) {
@@ -46,8 +46,8 @@ class SchemaValidationSuccess<T> extends SchemaValidationResult<T> {
 
 class SchemaValidationError<T> extends SchemaValidationResult<T> {
   @override
-  final T data;
+  final T? data;
   final Map<String, dynamic> errors;
 
-  SchemaValidationError({required this.data, required this.errors});
+  SchemaValidationError({this.data, required this.errors});
 }

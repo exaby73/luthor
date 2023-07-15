@@ -1,3 +1,10 @@
+## 0.2.3
+
+ - **FIX**: dependencies.
+ - **FIX**(luthor): SchemaValidation null error due to covariant.
+ - **FEAT**(luthor_generator): luthor classes now require a validate method instead of exposing the raw schema.
+ - **FEAT**(luthor): add fromJson argument to validateSchema.
+
 ## 0.2.2
 
 - Update `luthor_annotation` dependency to `^0.2.1`

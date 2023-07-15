@@ -1,3 +1,10 @@
+## 0.2.1
+
+ - **FIX**: redundant calls fromJson in SchemaValidationError.
+ - **FIX**(luthor): SchemaValidation null error due to covariant.
+ - **FIX**(luthor): l.list() does not validate inner values correctly.
+ - **FEAT**(luthor): add fromJson argument to validateSchema.
+
 # 0.2.0
 
 - Upgrade minimum Dart SDK version to 3.0.0

@@ -1,0 +1,9 @@
+name: dartseid
+repository: https://github.com/exaby73/luthor
+
+packages:
+  - packages/*
+
+scripts:
+  analyze:
+    run: dart analyze

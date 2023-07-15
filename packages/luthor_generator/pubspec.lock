@@ -164,10 +164,9 @@ packages:
   luthor_annotation:
     dependency: "direct main"
     description:
-      name: luthor_annotation
-      sha256: "411dffc04e073e8df4d6d3fcd3e077e7b128ef1f42f7e4cbb2371fb18fcc8c21"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../luthor_annotation"
+      relative: true
+    source: path
     version: "0.2.0"
   matcher:
     dependency: transitive

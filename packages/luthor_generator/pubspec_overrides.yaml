@@ -1,0 +1,4 @@
+# melos_managed_dependency_overrides: luthor_annotation
+dependency_overrides:
+  luthor_annotation:
+    path: ../luthor_annotation

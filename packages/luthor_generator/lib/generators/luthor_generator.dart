@@ -2,6 +2,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:collection/collection.dart';
 import 'package:luthor_annotation/luthor_annotation.dart';
+import 'package:luthor_generator/checkers.dart';
 import 'package:luthor_generator/helpers/validations/base_validations.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -47,7 +48,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
       throw InvalidGenerationSourceError(
         'Luthor can only be applied to classes with a static validate method. '
         'Add the following code to your class:\n'
-        'static SchemaValidationResult<$name> validate(Map<String, dynamic> json) => _validate(json);',
+        'static SchemaValidationResult<$name> validate(Map<String, dynamic> json) => _\$validate(json);',
         element: element,
       );
     }
@@ -57,7 +58,17 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
     buffer.write('Validator \$${name}Schema = l.schema({\n');
 
     for (final param in params) {
-      buffer.write("'${param.name}': ");
+      var name = param.name;
+      final jsonKeyName = jsonKeyChecker
+          .firstAnnotationOf(param)
+          ?.getField('name')
+          ?.toStringValue();
+
+      if (jsonKeyName != null) {
+        name = jsonKeyName;
+      }
+
+      buffer.write("'$name': ");
       buffer.write(getValidations(param));
       buffer.write(',\n');
     }

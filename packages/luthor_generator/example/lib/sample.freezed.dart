@@ -43,6 +43,8 @@ mixin _$Sample {
   @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
   String get luthorPath => throw _privateConstructorUsedError;
   AnotherSample get anotherSample => throw _privateConstructorUsedError;
+  @JsonKey(name: 'jsonKeyName')
+  String get foo => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -68,7 +70,8 @@ abstract class $SampleCopyWith<$Res> {
       @HasMin(8) @HasMax(200) String minAndMax,
       @IsUri(allowedSchemes: ['https']) String? httpsLink,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor') String luthorPath,
-      AnotherSample anotherSample});
+      AnotherSample anotherSample,
+      @JsonKey(name: 'jsonKeyName') String foo});
 
   $AnotherSampleCopyWith<$Res> get anotherSample;
 }
@@ -100,6 +103,7 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
     Object? httpsLink = freezed,
     Object? luthorPath = null,
     Object? anotherSample = null,
+    Object? foo = null,
   }) {
     return _then(_value.copyWith(
       anyValue: freezed == anyValue
@@ -158,6 +162,10 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
           ? _value.anotherSample
           : anotherSample // ignore: cast_nullable_to_non_nullable
               as AnotherSample,
+      foo: null == foo
+          ? _value.foo
+          : foo // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 
@@ -190,7 +198,8 @@ abstract class _$$_SampleCopyWith<$Res> implements $SampleCopyWith<$Res> {
       @HasMin(8) @HasMax(200) String minAndMax,
       @IsUri(allowedSchemes: ['https']) String? httpsLink,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor') String luthorPath,
-      AnotherSample anotherSample});
+      AnotherSample anotherSample,
+      @JsonKey(name: 'jsonKeyName') String foo});
 
   @override
   $AnotherSampleCopyWith<$Res> get anotherSample;
@@ -220,6 +229,7 @@ class __$$_SampleCopyWithImpl<$Res>
     Object? httpsLink = freezed,
     Object? luthorPath = null,
     Object? anotherSample = null,
+    Object? foo = null,
   }) {
     return _then(_$_Sample(
       anyValue: freezed == anyValue
@@ -278,6 +288,10 @@ class __$$_SampleCopyWithImpl<$Res>
           ? _value.anotherSample
           : anotherSample // ignore: cast_nullable_to_non_nullable
               as AnotherSample,
+      foo: null == foo
+          ? _value.foo
+          : foo // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -306,7 +320,9 @@ class _$_Sample implements _Sample {
           this.httpsLink,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
           required this.luthorPath,
-      required this.anotherSample})
+      required this.anotherSample,
+      @JsonKey(name: 'jsonKeyName')
+          required this.foo})
       : _listValue = listValue;
 
   factory _$_Sample.fromJson(Map<String, dynamic> json) =>
@@ -355,10 +371,13 @@ class _$_Sample implements _Sample {
   final String luthorPath;
   @override
   final AnotherSample anotherSample;
+  @override
+  @JsonKey(name: 'jsonKeyName')
+  final String foo;
 
   @override
   String toString() {
-    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, exactly10Characters: $exactly10Characters, minAndMax: $minAndMax, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample)';
+    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, exactly10Characters: $exactly10Characters, minAndMax: $minAndMax, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample, foo: $foo)';
   }
 
   @override
@@ -390,7 +409,8 @@ class _$_Sample implements _Sample {
             (identical(other.luthorPath, luthorPath) ||
                 other.luthorPath == luthorPath) &&
             (identical(other.anotherSample, anotherSample) ||
-                other.anotherSample == anotherSample));
+                other.anotherSample == anotherSample) &&
+            (identical(other.foo, foo) || other.foo == foo));
   }
 
   @JsonKey(ignore: true)
@@ -410,7 +430,8 @@ class _$_Sample implements _Sample {
       minAndMax,
       httpsLink,
       luthorPath,
-      anotherSample);
+      anotherSample,
+      foo);
 
   @JsonKey(ignore: true)
   @override
@@ -448,7 +469,9 @@ abstract class _Sample implements Sample {
           final String? httpsLink,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
           required final String luthorPath,
-      required final AnotherSample anotherSample}) = _$_Sample;
+      required final AnotherSample anotherSample,
+      @JsonKey(name: 'jsonKeyName')
+          required final String foo}) = _$_Sample;
 
   factory _Sample.fromJson(Map<String, dynamic> json) = _$_Sample.fromJson;
 
@@ -488,6 +511,9 @@ abstract class _Sample implements Sample {
   String get luthorPath;
   @override
   AnotherSample get anotherSample;
+  @override
+  @JsonKey(name: 'jsonKeyName')
+  String get foo;
   @override
   @JsonKey(ignore: true)
   _$$_SampleCopyWith<_$_Sample> get copyWith =>

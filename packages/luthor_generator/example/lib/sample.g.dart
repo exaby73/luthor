@@ -23,6 +23,7 @@ _$_Sample _$$_SampleFromJson(Map<String, dynamic> json) => _$_Sample(
       luthorPath: json['luthorPath'] as String,
       anotherSample:
           AnotherSample.fromJson(json['anotherSample'] as Map<String, dynamic>),
+      foo: json['jsonKeyName'] as String,
     );
 
 Map<String, dynamic> _$$_SampleToJson(_$_Sample instance) => <String, dynamic>{
@@ -40,6 +41,7 @@ Map<String, dynamic> _$$_SampleToJson(_$_Sample instance) => <String, dynamic>{
       'httpsLink': instance.httpsLink,
       'luthorPath': instance.luthorPath,
       'anotherSample': instance.anotherSample,
+      'jsonKeyName': instance.foo,
     };
 
 // **************************************************************************
@@ -62,6 +64,7 @@ Validator $SampleSchema = l.schema({
   'luthorPath':
       l.string().regex(r"^https:\/\/pub\.dev\/packages\/luthor").required(),
   'anotherSample': $AnotherSampleSchema.required(),
+  'jsonKeyName': l.string().required(),
 });
 
 SchemaValidationResult<Sample> _$validate(Map<String, dynamic> json) =>

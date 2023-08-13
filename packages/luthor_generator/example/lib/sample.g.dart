@@ -67,5 +67,9 @@ Validator $SampleSchema = l.schema({
   'jsonKeyName': l.string().required(),
 });
 
-SchemaValidationResult<Sample> _$validate(Map<String, dynamic> json) =>
+SchemaValidationResult<Sample> _$SampleValidate(Map<String, dynamic> json) =>
     $SampleSchema.validateSchema(json, fromJson: Sample.fromJson);
+
+extension SampleValidationExtension on Sample {
+  SchemaValidationResult<Sample> validateSelf() => _$SampleValidate(toJson());
+}

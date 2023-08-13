@@ -17,7 +17,7 @@ class AnotherSample with _$AnotherSample {
   static SchemaValidationResult<AnotherSample> validate(
     Map<String, dynamic> json,
   ) =>
-      _$validate(json);
+      _$AnotherSampleValidate(json);
 
   factory AnotherSample.fromJson(Map<String, dynamic> json) =>
       _$AnotherSampleFromJson(json);

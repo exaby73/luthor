@@ -46,7 +46,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
         validateMethod.returnType.toString() != 'SchemaValidationResult<$name>';
     if (isInvalidMethod) {
       throw InvalidGenerationSourceError(
-        'Luthor can only be applied to classes with a validate method. '
+        'Luthor can only be applied to classes with a static validate method. '
         'Add the following code to your class:\n'
         'static SchemaValidationResult<$name> validate(Map<String, dynamic> json) => _\$${name}Validate(json);',
         element: element,

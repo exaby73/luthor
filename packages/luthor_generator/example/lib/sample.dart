@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_annotation_target
+
 import 'package:example/another_sample.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:luthor/luthor.dart';
@@ -32,12 +34,21 @@ class Sample with _$Sample {
   }) = _Sample;
 
   static SchemaValidationResult<Sample> validate(Map<String, dynamic> json) =>
-      _$validate(json);
+      _$SampleValidate(json);
 
   factory Sample.fromJson(Map<String, dynamic> json) => _$SampleFromJson(json);
 }
 
 void main() {
-  final v = Sample.validate({});
-  print(v);
+  final result = Sample.validate({});
+  switch (result) {
+    case SchemaValidationError(errors: final errors):
+      print('Error: ');
+      errors.forEach((key, value) {
+        print('$key: $value');
+      });
+    case SchemaValidationSuccess(data: final data):
+      print('Success: $data');
+      data.validateSelf();
+  }
 }

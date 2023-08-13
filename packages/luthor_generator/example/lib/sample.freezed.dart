@@ -307,22 +307,15 @@ class _$_Sample implements _Sample {
       required final List<String> listValue,
       required this.numValue,
       required this.stringValue,
-      @isEmail
-          required this.email,
-      @isDateTime
-          required this.date,
-      @HasLength(10)
-          this.exactly10Characters,
-      @HasMin(8)
-      @HasMax(200)
-          required this.minAndMax,
-      @IsUri(allowedSchemes: ['https'])
-          this.httpsLink,
+      @isEmail required this.email,
+      @isDateTime required this.date,
+      @HasLength(10) this.exactly10Characters,
+      @HasMin(8) @HasMax(200) required this.minAndMax,
+      @IsUri(allowedSchemes: ['https']) this.httpsLink,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
-          required this.luthorPath,
+      required this.luthorPath,
       required this.anotherSample,
-      @JsonKey(name: 'jsonKeyName')
-          required this.foo})
+      @JsonKey(name: 'jsonKeyName') required this.foo})
       : _listValue = listValue;
 
   factory _$_Sample.fromJson(Map<String, dynamic> json) =>
@@ -456,22 +449,15 @@ abstract class _Sample implements Sample {
       required final List<String> listValue,
       required final num numValue,
       required final String stringValue,
-      @isEmail
-          required final String email,
-      @isDateTime
-          required final String date,
-      @HasLength(10)
-          final String? exactly10Characters,
-      @HasMin(8)
-      @HasMax(200)
-          required final String minAndMax,
-      @IsUri(allowedSchemes: ['https'])
-          final String? httpsLink,
+      @isEmail required final String email,
+      @isDateTime required final String date,
+      @HasLength(10) final String? exactly10Characters,
+      @HasMin(8) @HasMax(200) required final String minAndMax,
+      @IsUri(allowedSchemes: ['https']) final String? httpsLink,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
-          required final String luthorPath,
+      required final String luthorPath,
       required final AnotherSample anotherSample,
-      @JsonKey(name: 'jsonKeyName')
-          required final String foo}) = _$_Sample;
+      @JsonKey(name: 'jsonKeyName') required final String foo}) = _$_Sample;
 
   factory _Sample.fromJson(Map<String, dynamic> json) = _$_Sample.fromJson;
 

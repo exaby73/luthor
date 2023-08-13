@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-08-13
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`luthor_generator` - `v0.3.0`](#luthor_generator---v030)
+
+Packages with other changes:
+
+ - There are no other changes in this release.
+
+---
+
+#### `luthor_generator` - `v0.3.0`
+
+ - **FEAT**(luthor_generator): validate method generates unique methods allowing multiple luthor classes in one file.
+ - **FEAT**(luthor_generator): Add support for JsonKey.name.
+
+
 ## 2023-07-23
 
 ### Changes

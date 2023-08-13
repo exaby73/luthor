@@ -1,3 +1,7 @@
+## 0.3.0
+
+ - **FEAT**(luthor_generator): validate method generates unique methods allowing multiple luthor classes in one file.
+
 ## 0.2.4
 
  - **FIX**: dependencies.

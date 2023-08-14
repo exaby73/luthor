@@ -21,9 +21,9 @@ void _checkAndWriteDateTimeValidation(
   ParameterElement param,
 ) {
   final dateTimeAnnotation = getAnnotation(isDateTimeChecker, param);
-  if (dateTimeAnnotation != null) {
+  if (dateTimeAnnotation != null || param.type.getDisplayString(withNullability: false) == 'DateTime') {
     buffer.write('.dateTime(');
-    final message = dateTimeAnnotation.getField('message')?.toStringValue();
+    final message = dateTimeAnnotation?.getField('message')?.toStringValue();
     if (message != null) buffer.write("message: '$message'");
     buffer.write(')');
   }

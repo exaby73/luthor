@@ -24,6 +24,7 @@ class Sample with _$Sample {
     required String stringValue,
     @isEmail required String email,
     @isDateTime required String date,
+    required DateTime dateTime,
     @HasLength(10) String? exactly10Characters,
     @HasMin(8) @HasMax(200) required String minAndMax,
     @IsUri(allowedSchemes: ['https']) String? httpsLink,

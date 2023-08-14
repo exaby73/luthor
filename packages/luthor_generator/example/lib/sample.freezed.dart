@@ -33,6 +33,7 @@ mixin _$Sample {
   String get email => throw _privateConstructorUsedError;
   @isDateTime
   String get date => throw _privateConstructorUsedError;
+  DateTime get dateTime => throw _privateConstructorUsedError;
   @HasLength(10)
   String? get exactly10Characters => throw _privateConstructorUsedError;
   @HasMin(8)
@@ -66,6 +67,7 @@ abstract class $SampleCopyWith<$Res> {
       String stringValue,
       @isEmail String email,
       @isDateTime String date,
+      DateTime dateTime,
       @HasLength(10) String? exactly10Characters,
       @HasMin(8) @HasMax(200) String minAndMax,
       @IsUri(allowedSchemes: ['https']) String? httpsLink,
@@ -98,6 +100,7 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
     Object? stringValue = null,
     Object? email = null,
     Object? date = null,
+    Object? dateTime = null,
     Object? exactly10Characters = freezed,
     Object? minAndMax = null,
     Object? httpsLink = freezed,
@@ -142,6 +145,10 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as String,
+      dateTime: null == dateTime
+          ? _value.dateTime
+          : dateTime // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       exactly10Characters: freezed == exactly10Characters
           ? _value.exactly10Characters
           : exactly10Characters // ignore: cast_nullable_to_non_nullable
@@ -194,6 +201,7 @@ abstract class _$$_SampleCopyWith<$Res> implements $SampleCopyWith<$Res> {
       String stringValue,
       @isEmail String email,
       @isDateTime String date,
+      DateTime dateTime,
       @HasLength(10) String? exactly10Characters,
       @HasMin(8) @HasMax(200) String minAndMax,
       @IsUri(allowedSchemes: ['https']) String? httpsLink,
@@ -224,6 +232,7 @@ class __$$_SampleCopyWithImpl<$Res>
     Object? stringValue = null,
     Object? email = null,
     Object? date = null,
+    Object? dateTime = null,
     Object? exactly10Characters = freezed,
     Object? minAndMax = null,
     Object? httpsLink = freezed,
@@ -268,6 +277,10 @@ class __$$_SampleCopyWithImpl<$Res>
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as String,
+      dateTime: null == dateTime
+          ? _value.dateTime
+          : dateTime // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       exactly10Characters: freezed == exactly10Characters
           ? _value.exactly10Characters
           : exactly10Characters // ignore: cast_nullable_to_non_nullable
@@ -309,6 +322,7 @@ class _$_Sample implements _Sample {
       required this.stringValue,
       @isEmail required this.email,
       @isDateTime required this.date,
+      required this.dateTime,
       @HasLength(10) this.exactly10Characters,
       @HasMin(8) @HasMax(200) required this.minAndMax,
       @IsUri(allowedSchemes: ['https']) this.httpsLink,
@@ -350,6 +364,8 @@ class _$_Sample implements _Sample {
   @isDateTime
   final String date;
   @override
+  final DateTime dateTime;
+  @override
   @HasLength(10)
   final String? exactly10Characters;
   @override
@@ -370,7 +386,7 @@ class _$_Sample implements _Sample {
 
   @override
   String toString() {
-    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, exactly10Characters: $exactly10Characters, minAndMax: $minAndMax, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample, foo: $foo)';
+    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, dateTime: $dateTime, exactly10Characters: $exactly10Characters, minAndMax: $minAndMax, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample, foo: $foo)';
   }
 
   @override
@@ -393,6 +409,8 @@ class _$_Sample implements _Sample {
                 other.stringValue == stringValue) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.date, date) || other.date == date) &&
+            (identical(other.dateTime, dateTime) ||
+                other.dateTime == dateTime) &&
             (identical(other.exactly10Characters, exactly10Characters) ||
                 other.exactly10Characters == exactly10Characters) &&
             (identical(other.minAndMax, minAndMax) ||
@@ -419,6 +437,7 @@ class _$_Sample implements _Sample {
       stringValue,
       email,
       date,
+      dateTime,
       exactly10Characters,
       minAndMax,
       httpsLink,
@@ -451,6 +470,7 @@ abstract class _Sample implements Sample {
       required final String stringValue,
       @isEmail required final String email,
       @isDateTime required final String date,
+      required final DateTime dateTime,
       @HasLength(10) final String? exactly10Characters,
       @HasMin(8) @HasMax(200) required final String minAndMax,
       @IsUri(allowedSchemes: ['https']) final String? httpsLink,
@@ -482,6 +502,8 @@ abstract class _Sample implements Sample {
   @override
   @isDateTime
   String get date;
+  @override
+  DateTime get dateTime;
   @override
   @HasLength(10)
   String? get exactly10Characters;

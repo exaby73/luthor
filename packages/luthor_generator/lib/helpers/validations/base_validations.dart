@@ -12,12 +12,6 @@ String getValidations(ParameterElement param) {
 
   final isNullable = param.type.nullabilitySuffix == NullabilitySuffix.question;
 
-  if (param.type.getDisplayString(withNullability: false) == 'DateTime') {
-    throw UnsupportedTypeError(
-      'DateTime is not supported. Use String instead with @isDateTime.',
-    );
-  }
-
   if (param.type is DynamicType) {
     buffer.write('l.any()');
   }
@@ -46,7 +40,8 @@ String getValidations(ParameterElement param) {
     buffer.write('l.number()');
   }
 
-  if (param.type.isDartCoreString) {
+  if (param.type.isDartCoreString ||
+      param.type.getDisplayString(withNullability: false) == 'DateTime') {
     buffer.write('l.string()');
     buffer.write(getStringValidations(param));
   }
@@ -75,7 +70,8 @@ void _checkAndAddCustomSchema(StringBuffer buffer, ParameterElement param) {
       'does not have @luthor annotation.',
     );
   }
-  buffer.write('\$${param.type.getDisplayString(withNullability: false)}Schema');
+  buffer
+      .write('\$${param.type.getDisplayString(withNullability: false)}Schema');
 }
 
 DartObject? getAnnotation(TypeChecker checker, Element field) {

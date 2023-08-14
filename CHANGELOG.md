@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-08-15
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor_generator` - `v0.3.1`](#luthor_generator---v031)
+
+---
+
+#### `luthor_generator` - `v0.3.1`
+
+ - **FEAT**(luthor_generator): add support for DateTime.
+
+
 ## 2023-08-13
 
 ### Changes

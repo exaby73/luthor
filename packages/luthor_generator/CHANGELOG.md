@@ -1,3 +1,7 @@
+## 0.3.1
+
+ - **FEAT**(luthor_generator): add support for DateTime.
+
 ## 0.3.0
 
  - **FEAT**(luthor_generator): validate method generates unique methods allowing multiple luthor classes in one file.

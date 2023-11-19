@@ -1,3 +1,7 @@
+## 0.3.2
+
+ - **FEAT**: update analyzer.
+
 ## 0.3.1
 
  - **FEAT**(luthor_generator): add support for DateTime.

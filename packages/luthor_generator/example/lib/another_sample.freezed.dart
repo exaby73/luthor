@@ -68,22 +68,22 @@ class _$AnotherSampleCopyWithImpl<$Res, $Val extends AnotherSample>
 }
 
 /// @nodoc
-abstract class _$$_AnotherSampleCopyWith<$Res>
+abstract class _$$AnotherSampleImplCopyWith<$Res>
     implements $AnotherSampleCopyWith<$Res> {
-  factory _$$_AnotherSampleCopyWith(
-          _$_AnotherSample value, $Res Function(_$_AnotherSample) then) =
-      __$$_AnotherSampleCopyWithImpl<$Res>;
+  factory _$$AnotherSampleImplCopyWith(
+          _$AnotherSampleImpl value, $Res Function(_$AnotherSampleImpl) then) =
+      __$$AnotherSampleImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int id, String? name});
 }
 
 /// @nodoc
-class __$$_AnotherSampleCopyWithImpl<$Res>
-    extends _$AnotherSampleCopyWithImpl<$Res, _$_AnotherSample>
-    implements _$$_AnotherSampleCopyWith<$Res> {
-  __$$_AnotherSampleCopyWithImpl(
-      _$_AnotherSample _value, $Res Function(_$_AnotherSample) _then)
+class __$$AnotherSampleImplCopyWithImpl<$Res>
+    extends _$AnotherSampleCopyWithImpl<$Res, _$AnotherSampleImpl>
+    implements _$$AnotherSampleImplCopyWith<$Res> {
+  __$$AnotherSampleImplCopyWithImpl(
+      _$AnotherSampleImpl _value, $Res Function(_$AnotherSampleImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -92,7 +92,7 @@ class __$$_AnotherSampleCopyWithImpl<$Res>
     Object? id = null,
     Object? name = freezed,
   }) {
-    return _then(_$_AnotherSample(
+    return _then(_$AnotherSampleImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -107,11 +107,11 @@ class __$$_AnotherSampleCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_AnotherSample implements _AnotherSample {
-  const _$_AnotherSample({required this.id, this.name});
+class _$AnotherSampleImpl implements _AnotherSample {
+  const _$AnotherSampleImpl({required this.id, this.name});
 
-  factory _$_AnotherSample.fromJson(Map<String, dynamic> json) =>
-      _$$_AnotherSampleFromJson(json);
+  factory _$AnotherSampleImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AnotherSampleImplFromJson(json);
 
   @override
   final int id;
@@ -127,7 +127,7 @@ class _$_AnotherSample implements _AnotherSample {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AnotherSample &&
+            other is _$AnotherSampleImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name));
   }
@@ -139,12 +139,12 @@ class _$_AnotherSample implements _AnotherSample {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AnotherSampleCopyWith<_$_AnotherSample> get copyWith =>
-      __$$_AnotherSampleCopyWithImpl<_$_AnotherSample>(this, _$identity);
+  _$$AnotherSampleImplCopyWith<_$AnotherSampleImpl> get copyWith =>
+      __$$AnotherSampleImplCopyWithImpl<_$AnotherSampleImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_AnotherSampleToJson(
+    return _$$AnotherSampleImplToJson(
       this,
     );
   }
@@ -152,10 +152,10 @@ class _$_AnotherSample implements _AnotherSample {
 
 abstract class _AnotherSample implements AnotherSample {
   const factory _AnotherSample({required final int id, final String? name}) =
-      _$_AnotherSample;
+      _$AnotherSampleImpl;
 
   factory _AnotherSample.fromJson(Map<String, dynamic> json) =
-      _$_AnotherSample.fromJson;
+      _$AnotherSampleImpl.fromJson;
 
   @override
   int get id;
@@ -163,6 +163,6 @@ abstract class _AnotherSample implements AnotherSample {
   String? get name;
   @override
   @JsonKey(ignore: true)
-  _$$_AnotherSampleCopyWith<_$_AnotherSample> get copyWith =>
+  _$$AnotherSampleImplCopyWith<_$AnotherSampleImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

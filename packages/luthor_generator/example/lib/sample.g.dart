@@ -6,7 +6,7 @@ part of 'sample.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Sample _$$_SampleFromJson(Map<String, dynamic> json) => _$_Sample(
+_$SampleImpl _$$SampleImplFromJson(Map<String, dynamic> json) => _$SampleImpl(
       anyValue: json['anyValue'],
       boolValue: json['boolValue'] as bool,
       doubleValue: (json['doubleValue'] as num).toDouble(),
@@ -27,7 +27,8 @@ _$_Sample _$$_SampleFromJson(Map<String, dynamic> json) => _$_Sample(
       foo: json['jsonKeyName'] as String,
     );
 
-Map<String, dynamic> _$$_SampleToJson(_$_Sample instance) => <String, dynamic>{
+Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
+    <String, dynamic>{
       'anyValue': instance.anyValue,
       'boolValue': instance.boolValue,
       'doubleValue': instance.doubleValue,

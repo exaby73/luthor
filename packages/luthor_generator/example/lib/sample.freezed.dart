@@ -1,4 +1,5 @@
 // coverage:ignore-file
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
@@ -186,9 +187,10 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
 }
 
 /// @nodoc
-abstract class _$$_SampleCopyWith<$Res> implements $SampleCopyWith<$Res> {
-  factory _$$_SampleCopyWith(_$_Sample value, $Res Function(_$_Sample) then) =
-      __$$_SampleCopyWithImpl<$Res>;
+abstract class _$$SampleImplCopyWith<$Res> implements $SampleCopyWith<$Res> {
+  factory _$$SampleImplCopyWith(
+          _$SampleImpl value, $Res Function(_$SampleImpl) then) =
+      __$$SampleImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -214,10 +216,11 @@ abstract class _$$_SampleCopyWith<$Res> implements $SampleCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_SampleCopyWithImpl<$Res>
-    extends _$SampleCopyWithImpl<$Res, _$_Sample>
-    implements _$$_SampleCopyWith<$Res> {
-  __$$_SampleCopyWithImpl(_$_Sample _value, $Res Function(_$_Sample) _then)
+class __$$SampleImplCopyWithImpl<$Res>
+    extends _$SampleCopyWithImpl<$Res, _$SampleImpl>
+    implements _$$SampleImplCopyWith<$Res> {
+  __$$SampleImplCopyWithImpl(
+      _$SampleImpl _value, $Res Function(_$SampleImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -240,7 +243,7 @@ class __$$_SampleCopyWithImpl<$Res>
     Object? anotherSample = null,
     Object? foo = null,
   }) {
-    return _then(_$_Sample(
+    return _then(_$SampleImpl(
       anyValue: freezed == anyValue
           ? _value.anyValue
           : anyValue // ignore: cast_nullable_to_non_nullable
@@ -311,8 +314,8 @@ class __$$_SampleCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Sample implements _Sample {
-  const _$_Sample(
+class _$SampleImpl implements _Sample {
+  const _$SampleImpl(
       {this.anyValue,
       required this.boolValue,
       required this.doubleValue,
@@ -332,8 +335,8 @@ class _$_Sample implements _Sample {
       @JsonKey(name: 'jsonKeyName') required this.foo})
       : _listValue = listValue;
 
-  factory _$_Sample.fromJson(Map<String, dynamic> json) =>
-      _$$_SampleFromJson(json);
+  factory _$SampleImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SampleImplFromJson(json);
 
   @override
   final dynamic anyValue;
@@ -393,7 +396,7 @@ class _$_Sample implements _Sample {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Sample &&
+            other is _$SampleImpl &&
             const DeepCollectionEquality().equals(other.anyValue, anyValue) &&
             (identical(other.boolValue, boolValue) ||
                 other.boolValue == boolValue) &&
@@ -448,12 +451,12 @@ class _$_Sample implements _Sample {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SampleCopyWith<_$_Sample> get copyWith =>
-      __$$_SampleCopyWithImpl<_$_Sample>(this, _$identity);
+  _$$SampleImplCopyWith<_$SampleImpl> get copyWith =>
+      __$$SampleImplCopyWithImpl<_$SampleImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_SampleToJson(
+    return _$$SampleImplToJson(
       this,
     );
   }
@@ -477,9 +480,9 @@ abstract class _Sample implements Sample {
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
       required final String luthorPath,
       required final AnotherSample anotherSample,
-      @JsonKey(name: 'jsonKeyName') required final String foo}) = _$_Sample;
+      @JsonKey(name: 'jsonKeyName') required final String foo}) = _$SampleImpl;
 
-  factory _Sample.fromJson(Map<String, dynamic> json) = _$_Sample.fromJson;
+  factory _Sample.fromJson(Map<String, dynamic> json) = _$SampleImpl.fromJson;
 
   @override
   dynamic get anyValue;
@@ -524,6 +527,6 @@ abstract class _Sample implements Sample {
   String get foo;
   @override
   @JsonKey(ignore: true)
-  _$$_SampleCopyWith<_$_Sample> get copyWith =>
+  _$$SampleImplCopyWith<_$SampleImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

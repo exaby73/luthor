@@ -11,7 +11,9 @@ part 'another_sample.g.dart';
 class AnotherSample with _$AnotherSample {
   const factory AnotherSample({
     required int id,
-    String? name,
+    @JsonKey(name: 'full_name') String? name,
+    @IsEmail(message: "Invalid email") required String email,
+    @HasMin(8) required String password,
   }) = _AnotherSample;
 
   static SchemaValidationResult<AnotherSample> validate(
@@ -21,4 +23,15 @@ class AnotherSample with _$AnotherSample {
 
   factory AnotherSample.fromJson(Map<String, dynamic> json) =>
       _$AnotherSampleFromJson(json);
+}
+
+void main() {
+  final json = {'id': 0};
+  final result = AnotherSample.validate(json);
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print(data.validateSelf());
+    case SchemaValidationError(errors: final errors):
+      print(errors);
+  }
 }

@@ -9,13 +9,17 @@ part of 'another_sample.dart';
 _$AnotherSampleImpl _$$AnotherSampleImplFromJson(Map<String, dynamic> json) =>
     _$AnotherSampleImpl(
       id: json['id'] as int,
-      name: json['name'] as String?,
+      name: json['full_name'] as String?,
+      email: json['email'] as String,
+      password: json['password'] as String,
     );
 
 Map<String, dynamic> _$$AnotherSampleImplToJson(_$AnotherSampleImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'name': instance.name,
+      'full_name': instance.name,
+      'email': instance.email,
+      'password': instance.password,
     };
 
 // **************************************************************************
@@ -24,7 +28,9 @@ Map<String, dynamic> _$$AnotherSampleImplToJson(_$AnotherSampleImpl instance) =>
 
 Validator $AnotherSampleSchema = l.schema({
   'id': l.int().required(),
-  'name': l.string(),
+  'full_name': l.string(),
+  'email': l.string().email(message: 'Invalid email').required(),
+  'password': l.string().min(8).required(),
 });
 
 SchemaValidationResult<AnotherSample> _$AnotherSampleValidate(

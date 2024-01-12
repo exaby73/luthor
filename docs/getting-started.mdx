@@ -1,1 +1,75 @@
 # Getting Started
+
+## Installation
+
+### For Dart projects
+
+```bash
+dart pub add luthor
+```
+
+### For Flutter projects
+
+```bash
+flutter pub add luthor
+```
+
+## Usage
+
+Let's try validating whether a given string is a valid email address.
+
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() {
+  final String emailToValidate = '';
+  final emailSchema = l.string().email().required();
+  final result = emailSchema.validateValue(emailToValidate);
+
+  print(switch (result) {
+    SingleValidationSuccess(data: final String data) => 'Email is valid: $data',
+    SingleValidationError(errors: final List<String> errors) => errors,
+  });
+}
+```
+
+**Output:**
+
+```console
+[Value must be a valid email address]
+```
+
+In this example, we used the `string()` method to create a schema that validates strings. Then we chained the `email()` method to validate whether the string is a valid email address. Finally, we chained the `required()` method to validate whether the value is not `null`.
+
+Since we passed an empty string to the `validateValue` method, the validation failed and returned a list of errors. Specifically, the `email()` method returned an error because the string is not a valid email address.
+
+Let's try a more complex example. Let's validate a `Map<String, dynamic>` object that represents a user.
+
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() {
+  final Map<String, dynamic> userToValidate = {
+    'name': 'john doe',
+    'email': 'user@example.com',
+    'age': '25',
+  };
+  final userSchema = l.schema({
+    'name': l.string().required(),
+    'email': l.string().email().required(),
+    'age': l.int().required(),
+  });
+  final result =
+      userSchema.validateSchema<Map<String, dynamic>>(userToValidate);
+  print(switch (result) {
+    SchemaValidationSuccess(data: final Map<String, dynamic> data) => data,
+    SchemaValidationError(errors: final Map<String, dynamic> errors) => errors,
+  });
+}
+```
+
+**Output:**
+
+```console
+{age: [age must be an integer]}
+```

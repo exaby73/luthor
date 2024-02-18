@@ -10,6 +10,9 @@ import 'package:luthor/src/validations/number_validation.dart';
 import 'package:luthor/src/validations/required_validation.dart';
 import 'package:luthor/src/validations/schema_validation.dart';
 import 'package:luthor/src/validations/string_validation.dart';
+import 'package:luthor/src/validators/double_validator.dart';
+import 'package:luthor/src/validators/int_validator.dart';
+import 'package:luthor/src/validators/number_validator.dart';
 import 'package:luthor/src/validators/string_validator.dart';
 
 typedef FromJson<T> = T Function(Map<String, Object?> json);
@@ -46,21 +49,21 @@ class Validator {
   }
 
   /// Validates that the value is a number (int or double).
-  Validator number({String? message}) {
+  NumberValidator number({String? message}) {
     validations.add(NumberValidation(message: message));
-    return this;
+    return NumberValidator(initialValidations: validations);
   }
 
   /// Validates that the value is an int.
-  Validator int({String? message}) {
+  IntValidator int({String? message}) {
     validations.add(IntValidation(message: message));
-    return this;
+    return IntValidator(initialValidations: validations);
   }
 
   /// Validates that the value is a double.
-  Validator double({String? message}) {
+  DoubleValidator double({String? message}) {
     validations.add(DoubleValidation(message: message));
-    return this;
+    return DoubleValidator(initialValidations: validations);
   }
 
   /// Validates that the value is a bool.

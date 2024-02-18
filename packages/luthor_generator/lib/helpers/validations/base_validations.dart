@@ -4,6 +4,9 @@ import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:luthor_generator/checkers.dart';
 import 'package:luthor_generator/errors/unsupported_type_error.dart';
+import 'package:luthor_generator/helpers/validations/double_validations.dart';
+import 'package:luthor_generator/helpers/validations/int_validations.dart';
+import 'package:luthor_generator/helpers/validations/number_validations.dart';
 import 'package:luthor_generator/helpers/validations/string_validations.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -22,10 +25,12 @@ String getValidations(ParameterElement param) {
 
   if (param.type.isDartCoreDouble) {
     buffer.write('l.double()');
+    buffer.write(getDoubleValidations(param));
   }
 
   if (param.type.isDartCoreInt) {
     buffer.write('l.int()');
+    buffer.write(getIntValidations(param));
   }
 
   if (param.type.isDartCoreList) {
@@ -38,6 +43,7 @@ String getValidations(ParameterElement param) {
 
   if (param.type.isDartCoreNum) {
     buffer.write('l.number()');
+    buffer.write(getNumberValidations(param));
   }
 
   if (param.type.isDartCoreString ||

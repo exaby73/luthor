@@ -12,7 +12,7 @@ part of 'sample.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 Sample _$SampleFromJson(Map<String, dynamic> json) {
   return _Sample.fromJson(json);
@@ -38,7 +38,16 @@ mixin _$Sample {
   String? get exactly10Characters => throw _privateConstructorUsedError;
   @HasMin(8)
   @HasMax(200)
-  String get minAndMax => throw _privateConstructorUsedError;
+  String get minAndMaxString => throw _privateConstructorUsedError;
+  @HasMin(2)
+  @HasMax(4)
+  int get minAndMaxInt => throw _privateConstructorUsedError;
+  @HasMinDouble(2.0)
+  @HasMaxDouble(4.0)
+  double get minAndMaxDouble => throw _privateConstructorUsedError;
+  @HasMinNumber(2)
+  @HasMaxNumber(3.0)
+  num get minAndMaxNumber => throw _privateConstructorUsedError;
   @IsUri(allowedSchemes: ['https'])
   String? get httpsLink => throw _privateConstructorUsedError;
   @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
@@ -69,7 +78,10 @@ abstract class $SampleCopyWith<$Res> {
       @isDateTime String date,
       DateTime dateTime,
       @HasLength(10) String? exactly10Characters,
-      @HasMin(8) @HasMax(200) String minAndMax,
+      @HasMin(8) @HasMax(200) String minAndMaxString,
+      @HasMin(2) @HasMax(4) int minAndMaxInt,
+      @HasMinDouble(2.0) @HasMaxDouble(4.0) double minAndMaxDouble,
+      @HasMinNumber(2) @HasMaxNumber(3.0) num minAndMaxNumber,
       @IsUri(allowedSchemes: ['https']) String? httpsLink,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor') String luthorPath,
       AnotherSample anotherSample,
@@ -102,7 +114,10 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
     Object? date = null,
     Object? dateTime = null,
     Object? exactly10Characters = freezed,
-    Object? minAndMax = null,
+    Object? minAndMaxString = null,
+    Object? minAndMaxInt = null,
+    Object? minAndMaxDouble = null,
+    Object? minAndMaxNumber = null,
     Object? httpsLink = freezed,
     Object? luthorPath = null,
     Object? anotherSample = null,
@@ -153,10 +168,22 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
           ? _value.exactly10Characters
           : exactly10Characters // ignore: cast_nullable_to_non_nullable
               as String?,
-      minAndMax: null == minAndMax
-          ? _value.minAndMax
-          : minAndMax // ignore: cast_nullable_to_non_nullable
+      minAndMaxString: null == minAndMaxString
+          ? _value.minAndMaxString
+          : minAndMaxString // ignore: cast_nullable_to_non_nullable
               as String,
+      minAndMaxInt: null == minAndMaxInt
+          ? _value.minAndMaxInt
+          : minAndMaxInt // ignore: cast_nullable_to_non_nullable
+              as int,
+      minAndMaxDouble: null == minAndMaxDouble
+          ? _value.minAndMaxDouble
+          : minAndMaxDouble // ignore: cast_nullable_to_non_nullable
+              as double,
+      minAndMaxNumber: null == minAndMaxNumber
+          ? _value.minAndMaxNumber
+          : minAndMaxNumber // ignore: cast_nullable_to_non_nullable
+              as num,
       httpsLink: freezed == httpsLink
           ? _value.httpsLink
           : httpsLink // ignore: cast_nullable_to_non_nullable
@@ -204,7 +231,10 @@ abstract class _$$SampleImplCopyWith<$Res> implements $SampleCopyWith<$Res> {
       @isDateTime String date,
       DateTime dateTime,
       @HasLength(10) String? exactly10Characters,
-      @HasMin(8) @HasMax(200) String minAndMax,
+      @HasMin(8) @HasMax(200) String minAndMaxString,
+      @HasMin(2) @HasMax(4) int minAndMaxInt,
+      @HasMinDouble(2.0) @HasMaxDouble(4.0) double minAndMaxDouble,
+      @HasMinNumber(2) @HasMaxNumber(3.0) num minAndMaxNumber,
       @IsUri(allowedSchemes: ['https']) String? httpsLink,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor') String luthorPath,
       AnotherSample anotherSample,
@@ -236,7 +266,10 @@ class __$$SampleImplCopyWithImpl<$Res>
     Object? date = null,
     Object? dateTime = null,
     Object? exactly10Characters = freezed,
-    Object? minAndMax = null,
+    Object? minAndMaxString = null,
+    Object? minAndMaxInt = null,
+    Object? minAndMaxDouble = null,
+    Object? minAndMaxNumber = null,
     Object? httpsLink = freezed,
     Object? luthorPath = null,
     Object? anotherSample = null,
@@ -287,10 +320,22 @@ class __$$SampleImplCopyWithImpl<$Res>
           ? _value.exactly10Characters
           : exactly10Characters // ignore: cast_nullable_to_non_nullable
               as String?,
-      minAndMax: null == minAndMax
-          ? _value.minAndMax
-          : minAndMax // ignore: cast_nullable_to_non_nullable
+      minAndMaxString: null == minAndMaxString
+          ? _value.minAndMaxString
+          : minAndMaxString // ignore: cast_nullable_to_non_nullable
               as String,
+      minAndMaxInt: null == minAndMaxInt
+          ? _value.minAndMaxInt
+          : minAndMaxInt // ignore: cast_nullable_to_non_nullable
+              as int,
+      minAndMaxDouble: null == minAndMaxDouble
+          ? _value.minAndMaxDouble
+          : minAndMaxDouble // ignore: cast_nullable_to_non_nullable
+              as double,
+      minAndMaxNumber: null == minAndMaxNumber
+          ? _value.minAndMaxNumber
+          : minAndMaxNumber // ignore: cast_nullable_to_non_nullable
+              as num,
       httpsLink: freezed == httpsLink
           ? _value.httpsLink
           : httpsLink // ignore: cast_nullable_to_non_nullable
@@ -326,7 +371,10 @@ class _$SampleImpl implements _Sample {
       @isDateTime required this.date,
       required this.dateTime,
       @HasLength(10) this.exactly10Characters,
-      @HasMin(8) @HasMax(200) required this.minAndMax,
+      @HasMin(8) @HasMax(200) required this.minAndMaxString,
+      @HasMin(2) @HasMax(4) required this.minAndMaxInt,
+      @HasMinDouble(2.0) @HasMaxDouble(4.0) required this.minAndMaxDouble,
+      @HasMinNumber(2) @HasMaxNumber(3.0) required this.minAndMaxNumber,
       @IsUri(allowedSchemes: ['https']) this.httpsLink,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
       required this.luthorPath,
@@ -373,7 +421,19 @@ class _$SampleImpl implements _Sample {
   @override
   @HasMin(8)
   @HasMax(200)
-  final String minAndMax;
+  final String minAndMaxString;
+  @override
+  @HasMin(2)
+  @HasMax(4)
+  final int minAndMaxInt;
+  @override
+  @HasMinDouble(2.0)
+  @HasMaxDouble(4.0)
+  final double minAndMaxDouble;
+  @override
+  @HasMinNumber(2)
+  @HasMaxNumber(3.0)
+  final num minAndMaxNumber;
   @override
   @IsUri(allowedSchemes: ['https'])
   final String? httpsLink;
@@ -388,11 +448,11 @@ class _$SampleImpl implements _Sample {
 
   @override
   String toString() {
-    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, dateTime: $dateTime, exactly10Characters: $exactly10Characters, minAndMax: $minAndMax, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample, foo: $foo)';
+    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, dateTime: $dateTime, exactly10Characters: $exactly10Characters, minAndMaxString: $minAndMaxString, minAndMaxInt: $minAndMaxInt, minAndMaxDouble: $minAndMaxDouble, minAndMaxNumber: $minAndMaxNumber, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample, foo: $foo)';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SampleImpl &&
@@ -415,8 +475,14 @@ class _$SampleImpl implements _Sample {
                 other.dateTime == dateTime) &&
             (identical(other.exactly10Characters, exactly10Characters) ||
                 other.exactly10Characters == exactly10Characters) &&
-            (identical(other.minAndMax, minAndMax) ||
-                other.minAndMax == minAndMax) &&
+            (identical(other.minAndMaxString, minAndMaxString) ||
+                other.minAndMaxString == minAndMaxString) &&
+            (identical(other.minAndMaxInt, minAndMaxInt) ||
+                other.minAndMaxInt == minAndMaxInt) &&
+            (identical(other.minAndMaxDouble, minAndMaxDouble) ||
+                other.minAndMaxDouble == minAndMaxDouble) &&
+            (identical(other.minAndMaxNumber, minAndMaxNumber) ||
+                other.minAndMaxNumber == minAndMaxNumber) &&
             (identical(other.httpsLink, httpsLink) ||
                 other.httpsLink == httpsLink) &&
             (identical(other.luthorPath, luthorPath) ||
@@ -428,24 +494,28 @@ class _$SampleImpl implements _Sample {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(anyValue),
-      boolValue,
-      doubleValue,
-      intValue,
-      const DeepCollectionEquality().hash(_listValue),
-      numValue,
-      stringValue,
-      email,
-      date,
-      dateTime,
-      exactly10Characters,
-      minAndMax,
-      httpsLink,
-      luthorPath,
-      anotherSample,
-      foo);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        const DeepCollectionEquality().hash(anyValue),
+        boolValue,
+        doubleValue,
+        intValue,
+        const DeepCollectionEquality().hash(_listValue),
+        numValue,
+        stringValue,
+        email,
+        date,
+        dateTime,
+        exactly10Characters,
+        minAndMaxString,
+        minAndMaxInt,
+        minAndMaxDouble,
+        minAndMaxNumber,
+        httpsLink,
+        luthorPath,
+        anotherSample,
+        foo
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -474,7 +544,12 @@ abstract class _Sample implements Sample {
       @isDateTime required final String date,
       required final DateTime dateTime,
       @HasLength(10) final String? exactly10Characters,
-      @HasMin(8) @HasMax(200) required final String minAndMax,
+      @HasMin(8) @HasMax(200) required final String minAndMaxString,
+      @HasMin(2) @HasMax(4) required final int minAndMaxInt,
+      @HasMinDouble(2.0)
+      @HasMaxDouble(4.0)
+      required final double minAndMaxDouble,
+      @HasMinNumber(2) @HasMaxNumber(3.0) required final num minAndMaxNumber,
       @IsUri(allowedSchemes: ['https']) final String? httpsLink,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
       required final String luthorPath,
@@ -512,7 +587,19 @@ abstract class _Sample implements Sample {
   @override
   @HasMin(8)
   @HasMax(200)
-  String get minAndMax;
+  String get minAndMaxString;
+  @override
+  @HasMin(2)
+  @HasMax(4)
+  int get minAndMaxInt;
+  @override
+  @HasMinDouble(2.0)
+  @HasMaxDouble(4.0)
+  double get minAndMaxDouble;
+  @override
+  @HasMinNumber(2)
+  @HasMaxNumber(3.0)
+  num get minAndMaxNumber;
   @override
   @IsUri(allowedSchemes: ['https'])
   String? get httpsLink;

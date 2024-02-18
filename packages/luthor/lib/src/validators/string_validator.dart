@@ -1,12 +1,15 @@
+import 'package:luthor/src/validations/strings/string_contains_validation.dart';
 import 'package:luthor/src/validations/strings/string_cuid_2_validation.dart';
 import 'package:luthor/src/validations/strings/string_cuid_validation.dart';
 import 'package:luthor/src/validations/strings/string_date_time_validation.dart';
 import 'package:luthor/src/validations/strings/string_email_validation.dart';
 import 'package:luthor/src/validations/strings/string_emoji_validation.dart';
+import 'package:luthor/src/validations/strings/string_ends_with_validation.dart';
 import 'package:luthor/src/validations/strings/string_length_validation.dart';
 import 'package:luthor/src/validations/strings/string_max_validation.dart';
 import 'package:luthor/src/validations/strings/string_min_validation.dart';
 import 'package:luthor/src/validations/strings/string_regex_validation.dart';
+import 'package:luthor/src/validations/strings/string_starts_with_validation.dart';
 import 'package:luthor/src/validations/strings/string_uri_validation.dart';
 import 'package:luthor/src/validations/strings/string_uuid_validation.dart';
 import 'package:luthor/src/validator.dart';
@@ -82,6 +85,24 @@ class StringValidator extends Validator {
   /// Validates that the string matches a regular expression.
   StringValidator regex(String pattern, {String? message}) {
     validations.add(StringRegexValidation(pattern, message: message));
+    return this;
+  }
+
+  /// Validates that the string starts with a string.
+  StringValidator startsWith(String string, {String? message}) {
+    validations.add(StringStartsWithValidation(string, message: message));
+    return this;
+  }
+
+  /// Validates that the string ends with a string.
+  StringValidator endsWith(String string, {String? message}) {
+    validations.add(StringEndsWithValidation(string, message: message));
+    return this;
+  }
+
+  /// Validates that the string contains a string.
+  StringValidator contains(String string, {String? message}) {
+    validations.add(StringContainsValidation(string, message: message));
     return this;
   }
 }

@@ -12,6 +12,9 @@ String getStringValidations(ParameterElement param) {
   _checkAndWriteMinValidation(buffer, param);
   _checkAndWriteUriValidation(buffer, param);
   _checkAndWriteRegexValidation(buffer, param);
+  _checkAndWriteStartsWithValidation(buffer, param);
+  _checkAndWriteEndsWithValidation(buffer, param);
+  _checkAndWriteContainsValidation(buffer, param);
 
   return buffer.toString();
 }
@@ -126,6 +129,54 @@ void _checkAndWriteRegexValidation(
     final pattern = regexAnnotation.getField('pattern')!.toStringValue();
     final message = regexAnnotation.getField('message')?.toStringValue();
     buffer.write('r"$pattern"');
+    if (message != null) buffer.write(", message: '$message'");
+    buffer.write(')');
+  }
+}
+
+void _checkAndWriteStartsWithValidation(
+  StringBuffer buffer,
+  ParameterElement param,
+) {
+  final startsWithAnnotation = getAnnotation(startsWithChecker, param);
+  if (startsWithAnnotation != null) {
+    buffer.write('.startsWith(');
+
+    final string = startsWithAnnotation.getField('string')!.toStringValue();
+    final message = startsWithAnnotation.getField('message')?.toStringValue();
+    buffer.write('r"$string"');
+    if (message != null) buffer.write(", message: '$message'");
+    buffer.write(')');
+  }
+}
+
+void _checkAndWriteEndsWithValidation(
+  StringBuffer buffer,
+  ParameterElement param,
+) {
+  final endsWithAnnotation = getAnnotation(endsWithChecker, param);
+  if (endsWithAnnotation != null) {
+    buffer.write('.endsWith(');
+
+    final string = endsWithAnnotation.getField('string')!.toStringValue();
+    final message = endsWithAnnotation.getField('message')?.toStringValue();
+    buffer.write('r"$string"');
+    if (message != null) buffer.write(", message: '$message'");
+    buffer.write(')');
+  }
+}
+
+void _checkAndWriteContainsValidation(
+  StringBuffer buffer,
+  ParameterElement param,
+) {
+  final containsAnnotation = getAnnotation(containsChecker, param);
+  if (containsAnnotation != null) {
+    buffer.write('.contains(');
+
+    final string = containsAnnotation.getField('string')!.toStringValue();
+    final message = containsAnnotation.getField('message')?.toStringValue();
+    buffer.write('r"$string"');
     if (message != null) buffer.write(", message: '$message'");
     buffer.write(')');
   }

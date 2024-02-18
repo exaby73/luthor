@@ -6,3 +6,5 @@ pubspec.lock
 
 .fvm/
 .fvmrc
+
+.nvim.lua

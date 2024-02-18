@@ -1,3 +1,8 @@
+## 0.3.0
+
+- **FEAT**(luthor,luthor_annotation,luthor_generator): add startsWith, endsWith and contains string validations ([#63](https://github.com/exaby73/luthor/issues/63)).
+- **FEAT**: custom validators ([#61](https://github.com/exaby73/luthor/issues/61)).
+
 ## 0.2.0
 
 - Update minimum Dart SDK version to 3.0.0

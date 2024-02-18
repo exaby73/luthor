@@ -28,6 +28,7 @@ _$SampleImpl _$$SampleImplFromJson(Map<String, dynamic> json) => _$SampleImpl(
       anotherSample:
           AnotherSample.fromJson(json['anotherSample'] as Map<String, dynamic>),
       foo: json['jsonKeyName'] as String,
+      custom: json['custom'] as String,
     );
 
 Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
@@ -51,6 +52,7 @@ Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
       'luthorPath': instance.luthorPath,
       'anotherSample': instance.anotherSample,
       'jsonKeyName': instance.foo,
+      'custom': instance.custom,
     };
 
 // **************************************************************************
@@ -78,6 +80,7 @@ Validator $SampleSchema = l.schema({
       l.string().regex(r"^https:\/\/pub\.dev\/packages\/luthor").required(),
   'anotherSample': $AnotherSampleSchema.required(),
   'jsonKeyName': l.string().required(),
+  'custom': l.string().custom(customValidatorFn).required(),
 });
 
 SchemaValidationResult<Sample> _$SampleValidate(Map<String, dynamic> json) =>

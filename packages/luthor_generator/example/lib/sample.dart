@@ -9,6 +9,10 @@ part 'sample.freezed.dart';
 
 part 'sample.g.dart';
 
+bool customValidatorFn(Object? value) {
+  return value == 'custom';
+}
+
 @luthor
 @freezed
 class Sample with _$Sample {
@@ -35,6 +39,7 @@ class Sample with _$Sample {
     required String luthorPath,
     required AnotherSample anotherSample,
     @JsonKey(name: 'jsonKeyName') required String foo,
+    @WithCustomValidator(customValidatorFn) required String custom,
   }) = _Sample;
 
   static SchemaValidationResult<Sample> validate(Map<String, dynamic> json) =>
@@ -61,6 +66,7 @@ void main() {
     "minAndMaxInt": 1,
     "minAndMaxDouble": 1.0,
     "minAndMaxNumber": 1,
+    "custom": 'custom',
   });
   switch (result2) {
     case SchemaValidationError(errors: final errors):
@@ -78,6 +84,7 @@ void main() {
     "minAndMaxInt": 5,
     "minAndMaxDouble": 5.0,
     "minAndMaxNumber": 5,
+    "custom": 1,
   });
   switch (result3) {
     case SchemaValidationError(errors: final errors):

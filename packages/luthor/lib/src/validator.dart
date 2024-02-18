@@ -2,6 +2,7 @@ import 'package:luthor/src/validation.dart';
 import 'package:luthor/src/validation_result.dart';
 import 'package:luthor/src/validations/any_validation.dart';
 import 'package:luthor/src/validations/bool_validation.dart';
+import 'package:luthor/src/validations/custom_validation.dart';
 import 'package:luthor/src/validations/double_validation.dart';
 import 'package:luthor/src/validations/int_validation.dart';
 import 'package:luthor/src/validations/list_validation.dart';
@@ -25,8 +26,14 @@ class Validator {
   final List<Validation> validations;
 
   /// Validates a value as dynamic. Always returns true.
-  Validator any({String? message}) {
-    validations.add(AnyValidation(message: message));
+  Validator custom(CustomValidator customValidator, {String? message}) {
+    validations.add(CustomValidation(customValidator, message: message));
+    return this;
+  }
+
+  /// Validates a value as dynamic. Always returns true.
+  Validator any() {
+    validations.add(AnyValidation());
     return this;
   }
 

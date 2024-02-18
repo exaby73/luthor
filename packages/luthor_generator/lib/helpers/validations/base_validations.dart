@@ -4,6 +4,7 @@ import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:luthor_generator/checkers.dart';
 import 'package:luthor_generator/errors/unsupported_type_error.dart';
+import 'package:luthor_generator/helpers/validations/custom_validations.dart';
 import 'package:luthor_generator/helpers/validations/double_validations.dart';
 import 'package:luthor_generator/helpers/validations/int_validations.dart';
 import 'package:luthor_generator/helpers/validations/number_validations.dart';
@@ -55,6 +56,8 @@ String getValidations(ParameterElement param) {
   if (buffer.isEmpty) {
     _checkAndAddCustomSchema(buffer, param);
   }
+
+  getCustomValidations(param, buffer);
 
   if (param.type is! DynamicType && !isNullable) buffer.write('.required()');
 

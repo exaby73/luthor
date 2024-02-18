@@ -55,6 +55,8 @@ mixin _$Sample {
   AnotherSample get anotherSample => throw _privateConstructorUsedError;
   @JsonKey(name: 'jsonKeyName')
   String get foo => throw _privateConstructorUsedError;
+  @WithCustomValidator(customValidatorFn)
+  String get custom => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -85,7 +87,8 @@ abstract class $SampleCopyWith<$Res> {
       @IsUri(allowedSchemes: ['https']) String? httpsLink,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor') String luthorPath,
       AnotherSample anotherSample,
-      @JsonKey(name: 'jsonKeyName') String foo});
+      @JsonKey(name: 'jsonKeyName') String foo,
+      @WithCustomValidator(customValidatorFn) String custom});
 
   $AnotherSampleCopyWith<$Res> get anotherSample;
 }
@@ -122,6 +125,7 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
     Object? luthorPath = null,
     Object? anotherSample = null,
     Object? foo = null,
+    Object? custom = null,
   }) {
     return _then(_value.copyWith(
       anyValue: freezed == anyValue
@@ -200,6 +204,10 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
           ? _value.foo
           : foo // ignore: cast_nullable_to_non_nullable
               as String,
+      custom: null == custom
+          ? _value.custom
+          : custom // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 
@@ -238,7 +246,8 @@ abstract class _$$SampleImplCopyWith<$Res> implements $SampleCopyWith<$Res> {
       @IsUri(allowedSchemes: ['https']) String? httpsLink,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor') String luthorPath,
       AnotherSample anotherSample,
-      @JsonKey(name: 'jsonKeyName') String foo});
+      @JsonKey(name: 'jsonKeyName') String foo,
+      @WithCustomValidator(customValidatorFn) String custom});
 
   @override
   $AnotherSampleCopyWith<$Res> get anotherSample;
@@ -274,6 +283,7 @@ class __$$SampleImplCopyWithImpl<$Res>
     Object? luthorPath = null,
     Object? anotherSample = null,
     Object? foo = null,
+    Object? custom = null,
   }) {
     return _then(_$SampleImpl(
       anyValue: freezed == anyValue
@@ -352,6 +362,10 @@ class __$$SampleImplCopyWithImpl<$Res>
           ? _value.foo
           : foo // ignore: cast_nullable_to_non_nullable
               as String,
+      custom: null == custom
+          ? _value.custom
+          : custom // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -379,7 +393,8 @@ class _$SampleImpl implements _Sample {
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
       required this.luthorPath,
       required this.anotherSample,
-      @JsonKey(name: 'jsonKeyName') required this.foo})
+      @JsonKey(name: 'jsonKeyName') required this.foo,
+      @WithCustomValidator(customValidatorFn) required this.custom})
       : _listValue = listValue;
 
   factory _$SampleImpl.fromJson(Map<String, dynamic> json) =>
@@ -445,10 +460,13 @@ class _$SampleImpl implements _Sample {
   @override
   @JsonKey(name: 'jsonKeyName')
   final String foo;
+  @override
+  @WithCustomValidator(customValidatorFn)
+  final String custom;
 
   @override
   String toString() {
-    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, dateTime: $dateTime, exactly10Characters: $exactly10Characters, minAndMaxString: $minAndMaxString, minAndMaxInt: $minAndMaxInt, minAndMaxDouble: $minAndMaxDouble, minAndMaxNumber: $minAndMaxNumber, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample, foo: $foo)';
+    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, dateTime: $dateTime, exactly10Characters: $exactly10Characters, minAndMaxString: $minAndMaxString, minAndMaxInt: $minAndMaxInt, minAndMaxDouble: $minAndMaxDouble, minAndMaxNumber: $minAndMaxNumber, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample, foo: $foo, custom: $custom)';
   }
 
   @override
@@ -489,7 +507,8 @@ class _$SampleImpl implements _Sample {
                 other.luthorPath == luthorPath) &&
             (identical(other.anotherSample, anotherSample) ||
                 other.anotherSample == anotherSample) &&
-            (identical(other.foo, foo) || other.foo == foo));
+            (identical(other.foo, foo) || other.foo == foo) &&
+            (identical(other.custom, custom) || other.custom == custom));
   }
 
   @JsonKey(ignore: true)
@@ -514,7 +533,8 @@ class _$SampleImpl implements _Sample {
         httpsLink,
         luthorPath,
         anotherSample,
-        foo
+        foo,
+        custom
       ]);
 
   @JsonKey(ignore: true)
@@ -554,7 +574,9 @@ abstract class _Sample implements Sample {
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
       required final String luthorPath,
       required final AnotherSample anotherSample,
-      @JsonKey(name: 'jsonKeyName') required final String foo}) = _$SampleImpl;
+      @JsonKey(name: 'jsonKeyName') required final String foo,
+      @WithCustomValidator(customValidatorFn)
+      required final String custom}) = _$SampleImpl;
 
   factory _Sample.fromJson(Map<String, dynamic> json) = _$SampleImpl.fromJson;
 
@@ -611,6 +633,9 @@ abstract class _Sample implements Sample {
   @override
   @JsonKey(name: 'jsonKeyName')
   String get foo;
+  @override
+  @WithCustomValidator(customValidatorFn)
+  String get custom;
   @override
   @JsonKey(ignore: true)
   _$$SampleImplCopyWith<_$SampleImpl> get copyWith =>

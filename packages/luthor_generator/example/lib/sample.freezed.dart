@@ -12,7 +12,7 @@ part of 'sample.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 Sample _$SampleFromJson(Map<String, dynamic> json) {
   return _Sample.fromJson(json);
@@ -39,6 +39,12 @@ mixin _$Sample {
   @HasMin(8)
   @HasMax(200)
   String get minAndMaxString => throw _privateConstructorUsedError;
+  @StartsWith('foo')
+  String get startsWithFoo => throw _privateConstructorUsedError;
+  @EndsWith('bar')
+  String get endsWithBar => throw _privateConstructorUsedError;
+  @Contains('baz')
+  String get containsBaz => throw _privateConstructorUsedError;
   @HasMin(2)
   @HasMax(4)
   int get minAndMaxInt => throw _privateConstructorUsedError;
@@ -81,6 +87,9 @@ abstract class $SampleCopyWith<$Res> {
       DateTime dateTime,
       @HasLength(10) String? exactly10Characters,
       @HasMin(8) @HasMax(200) String minAndMaxString,
+      @StartsWith('foo') String startsWithFoo,
+      @EndsWith('bar') String endsWithBar,
+      @Contains('baz') String containsBaz,
       @HasMin(2) @HasMax(4) int minAndMaxInt,
       @HasMinDouble(2.0) @HasMaxDouble(4.0) double minAndMaxDouble,
       @HasMinNumber(2) @HasMaxNumber(3.0) num minAndMaxNumber,
@@ -118,6 +127,9 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
     Object? dateTime = null,
     Object? exactly10Characters = freezed,
     Object? minAndMaxString = null,
+    Object? startsWithFoo = null,
+    Object? endsWithBar = null,
+    Object? containsBaz = null,
     Object? minAndMaxInt = null,
     Object? minAndMaxDouble = null,
     Object? minAndMaxNumber = null,
@@ -175,6 +187,18 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
       minAndMaxString: null == minAndMaxString
           ? _value.minAndMaxString
           : minAndMaxString // ignore: cast_nullable_to_non_nullable
+              as String,
+      startsWithFoo: null == startsWithFoo
+          ? _value.startsWithFoo
+          : startsWithFoo // ignore: cast_nullable_to_non_nullable
+              as String,
+      endsWithBar: null == endsWithBar
+          ? _value.endsWithBar
+          : endsWithBar // ignore: cast_nullable_to_non_nullable
+              as String,
+      containsBaz: null == containsBaz
+          ? _value.containsBaz
+          : containsBaz // ignore: cast_nullable_to_non_nullable
               as String,
       minAndMaxInt: null == minAndMaxInt
           ? _value.minAndMaxInt
@@ -240,6 +264,9 @@ abstract class _$$SampleImplCopyWith<$Res> implements $SampleCopyWith<$Res> {
       DateTime dateTime,
       @HasLength(10) String? exactly10Characters,
       @HasMin(8) @HasMax(200) String minAndMaxString,
+      @StartsWith('foo') String startsWithFoo,
+      @EndsWith('bar') String endsWithBar,
+      @Contains('baz') String containsBaz,
       @HasMin(2) @HasMax(4) int minAndMaxInt,
       @HasMinDouble(2.0) @HasMaxDouble(4.0) double minAndMaxDouble,
       @HasMinNumber(2) @HasMaxNumber(3.0) num minAndMaxNumber,
@@ -276,6 +303,9 @@ class __$$SampleImplCopyWithImpl<$Res>
     Object? dateTime = null,
     Object? exactly10Characters = freezed,
     Object? minAndMaxString = null,
+    Object? startsWithFoo = null,
+    Object? endsWithBar = null,
+    Object? containsBaz = null,
     Object? minAndMaxInt = null,
     Object? minAndMaxDouble = null,
     Object? minAndMaxNumber = null,
@@ -334,6 +364,18 @@ class __$$SampleImplCopyWithImpl<$Res>
           ? _value.minAndMaxString
           : minAndMaxString // ignore: cast_nullable_to_non_nullable
               as String,
+      startsWithFoo: null == startsWithFoo
+          ? _value.startsWithFoo
+          : startsWithFoo // ignore: cast_nullable_to_non_nullable
+              as String,
+      endsWithBar: null == endsWithBar
+          ? _value.endsWithBar
+          : endsWithBar // ignore: cast_nullable_to_non_nullable
+              as String,
+      containsBaz: null == containsBaz
+          ? _value.containsBaz
+          : containsBaz // ignore: cast_nullable_to_non_nullable
+              as String,
       minAndMaxInt: null == minAndMaxInt
           ? _value.minAndMaxInt
           : minAndMaxInt // ignore: cast_nullable_to_non_nullable
@@ -386,6 +428,9 @@ class _$SampleImpl implements _Sample {
       required this.dateTime,
       @HasLength(10) this.exactly10Characters,
       @HasMin(8) @HasMax(200) required this.minAndMaxString,
+      @StartsWith('foo') required this.startsWithFoo,
+      @EndsWith('bar') required this.endsWithBar,
+      @Contains('baz') required this.containsBaz,
       @HasMin(2) @HasMax(4) required this.minAndMaxInt,
       @HasMinDouble(2.0) @HasMaxDouble(4.0) required this.minAndMaxDouble,
       @HasMinNumber(2) @HasMaxNumber(3.0) required this.minAndMaxNumber,
@@ -438,6 +483,15 @@ class _$SampleImpl implements _Sample {
   @HasMax(200)
   final String minAndMaxString;
   @override
+  @StartsWith('foo')
+  final String startsWithFoo;
+  @override
+  @EndsWith('bar')
+  final String endsWithBar;
+  @override
+  @Contains('baz')
+  final String containsBaz;
+  @override
   @HasMin(2)
   @HasMax(4)
   final int minAndMaxInt;
@@ -466,11 +520,11 @@ class _$SampleImpl implements _Sample {
 
   @override
   String toString() {
-    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, dateTime: $dateTime, exactly10Characters: $exactly10Characters, minAndMaxString: $minAndMaxString, minAndMaxInt: $minAndMaxInt, minAndMaxDouble: $minAndMaxDouble, minAndMaxNumber: $minAndMaxNumber, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample, foo: $foo, custom: $custom)';
+    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, dateTime: $dateTime, exactly10Characters: $exactly10Characters, minAndMaxString: $minAndMaxString, startsWithFoo: $startsWithFoo, endsWithBar: $endsWithBar, containsBaz: $containsBaz, minAndMaxInt: $minAndMaxInt, minAndMaxDouble: $minAndMaxDouble, minAndMaxNumber: $minAndMaxNumber, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample, foo: $foo, custom: $custom)';
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SampleImpl &&
@@ -495,6 +549,12 @@ class _$SampleImpl implements _Sample {
                 other.exactly10Characters == exactly10Characters) &&
             (identical(other.minAndMaxString, minAndMaxString) ||
                 other.minAndMaxString == minAndMaxString) &&
+            (identical(other.startsWithFoo, startsWithFoo) ||
+                other.startsWithFoo == startsWithFoo) &&
+            (identical(other.endsWithBar, endsWithBar) ||
+                other.endsWithBar == endsWithBar) &&
+            (identical(other.containsBaz, containsBaz) ||
+                other.containsBaz == containsBaz) &&
             (identical(other.minAndMaxInt, minAndMaxInt) ||
                 other.minAndMaxInt == minAndMaxInt) &&
             (identical(other.minAndMaxDouble, minAndMaxDouble) ||
@@ -527,6 +587,9 @@ class _$SampleImpl implements _Sample {
         dateTime,
         exactly10Characters,
         minAndMaxString,
+        startsWithFoo,
+        endsWithBar,
+        containsBaz,
         minAndMaxInt,
         minAndMaxDouble,
         minAndMaxNumber,
@@ -565,6 +628,9 @@ abstract class _Sample implements Sample {
       required final DateTime dateTime,
       @HasLength(10) final String? exactly10Characters,
       @HasMin(8) @HasMax(200) required final String minAndMaxString,
+      @StartsWith('foo') required final String startsWithFoo,
+      @EndsWith('bar') required final String endsWithBar,
+      @Contains('baz') required final String containsBaz,
       @HasMin(2) @HasMax(4) required final int minAndMaxInt,
       @HasMinDouble(2.0)
       @HasMaxDouble(4.0)
@@ -610,6 +676,15 @@ abstract class _Sample implements Sample {
   @HasMin(8)
   @HasMax(200)
   String get minAndMaxString;
+  @override
+  @StartsWith('foo')
+  String get startsWithFoo;
+  @override
+  @EndsWith('bar')
+  String get endsWithBar;
+  @override
+  @Contains('baz')
+  String get containsBaz;
   @override
   @HasMin(2)
   @HasMax(4)

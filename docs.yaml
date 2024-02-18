@@ -1,5 +1,9 @@
 name: "Luthor"
 theme: "#36B9B9"
+anchors:
+  - title: "Pub"
+    icon: "cube"
+    link: "https://pub.dev/packages/luthor"
 sidebar:
   - - "Getting Started"
     - - - "Introduction"

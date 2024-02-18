@@ -38,7 +38,22 @@ mixin _$Sample {
   String? get exactly10Characters => throw _privateConstructorUsedError;
   @HasMin(8)
   @HasMax(200)
-  String get minAndMax => throw _privateConstructorUsedError;
+  String get minAndMaxString => throw _privateConstructorUsedError;
+  @StartsWith('foo')
+  String get startsWithFoo => throw _privateConstructorUsedError;
+  @EndsWith('bar')
+  String get endsWithBar => throw _privateConstructorUsedError;
+  @Contains('baz')
+  String get containsBaz => throw _privateConstructorUsedError;
+  @HasMin(2)
+  @HasMax(4)
+  int get minAndMaxInt => throw _privateConstructorUsedError;
+  @HasMinDouble(2.0)
+  @HasMaxDouble(4.0)
+  double get minAndMaxDouble => throw _privateConstructorUsedError;
+  @HasMinNumber(2)
+  @HasMaxNumber(3.0)
+  num get minAndMaxNumber => throw _privateConstructorUsedError;
   @IsUri(allowedSchemes: ['https'])
   String? get httpsLink => throw _privateConstructorUsedError;
   @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
@@ -46,6 +61,8 @@ mixin _$Sample {
   AnotherSample get anotherSample => throw _privateConstructorUsedError;
   @JsonKey(name: 'jsonKeyName')
   String get foo => throw _privateConstructorUsedError;
+  @WithCustomValidator(customValidatorFn)
+  String get custom => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -69,11 +86,18 @@ abstract class $SampleCopyWith<$Res> {
       @isDateTime String date,
       DateTime dateTime,
       @HasLength(10) String? exactly10Characters,
-      @HasMin(8) @HasMax(200) String minAndMax,
+      @HasMin(8) @HasMax(200) String minAndMaxString,
+      @StartsWith('foo') String startsWithFoo,
+      @EndsWith('bar') String endsWithBar,
+      @Contains('baz') String containsBaz,
+      @HasMin(2) @HasMax(4) int minAndMaxInt,
+      @HasMinDouble(2.0) @HasMaxDouble(4.0) double minAndMaxDouble,
+      @HasMinNumber(2) @HasMaxNumber(3.0) num minAndMaxNumber,
       @IsUri(allowedSchemes: ['https']) String? httpsLink,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor') String luthorPath,
       AnotherSample anotherSample,
-      @JsonKey(name: 'jsonKeyName') String foo});
+      @JsonKey(name: 'jsonKeyName') String foo,
+      @WithCustomValidator(customValidatorFn) String custom});
 
   $AnotherSampleCopyWith<$Res> get anotherSample;
 }
@@ -102,11 +126,18 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
     Object? date = null,
     Object? dateTime = null,
     Object? exactly10Characters = freezed,
-    Object? minAndMax = null,
+    Object? minAndMaxString = null,
+    Object? startsWithFoo = null,
+    Object? endsWithBar = null,
+    Object? containsBaz = null,
+    Object? minAndMaxInt = null,
+    Object? minAndMaxDouble = null,
+    Object? minAndMaxNumber = null,
     Object? httpsLink = freezed,
     Object? luthorPath = null,
     Object? anotherSample = null,
     Object? foo = null,
+    Object? custom = null,
   }) {
     return _then(_value.copyWith(
       anyValue: freezed == anyValue
@@ -153,10 +184,34 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
           ? _value.exactly10Characters
           : exactly10Characters // ignore: cast_nullable_to_non_nullable
               as String?,
-      minAndMax: null == minAndMax
-          ? _value.minAndMax
-          : minAndMax // ignore: cast_nullable_to_non_nullable
+      minAndMaxString: null == minAndMaxString
+          ? _value.minAndMaxString
+          : minAndMaxString // ignore: cast_nullable_to_non_nullable
               as String,
+      startsWithFoo: null == startsWithFoo
+          ? _value.startsWithFoo
+          : startsWithFoo // ignore: cast_nullable_to_non_nullable
+              as String,
+      endsWithBar: null == endsWithBar
+          ? _value.endsWithBar
+          : endsWithBar // ignore: cast_nullable_to_non_nullable
+              as String,
+      containsBaz: null == containsBaz
+          ? _value.containsBaz
+          : containsBaz // ignore: cast_nullable_to_non_nullable
+              as String,
+      minAndMaxInt: null == minAndMaxInt
+          ? _value.minAndMaxInt
+          : minAndMaxInt // ignore: cast_nullable_to_non_nullable
+              as int,
+      minAndMaxDouble: null == minAndMaxDouble
+          ? _value.minAndMaxDouble
+          : minAndMaxDouble // ignore: cast_nullable_to_non_nullable
+              as double,
+      minAndMaxNumber: null == minAndMaxNumber
+          ? _value.minAndMaxNumber
+          : minAndMaxNumber // ignore: cast_nullable_to_non_nullable
+              as num,
       httpsLink: freezed == httpsLink
           ? _value.httpsLink
           : httpsLink // ignore: cast_nullable_to_non_nullable
@@ -172,6 +227,10 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
       foo: null == foo
           ? _value.foo
           : foo // ignore: cast_nullable_to_non_nullable
+              as String,
+      custom: null == custom
+          ? _value.custom
+          : custom // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -204,11 +263,18 @@ abstract class _$$SampleImplCopyWith<$Res> implements $SampleCopyWith<$Res> {
       @isDateTime String date,
       DateTime dateTime,
       @HasLength(10) String? exactly10Characters,
-      @HasMin(8) @HasMax(200) String minAndMax,
+      @HasMin(8) @HasMax(200) String minAndMaxString,
+      @StartsWith('foo') String startsWithFoo,
+      @EndsWith('bar') String endsWithBar,
+      @Contains('baz') String containsBaz,
+      @HasMin(2) @HasMax(4) int minAndMaxInt,
+      @HasMinDouble(2.0) @HasMaxDouble(4.0) double minAndMaxDouble,
+      @HasMinNumber(2) @HasMaxNumber(3.0) num minAndMaxNumber,
       @IsUri(allowedSchemes: ['https']) String? httpsLink,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor') String luthorPath,
       AnotherSample anotherSample,
-      @JsonKey(name: 'jsonKeyName') String foo});
+      @JsonKey(name: 'jsonKeyName') String foo,
+      @WithCustomValidator(customValidatorFn) String custom});
 
   @override
   $AnotherSampleCopyWith<$Res> get anotherSample;
@@ -236,11 +302,18 @@ class __$$SampleImplCopyWithImpl<$Res>
     Object? date = null,
     Object? dateTime = null,
     Object? exactly10Characters = freezed,
-    Object? minAndMax = null,
+    Object? minAndMaxString = null,
+    Object? startsWithFoo = null,
+    Object? endsWithBar = null,
+    Object? containsBaz = null,
+    Object? minAndMaxInt = null,
+    Object? minAndMaxDouble = null,
+    Object? minAndMaxNumber = null,
     Object? httpsLink = freezed,
     Object? luthorPath = null,
     Object? anotherSample = null,
     Object? foo = null,
+    Object? custom = null,
   }) {
     return _then(_$SampleImpl(
       anyValue: freezed == anyValue
@@ -287,10 +360,34 @@ class __$$SampleImplCopyWithImpl<$Res>
           ? _value.exactly10Characters
           : exactly10Characters // ignore: cast_nullable_to_non_nullable
               as String?,
-      minAndMax: null == minAndMax
-          ? _value.minAndMax
-          : minAndMax // ignore: cast_nullable_to_non_nullable
+      minAndMaxString: null == minAndMaxString
+          ? _value.minAndMaxString
+          : minAndMaxString // ignore: cast_nullable_to_non_nullable
               as String,
+      startsWithFoo: null == startsWithFoo
+          ? _value.startsWithFoo
+          : startsWithFoo // ignore: cast_nullable_to_non_nullable
+              as String,
+      endsWithBar: null == endsWithBar
+          ? _value.endsWithBar
+          : endsWithBar // ignore: cast_nullable_to_non_nullable
+              as String,
+      containsBaz: null == containsBaz
+          ? _value.containsBaz
+          : containsBaz // ignore: cast_nullable_to_non_nullable
+              as String,
+      minAndMaxInt: null == minAndMaxInt
+          ? _value.minAndMaxInt
+          : minAndMaxInt // ignore: cast_nullable_to_non_nullable
+              as int,
+      minAndMaxDouble: null == minAndMaxDouble
+          ? _value.minAndMaxDouble
+          : minAndMaxDouble // ignore: cast_nullable_to_non_nullable
+              as double,
+      minAndMaxNumber: null == minAndMaxNumber
+          ? _value.minAndMaxNumber
+          : minAndMaxNumber // ignore: cast_nullable_to_non_nullable
+              as num,
       httpsLink: freezed == httpsLink
           ? _value.httpsLink
           : httpsLink // ignore: cast_nullable_to_non_nullable
@@ -306,6 +403,10 @@ class __$$SampleImplCopyWithImpl<$Res>
       foo: null == foo
           ? _value.foo
           : foo // ignore: cast_nullable_to_non_nullable
+              as String,
+      custom: null == custom
+          ? _value.custom
+          : custom // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -326,12 +427,19 @@ class _$SampleImpl implements _Sample {
       @isDateTime required this.date,
       required this.dateTime,
       @HasLength(10) this.exactly10Characters,
-      @HasMin(8) @HasMax(200) required this.minAndMax,
+      @HasMin(8) @HasMax(200) required this.minAndMaxString,
+      @StartsWith('foo') required this.startsWithFoo,
+      @EndsWith('bar') required this.endsWithBar,
+      @Contains('baz') required this.containsBaz,
+      @HasMin(2) @HasMax(4) required this.minAndMaxInt,
+      @HasMinDouble(2.0) @HasMaxDouble(4.0) required this.minAndMaxDouble,
+      @HasMinNumber(2) @HasMaxNumber(3.0) required this.minAndMaxNumber,
       @IsUri(allowedSchemes: ['https']) this.httpsLink,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
       required this.luthorPath,
       required this.anotherSample,
-      @JsonKey(name: 'jsonKeyName') required this.foo})
+      @JsonKey(name: 'jsonKeyName') required this.foo,
+      @WithCustomValidator(customValidatorFn) required this.custom})
       : _listValue = listValue;
 
   factory _$SampleImpl.fromJson(Map<String, dynamic> json) =>
@@ -373,7 +481,28 @@ class _$SampleImpl implements _Sample {
   @override
   @HasMin(8)
   @HasMax(200)
-  final String minAndMax;
+  final String minAndMaxString;
+  @override
+  @StartsWith('foo')
+  final String startsWithFoo;
+  @override
+  @EndsWith('bar')
+  final String endsWithBar;
+  @override
+  @Contains('baz')
+  final String containsBaz;
+  @override
+  @HasMin(2)
+  @HasMax(4)
+  final int minAndMaxInt;
+  @override
+  @HasMinDouble(2.0)
+  @HasMaxDouble(4.0)
+  final double minAndMaxDouble;
+  @override
+  @HasMinNumber(2)
+  @HasMaxNumber(3.0)
+  final num minAndMaxNumber;
   @override
   @IsUri(allowedSchemes: ['https'])
   final String? httpsLink;
@@ -385,10 +514,13 @@ class _$SampleImpl implements _Sample {
   @override
   @JsonKey(name: 'jsonKeyName')
   final String foo;
+  @override
+  @WithCustomValidator(customValidatorFn)
+  final String custom;
 
   @override
   String toString() {
-    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, dateTime: $dateTime, exactly10Characters: $exactly10Characters, minAndMax: $minAndMax, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample, foo: $foo)';
+    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, dateTime: $dateTime, exactly10Characters: $exactly10Characters, minAndMaxString: $minAndMaxString, startsWithFoo: $startsWithFoo, endsWithBar: $endsWithBar, containsBaz: $containsBaz, minAndMaxInt: $minAndMaxInt, minAndMaxDouble: $minAndMaxDouble, minAndMaxNumber: $minAndMaxNumber, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample, foo: $foo, custom: $custom)';
   }
 
   @override
@@ -415,37 +547,58 @@ class _$SampleImpl implements _Sample {
                 other.dateTime == dateTime) &&
             (identical(other.exactly10Characters, exactly10Characters) ||
                 other.exactly10Characters == exactly10Characters) &&
-            (identical(other.minAndMax, minAndMax) ||
-                other.minAndMax == minAndMax) &&
+            (identical(other.minAndMaxString, minAndMaxString) ||
+                other.minAndMaxString == minAndMaxString) &&
+            (identical(other.startsWithFoo, startsWithFoo) ||
+                other.startsWithFoo == startsWithFoo) &&
+            (identical(other.endsWithBar, endsWithBar) ||
+                other.endsWithBar == endsWithBar) &&
+            (identical(other.containsBaz, containsBaz) ||
+                other.containsBaz == containsBaz) &&
+            (identical(other.minAndMaxInt, minAndMaxInt) ||
+                other.minAndMaxInt == minAndMaxInt) &&
+            (identical(other.minAndMaxDouble, minAndMaxDouble) ||
+                other.minAndMaxDouble == minAndMaxDouble) &&
+            (identical(other.minAndMaxNumber, minAndMaxNumber) ||
+                other.minAndMaxNumber == minAndMaxNumber) &&
             (identical(other.httpsLink, httpsLink) ||
                 other.httpsLink == httpsLink) &&
             (identical(other.luthorPath, luthorPath) ||
                 other.luthorPath == luthorPath) &&
             (identical(other.anotherSample, anotherSample) ||
                 other.anotherSample == anotherSample) &&
-            (identical(other.foo, foo) || other.foo == foo));
+            (identical(other.foo, foo) || other.foo == foo) &&
+            (identical(other.custom, custom) || other.custom == custom));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(anyValue),
-      boolValue,
-      doubleValue,
-      intValue,
-      const DeepCollectionEquality().hash(_listValue),
-      numValue,
-      stringValue,
-      email,
-      date,
-      dateTime,
-      exactly10Characters,
-      minAndMax,
-      httpsLink,
-      luthorPath,
-      anotherSample,
-      foo);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        const DeepCollectionEquality().hash(anyValue),
+        boolValue,
+        doubleValue,
+        intValue,
+        const DeepCollectionEquality().hash(_listValue),
+        numValue,
+        stringValue,
+        email,
+        date,
+        dateTime,
+        exactly10Characters,
+        minAndMaxString,
+        startsWithFoo,
+        endsWithBar,
+        containsBaz,
+        minAndMaxInt,
+        minAndMaxDouble,
+        minAndMaxNumber,
+        httpsLink,
+        luthorPath,
+        anotherSample,
+        foo,
+        custom
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -474,12 +627,22 @@ abstract class _Sample implements Sample {
       @isDateTime required final String date,
       required final DateTime dateTime,
       @HasLength(10) final String? exactly10Characters,
-      @HasMin(8) @HasMax(200) required final String minAndMax,
+      @HasMin(8) @HasMax(200) required final String minAndMaxString,
+      @StartsWith('foo') required final String startsWithFoo,
+      @EndsWith('bar') required final String endsWithBar,
+      @Contains('baz') required final String containsBaz,
+      @HasMin(2) @HasMax(4) required final int minAndMaxInt,
+      @HasMinDouble(2.0)
+      @HasMaxDouble(4.0)
+      required final double minAndMaxDouble,
+      @HasMinNumber(2) @HasMaxNumber(3.0) required final num minAndMaxNumber,
       @IsUri(allowedSchemes: ['https']) final String? httpsLink,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
       required final String luthorPath,
       required final AnotherSample anotherSample,
-      @JsonKey(name: 'jsonKeyName') required final String foo}) = _$SampleImpl;
+      @JsonKey(name: 'jsonKeyName') required final String foo,
+      @WithCustomValidator(customValidatorFn)
+      required final String custom}) = _$SampleImpl;
 
   factory _Sample.fromJson(Map<String, dynamic> json) = _$SampleImpl.fromJson;
 
@@ -512,7 +675,28 @@ abstract class _Sample implements Sample {
   @override
   @HasMin(8)
   @HasMax(200)
-  String get minAndMax;
+  String get minAndMaxString;
+  @override
+  @StartsWith('foo')
+  String get startsWithFoo;
+  @override
+  @EndsWith('bar')
+  String get endsWithBar;
+  @override
+  @Contains('baz')
+  String get containsBaz;
+  @override
+  @HasMin(2)
+  @HasMax(4)
+  int get minAndMaxInt;
+  @override
+  @HasMinDouble(2.0)
+  @HasMaxDouble(4.0)
+  double get minAndMaxDouble;
+  @override
+  @HasMinNumber(2)
+  @HasMaxNumber(3.0)
+  num get minAndMaxNumber;
   @override
   @IsUri(allowedSchemes: ['https'])
   String? get httpsLink;
@@ -524,6 +708,9 @@ abstract class _Sample implements Sample {
   @override
   @JsonKey(name: 'jsonKeyName')
   String get foo;
+  @override
+  @WithCustomValidator(customValidatorFn)
+  String get custom;
   @override
   @JsonKey(ignore: true)
   _$$SampleImplCopyWith<_$SampleImpl> get copyWith =>

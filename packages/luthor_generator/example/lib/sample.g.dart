@@ -19,12 +19,19 @@ _$SampleImpl _$$SampleImplFromJson(Map<String, dynamic> json) => _$SampleImpl(
       date: json['date'] as String,
       dateTime: DateTime.parse(json['dateTime'] as String),
       exactly10Characters: json['exactly10Characters'] as String?,
-      minAndMax: json['minAndMax'] as String,
+      minAndMaxString: json['minAndMaxString'] as String,
+      startsWithFoo: json['startsWithFoo'] as String,
+      endsWithBar: json['endsWithBar'] as String,
+      containsBaz: json['containsBaz'] as String,
+      minAndMaxInt: json['minAndMaxInt'] as int,
+      minAndMaxDouble: (json['minAndMaxDouble'] as num).toDouble(),
+      minAndMaxNumber: json['minAndMaxNumber'] as num,
       httpsLink: json['httpsLink'] as String?,
       luthorPath: json['luthorPath'] as String,
       anotherSample:
           AnotherSample.fromJson(json['anotherSample'] as Map<String, dynamic>),
       foo: json['jsonKeyName'] as String,
+      custom: json['custom'] as String,
     );
 
 Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
@@ -40,11 +47,18 @@ Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
       'date': instance.date,
       'dateTime': instance.dateTime.toIso8601String(),
       'exactly10Characters': instance.exactly10Characters,
-      'minAndMax': instance.minAndMax,
+      'minAndMaxString': instance.minAndMaxString,
+      'startsWithFoo': instance.startsWithFoo,
+      'endsWithBar': instance.endsWithBar,
+      'containsBaz': instance.containsBaz,
+      'minAndMaxInt': instance.minAndMaxInt,
+      'minAndMaxDouble': instance.minAndMaxDouble,
+      'minAndMaxNumber': instance.minAndMaxNumber,
       'httpsLink': instance.httpsLink,
       'luthorPath': instance.luthorPath,
       'anotherSample': instance.anotherSample,
       'jsonKeyName': instance.foo,
+      'custom': instance.custom,
     };
 
 // **************************************************************************
@@ -63,12 +77,19 @@ Validator $SampleSchema = l.schema({
   'date': l.string().dateTime().required(),
   'dateTime': l.string().dateTime().required(),
   'exactly10Characters': l.string().length(10),
-  'minAndMax': l.string().max(200).min(8).required(),
+  'minAndMaxString': l.string().max(200).min(8).required(),
+  'startsWithFoo': l.string().startsWith(r"foo").required(),
+  'endsWithBar': l.string().endsWith(r"bar").required(),
+  'containsBaz': l.string().contains(r"baz").required(),
+  'minAndMaxInt': l.int().max(4).min(2).required(),
+  'minAndMaxDouble': l.double().max(4.0).min(2.0).required(),
+  'minAndMaxNumber': l.number().max(3.0).min(2).required(),
   'httpsLink': l.string().uri(allowedSchemes: ['https']),
   'luthorPath':
       l.string().regex(r"^https:\/\/pub\.dev\/packages\/luthor").required(),
   'anotherSample': $AnotherSampleSchema.required(),
   'jsonKeyName': l.string().required(),
+  'custom': l.string().custom(customValidatorFn).required(),
 });
 
 SchemaValidationResult<Sample> _$SampleValidate(Map<String, dynamic> json) =>

@@ -1,11 +1,7 @@
 import 'package:luthor/src/validation.dart';
 
 class AnyValidation extends Validation {
-  String? customMessage;
-
-  AnyValidation({
-    String? message,
-  }) : customMessage = message;
+  AnyValidation();
 
   @override
   bool call(String? fieldName, Object? value) {

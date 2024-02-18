@@ -1,4 +1,11 @@
 .idea
+.vscode/
+
 .dart_tool
 pubspec.lock
+
+.fvm/
+.fvmrc
+
+.nvim.lua
 Taskfile.yml

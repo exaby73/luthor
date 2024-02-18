@@ -7,3 +7,12 @@ packages:
 scripts:
   analyze:
     run: dart analyze
+
+  format:
+    run: dart format --set-exit-if-changed .
+
+  test:
+    exec: dart test
+    packageFilters:
+      scope:
+        - luthor

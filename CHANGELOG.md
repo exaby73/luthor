@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-02-18
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor` - `v0.3.0`](#luthor---v030)
+
+---
+
+#### `luthor` - `v0.3.0`
+
+ - **FEAT**(luthor,luthor_annotation,luthor_generator): add startsWith, endsWith and contains string validations ([#63](https://github.com/exaby73/luthor/issues/63)).
+ - **FEAT**: custom validators ([#61](https://github.com/exaby73/luthor/issues/61)).
+ - **FEAT**(luthor): consolidated int and double validator to num.
+ - **FEAT**(luthor): added min and max validators for int, double and num.
+ - **FEAT**: update analyzer.
+
+
 ## 2023-11-20
 
 ### Changes

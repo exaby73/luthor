@@ -19,7 +19,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
         element: element,
       );
     }
-    
+
     if (element.constructors.isEmpty) {
       throw InvalidGenerationSourceError(
         'Luthor can only be applied to classes with at least one constructor.',
@@ -36,7 +36,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
         element: element,
       );
     }
-    
+
     final validateMethod = element.getMethod('validate');
     final isInvalidMethod = validateMethod == null ||
         !validateMethod.isStatic ||

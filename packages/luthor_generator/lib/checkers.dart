@@ -16,3 +16,4 @@ const hasMaxNumberChecker = TypeChecker.fromRuntime(HasMaxNumber);
 const hasMinNumberChecker = TypeChecker.fromRuntime(HasMinNumber);
 const isUriChecker = TypeChecker.fromRuntime(IsUri);
 const matchRegexChecker = TypeChecker.fromRuntime(MatchRegex);
+const customValidatorChecker = TypeChecker.fromRuntime(WithCustomValidator);

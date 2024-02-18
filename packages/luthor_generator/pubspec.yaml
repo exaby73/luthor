@@ -11,7 +11,7 @@ dependencies:
   build: ^2.4.1
   collection: ^1.18.0
   json_annotation: ^4.8.1
-  luthor_annotation: ^0.2.0
+  luthor_annotation: ^0.3.0
   source_gen: ^1.5.0
 
 dev_dependencies:

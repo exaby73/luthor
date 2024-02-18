@@ -15,6 +15,29 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`luthor_generator` - `v0.4.0`](#luthor_generator---v040)
+
+---
+
+#### `luthor_generator` - `v0.4.0`
+
+ - **FEAT**(luthor,luthor_annotation,luthor_generator): add startsWith, endsWith and contains string validations ([#63](https://github.com/exaby73/luthor/issues/63)).
+ - **FEAT**: custom validators ([#61](https://github.com/exaby73/luthor/issues/61)).
+ - **FEAT**(luthor_generator): added generation for min and max validator for int, double and num.
+
+
+## 2024-02-18
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`luthor_annotation` - `v0.3.0`](#luthor_annotation---v030)
  - [`luthor_generator` - `v0.3.2+1`](#luthor_generator---v0321)
 

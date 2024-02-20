@@ -1,0 +1,36 @@
+# Schema Validators
+
+Schema Validators are used to validate maps. See [Single Value Validators][single-value-validators] for validating any value that is not a map.
+
+Here is a simple example of how to use a schema validator to validate a map:
+
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() {
+  final personValidator = l.schema({
+    "username": l.string().min(3),
+    "age": l.int().min(18),
+  });
+  print(personValidator.validateValue({
+    "username": "John Doe",
+    "age": 25,
+  }));
+  print(personValidator.validateValue({
+    "username": "John",
+    "age": 17,
+  }));
+}
+```
+
+This will print:
+
+```console
+SchemaValidationSuccess(data: {username: John Doe, age: 25})
+SchemaValidationError(data: {username: John, age: 17}, errors: {age: [age must be greater than or equal to 18]})
+```
+
+The error in the second print statement is a map because the `schema` validator can return multiple errors. The keys of the map are the keys of the input map and the values are the errors for each key. The errors are lists because the `schema` validator can return multiple errors for each key. It can also return a map of errors for each key in the case of a nested validator. See the [Nested Validators][nested-validators] section for more information.
+
+[single-value-validators]: /concepts/single-value-validators
+[nested-validators]: /api/schema-validators#nested-validators

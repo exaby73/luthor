@@ -1,6 +1,8 @@
 # Single Value Validators
 
-Single Value Validators
+Single Value Validators are used to validate any value that is not a map. See [Schema Validators][schema-validators] for validating maps.
+
+Here is a simple example of how to use a single value validator to validate an email address:
 
 ```dart
 import 'package:luthor/luthor.dart';
@@ -10,3 +12,11 @@ void main() {
   print(emailValidator.validateValue("sample@example.com"));
 }
 ```
+
+This will print:
+
+```console
+SingleValidationSuccess(data: sample@example.com)
+```
+
+[schema-validators]: /concepts/schema-validators

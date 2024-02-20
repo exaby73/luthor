@@ -1,7 +1,12 @@
 # Single Value Validators
 
-Single Value Validators are a type of data validation tools used in programming to ensure that a variable or input field receives a value that meets certain criteria. These validators are applied to single values, such as a string, a number, or a date, and they check whether the value is valid based on specific rules.
+Single Value Validators
 
-For example, a Single Value Validator might check whether a string is a valid email address, or whether a number is within a certain range;
+```dart
+import 'package:luthor/luthor.dart';
 
-These validators are often used in form validation, to ensure that user input is valid before it is processed or stored. They can help to prevent errors, improve data quality, and enhance security by preventing the submission of invalid or malicious data.Single Value Validators
+void main() {
+  final emailValidator = l.string().email();
+  print(emailValidator.validateValue("sample@example.com"));
+}
+```

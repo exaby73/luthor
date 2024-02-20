@@ -1,3 +1,9 @@
+## 0.4.0
+
+ - **FEAT**(luthor,luthor_annotation,luthor_generator): add startsWith, endsWith and contains string validations ([#63](https://github.com/exaby73/luthor/issues/63)).
+ - **FEAT**: custom validators ([#61](https://github.com/exaby73/luthor/issues/61)).
+ - **FEAT**(luthor_generator): added generation for min and max validator for int, double and num.
+
 ## 0.3.2
 
  - **FEAT**: update analyzer.

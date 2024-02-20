@@ -3,6 +3,84 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-02-18
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor_generator` - `v0.4.0`](#luthor_generator---v040)
+
+---
+
+#### `luthor_generator` - `v0.4.0`
+
+ - **FEAT**(luthor,luthor_annotation,luthor_generator): add startsWith, endsWith and contains string validations ([#63](https://github.com/exaby73/luthor/issues/63)).
+ - **FEAT**: custom validators ([#61](https://github.com/exaby73/luthor/issues/61)).
+ - **FEAT**(luthor_generator): added generation for min and max validator for int, double and num.
+
+
+## 2024-02-18
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor_annotation` - `v0.3.0`](#luthor_annotation---v030)
+ - [`luthor_generator` - `v0.3.2+1`](#luthor_generator---v0321)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `luthor_generator` - `v0.3.2+1`
+
+---
+
+#### `luthor_annotation` - `v0.3.0`
+
+ - **FEAT**(luthor,luthor_annotation,luthor_generator): add startsWith, endsWith and contains string validations ([#63](https://github.com/exaby73/luthor/issues/63)).
+ - **FEAT**: custom validators ([#61](https://github.com/exaby73/luthor/issues/61)).
+ - **FEAT**: resolved.
+
+
+## 2024-02-18
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor` - `v0.3.0`](#luthor---v030)
+
+---
+
+#### `luthor` - `v0.3.0`
+
+ - **FEAT**(luthor,luthor_annotation,luthor_generator): add startsWith, endsWith and contains string validations ([#63](https://github.com/exaby73/luthor/issues/63)).
+ - **FEAT**: custom validators ([#61](https://github.com/exaby73/luthor/issues/61)).
+ - **FEAT**(luthor): consolidated int and double validator to num.
+ - **FEAT**(luthor): added min and max validators for int, double and num.
+ - **FEAT**: update analyzer.
+
+
 ## 2023-11-20
 
 ### Changes

@@ -8,6 +8,16 @@ sealed class SingleValidationResult<Data> {
       SingleValidationError(data: _, errors: _) => false,
     };
   }
+
+  @override
+  String toString() {
+    return switch (this) {
+      SingleValidationSuccess<Data>(data: final data) =>
+        'SingleValidationSuccess(data: $data)',
+      SingleValidationError<Data>(data: final data, errors: final errors) =>
+        'SingleValidationError(data: $data, errors: $errors)',
+    };
+  }
 }
 
 class SingleValidationSuccess<T> extends SingleValidationResult<T> {
@@ -33,6 +43,16 @@ sealed class SchemaValidationResult<T> {
     return switch (this) {
       SchemaValidationSuccess(data: _) => true,
       SchemaValidationError(data: _, errors: _) => false,
+    };
+  }
+
+  @override
+  String toString() {
+    return switch (this) {
+      SchemaValidationSuccess<T>(data: final data) =>
+        'SchemaValidationSuccess(data: $data)',
+      SchemaValidationError<T>(data: final data, errors: final errors) =>
+        'SchemaValidationError(data: $data, errors: $errors)',
     };
   }
 }

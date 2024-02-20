@@ -10,6 +10,7 @@ import 'package:luthor/luthor.dart';
 void main() {
   final emailValidator = l.string().email();
   print(emailValidator.validateValue("sample@example.com"));
+  print(emailValidator.validateValue("not an email address"));
 }
 ```
 
@@ -17,6 +18,7 @@ This will print:
 
 ```console
 SingleValidationSuccess(data: sample@example.com)
+SingleValidationError(data: not an email address, errors: [value must be a valid email address])
 ```
 
 [schema-validators]: /concepts/schema-validators

@@ -1,0 +1,33 @@
+---
+// Modified from https://github.com/withastro/starlight/blob/main/packages/starlight/components/EditLink.astro
+
+import Icon from "./user-components/Icon.astro";
+
+interface Props {
+  editUrl: string;
+}
+
+const { editUrl } = Astro.props;
+---
+
+{
+  editUrl && (
+    <a href={editUrl} class="flex ps-8">
+      <Icon name="pencil" size="1.2em" />
+      Edit Page
+    </a>
+  )
+}
+
+<style>
+  a {
+    gap: 0.5rem;
+    align-items: center;
+    text-decoration: none;
+    color: var(--sl-color-gray-3);
+  }
+
+  a:hover {
+    color: var(--sl-color-white);
+  }
+</style>

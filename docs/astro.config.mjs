@@ -9,7 +9,7 @@ export default defineConfig({
   base: "/",
   integrations: [
     starlight({
-      title: "Ion Theme",
+      title: "Luthor",
       head: [
         {
           tag: "script",
@@ -25,9 +25,6 @@ export default defineConfig({
           },
         },
       ],
-      logo: {
-        src: "./src/assets/ion-logo.svg",
-      },
       social: {
         github: "https://github.com/exaby73/luthor",
       },

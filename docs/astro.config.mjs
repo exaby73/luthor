@@ -39,7 +39,8 @@ export default defineConfig({
         },
       ],
       editLink: {
-        baseUrl: "https://github.com/exaby73/luthor/edit/docs/docs",
+        // Logic to handle the edit link in src/components/EditLink.astro
+        baseUrl: "https://example.com",
       },
       components: {
         ThemeProvider: "./src/components/ThemeProvider.astro",

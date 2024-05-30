@@ -4,15 +4,22 @@
 import Icon from "./user-components/Icon.astro";
 
 interface Props {
-  editUrl: string;
+  editUrl: URL;
 }
 
 const { editUrl } = Astro.props;
+console.log({ editUrl });
 ---
 
 {
   editUrl && (
-    <a href={editUrl} class="flex ps-8">
+    <a
+      href={editUrl.href.replace(
+        "https://example.com",
+        "https://github.com/exaby73/luthor/edit/docs/docs"
+      )}
+      class="flex ps-8"
+    >
       <Icon name="pencil" size="1.2em" />
       Edit Page
     </a>

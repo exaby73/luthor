@@ -1,1 +1,0 @@
-function n(){document.addEventListener("alpine:init",()=>{const t={enabled:!1,init(){const e=localStorage.getItem("codeGen");e&&(this.enabled=e==="true"),localStorage.setItem("codeGen",this.enabled.toString())},toggle(){this.enabled=!this.enabled,localStorage.setItem("codeGen",this.enabled.toString())}};Alpine.store("codeGen",t)})}n();

@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-06-01
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+- There are no breaking changes in this release.
+
+Packages with other changes:
+
+- [`luthor` - `v0.3.1`](#luthor---v031)
+
+---
+
+#### `luthor` - `v0.3.1`
+
+- **FIX**: email and emoji regex ([#67](https://github.com/exaby73/luthor/issues/67)).
+- **FEAT**: override toString for validation results ([#66](https://github.com/exaby73/luthor/issues/66)).
+
 ## 2024-02-18
 
 ### Changes
@@ -11,20 +32,19 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 Packages with breaking changes:
 
- - There are no breaking changes in this release.
+- There are no breaking changes in this release.
 
 Packages with other changes:
 
- - [`luthor_generator` - `v0.4.0`](#luthor_generator---v040)
+- [`luthor_generator` - `v0.4.0`](#luthor_generator---v040)
 
 ---
 
 #### `luthor_generator` - `v0.4.0`
 
- - **FEAT**(luthor,luthor_annotation,luthor_generator): add startsWith, endsWith and contains string validations ([#63](https://github.com/exaby73/luthor/issues/63)).
- - **FEAT**: custom validators ([#61](https://github.com/exaby73/luthor/issues/61)).
- - **FEAT**(luthor_generator): added generation for min and max validator for int, double and num.
-
+- **FEAT**(luthor,luthor_annotation,luthor_generator): add startsWith, endsWith and contains string validations ([#63](https://github.com/exaby73/luthor/issues/63)).
+- **FEAT**: custom validators ([#61](https://github.com/exaby73/luthor/issues/61)).
+- **FEAT**(luthor_generator): added generation for min and max validator for int, double and num.
 
 ## 2024-02-18
 
@@ -34,27 +54,26 @@ Packages with other changes:
 
 Packages with breaking changes:
 
- - There are no breaking changes in this release.
+- There are no breaking changes in this release.
 
 Packages with other changes:
 
- - [`luthor_annotation` - `v0.3.0`](#luthor_annotation---v030)
- - [`luthor_generator` - `v0.3.2+1`](#luthor_generator---v0321)
+- [`luthor_annotation` - `v0.3.0`](#luthor_annotation---v030)
+- [`luthor_generator` - `v0.3.2+1`](#luthor_generator---v0321)
 
 Packages with dependency updates only:
 
 > Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
 
- - `luthor_generator` - `v0.3.2+1`
+- `luthor_generator` - `v0.3.2+1`
 
 ---
 
 #### `luthor_annotation` - `v0.3.0`
 
- - **FEAT**(luthor,luthor_annotation,luthor_generator): add startsWith, endsWith and contains string validations ([#63](https://github.com/exaby73/luthor/issues/63)).
- - **FEAT**: custom validators ([#61](https://github.com/exaby73/luthor/issues/61)).
- - **FEAT**: resolved.
-
+- **FEAT**(luthor,luthor_annotation,luthor_generator): add startsWith, endsWith and contains string validations ([#63](https://github.com/exaby73/luthor/issues/63)).
+- **FEAT**: custom validators ([#61](https://github.com/exaby73/luthor/issues/61)).
+- **FEAT**: resolved.
 
 ## 2024-02-18
 
@@ -64,22 +83,21 @@ Packages with dependency updates only:
 
 Packages with breaking changes:
 
- - There are no breaking changes in this release.
+- There are no breaking changes in this release.
 
 Packages with other changes:
 
- - [`luthor` - `v0.3.0`](#luthor---v030)
+- [`luthor` - `v0.3.0`](#luthor---v030)
 
 ---
 
 #### `luthor` - `v0.3.0`
 
- - **FEAT**(luthor,luthor_annotation,luthor_generator): add startsWith, endsWith and contains string validations ([#63](https://github.com/exaby73/luthor/issues/63)).
- - **FEAT**: custom validators ([#61](https://github.com/exaby73/luthor/issues/61)).
- - **FEAT**(luthor): consolidated int and double validator to num.
- - **FEAT**(luthor): added min and max validators for int, double and num.
- - **FEAT**: update analyzer.
-
+- **FEAT**(luthor,luthor_annotation,luthor_generator): add startsWith, endsWith and contains string validations ([#63](https://github.com/exaby73/luthor/issues/63)).
+- **FEAT**: custom validators ([#61](https://github.com/exaby73/luthor/issues/61)).
+- **FEAT**(luthor): consolidated int and double validator to num.
+- **FEAT**(luthor): added min and max validators for int, double and num.
+- **FEAT**: update analyzer.
 
 ## 2023-11-20
 
@@ -89,18 +107,17 @@ Packages with other changes:
 
 Packages with breaking changes:
 
- - There are no breaking changes in this release.
+- There are no breaking changes in this release.
 
 Packages with other changes:
 
- - [`luthor_generator` - `v0.3.2`](#luthor_generator---v032)
+- [`luthor_generator` - `v0.3.2`](#luthor_generator---v032)
 
 ---
 
 #### `luthor_generator` - `v0.3.2`
 
- - **FEAT**: update analyzer.
-
+- **FEAT**: update analyzer.
 
 ## 2023-08-15
 
@@ -110,18 +127,17 @@ Packages with other changes:
 
 Packages with breaking changes:
 
- - There are no breaking changes in this release.
+- There are no breaking changes in this release.
 
 Packages with other changes:
 
- - [`luthor_generator` - `v0.3.1`](#luthor_generator---v031)
+- [`luthor_generator` - `v0.3.1`](#luthor_generator---v031)
 
 ---
 
 #### `luthor_generator` - `v0.3.1`
 
- - **FEAT**(luthor_generator): add support for DateTime.
-
+- **FEAT**(luthor_generator): add support for DateTime.
 
 ## 2023-08-13
 
@@ -131,19 +147,18 @@ Packages with other changes:
 
 Packages with breaking changes:
 
- - [`luthor_generator` - `v0.3.0`](#luthor_generator---v030)
+- [`luthor_generator` - `v0.3.0`](#luthor_generator---v030)
 
 Packages with other changes:
 
- - There are no other changes in this release.
+- There are no other changes in this release.
 
 ---
 
 #### `luthor_generator` - `v0.3.0`
 
- - **FEAT**(luthor_generator): validate method generates unique methods allowing multiple luthor classes in one file.
- - **FEAT**(luthor_generator): Add support for JsonKey.name.
-
+- **FEAT**(luthor_generator): validate method generates unique methods allowing multiple luthor classes in one file.
+- **FEAT**(luthor_generator): Add support for JsonKey.name.
 
 ## 2023-07-23
 
@@ -153,30 +168,29 @@ Packages with other changes:
 
 Packages with breaking changes:
 
- - There are no breaking changes in this release.
+- There are no breaking changes in this release.
 
 Packages with other changes:
 
- - [`luthor` - `v0.2.2`](#luthor---v022)
- - [`luthor_generator` - `v0.2.4`](#luthor_generator---v024)
+- [`luthor` - `v0.2.2`](#luthor---v022)
+- [`luthor_generator` - `v0.2.4`](#luthor_generator---v024)
 
 ---
 
 #### `luthor` - `v0.2.2`
 
- - **FIX**: redundant calls fromJson in SchemaValidationError.
- - **FIX**(luthor): SchemaValidation null error due to covariant.
- - **FIX**(luthor): l.list() does not validate inner values correctly.
- - **FEAT**(luthor): add fromJson argument to validateSchema.
+- **FIX**: redundant calls fromJson in SchemaValidationError.
+- **FIX**(luthor): SchemaValidation null error due to covariant.
+- **FIX**(luthor): l.list() does not validate inner values correctly.
+- **FEAT**(luthor): add fromJson argument to validateSchema.
 
 #### `luthor_generator` - `v0.2.4`
 
- - **FIX**: dependencies.
- - **FIX**(luthor): SchemaValidation null error due to covariant.
- - **FEAT**(luthor_generator): Add support for JsonKey.name.
- - **FEAT**(luthor_generator): luthor classes now require a validate method instead of exposing the raw schema.
- - **FEAT**(luthor): add fromJson argument to validateSchema.
-
+- **FIX**: dependencies.
+- **FIX**(luthor): SchemaValidation null error due to covariant.
+- **FEAT**(luthor_generator): Add support for JsonKey.name.
+- **FEAT**(luthor_generator): luthor classes now require a validate method instead of exposing the raw schema.
+- **FEAT**(luthor): add fromJson argument to validateSchema.
 
 ## 2023-07-15
 
@@ -186,26 +200,25 @@ Packages with other changes:
 
 Packages with breaking changes:
 
- - There are no breaking changes in this release.
+- There are no breaking changes in this release.
 
 Packages with other changes:
 
- - [`luthor` - `v0.2.1`](#luthor---v021)
- - [`luthor_generator` - `v0.2.3`](#luthor_generator---v023)
+- [`luthor` - `v0.2.1`](#luthor---v021)
+- [`luthor_generator` - `v0.2.3`](#luthor_generator---v023)
 
 ---
 
 #### `luthor` - `v0.2.1`
 
- - **FIX**: redundant calls fromJson in SchemaValidationError.
- - **FIX**(luthor): SchemaValidation null error due to covariant.
- - **FIX**(luthor): l.list() does not validate inner values correctly.
- - **FEAT**(luthor): add fromJson argument to validateSchema.
+- **FIX**: redundant calls fromJson in SchemaValidationError.
+- **FIX**(luthor): SchemaValidation null error due to covariant.
+- **FIX**(luthor): l.list() does not validate inner values correctly.
+- **FEAT**(luthor): add fromJson argument to validateSchema.
 
 #### `luthor_generator` - `v0.2.3`
 
- - **FIX**: dependencies.
- - **FIX**(luthor): SchemaValidation null error due to covariant.
- - **FEAT**(luthor_generator): luthor classes now require a validate method instead of exposing the raw schema.
- - **FEAT**(luthor): add fromJson argument to validateSchema.
-
+- **FIX**: dependencies.
+- **FIX**(luthor): SchemaValidation null error due to covariant.
+- **FEAT**(luthor_generator): luthor classes now require a validate method instead of exposing the raw schema.
+- **FEAT**(luthor): add fromJson argument to validateSchema.

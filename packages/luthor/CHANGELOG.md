@@ -1,24 +1,29 @@
+## 0.3.1
+
+- **FIX**: email and emoji regex ([#67](https://github.com/exaby73/luthor/issues/67)).
+- **FEAT**: override toString for validation results ([#66](https://github.com/exaby73/luthor/issues/66)).
+
 ## 0.3.0
 
- - **FEAT**(luthor,luthor_annotation,luthor_generator): add startsWith, endsWith and contains string validations ([#63](https://github.com/exaby73/luthor/issues/63)).
- - **FEAT**: custom validators ([#61](https://github.com/exaby73/luthor/issues/61)).
- - **FEAT**(luthor): consolidated int and double validator to num.
- - **FEAT**(luthor): added min and max validators for int, double and num.
- - **FEAT**: update analyzer.
+- **FEAT**(luthor,luthor_annotation,luthor_generator): add startsWith, endsWith and contains string validations ([#63](https://github.com/exaby73/luthor/issues/63)).
+- **FEAT**: custom validators ([#61](https://github.com/exaby73/luthor/issues/61)).
+- **FEAT**(luthor): consolidated int and double validator to num.
+- **FEAT**(luthor): added min and max validators for int, double and num.
+- **FEAT**: update analyzer.
 
 ## 0.2.2
 
- - **FIX**: redundant calls fromJson in SchemaValidationError.
- - **FIX**(luthor): SchemaValidation null error due to covariant.
- - **FIX**(luthor): l.list() does not validate inner values correctly.
- - **FEAT**(luthor): add fromJson argument to validateSchema.
+- **FIX**: redundant calls fromJson in SchemaValidationError.
+- **FIX**(luthor): SchemaValidation null error due to covariant.
+- **FIX**(luthor): l.list() does not validate inner values correctly.
+- **FEAT**(luthor): add fromJson argument to validateSchema.
 
 ## 0.2.1
 
- - **FIX**: redundant calls fromJson in SchemaValidationError.
- - **FIX**(luthor): SchemaValidation null error due to covariant.
- - **FIX**(luthor): l.list() does not validate inner values correctly.
- - **FEAT**(luthor): add fromJson argument to validateSchema.
+- **FIX**: redundant calls fromJson in SchemaValidationError.
+- **FIX**(luthor): SchemaValidation null error due to covariant.
+- **FIX**(luthor): l.list() does not validate inner values correctly.
+- **FEAT**(luthor): add fromJson argument to validateSchema.
 
 # 0.2.0
 

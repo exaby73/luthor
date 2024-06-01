@@ -1,0 +1,74 @@
+{
+  "name": "@astrojs/language-server",
+  "version": "2.10.0",
+  "author": "withastro",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/withastro/language-tools",
+    "directory": "packages/language-server"
+  },
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "files": [
+    "bin",
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "types/**/*.d.ts"
+  ],
+  "bin": {
+    "astro-ls": "./bin/nodeServer.js"
+  },
+  "dependencies": {
+    "@astrojs/compiler": "^2.7.0",
+    "@jridgewell/sourcemap-codec": "^1.4.15",
+    "@volar/kit": "~2.2.3",
+    "@volar/language-core": "~2.2.3",
+    "@volar/language-server": "~2.2.3",
+    "@volar/language-service": "~2.2.3",
+    "@volar/typescript": "~2.2.3",
+    "fast-glob": "^3.2.12",
+    "volar-service-css": "0.0.45",
+    "volar-service-emmet": "0.0.45",
+    "volar-service-html": "0.0.45",
+    "volar-service-prettier": "0.0.45",
+    "volar-service-typescript": "0.0.45",
+    "volar-service-typescript-twoslash-queries": "0.0.45",
+    "vscode-html-languageservice": "^5.2.0",
+    "vscode-uri": "^3.0.8"
+  },
+  "devDependencies": {
+    "svelte": "^4.2.10",
+    "@astrojs/svelte": "^5.0.3",
+    "@astrojs/vue": "^4.0.8",
+    "@types/chai": "^4.3.5",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.17.8",
+    "@volar/test-utils": "~2.2.3",
+    "astro": "^4.3.5",
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "tsx": "^3.12.7",
+    "typescript": "^5.2.2",
+    "vscode-languageserver-protocol": "^3.17.5",
+    "vscode-languageserver-textdocument": "^1.0.11"
+  },
+  "peerDependencies": {
+    "prettier": "^3.0.0",
+    "prettier-plugin-astro": ">=0.11.0"
+  },
+  "peerDependenciesMeta": {
+    "prettier": {
+      "optional": true
+    },
+    "prettier-plugin-astro": {
+      "optional": true
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "mocha --timeout 10000 --require tsx --require test/takedown.ts test/misc/init.test.ts test/**/*.test.ts",
+    "test:match": "pnpm run test -g"
+  }
+}

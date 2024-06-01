@@ -3,11 +3,11 @@ import 'package:test/test.dart';
 
 void main() {
   test('should return true when value is a valid emoji', () {
-    final result = l.string().emoji().validateValue('👍');
+    final result = l.string().emoji().validateValue('👍👍👍');
 
     switch (result) {
       case SingleValidationSuccess(data: _):
-        expect(result.data, '👍');
+        expect(result.data, '👍👍👍');
       case SingleValidationError(data: _, errors: _):
         fail('should not have errors');
     }

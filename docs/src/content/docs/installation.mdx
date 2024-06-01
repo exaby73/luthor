@@ -1,0 +1,43 @@
+---
+title: Get Started
+layout: ../../layouts/MainLayout.astro
+---
+
+import CodeGenContentSwitcher from "../../components/CodeGenContentSwitcher.astro";
+
+Ad eiusmod ad commodo aute fugiat labore. Ipsum id occaecat reprehenderit ullamco. Reprehenderit et ad sint ullamco labore commodo aliquip et anim ex commodo. Anim nisi esse aliqua aute. Culpa enim nulla et enim id minim minim consequat adipisicing culpa cillum. Qui id laborum laboris tempor fugiat. Qui officia consequat pariatur exercitation sint.
+
+## Installation
+
+Luthor can be installed into any Dart project using the following command:
+
+```bash
+dart pub add luthor
+```
+
+If you're using Flutter, you can also use the following command:
+
+```bash
+flutter pub add luthor
+```
+
+<CodeGenContentSwitcher>
+    <div slot="true">
+#### Installing Code Generation Packages
+
+Luthor can be used with code generation using `build_runner` optionally. To use code generation, you need to add the following dependencies as well:
+
+```bash
+dart pub add dev:build_runner dev:luthor_generator
+```
+
+If you're using Flutter, you can also use the following command:
+
+```bash
+flutter pub add dev:build_runner dev:luthor_generator
+```
+
+    </div>
+</CodeGenContentSwitcher>
+
+And you're all set! You can now start using Luthor in your project.

@@ -30,12 +30,150 @@ export default defineConfig({
       },
       sidebar: [
         {
-          label: "Home",
-          link: "/",
+          label: "Basics",
+          items: [
+            {
+              label: "Installation",
+              link: "/installation",
+            },
+            {
+              label: "Concepts",
+              link: "/concepts",
+            },
+          ],
         },
         {
-          label: "Get Started",
-          link: "/get-started",
+          label: "Single Values",
+          items: [
+            {
+              label: "Int",
+              link: "/single-values/int",
+            },
+            {
+              label: "Double",
+              link: "/single-values/double",
+            },
+            {
+              label: "Num",
+              link: "/single-values/num",
+            },
+            {
+              label: "Bool",
+              link: "/single-values/bool",
+            },
+            {
+              label: "String",
+              link: "/single-values/string",
+            },
+            {
+              label: "Null",
+              link: "/single-values/null",
+            },
+            {
+              label: "Dynamic",
+              link: "/single-values/dynamic",
+            },
+            {
+              label: "List",
+              link: "/single-values/list",
+            },
+          ],
+        },
+        {
+          label: "Modifiers",
+          items: [
+            {
+              label: "Required",
+              link: "/modifiers/required",
+            },
+            {
+              label: "Custom",
+              link: "/modifiers/custom",
+            },
+            {
+              label: "Number Modifiers",
+              items: [
+                {
+                  label: "Min",
+                  link: "/modifiers/number-modifiers/min",
+                },
+                {
+                  label: "Max",
+                  link: "/modifiers/number-modifiers/max",
+                },
+              ],
+            },
+            {
+              label: "String Modifiers",
+              items: [
+                {
+                  label: "Min",
+                  link: "/modifiers/string-modifiers/min",
+                },
+                {
+                  label: "Max",
+                  link: "/modifiers/string-modifiers/max",
+                },
+                {
+                  label: "Length",
+                  link: "/modifiers/string-modifiers/length",
+                },
+                {
+                  label: "Contains",
+                  link: "/modifiers/string-modifiers/contains",
+                },
+                {
+                  label: "Starts With",
+                  link: "/modifiers/string-modifiers/starts-with",
+                },
+                {
+                  label: "Ends With",
+                  link: "/modifiers/string-modifiers/ends-with",
+                },
+                {
+                  label: "DateTime",
+                  link: "/modifiers/string-modifiers/date-time",
+                },
+                {
+                  label: "Email",
+                  link: "/modifiers/string-modifiers/email",
+                },
+                {
+                  label: "Emoji",
+                  link: "/modifiers/string-modifiers/emoji",
+                },
+                {
+                  label: "Regex",
+                  link: "/modifiers/string-modifiers/regex",
+                },
+                {
+                  label: "Uri",
+                  link: "/modifiers/string-modifiers/uri",
+                },
+                {
+                  label: "UUID",
+                  link: "/modifiers/string-modifiers/uuid",
+                },
+                {
+                  label: "CUID",
+                  link: "/modifiers/string-modifiers/cuid",
+                },
+                {
+                  label: "CUID 2",
+                  link: "/modifiers/string-modifiers/cuid-2",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          label: "Schemas",
+          items: [
+            {
+              label: "Defining schemas",
+              link: "/schemas/defining-schemas",
+            },
+          ],
         },
       ],
       editLink: {

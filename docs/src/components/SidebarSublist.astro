@@ -12,9 +12,15 @@ interface Props {
 const { sublist, nested, nestedCount } = Astro.props;
 ---
 
-<CodeGenToggle />
+{
+  !nested && (
+    <>
+      <CodeGenToggle />
 
-<hr class="border-white opacity-10" />
+      <hr class="border-white opacity-10" />
+    </>
+  )
+}
 
 <ul class:list={{ "top-level": !nested }}>
   {
@@ -23,7 +29,7 @@ const { sublist, nested, nestedCount } = Astro.props;
         <li
           class:list={[
             {
-              nested: nested && nestedCount > 1,
+              // nested: nested && nestedCount > 1,
               active: entry.type === "link" && entry.isCurrent,
             },
           ]}
@@ -52,12 +58,11 @@ const { sublist, nested, nestedCount } = Astro.props;
             </a>
           ) : (
             <details open>
-              <summary
-                style="pointer-events: none;"
-                class={nested ? "hidden" : ""}
-              >
-                <div class="group-label">
-                  <span class="large">{entry.label.trim()}</span>
+              <summary style="pointer-events: none;">
+                <div class={nested ? "" : "group-label"}>
+                  <span class={nested ? "" : "large"}>
+                    {entry.label.trim()}
+                  </span>
                   {entry.badge && (
                     <>
                       {" "}
@@ -114,12 +119,15 @@ const { sublist, nested, nestedCount } = Astro.props;
   }
 
   ul:not(.top-level) > li > details {
-    margin-inline-start: 0.5rem;
-    padding-inline-start: 0.5rem;
-
     > summary {
       border-top: none;
-      padding-top: 0;
+      padding: 0 0 0.25rem 0;
+      margin: 0;
+      font-size: var(--sl-text-sm);
+    }
+
+    > ul {
+      padding-inline-start: 1rem;
     }
   }
 
@@ -141,7 +149,7 @@ const { sublist, nested, nestedCount } = Astro.props;
     padding-top: 1rem;
   }
 
-  summary span {
+  ul.top-level > li > details > summary > div > span {
     font-family: "Space Mono", monospace;
     font-weight: 400 !important;
   }

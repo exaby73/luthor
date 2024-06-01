@@ -1,3 +1,45 @@
 ---
 title: Validating a Double value
 ---
+
+import CodeGenContentSwitcher from '../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+  <div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() {
+  final validator = l.double();
+  print(validator.validateValue(42.0));
+}
+```
+  </div>
+
+  <div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'double_schema.freezed.dart';
+part 'double_schema.g.dart';
+
+@freezed
+@luthor
+class DoubleSchema extends _$DoubleSchema {
+  const factory DoubleSchema({
+    required double value,
+  }) = _$DoubleSchema;
+
+  static SchemaValidationResult<DoubleSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$DoubleSchemaValidate(json);
+}
+
+void main() {
+  print(DoubleSchema.validate({'value': 42.0}));
+}
+```
+  </div>
+</CodeGenContentSwitcher>

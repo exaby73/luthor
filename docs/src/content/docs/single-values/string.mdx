@@ -1,3 +1,45 @@
 ---
 title: Validating a String value
 ---
+
+import CodeGenContentSwitcher from '../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+  <div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.string();
+  print(validator.validateValue('Hello World!'));
+}
+```
+  </div>
+
+  <div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'string_schema.freezed.dart';
+part 'string_schema.g.dart';
+
+@freezed
+@luthor
+class StringSchema extends _$StringSchema {
+  const factory StringSchema({
+    required String value,
+  }) = _$StringSchema;
+
+  static SchemaValidationResult<StringSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$StringSchemaValidate(json);
+}
+
+void main() {
+  print(StringSchema.validate({'value': 'Hello World!'}));
+}
+```
+  </div>
+</CodeGenContentSwitcher>

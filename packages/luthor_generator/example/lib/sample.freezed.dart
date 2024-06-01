@@ -63,6 +63,7 @@ mixin _$Sample {
   String get foo => throw _privateConstructorUsedError;
   @WithCustomValidator(customValidatorFn)
   String get custom => throw _privateConstructorUsedError;
+  List<int> get numbers => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -97,7 +98,8 @@ abstract class $SampleCopyWith<$Res> {
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor') String luthorPath,
       AnotherSample anotherSample,
       @JsonKey(name: 'jsonKeyName') String foo,
-      @WithCustomValidator(customValidatorFn) String custom});
+      @WithCustomValidator(customValidatorFn) String custom,
+      List<int> numbers});
 
   $AnotherSampleCopyWith<$Res> get anotherSample;
 }
@@ -138,6 +140,7 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
     Object? anotherSample = null,
     Object? foo = null,
     Object? custom = null,
+    Object? numbers = null,
   }) {
     return _then(_value.copyWith(
       anyValue: freezed == anyValue
@@ -232,6 +235,10 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
           ? _value.custom
           : custom // ignore: cast_nullable_to_non_nullable
               as String,
+      numbers: null == numbers
+          ? _value.numbers
+          : numbers // ignore: cast_nullable_to_non_nullable
+              as List<int>,
     ) as $Val);
   }
 
@@ -274,7 +281,8 @@ abstract class _$$SampleImplCopyWith<$Res> implements $SampleCopyWith<$Res> {
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor') String luthorPath,
       AnotherSample anotherSample,
       @JsonKey(name: 'jsonKeyName') String foo,
-      @WithCustomValidator(customValidatorFn) String custom});
+      @WithCustomValidator(customValidatorFn) String custom,
+      List<int> numbers});
 
   @override
   $AnotherSampleCopyWith<$Res> get anotherSample;
@@ -314,6 +322,7 @@ class __$$SampleImplCopyWithImpl<$Res>
     Object? anotherSample = null,
     Object? foo = null,
     Object? custom = null,
+    Object? numbers = null,
   }) {
     return _then(_$SampleImpl(
       anyValue: freezed == anyValue
@@ -408,6 +417,10 @@ class __$$SampleImplCopyWithImpl<$Res>
           ? _value.custom
           : custom // ignore: cast_nullable_to_non_nullable
               as String,
+      numbers: null == numbers
+          ? _value._numbers
+          : numbers // ignore: cast_nullable_to_non_nullable
+              as List<int>,
     ));
   }
 }
@@ -439,8 +452,10 @@ class _$SampleImpl implements _Sample {
       required this.luthorPath,
       required this.anotherSample,
       @JsonKey(name: 'jsonKeyName') required this.foo,
-      @WithCustomValidator(customValidatorFn) required this.custom})
-      : _listValue = listValue;
+      @WithCustomValidator(customValidatorFn) required this.custom,
+      required final List<int> numbers})
+      : _listValue = listValue,
+        _numbers = numbers;
 
   factory _$SampleImpl.fromJson(Map<String, dynamic> json) =>
       _$$SampleImplFromJson(json);
@@ -517,10 +532,17 @@ class _$SampleImpl implements _Sample {
   @override
   @WithCustomValidator(customValidatorFn)
   final String custom;
+  final List<int> _numbers;
+  @override
+  List<int> get numbers {
+    if (_numbers is EqualUnmodifiableListView) return _numbers;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_numbers);
+  }
 
   @override
   String toString() {
-    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, dateTime: $dateTime, exactly10Characters: $exactly10Characters, minAndMaxString: $minAndMaxString, startsWithFoo: $startsWithFoo, endsWithBar: $endsWithBar, containsBaz: $containsBaz, minAndMaxInt: $minAndMaxInt, minAndMaxDouble: $minAndMaxDouble, minAndMaxNumber: $minAndMaxNumber, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample, foo: $foo, custom: $custom)';
+    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, dateTime: $dateTime, exactly10Characters: $exactly10Characters, minAndMaxString: $minAndMaxString, startsWithFoo: $startsWithFoo, endsWithBar: $endsWithBar, containsBaz: $containsBaz, minAndMaxInt: $minAndMaxInt, minAndMaxDouble: $minAndMaxDouble, minAndMaxNumber: $minAndMaxNumber, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample, foo: $foo, custom: $custom, numbers: $numbers)';
   }
 
   @override
@@ -568,7 +590,8 @@ class _$SampleImpl implements _Sample {
             (identical(other.anotherSample, anotherSample) ||
                 other.anotherSample == anotherSample) &&
             (identical(other.foo, foo) || other.foo == foo) &&
-            (identical(other.custom, custom) || other.custom == custom));
+            (identical(other.custom, custom) || other.custom == custom) &&
+            const DeepCollectionEquality().equals(other._numbers, _numbers));
   }
 
   @JsonKey(ignore: true)
@@ -597,7 +620,8 @@ class _$SampleImpl implements _Sample {
         luthorPath,
         anotherSample,
         foo,
-        custom
+        custom,
+        const DeepCollectionEquality().hash(_numbers)
       ]);
 
   @JsonKey(ignore: true)
@@ -641,8 +665,8 @@ abstract class _Sample implements Sample {
       required final String luthorPath,
       required final AnotherSample anotherSample,
       @JsonKey(name: 'jsonKeyName') required final String foo,
-      @WithCustomValidator(customValidatorFn)
-      required final String custom}) = _$SampleImpl;
+      @WithCustomValidator(customValidatorFn) required final String custom,
+      required final List<int> numbers}) = _$SampleImpl;
 
   factory _Sample.fromJson(Map<String, dynamic> json) = _$SampleImpl.fromJson;
 
@@ -711,6 +735,8 @@ abstract class _Sample implements Sample {
   @override
   @WithCustomValidator(customValidatorFn)
   String get custom;
+  @override
+  List<int> get numbers;
   @override
   @JsonKey(ignore: true)
   _$$SampleImplCopyWith<_$SampleImpl> get copyWith =>

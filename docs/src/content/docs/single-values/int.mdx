@@ -1,3 +1,45 @@
 ---
 title: Validating an Int value
 ---
+
+import CodeGenContentSwitcher from '../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+  <div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() {
+  final validator = l.int();
+  print(validator.validateValue(42));
+}
+```
+  </div>
+
+  <div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'int_schema.freezed.dart';
+part 'int_schema.g.dart';
+
+@freezed
+@luthor
+class IntSchema extends _$IntSchema {
+  const factory IntSchema({
+    required int value,
+  }) = _$IntSchema;
+
+  static SchemaValidationResult<IntSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$IntSchemaValidate(json);
+}
+
+void main() {
+  print(IntSchema.validate({'value': 42}));
+}
+```
+    </div>
+</CodeGenContentSwitcher>

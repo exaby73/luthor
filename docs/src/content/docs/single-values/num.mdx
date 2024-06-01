@@ -1,3 +1,48 @@
 ---
 title: Validating a Num (Int or Double) value
 ---
+
+import CodeGenContentSwitcher from '../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+  <div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() {
+  final validator = l.number();
+  print(validator.validateValue(42));
+  print(validator.validateValue(42.0));
+}
+
+```
+  </div>
+
+  <div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'number_schema.freezed.dart';
+part 'number_schema.g.dart';
+
+@freezed
+@luthor
+class NumberSchema extends _$NumberSchema {
+  const factory NumberSchema({
+    required num value,
+  }) = _$NumberSchema;
+
+  static SchemaValidationResult<NumberSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$NumberSchemaValidate(json);
+}
+
+void main() {
+  print(NumberSchema.validate({'value': 42}));
+  print(NumberSchema.validate({'value': 42.0}));
+}
+```
+  </div>
+</CodeGenContentSwitcher>

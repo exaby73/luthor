@@ -1,3 +1,22 @@
 ---
 title: Validating a Null value
 ---
+
+import CodeGenContentSwitcher from '../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+  <div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.nullValue();
+  print(validator.validateValue(null));
+}
+```
+  </div>
+
+  <div slot="true">
+    `null` validation does not work with `json_serializable` which is a requirement for `luthor_generator`.
+  </div>
+</CodeGenContentSwitcher>

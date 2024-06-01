@@ -14,7 +14,7 @@ void main() {
   });
 
   test('should return false when value is not a valid email', () {
-    final result = l.string().email().validateValue('user');
+    final result = l.string().email().validateValue('hello user@example.com');
 
     switch (result) {
       case SingleValidationSuccess(data: _):

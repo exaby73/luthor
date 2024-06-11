@@ -35,6 +35,9 @@ class ListSchema extends _$ListSchema {
     Map<String, dynamic> json,
   ) =>
       _$ListSchemaValidate(json);
+
+  factory ListSchema.fromJson(Map<String, dynamic> json) =>
+      _$ListSchemaFromJson(json);
 }
 
 void main() {

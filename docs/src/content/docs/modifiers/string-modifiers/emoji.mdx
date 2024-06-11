@@ -1,3 +1,48 @@
 ---
 title: Validating a string contains only emojis
 ---
+
+import CodeGenContentSwitcher from '../../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+<div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.string().emoji();
+  print(validator.validateValue('👍'));
+}
+```
+</div>
+
+<div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'emoji.freezed.dart';
+part 'emoji.g.dart';
+
+@freezed
+@luthor
+class EmojiSchema extends _$EmojiSchema {
+  const factory EmojiSchema({
+    required String value,
+  }) = _$EmojiSchema;
+
+  static SchemaValidationResult<EmojiSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$EmojiSchemaValidate(json);
+  
+  factory EmojiSchema.fromJson(Map<String, dynamic> json) =>
+      _$EmojiSchemaFromJson(json);
+}
+
+void main() {
+  print(EmojiSchema.validate({'value': '👍'}));
+}
+```
+</div>
+</CodeGenContentSwitcher>

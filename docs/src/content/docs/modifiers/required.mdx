@@ -1,3 +1,54 @@
 ---
 title: Make a value Required / Non-nullable
 ---
+
+import CodeGenContentSwitcher from '../../../components/CodeGenContentSwitcher.astro'
+
+To make a value required, you can use the `required` modifier. This will ensure that the value is not `null`.
+
+<CodeGenContentSwitcher>
+<div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.string().required();
+  print(validator.validateValue('Hello'));
+}
+```
+</div>
+
+<div slot="true">
+
+> Note: When using code generation, using the `required` keyword in the Freezed class will make the value required automatically.
+
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'required_schema.freezed.dart';
+part 'required_schema.g.dart';
+
+@freezed
+@luthor
+class RequiredSchema extends _$RequiredSchema {
+  const factory RequiredSchema({
+    // Adds the required modifier to the value
+    required String value,
+  }) = _$RequiredSchema;
+
+  static SchemaValidationResult<RequiredSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$RequiredSchemaValidate(json);
+
+  factory RequiredSchema.fromJson(Map<String, dynamic> json) =>
+      _$RequiredSchemaFromJson(json);
+}
+
+void main() {
+  print(RequiredSchema.validate({'value': 'Hello'}));
+}
+```
+</div>
+</CodeGenContentSwitcher>

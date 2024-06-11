@@ -1,3 +1,48 @@
 ---
 title: Validating a string is a specific length
 ---
+
+import CodeGenContentSwitcher from '../../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+<div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.string().length(5);
+  print(validator.validateValue('Hello'));
+}
+```
+</div>
+
+<div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'length.freezed.dart';
+part 'length.g.dart';
+
+@freezed
+@luthor
+class LengthSchema extends _$LengthSchema {
+  const factory LengthSchema({
+    required String value,
+  }) = _$LengthSchema;
+
+  static SchemaValidationResult<LengthSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$LengthSchemaValidate(json);
+  
+  factory LengthSchema.fromJson(Map<String, dynamic> json) =>
+      _$LengthSchemaFromJson(json);
+}
+
+void main() {
+  print(LengthSchema.validate({'value': 'Hello'}));
+}
+```
+</div>
+</CodeGenContentSwitcher>

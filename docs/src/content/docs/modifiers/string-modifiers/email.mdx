@@ -1,3 +1,48 @@
 ---
 title: Validating a string is a valid email
 ---
+
+import CodeGenContentSwitcher from '../../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+<div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.string().email();
+  print(validator.validateValue('user@example.com'));
+}
+```
+</div>
+
+<div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'email.freezed.dart';
+part 'email.g.dart';
+
+@freezed
+@luthor
+class EmailSchema extends _$EmailSchema {
+  const factory EmailSchema({
+    required String value,
+  }) = _$EmailSchema;
+
+  static SchemaValidationResult<EmailSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$EmailSchemaValidate(json);
+  
+  factory EmailSchema.fromJson(Map<String, dynamic> json) =>
+      _$EmailSchemaFromJson(json);
+}
+
+void main() {
+  print(EmailSchema.validate({'value': 'user@example.com'}));
+}
+```
+</div>
+</CodeGenContentSwitcher>

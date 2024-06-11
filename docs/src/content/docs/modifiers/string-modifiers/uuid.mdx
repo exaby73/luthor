@@ -1,3 +1,48 @@
 ---
 title: Validating a string is a valid UUID
 ---
+
+import CodeGenContentSwitcher from '../../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+<div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.string().uuid();
+  print(validator.validateValue('f47ac10b-58cc-4372-a567-0e02b2c3d479'));
+}
+```
+</div>
+
+<div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'uuid.freezed.dart';
+part 'uuid.g.dart';
+
+@freezed
+@luthor
+class UuidSchema extends _$UuidSchema {
+  const factory UuidSchema({
+    required String value,
+  }) = _$UuidSchema;
+
+  static SchemaValidationResult<UuidSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$UuidSchemaValidate(json);
+  
+  factory UuidSchema.fromJson(Map<String, dynamic> json) =>
+      _$UuidSchemaFromJson(json);
+}
+
+void main() {
+  print(UuidSchema.validate({'value': 'f47ac10b-58cc-4372-a567-0e02b2c3d479'}));
+}
+```
+</div>
+</CodeGenContentSwitcher>

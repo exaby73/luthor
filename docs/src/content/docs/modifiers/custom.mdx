@@ -1,3 +1,63 @@
 ---
 title: Define a custom validation function
 ---
+
+import CodeGenContentSwitcher from '../../../components/CodeGenContentSwitcher.astro'
+
+You can provide a custom validation function to validate a value. This function should accept an `Object?` and return a `bool`.
+
+The `typedef` for the custom validation function is:
+
+```dart
+typedef CustomValidator = bool Function(Object? value);
+```
+
+<CodeGenContentSwitcher>
+<div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() {
+  final validator = l.custom((value) => value == 42);
+  print(validator.validateValue(42));
+}
+```
+</div>
+
+<div slot="true">
+
+With Code Generation, we can use the `@WithCustomValidator` annotation to provide a custom validation function.
+
+> Note: The custom validation function should be a top level function when using Code Generation. Anonymous functions are not supported due to Dart limitations.
+
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'custom_schema.freezed.dart';
+part 'custom_schema.g.dart';
+
+bool customValidatorFn(Object? value) => value == 42;
+
+@freezed
+@luthor
+class CustomSchema extends _$CustomSchema {
+  const factory CustomSchema({
+    @WithCustomValidator(customValidatorFn) required int value,
+  }) = _$CustomSchema;
+
+  static SchemaValidationResult<CustomSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$CustomSchemaValidate(json);
+
+  factory CustomSchema.fromJson(Map<String, dynamic> json) =>
+      _$CustomSchemaFromJson(json);
+}
+
+void main() {
+  print(CustomSchema.validate({'value': 42}));
+}
+```
+</div>
+</CodeGenContentSwitcher>

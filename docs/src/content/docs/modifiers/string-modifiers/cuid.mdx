@@ -1,3 +1,48 @@
 ---
 title: Validating a string is a valid CUID
 ---
+
+import CodeGenContentSwitcher from '../../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+<div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.string().cuid();
+  print(validator.validateValue('clgtidfup000001pr8qnxasa9'));
+}
+```
+</div>
+
+<div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'cuid.freezed.dart';
+part 'cuid.g.dart';
+
+@freezed
+@luthor
+class CuidSchema extends _$CuidSchema {
+  const factory CuidSchema({
+    required String value,
+  }) = _$CuidSchema;
+
+  static SchemaValidationResult<CuidSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$CuidSchemaValidate(json);
+  
+  factory CuidSchema.fromJson(Map<String, dynamic> json) =>
+      _$CuidSchemaFromJson(json);
+}
+
+void main() {
+  print(CuidSchema.validate({'value': 'clgtidfup000001pr8qnxasa9'}));
+}
+```
+</div>
+</CodeGenContentSwitcher>

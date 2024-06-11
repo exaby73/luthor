@@ -35,6 +35,9 @@ class AnySchema extends _$AnySchema {
     Map<String, dynamic> json,
   ) =>
       _$AnySchemaValidate(json);
+  
+  factory AnySchema.fromJson(Map<String, dynamic> json) =>
+      _$AnySchemaFromJson(json);
 }
 
 void main() {

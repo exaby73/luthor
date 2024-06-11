@@ -1,3 +1,48 @@
 ---
 title: Validating a string ends with a substring
 ---
+
+import CodeGenContentSwitcher from '../../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+<div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.string().endsWith('World!');
+  print(validator.validateValue('Hello World!'));
+}
+```
+</div>
+
+<div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'ends_with.freezed.dart';
+part 'ends_with.g.dart';
+
+@freezed
+@luthor
+class EndsWithSchema extends _$EndsWithSchema {
+  const factory EndsWithSchema({
+    required String value,
+  }) = _$EndsWithSchema;
+
+  static SchemaValidationResult<EndsWithSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$EndsWithSchemaValidate(json);
+  
+  factory EndsWithSchema.fromJson(Map<String, dynamic> json) =>
+      _$EndsWithSchemaFromJson(json);
+}
+
+void main() {
+  print(EndsWithSchema.validate({'value': 'Hello World!'}));
+}
+```
+</div>
+</CodeGenContentSwitcher>

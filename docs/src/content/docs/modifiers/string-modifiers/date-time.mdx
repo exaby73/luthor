@@ -1,3 +1,48 @@
 ---
 title: Validating a string is a valid DateTime
 ---
+
+import CodeGenContentSwitcher from '../../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+<div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.string().dateTime();
+  print(validator.validateValue('2021-01-01T00:00:00Z'));
+}
+```
+</div>
+
+<div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'date_time.freezed.dart';
+part 'date_time.g.dart';
+
+@freezed
+@luthor
+class DateTimeSchema extends _$DateTimeSchema {
+  const factory DateTimeSchema({
+    required String value,
+  }) = _$DateTimeSchema;
+
+  static SchemaValidationResult<DateTimeSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$DateTimeSchemaValidate(json);
+  
+  factory DateTimeSchema.fromJson(Map<String, dynamic> json) =>
+      _$DateTimeSchemaFromJson(json);
+}
+
+void main() {
+  print(DateTimeSchema.validate({'value': '2021-01-01T00:00:00Z'}));
+}
+```
+</div>
+</CodeGenContentSwitcher>

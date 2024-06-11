@@ -1,3 +1,48 @@
 ---
 title: Validating a string contains a substring
 ---
+
+import CodeGenContentSwitcher from '../../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+<div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.string().contains('World');
+  print(validator.validateValue('Hello World!'));
+}
+```
+</div>
+
+<div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'contains.freezed.dart';
+part 'contains.g.dart';
+
+@freezed
+@luthor
+class ContainsSchema extends _$ContainsSchema {
+  const factory ContainsSchema({
+    required String value,
+  }) = _$ContainsSchema;
+
+  static SchemaValidationResult<ContainsSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$ContainsSchemaValidate(json);
+  
+  factory ContainsSchema.fromJson(Map<String, dynamic> json) =>
+      _$ContainsSchemaFromJson(json);
+}
+
+void main() {
+  print(ContainsSchema.validate({'value': 'Hello World!'}));
+}
+```
+</div>
+</CodeGenContentSwitcher>

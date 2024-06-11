@@ -1,3 +1,61 @@
 ---
 title: Validating a number has a maximum value
 ---
+
+import CodeGenContentSwitcher from '../../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+<div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() {
+  final intValidator = l.int().max(42);
+  final doubleValidator = l.double().max(42.0);
+  final numberValidator = l.number().max(42);
+
+  print(intValidator.validateValue(42));
+  print(doubleValidator.validateValue(42.0));
+  print(numberValidator.validateValue(42));
+}
+```
+</div>
+
+<div slot="true">
+You can use the `@HasMax`, `@HasMaxDouble`, and `@HasMaxNumber` annotations to validate that a number has a maximum value. `@HasMax` is used for `int`, `@HasMaxDouble` is used for `double`, and `@HasMaxNumber` is used for `num`.
+
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'number_max_schema.freezed.dart';
+part 'number_max_schema.g.dart';
+
+@freezed
+@luthor
+class NumberMaxSchema extends _$NumberMaxSchema {
+  const factory NumberMaxSchema({
+    @HasMax(42) required int intValue,
+    @HasMaxDouble(42.0) required double doubleValue,
+    @HasMaxNumber(42) required num numValue,
+  }) = _$NumberMaxSchema;
+
+  static SchemaValidationResult<NumberMaxSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$NumberMaxSchemaValidate(json);
+
+  factory NumberMaxSchema.fromJson(Map<String, dynamic> json) =>
+      _$NumberMaxSchemaFromJson(json);
+}
+
+void main() {
+  print(NumberMaxSchema.validate({
+    'intValue': 42,
+    'doubleValue': 42.0,
+    'numValue': 42,
+  }));
+}
+```
+</div>
+</CodeGenContentSwitcher>

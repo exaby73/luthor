@@ -37,6 +37,9 @@ class NumberSchema extends _$NumberSchema {
     Map<String, dynamic> json,
   ) =>
       _$NumberSchemaValidate(json);
+
+  factory NumberSchema.fromJson(Map<String, dynamic> json) =>
+      _$NumberSchemaFromJson(json);
 }
 
 void main() {

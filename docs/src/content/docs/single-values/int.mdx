@@ -35,6 +35,9 @@ class IntSchema extends _$IntSchema {
     Map<String, dynamic> json,
   ) =>
       _$IntSchemaValidate(json);
+
+  factory IntSchema.fromJson(Map<String, dynamic> json) =>
+      _$IntSchemaFromJson(json);
 }
 
 void main() {

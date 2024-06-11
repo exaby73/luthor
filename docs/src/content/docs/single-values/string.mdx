@@ -35,6 +35,9 @@ class StringSchema extends _$StringSchema {
     Map<String, dynamic> json,
   ) =>
       _$StringSchemaValidate(json);
+
+  factory StringSchema.fromJson(Map<String, dynamic> json) =>
+      _$StringSchemaFromJson(json);
 }
 
 void main() {

@@ -35,6 +35,9 @@ class BoolSchema extends _$BoolSchema {
     Map<String, dynamic> json,
   ) =>
       _$BoolSchemaValidate(json);
+
+  factory BoolSchema.fromJson(Map<String, dynamic> json) =>
+      _$BoolSchemaFromJson(json);
 }
 
 void main() {

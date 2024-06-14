@@ -1,0 +1,8 @@
+<div x-data>
+  <div x-show="!$store.codeGen.enabled">
+    <slot name="false" />
+  </div>
+  <div x-show="$store.codeGen.enabled">
+    <slot name="true" />
+  </div>
+</div>

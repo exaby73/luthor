@@ -1,0 +1,48 @@
+---
+title: Validating a Bool value
+---
+
+import CodeGenContentSwitcher from '../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+  <div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.bool();
+  print(validator.validateValue(true));
+}
+```
+  </div>
+
+  <div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'bool_schema.freezed.dart';
+part 'bool_schema.g.dart';
+
+@freezed
+@luthor
+class BoolSchema extends _$BoolSchema {
+  const factory BoolSchema({
+    required bool value,
+  }) = _$BoolSchema;
+
+  static SchemaValidationResult<BoolSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$BoolSchemaValidate(json);
+
+  factory BoolSchema.fromJson(Map<String, dynamic> json) =>
+      _$BoolSchemaFromJson(json);
+}
+
+void main() {
+  print(BoolSchema.validate({'value': true}));
+}
+```
+  </div>
+</CodeGenContentSwitcher>

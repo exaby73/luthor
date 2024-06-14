@@ -1,0 +1,48 @@
+---
+title: Validating a Dynamic value
+---
+
+import CodeGenContentSwitcher from '../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+  <div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.any();
+  print(validator.validateValue(42));
+}
+```
+  </div>
+
+  <div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'any_schema.freezed.dart';
+part 'any_schema.g.dart';
+
+@freezed
+@luthor
+class AnySchema extends _$AnySchema {
+  const factory AnySchema({
+    required dynamic value,
+  }) = _$AnySchema;
+
+  static SchemaValidationResult<AnySchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$AnySchemaValidate(json);
+  
+  factory AnySchema.fromJson(Map<String, dynamic> json) =>
+      _$AnySchemaFromJson(json);
+}
+
+void main() {
+  print(AnySchema.validate({'value': 42}));
+}
+```
+  </div>
+</CodeGenContentSwitcher>

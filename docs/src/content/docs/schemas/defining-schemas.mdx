@@ -1,0 +1,53 @@
+---
+title: Defining Schemas
+---
+
+Luthor has a concept of "schemas" which are used to define the structure of the data that you want to validate. Essentially, a schema is a `Map` that defines the structure of the data that you want to validate. The keys of the `Map` are the names of the fields that you want to validate, and the values are the rules that you want to apply to those fields.
+
+Here's an example of a simple schema:
+
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() {
+  final person = l.schema({
+    'name': l.string().min(1).required(),
+    'age': l.int().required(),
+  });
+
+  person.validateSchema({
+    'name': 'John Doe',
+    'age': 30,
+  });
+}
+```
+
+Above, we define a schema for a `person` object that has two fields: `name` and `age`. The `name` field is a required string that must have a minimum length of 1, and the `age` field is a required integer.
+
+You can also define nested schemas:
+
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() {
+  final person = l.schema({
+    'name': l.string().min(1).required(),
+    'age': l.int().required(),
+    'address': l.schema({
+      'street': l.string().required(),
+      'city': l.string().required(),
+      'zip': l.string().required(),
+    }).required(),
+  });
+
+  person.validateSchema({
+    'name': 'John Doe',
+    'age': 30,
+    'address': {
+      'street': '123 Main St',
+      'city': 'Springfield',
+      'zip': '12345',
+    },
+  });
+}
+```

@@ -1,0 +1,48 @@
+---
+title: Validating a List value
+---
+
+import CodeGenContentSwitcher from '../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+  <div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.list(validators: [l.int()]);
+  print(validator.validateValue([42]));
+}
+```
+  </div>
+
+  <div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'list_schema.freezed.dart';
+part 'list_schema.g.dart';
+
+@freezed
+@luthor
+class ListSchema extends _$ListSchema {
+  const factory ListSchema({
+    required List<int> value,
+  }) = _$ListSchema;
+
+  static SchemaValidationResult<ListSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$ListSchemaValidate(json);
+
+  factory ListSchema.fromJson(Map<String, dynamic> json) =>
+      _$ListSchemaFromJson(json);
+}
+
+void main() {
+  print(ListSchema.validate({'value': [42]}));
+}
+```
+  </div>
+</CodeGenContentSwitcher>

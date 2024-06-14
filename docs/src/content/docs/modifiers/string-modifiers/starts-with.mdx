@@ -1,0 +1,48 @@
+---
+title: Validating a string starts with a substring
+---
+
+import CodeGenContentSwitcher from '../../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+<div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.string().startsWith('Hello');
+  print(validator.validateValue('Hello World!'));
+}
+```
+</div>
+
+<div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'starts_with.freezed.dart';
+part 'starts_with.g.dart';
+
+@freezed
+@luthor
+class StartsWithSchema extends _$StartsWithSchema {
+  const factory StartsWithSchema({
+    required String value,
+  }) = _$StartsWithSchema;
+
+  static SchemaValidationResult<StartsWithSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$StartsWithSchemaValidate(json);
+  
+  factory StartsWithSchema.fromJson(Map<String, dynamic> json) =>
+      _$StartsWithSchemaFromJson(json);
+}
+
+void main() {
+  print(StartsWithSchema.validate({'value': 'Hello World!'}));
+}
+```
+</div>
+</CodeGenContentSwitcher>

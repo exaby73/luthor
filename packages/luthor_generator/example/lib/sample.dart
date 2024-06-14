@@ -43,6 +43,7 @@ class Sample with _$Sample {
     required AnotherSample anotherSample,
     @JsonKey(name: 'jsonKeyName') required String foo,
     @WithCustomValidator(customValidatorFn) required String custom,
+    required List<int> numbers,
   }) = _Sample;
 
   static SchemaValidationResult<Sample> validate(Map<String, dynamic> json) =>

@@ -1,0 +1,48 @@
+---
+title: Validating a string has a minimum length
+---
+
+import CodeGenContentSwitcher from '../../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+<div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.string().min(5);
+  print(validator.validateValue('Hello World!'));
+}
+```
+</div>
+
+<div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'min.freezed.dart';
+part 'min.g.dart';
+
+@freezed
+@luthor
+class MinSchema extends _$MinSchema {
+  const factory MinSchema({
+    required String value,
+  }) = _$MinSchema;
+
+  static SchemaValidationResult<MinSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$MinSchemaValidate(json);
+  
+  factory MinSchema.fromJson(Map<String, dynamic> json) =>
+      _$MinSchemaFromJson(json);
+}
+
+void main() {
+  print(MinSchema.validate({'value': 'Hello World!'}));
+}
+```
+</div>
+</CodeGenContentSwitcher>

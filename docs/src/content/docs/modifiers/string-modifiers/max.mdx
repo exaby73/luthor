@@ -1,0 +1,48 @@
+---
+title: Validating a string has a maximum length
+---
+
+import CodeGenContentSwitcher from '../../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+<div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.string().max(5);
+  print(validator.validateValue('Hello World!'));
+}
+```
+</div>
+
+<div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'max.freezed.dart';
+part 'max.g.dart';
+
+@freezed
+@luthor
+class MaxSchema extends _$MaxSchema {
+  const factory MaxSchema({
+    required String value,
+  }) = _$MaxSchema;
+
+  static SchemaValidationResult<MaxSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$MaxSchemaValidate(json);
+  
+  factory MaxSchema.fromJson(Map<String, dynamic> json) =>
+      _$MaxSchemaFromJson(json);
+}
+
+void main() {
+  print(MaxSchema.validate({'value': 'Hello World!'}));
+}
+```
+</div>
+</CodeGenContentSwitcher>

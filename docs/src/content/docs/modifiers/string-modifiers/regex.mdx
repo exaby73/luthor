@@ -1,0 +1,48 @@
+---
+title: Validating a string matches a regular expression
+---
+
+import CodeGenContentSwitcher from '../../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+<div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  final validator = l.string().regex(RegExp(r'^[a-zA-Z0-9]+$'));
+  print(validator.validateValue('Hello123'));
+}
+```
+</div>
+
+<div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'regex.freezed.dart';
+part 'regex.g.dart';
+
+@freezed
+@luthor
+class RegexSchema extends _$RegexSchema {
+  const factory RegexSchema({
+    required String value,
+  }) = _$RegexSchema;
+
+  static SchemaValidationResult<RegexSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$RegexSchemaValidate(json);
+  
+  factory RegexSchema.fromJson(Map<String, dynamic> json) =>
+      _$RegexSchemaFromJson(json);
+}
+
+void main() {
+  print(RegexSchema.validate({'value': 'Hello123'}));
+}
+```
+</div>
+</CodeGenContentSwitcher>

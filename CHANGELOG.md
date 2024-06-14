@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-06-14
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor` - `v0.3.1+1`](#luthor---v0311)
+
+---
+
+#### `luthor` - `v0.3.1+1`
+
+
 ## 2024-06-01
 
 ### Changes

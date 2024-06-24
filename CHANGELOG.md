@@ -15,6 +15,25 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`luthor` - `v0.3.2+1`](#luthor---v0321)
+
+---
+
+#### `luthor` - `v0.3.2+1`
+
+
+## 2024-06-25
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`luthor` - `v0.3.2`](#luthor---v032)
  - [`luthor_generator` - `v0.4.1`](#luthor_generator---v041)
 

@@ -1,3 +1,7 @@
+## 0.4.1
+
+ - **FEAT**: getErrors method ([#74](https://github.com/exaby73/luthor/issues/74)).
+
 ## 0.4.0+1
 
 ## 0.4.0

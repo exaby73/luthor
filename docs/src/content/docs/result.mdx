@@ -1,0 +1,106 @@
+---
+title: Validation results
+---
+
+### SingleValidationResult
+
+When validating a value, the `validateValue` method returns a `SingleValidationResult` object. This object is an instance of a sealed class that can be either a `SingleValidationSuccess` or a `SingleValidationError`.
+
+Example:
+
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() {
+  final validator = l.string();
+
+  final successResult = validator.validateValue('Hello, World!');
+  final errorResult = validator.validateValue(42); // This should be a string but it is a number
+
+  switch (successResult) {
+    case SingleValidationSuccess(data: final String data):
+      print(data); // Hello, World!
+    case SingleValidationError(data: final String data, errors: final List<String> errors):
+      print('Error: ${errors}'); // This will not be executed
+  }
+
+  switch (errorResult) {
+    case SingleValidationSuccess(data: final String data):
+      print(data); // This will not be executed
+    case SingleValidationError(data: final String data, errors: final List<String> errors):
+      print('Error: ${errors}'); // Error: [value is not a string]
+  }
+}
+```
+
+You can also use the `isValid` property to check if the validation was successful:
+
+```dart
+print(successResult.isValid); // true
+print(errorResult.isValid); // false
+```
+
+### SchemaValidationResult
+
+When using the `validateSchema` method on a `Map` to validate a schema, the `validateSchema` method returns a `SchemaValidationResult` object. This object is an instance of a sealed class that can be either a `SchemaValidationSuccess` or a `SchemaValidationError`.
+
+Example:
+
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() {
+  final validator = l.schema({
+    'name': l.string(),
+    'age': l.number(),
+    'address': l.schema({
+      'street': l.string(),
+      'city': l.string(),
+    }).required(),
+  });
+
+  final successResult = validator.validateSchema({
+    'name': 'John Doe',
+    'age': 42,
+    'address': {
+      'street': '123 Main St',
+      'city': 'Anytown',
+    },
+  });
+  final errorResult = validator.validateSchema({
+    'name': 'John Doe',
+    'age': '42', // This should be a number but it is a string
+    'address': {
+      'street': '123 Main St',
+      // 'city' is missing but it is required
+    },
+  });
+
+  switch (successResult) {
+    case SchemaValidationSuccess(data: final Map<String, dynamic> data):
+      print(data); // {name: John Doe, age: 42, address: {street: 123 Main St, city: Anytown}}
+    case SchemaValidationError(data: final Map<String, dynamic> data, errors: final Map<String, List<String>> errors):
+      print('Error: ${errors}'); // This will not be executed
+  }
+
+  switch (errorResult) {
+    case SchemaValidationSuccess(data: final Map<String, dynamic> data):
+      print(data); // This will not be executed
+    case SchemaValidationError(data: final Map<String, dynamic> data, errors: final Map<String, List<String>> errors):
+      print('Error: ${errors}'); // Error: {age: [value is not a number], address: {city: [value is required]}}
+  }
+}
+```
+
+You can also use the `isValid` property to check if the validation was successful:
+
+```dart
+print(successResult.isValid); // true
+print(errorResult.isValid); // false
+```
+
+When dealing with a `SchemaValidationError`, you can use the `getError()` method to get first the error message for a specific key or nested key using a dot-separated path. If there no errors for the specified key, it will return `null`.
+
+```dart
+print(errorResult.getError('address.city')); // value is required
+```

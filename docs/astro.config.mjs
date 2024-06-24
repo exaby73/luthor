@@ -40,6 +40,10 @@ export default defineConfig({
               label: "Concepts",
               link: "/concepts",
             },
+            {
+              label: "Validation Result",
+              link: "/result",
+            },
           ],
         },
         {

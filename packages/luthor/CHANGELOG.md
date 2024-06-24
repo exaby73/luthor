@@ -1,8 +1,10 @@
 ## 0.3.2+1
 
+- **CHORE**: update docs.
+
 ## 0.3.2
 
- - **FEAT**: getErrors method ([#74](https://github.com/exaby73/luthor/issues/74)).
+- **FEAT**: getErrors method ([#74](https://github.com/exaby73/luthor/issues/74)).
 
 ## 0.3.1+1
 

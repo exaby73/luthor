@@ -70,4 +70,21 @@ class SchemaValidationError<T> extends SchemaValidationResult<T> {
   final Map<String, dynamic> errors;
 
   SchemaValidationError({this.data, required this.errors});
+
+  String? getError(String key) {
+    final nestedKeys = key.split('.');
+
+    dynamic error = errors;
+    for (final nestedKey in nestedKeys) {
+      if (error is Map) {
+        error = error[nestedKey];
+      }
+    }
+
+    if (error is! List?) {
+      throw StateError('Invalid key: $key');
+    }
+
+    return error?.firstOrNull as String?;
+  }
 }

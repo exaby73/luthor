@@ -1,6 +1,6 @@
 name: luthor_annotation
 description: Annotation for luthor_generator
-version: 0.3.0
+version: 0.3.0+1
 repository: https://github.com/exaby73/luthor/tree/main/packages/luthor_annotation
 homepage: https://luthor.netlify.app
 

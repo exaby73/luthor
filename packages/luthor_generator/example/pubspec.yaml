@@ -4,11 +4,11 @@ version: 1.0.0
 publish_to: none
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  freezed_annotation: ^2.2.0
-  json_annotation: ^4.8.1
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.9.0
   luthor: any
   luthor_annotation: any
 
@@ -21,8 +21,8 @@ dependency_overrides:
 dev_dependencies:
   luthor_generator:
     path: ../
-  lints: ^2.0.0
-  test: ^1.21.0
-  build_runner: ^2.3.3
-  freezed: ^2.3.2
-  json_serializable: ^6.6.1
+  lints: ^4.0.0
+  test: ^1.25.7
+  build_runner: ^2.4.11
+  freezed: ^2.5.3
+  json_serializable: ^6.8.0

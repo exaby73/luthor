@@ -1,3 +1,5 @@
+## 0.3.1+1
+
 ## 0.3.1
 
 - **FIX**: email and emoji regex ([#67](https://github.com/exaby73/luthor/issues/67)).

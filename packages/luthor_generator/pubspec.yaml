@@ -1,6 +1,6 @@
 name: luthor_generator
 description: Generate luthor schemas with Freezed
-version: 0.4.0
+version: 0.4.0+1
 repository: https://github.com/exaby73/luthor/tree/main/packages/luthor_generator
 homepage: https://luthor.netlify.app
 
@@ -12,7 +12,7 @@ dependencies:
   build: ^2.4.1
   collection: ^1.18.0
   json_annotation: ^4.8.1
-  luthor_annotation: ^0.3.0
+  luthor_annotation: ^0.3.0+1
   source_gen: ^1.5.0
 
 dev_dependencies:

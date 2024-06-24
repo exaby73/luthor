@@ -25,7 +25,7 @@ class Validator {
 
   final List<Validation> validations;
 
-  /// Validates a value as dynamic. Always returns true.
+  /// Validates a value against a custom validator function.
   Validator custom(CustomValidator customValidator, {String? message}) {
     validations.add(CustomValidation(customValidator, message: message));
     return this;

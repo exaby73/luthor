@@ -71,6 +71,28 @@ class SchemaValidationError<T> extends SchemaValidationResult<T> {
 
   SchemaValidationError({this.data, required this.errors});
 
+  /// Get the error message for a specific key.
+  /// Supports nested keys via dot notation.
+  ///
+  /// Example:
+  /// ```dart
+  /// final data = {
+  ///  'value': null,
+  ///  'nested': {'value2': null},
+  /// };
+  ///
+  /// final schema = l.schema({
+  ///  'value': l.string().required(),
+  ///  'nested': l.schema({
+  ///    'value2': l.string().required(),
+  ///  }).required(),
+  /// });
+  ///
+  /// final result = schema.validateSchema(data);
+  ///
+  /// print(result.getError('value')); // value is required
+  /// print(result.getError('nested.value')); // value2 is required
+  /// ```
   String? getError(String key) {
     final nestedKeys = key.split('.');
 

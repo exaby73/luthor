@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-06-25
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor` - `v0.3.2`](#luthor---v032)
+ - [`luthor_generator` - `v0.4.1`](#luthor_generator---v041)
+
+---
+
+#### `luthor` - `v0.3.2`
+
+ - **FEAT**: getErrors method ([#74](https://github.com/exaby73/luthor/issues/74)).
+
+#### `luthor_generator` - `v0.4.1`
+
+ - **FEAT**: getErrors method ([#74](https://github.com/exaby73/luthor/issues/74)).
+
+
 ## 2024-06-14
 
 ### Changes

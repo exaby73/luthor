@@ -1,3 +1,7 @@
+## 0.3.1
+
+ - **FEAT**: deprecate luthor_annotation ([#77](https://github.com/exaby73/luthor/issues/77)).
+
 ## 0.3.0+1
 
 ## 0.3.0

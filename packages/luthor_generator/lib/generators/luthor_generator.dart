@@ -37,22 +37,6 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
       );
     }
 
-    final validateMethod = element.getMethod('validate');
-    final isInvalidMethod = validateMethod == null ||
-        !validateMethod.isStatic ||
-        validateMethod.parameters.length != 1 ||
-        validateMethod.parameters.first.type.toString() !=
-            'Map<String, dynamic>' ||
-        validateMethod.returnType.toString() != 'SchemaValidationResult<$name>';
-    if (isInvalidMethod) {
-      throw InvalidGenerationSourceError(
-        'Luthor can only be applied to classes with a static validate method. '
-        'Add the following code to your class:\n'
-        'static SchemaValidationResult<$name> validate(Map<String, dynamic> json) => _\$${name}Validate(json);',
-        element: element,
-      );
-    }
-
     final params = constructor.parameters;
     final buffer = StringBuffer();
     buffer.write('Validator \$${name}Schema = l.schema({\n');
@@ -84,7 +68,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
 
   void _writeValidateMethod(StringBuffer buffer, String name) {
     buffer.write(
-      'SchemaValidationResult<$name> _\$${name}Validate(Map<String, dynamic> json) => '
+      'SchemaValidationResult<$name> \$${name}Validate(Map<String, dynamic> json) => '
       '\$${name}Schema.validateSchema(json, fromJson: $name.fromJson);',
     );
   }

@@ -1,3 +1,8 @@
+## 0.4.1
+
+ - **FEAT**: deprecate luthor_annotation ([#77](https://github.com/exaby73/luthor/issues/77)).
+ - **FEAT**: Deprecate luthor_annoation and add annotations to luthor package.
+
 ## 0.4.0
 
 - **FEAT**: Deprecate luthor_annoation and add annotations to luthor package.

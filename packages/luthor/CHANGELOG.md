@@ -1,3 +1,7 @@
+## 0.4.0
+
+- **FEAT**: Deprecate luthor_annoation and add annotations to luthor package.
+
 ## 0.3.2+1
 
 - **CHORE**: update docs.

@@ -11,6 +11,39 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 Packages with breaking changes:
 
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor` - `v0.4.1`](#luthor---v041)
+ - [`luthor_annotation` - `v0.3.1`](#luthor_annotation---v031)
+ - [`luthor_generator` - `v0.4.2`](#luthor_generator---v042)
+
+---
+
+#### `luthor` - `v0.4.1`
+
+ - **FEAT**: deprecate luthor_annotation ([#77](https://github.com/exaby73/luthor/issues/77)).
+ - **FEAT**: Deprecate luthor_annoation and add annotations to luthor package.
+
+#### `luthor_annotation` - `v0.3.1`
+
+ - **FEAT**: deprecate luthor_annotation ([#77](https://github.com/exaby73/luthor/issues/77)).
+
+#### `luthor_generator` - `v0.4.2`
+
+ - **FEAT**(luthor_generator): remove need for validate method.
+ - **FEAT**: deprecate luthor_annotation ([#77](https://github.com/exaby73/luthor/issues/77)).
+
+
+## 2024-06-25
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
 - There are no breaking changes in this release.
 
 Packages with other changes:

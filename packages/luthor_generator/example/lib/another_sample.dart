@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:luthor/luthor.dart';
-import 'package:luthor_annotation/luthor_annotation.dart';
 
 part 'another_sample.freezed.dart';
 

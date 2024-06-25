@@ -10,7 +10,6 @@ dependencies:
   freezed_annotation: ^2.4.1
   json_annotation: ^4.9.0
   luthor: any
-  luthor_annotation: any
 
 dependency_overrides:
   luthor:

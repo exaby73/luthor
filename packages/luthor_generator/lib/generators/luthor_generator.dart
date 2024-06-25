@@ -1,7 +1,7 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:collection/collection.dart';
-import 'package:luthor_annotation/luthor_annotation.dart';
+import 'package:luthor/luthor.dart';
 import 'package:luthor_generator/checkers.dart';
 import 'package:luthor_generator/helpers/validations/base_validations.dart';
 import 'package:source_gen/source_gen.dart';

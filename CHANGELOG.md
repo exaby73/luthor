@@ -11,16 +11,24 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 Packages with breaking changes:
 
- - There are no breaking changes in this release.
+- There are no breaking changes in this release.
 
 Packages with other changes:
 
- - [`luthor` - `v0.3.2+1`](#luthor---v0321)
+- [`luthor` - `v0.4.0`](#luthor---v040)
+- [`luthor_generator` - `v0.4.1+1`](#luthor_generator---v0411)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+- `luthor_generator` - `v0.4.1+1`
 
 ---
 
-#### `luthor` - `v0.3.2+1`
+#### `luthor` - `v0.4.0`
 
+- **FEAT**: Deprecate luthor_annoation and add annotations to luthor package.
 
 ## 2024-06-25
 
@@ -30,23 +38,40 @@ Packages with other changes:
 
 Packages with breaking changes:
 
- - There are no breaking changes in this release.
+- There are no breaking changes in this release.
 
 Packages with other changes:
 
- - [`luthor` - `v0.3.2`](#luthor---v032)
- - [`luthor_generator` - `v0.4.1`](#luthor_generator---v041)
+- [`luthor` - `v0.3.2+1`](#luthor---v0321)
+
+---
+
+#### `luthor` - `v0.3.2+1`
+
+## 2024-06-25
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+- There are no breaking changes in this release.
+
+Packages with other changes:
+
+- [`luthor` - `v0.3.2`](#luthor---v032)
+- [`luthor_generator` - `v0.4.1`](#luthor_generator---v041)
 
 ---
 
 #### `luthor` - `v0.3.2`
 
- - **FEAT**: getErrors method ([#74](https://github.com/exaby73/luthor/issues/74)).
+- **FEAT**: getErrors method ([#74](https://github.com/exaby73/luthor/issues/74)).
 
 #### `luthor_generator` - `v0.4.1`
 
- - **FEAT**: getErrors method ([#74](https://github.com/exaby73/luthor/issues/74)).
-
+- **FEAT**: getErrors method ([#74](https://github.com/exaby73/luthor/issues/74)).
 
 ## 2024-06-14
 
@@ -56,17 +81,16 @@ Packages with other changes:
 
 Packages with breaking changes:
 
- - There are no breaking changes in this release.
+- There are no breaking changes in this release.
 
 Packages with other changes:
 
- - [`luthor_generator` - `v0.4.0+1`](#luthor_generator---v0401)
+- [`luthor_generator` - `v0.4.0+1`](#luthor_generator---v0401)
 
 ---
 
 #### `luthor_generator` - `v0.4.0+1`
 
-
 ## 2024-06-14
 
 ### Changes
@@ -75,23 +99,22 @@ Packages with other changes:
 
 Packages with breaking changes:
 
- - There are no breaking changes in this release.
+- There are no breaking changes in this release.
 
 Packages with other changes:
 
- - [`luthor_annotation` - `v0.3.0+1`](#luthor_annotation---v0301)
- - [`luthor_generator` - `v0.4.0+1`](#luthor_generator---v0401)
+- [`luthor_annotation` - `v0.3.0+1`](#luthor_annotation---v0301)
+- [`luthor_generator` - `v0.4.0+1`](#luthor_generator---v0401)
 
 Packages with dependency updates only:
 
 > Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
 
- - `luthor_generator` - `v0.4.0+1`
+- `luthor_generator` - `v0.4.0+1`
 
 ---
 
 #### `luthor_annotation` - `v0.3.0+1`
-
 
 ## 2024-06-14
 
@@ -101,16 +124,15 @@ Packages with dependency updates only:
 
 Packages with breaking changes:
 
- - There are no breaking changes in this release.
+- There are no breaking changes in this release.
 
 Packages with other changes:
 
- - [`luthor` - `v0.3.1+1`](#luthor---v0311)
+- [`luthor` - `v0.3.1+1`](#luthor---v0311)
 
 ---
 
 #### `luthor` - `v0.3.1+1`
-
 
 ## 2024-06-01
 

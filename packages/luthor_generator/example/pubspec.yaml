@@ -14,8 +14,6 @@ dependencies:
 dependency_overrides:
   luthor:
     path: ../../luthor
-  luthor_annotation:
-    path: ../../luthor_annotation
 
 dev_dependencies:
   luthor_generator:

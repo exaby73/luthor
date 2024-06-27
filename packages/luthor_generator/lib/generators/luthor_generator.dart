@@ -76,7 +76,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
   void _writeExtension(StringBuffer buffer, String name) {
     buffer.write(
       '\n\nextension ${name}ValidationExtension on $name {\n'
-      '  SchemaValidationResult<$name> validateSelf() => _\$${name}Validate(toJson());\n'
+      '  SchemaValidationResult<$name> validateSelf() => \$${name}Validate(toJson());\n'
       '}\n',
     );
   }

@@ -1,3 +1,9 @@
+## 0.4.3
+
+ - **FIX**(luthor_generator): invalid identifier.
+ - **FEAT**(luthor_generator): remove validate method ([#78](https://github.com/exaby73/luthor/issues/78)).
+ - **FEAT**(luthor_generator): remove need for validate method.
+
 ## 0.4.2
 
  - **FEAT**(luthor_generator): remove need for validate method.

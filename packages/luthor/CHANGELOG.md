@@ -1,3 +1,7 @@
+## 0.4.2
+
+ - **FEAT**(luthor_generator): remove validate method ([#78](https://github.com/exaby73/luthor/issues/78)).
+
 ## 0.4.1
 
  - **FEAT**: deprecate luthor_annotation ([#77](https://github.com/exaby73/luthor/issues/77)).

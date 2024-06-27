@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-06-27
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor` - `v0.4.2`](#luthor---v042)
+ - [`luthor_annotation` - `v0.3.2`](#luthor_annotation---v032)
+ - [`luthor_generator` - `v0.4.3`](#luthor_generator---v043)
+
+---
+
+#### `luthor` - `v0.4.2`
+
+ - **FEAT**(luthor_generator): remove validate method ([#78](https://github.com/exaby73/luthor/issues/78)).
+
+#### `luthor_annotation` - `v0.3.2`
+
+ - **FEAT**(luthor_generator): remove validate method ([#78](https://github.com/exaby73/luthor/issues/78)).
+
+#### `luthor_generator` - `v0.4.3`
+
+ - **FIX**(luthor_generator): invalid identifier.
+ - **FEAT**(luthor_generator): remove validate method ([#78](https://github.com/exaby73/luthor/issues/78)).
+ - **FEAT**(luthor_generator): remove need for validate method.
+
+
 ## 2024-06-25
 
 ### Changes

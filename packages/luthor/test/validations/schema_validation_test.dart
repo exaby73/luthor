@@ -64,7 +64,7 @@ void main() {
       case SchemaValidationError(data: _, errors: final errors):
         expect(result.data, data);
         expect(errors, {
-          'email': ['email must be a valid email address']
+          'email': ['email must be a valid email address'],
         });
     }
   });
@@ -86,7 +86,7 @@ void main() {
             'email must be a string',
             'email must be a valid email address',
           ],
-          'password': ['password must be a string']
+          'password': ['password must be a string'],
         });
     }
   });
@@ -107,7 +107,7 @@ void main() {
         expect(errors, {
           'address': {
             'state': ['state is required'],
-          }
+          },
         });
     }
   });
@@ -129,7 +129,7 @@ void main() {
         expect(errors, {
           'address': {
             'state': ['state must be a string'],
-          }
+          },
         });
     }
   });

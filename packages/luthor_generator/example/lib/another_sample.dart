@@ -15,18 +15,13 @@ class AnotherSample with _$AnotherSample {
     @HasMin(8) required String password,
   }) = _AnotherSample;
 
-  static SchemaValidationResult<AnotherSample> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$AnotherSampleValidate(json);
-
   factory AnotherSample.fromJson(Map<String, dynamic> json) =>
       _$AnotherSampleFromJson(json);
 }
 
 void main() {
   final json = {'id': 0};
-  final result = AnotherSample.validate(json);
+  final result = $AnotherSampleValidate(json);
   switch (result) {
     case SchemaValidationSuccess(data: final data):
       print(data.validateSelf());

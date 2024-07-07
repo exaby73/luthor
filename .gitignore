@@ -8,3 +8,5 @@ pubspec.lock
 .fvmrc
 
 .nvim.lua
+
+packages/**/pubspec_overrides.yaml

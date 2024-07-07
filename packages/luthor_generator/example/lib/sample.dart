@@ -45,14 +45,11 @@ class Sample with _$Sample {
     required List<int> numbers,
   }) = _Sample;
 
-  static SchemaValidationResult<Sample> validate(Map<String, dynamic> json) =>
-      _$SampleValidate(json);
-
   factory Sample.fromJson(Map<String, dynamic> json) => _$SampleFromJson(json);
 }
 
 void main() {
-  final result = Sample.validate({});
+  final result = $SampleValidate({});
   switch (result) {
     case SchemaValidationError(errors: final errors):
       print('Error: ');
@@ -65,7 +62,7 @@ void main() {
   }
 
   print('*' * 10);
-  final result2 = Sample.validate({
+  final result2 = $SampleValidate({
     "minAndMaxInt": 1,
     "minAndMaxDouble": 1.0,
     "minAndMaxNumber": 1,
@@ -83,7 +80,7 @@ void main() {
   }
 
   print('*' * 10);
-  final result3 = Sample.validate({
+  final result3 = $SampleValidate({
     "minAndMaxInt": 5,
     "minAndMaxDouble": 5.0,
     "minAndMaxNumber": 5,

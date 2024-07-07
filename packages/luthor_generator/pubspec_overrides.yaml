@@ -1,3 +1,0 @@
-# melos_managed_dependency_overrides: luthor
-dependency_overrides:
-  {luthor: {path: ../luthor}}

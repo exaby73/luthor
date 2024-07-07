@@ -10,7 +10,7 @@ _$SampleImpl _$$SampleImplFromJson(Map<String, dynamic> json) => _$SampleImpl(
       anyValue: json['anyValue'],
       boolValue: json['boolValue'] as bool,
       doubleValue: (json['doubleValue'] as num).toDouble(),
-      intValue: json['intValue'] as int,
+      intValue: (json['intValue'] as num).toInt(),
       listValue:
           (json['listValue'] as List<dynamic>).map((e) => e as String).toList(),
       numValue: json['numValue'] as num,
@@ -23,7 +23,7 @@ _$SampleImpl _$$SampleImplFromJson(Map<String, dynamic> json) => _$SampleImpl(
       startsWithFoo: json['startsWithFoo'] as String,
       endsWithBar: json['endsWithBar'] as String,
       containsBaz: json['containsBaz'] as String,
-      minAndMaxInt: json['minAndMaxInt'] as int,
+      minAndMaxInt: (json['minAndMaxInt'] as num).toInt(),
       minAndMaxDouble: (json['minAndMaxDouble'] as num).toDouble(),
       minAndMaxNumber: json['minAndMaxNumber'] as num,
       httpsLink: json['httpsLink'] as String?,
@@ -32,7 +32,9 @@ _$SampleImpl _$$SampleImplFromJson(Map<String, dynamic> json) => _$SampleImpl(
           AnotherSample.fromJson(json['anotherSample'] as Map<String, dynamic>),
       foo: json['jsonKeyName'] as String,
       custom: json['custom'] as String,
-      numbers: (json['numbers'] as List<dynamic>).map((e) => e as int).toList(),
+      numbers: (json['numbers'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
     );
 
 Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
@@ -95,9 +97,9 @@ Validator $SampleSchema = l.schema({
   'numbers': l.list(validators: [l.int()]).required(),
 });
 
-SchemaValidationResult<Sample> _$SampleValidate(Map<String, dynamic> json) =>
+SchemaValidationResult<Sample> $SampleValidate(Map<String, dynamic> json) =>
     $SampleSchema.validateSchema(json, fromJson: Sample.fromJson);
 
 extension SampleValidationExtension on Sample {
-  SchemaValidationResult<Sample> validateSelf() => _$SampleValidate(toJson());
+  SchemaValidationResult<Sample> validateSelf() => $SampleValidate(toJson());
 }

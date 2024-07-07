@@ -8,7 +8,7 @@ part of 'another_sample.dart';
 
 _$AnotherSampleImpl _$$AnotherSampleImplFromJson(Map<String, dynamic> json) =>
     _$AnotherSampleImpl(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       name: json['full_name'] as String?,
       email: json['email'] as String,
       password: json['password'] as String,
@@ -33,11 +33,11 @@ Validator $AnotherSampleSchema = l.schema({
   'password': l.string().min(8).required(),
 });
 
-SchemaValidationResult<AnotherSample> _$AnotherSampleValidate(
+SchemaValidationResult<AnotherSample> $AnotherSampleValidate(
         Map<String, dynamic> json) =>
     $AnotherSampleSchema.validateSchema(json, fromJson: AnotherSample.fromJson);
 
 extension AnotherSampleValidationExtension on AnotherSample {
   SchemaValidationResult<AnotherSample> validateSelf() =>
-      _$AnotherSampleValidate(toJson());
+      $AnotherSampleValidate(toJson());
 }

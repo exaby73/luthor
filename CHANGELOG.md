@@ -15,6 +15,34 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`luthor` - `v0.4.2+1`](#luthor---v0421)
+ - [`luthor_generator` - `v0.4.4+1`](#luthor_generator---v0441)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `luthor_generator` - `v0.4.4+1`
+
+---
+
+#### `luthor` - `v0.4.2+1`
+
+ - **FIX**(luthor): String validator return types for email and dateTime ([#84](https://github.com/exaby73/luthor/issues/84)).
+
+
+## 2024-07-13
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`luthor_generator` - `v0.4.4`](#luthor_generator---v044)
 
 ---

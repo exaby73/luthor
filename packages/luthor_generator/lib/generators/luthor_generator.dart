@@ -28,11 +28,14 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
     }
 
     final name = element.name;
-    final constructor =
-        element.constructors.firstWhereOrNull((c) => c.isFactory);
-    if (constructor == null) {
+    final constructor = element.constructors.first;
+
+    final hasFromJsonCtor = element.constructors.any(
+      (element) => element.isFactory && element.name == 'fromJson',
+    );
+    if (hasFromJsonCtor) {
       throw InvalidGenerationSourceError(
-        'Luthor can only be applied to classes with a factory constructor.',
+        'Luthor can only be applied to classes with a factory fromJson constructor',
         element: element,
       );
     }

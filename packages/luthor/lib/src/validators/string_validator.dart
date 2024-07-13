@@ -19,13 +19,13 @@ class StringValidator extends Validator {
   StringValidator({super.initialValidations});
 
   /// Validates that the string is a valid date.
-  Validator dateTime({String? message}) {
+  StringValidator dateTime({String? message}) {
     validations.add(StringDateTimeValidation(message: message));
     return this;
   }
 
   /// Validates that the string is a valid email.
-  Validator email({String? message}) {
+  StringValidator email({String? message}) {
     validations.add(StringEmailValidation(message: message));
     return this;
   }

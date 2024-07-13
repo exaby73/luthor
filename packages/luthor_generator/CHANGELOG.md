@@ -1,3 +1,7 @@
+## 0.4.4+1
+
+ - Update a dependency to the latest release.
+
 ## 0.4.4
 
  - **FEAT**: Support non-freezed classes by ignoring previous requirement for factory ctors ([#82](https://github.com/exaby73/luthor/issues/82)).

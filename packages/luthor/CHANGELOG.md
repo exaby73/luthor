@@ -1,3 +1,7 @@
+## 0.4.2+1
+
+ - **FIX**(luthor): String validator return types for email and dateTime ([#84](https://github.com/exaby73/luthor/issues/84)).
+
 ## 0.4.2
 
  - **FEAT**(luthor_generator): remove validate method ([#78](https://github.com/exaby73/luthor/issues/78)).

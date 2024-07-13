@@ -1,0 +1,8 @@
+version: 2
+updates:
+  - package-ecosystem: "pub"
+    directories:
+      - "/packages/luthor"
+      - "/packages/luthor_generator"
+    schedule:
+      interval: "weekly"

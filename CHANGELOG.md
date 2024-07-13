@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-07-13
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor_generator` - `v0.4.4`](#luthor_generator---v044)
+
+---
+
+#### `luthor_generator` - `v0.4.4`
+
+ - **FEAT**: Support non-freezed classes by ignoring previous requirement for factory ctors ([#82](https://github.com/exaby73/luthor/issues/82)).
+
+
 ## 2024-06-27
 
 ### Changes

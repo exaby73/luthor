@@ -59,7 +59,10 @@ String getValidations(ParameterElement param) {
 
   getCustomValidations(param, buffer);
 
-  if (param.type is! DynamicType && !isNullable) buffer.write('.required()');
+  final hasDefaultAnnotation = getAnnotation(defaultChecker, param) != null;
+  if (param.type is! DynamicType && !isNullable && !hasDefaultAnnotation) {
+    buffer.write('.required()');
+  }
 
   return buffer.toString();
 }

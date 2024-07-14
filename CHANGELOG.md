@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-07-14
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor_generator` - `v0.4.4+2`](#luthor_generator---v0442)
+
+---
+
+#### `luthor_generator` - `v0.4.4+2`
+
+ - **FIX**(luthor_generator): Improper check for fromJson ([#88](https://github.com/exaby73/luthor/issues/88)).
+
+
 ## 2024-07-13
 
 ### Changes

@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`luthor_generator` - `v0.4.5`](#luthor_generator---v045)
+
+---
+
+#### `luthor_generator` - `v0.4.5`
+
+ - **FEAT**(luthor_generator): Support of freezed's Default ([#87](https://github.com/exaby73/luthor/issues/87)).
+
+
+## 2024-07-14
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`luthor_generator` - `v0.4.4+2`](#luthor_generator---v0442)
 
 ---

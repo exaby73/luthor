@@ -1,3 +1,7 @@
+## 0.4.5
+
+ - **FEAT**(luthor_generator): Support of freezed's Default ([#87](https://github.com/exaby73/luthor/issues/87)).
+
 ## 0.4.4+2
 
  - **FIX**(luthor_generator): Improper check for fromJson ([#88](https://github.com/exaby73/luthor/issues/88)).

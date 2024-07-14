@@ -1,6 +1,5 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
-import 'package:collection/collection.dart';
 import 'package:luthor/luthor.dart';
 import 'package:luthor_generator/checkers.dart';
 import 'package:luthor_generator/helpers/validations/base_validations.dart';
@@ -33,7 +32,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
     final hasFromJsonCtor = element.constructors.any(
       (element) => element.isFactory && element.name == 'fromJson',
     );
-    if (hasFromJsonCtor) {
+    if (!hasFromJsonCtor) {
       throw InvalidGenerationSourceError(
         'Luthor can only be applied to classes with a factory fromJson constructor',
         element: element,

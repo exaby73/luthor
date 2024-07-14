@@ -13,6 +13,7 @@ class AnotherSample with _$AnotherSample {
     @JsonKey(name: 'full_name') String? name,
     @IsEmail(message: "Invalid email") required String email,
     @HasMin(8) required String password,
+    @Default('user') String type,
   }) = _AnotherSample;
 
   factory AnotherSample.fromJson(Map<String, dynamic> json) =>

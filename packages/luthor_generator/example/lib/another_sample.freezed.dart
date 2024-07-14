@@ -27,9 +27,14 @@ mixin _$AnotherSample {
   String get email => throw _privateConstructorUsedError;
   @HasMin(8)
   String get password => throw _privateConstructorUsedError;
+  String get type => throw _privateConstructorUsedError;
 
+  /// Serializes this AnotherSample to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AnotherSample
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AnotherSampleCopyWith<AnotherSample> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -44,7 +49,8 @@ abstract class $AnotherSampleCopyWith<$Res> {
       {int id,
       @JsonKey(name: 'full_name') String? name,
       @IsEmail(message: "Invalid email") String email,
-      @HasMin(8) String password});
+      @HasMin(8) String password,
+      String type});
 }
 
 /// @nodoc
@@ -57,6 +63,8 @@ class _$AnotherSampleCopyWithImpl<$Res, $Val extends AnotherSample>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AnotherSample
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -64,6 +72,7 @@ class _$AnotherSampleCopyWithImpl<$Res, $Val extends AnotherSample>
     Object? name = freezed,
     Object? email = null,
     Object? password = null,
+    Object? type = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -82,6 +91,10 @@ class _$AnotherSampleCopyWithImpl<$Res, $Val extends AnotherSample>
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -98,7 +111,8 @@ abstract class _$$AnotherSampleImplCopyWith<$Res>
       {int id,
       @JsonKey(name: 'full_name') String? name,
       @IsEmail(message: "Invalid email") String email,
-      @HasMin(8) String password});
+      @HasMin(8) String password,
+      String type});
 }
 
 /// @nodoc
@@ -109,6 +123,8 @@ class __$$AnotherSampleImplCopyWithImpl<$Res>
       _$AnotherSampleImpl _value, $Res Function(_$AnotherSampleImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AnotherSample
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -116,6 +132,7 @@ class __$$AnotherSampleImplCopyWithImpl<$Res>
     Object? name = freezed,
     Object? email = null,
     Object? password = null,
+    Object? type = null,
   }) {
     return _then(_$AnotherSampleImpl(
       id: null == id
@@ -134,6 +151,10 @@ class __$$AnotherSampleImplCopyWithImpl<$Res>
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -145,7 +166,8 @@ class _$AnotherSampleImpl implements _AnotherSample {
       {required this.id,
       @JsonKey(name: 'full_name') this.name,
       @IsEmail(message: "Invalid email") required this.email,
-      @HasMin(8) required this.password});
+      @HasMin(8) required this.password,
+      this.type = 'user'});
 
   factory _$AnotherSampleImpl.fromJson(Map<String, dynamic> json) =>
       _$$AnotherSampleImplFromJson(json);
@@ -161,10 +183,13 @@ class _$AnotherSampleImpl implements _AnotherSample {
   @override
   @HasMin(8)
   final String password;
+  @override
+  @JsonKey()
+  final String type;
 
   @override
   String toString() {
-    return 'AnotherSample(id: $id, name: $name, email: $email, password: $password)';
+    return 'AnotherSample(id: $id, name: $name, email: $email, password: $password, type: $type)';
   }
 
   @override
@@ -176,14 +201,17 @@ class _$AnotherSampleImpl implements _AnotherSample {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.password, password) ||
-                other.password == password));
+                other.password == password) &&
+            (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, email, password);
+  int get hashCode => Object.hash(runtimeType, id, name, email, password, type);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AnotherSample
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AnotherSampleImplCopyWith<_$AnotherSampleImpl> get copyWith =>
@@ -202,7 +230,8 @@ abstract class _AnotherSample implements AnotherSample {
       {required final int id,
       @JsonKey(name: 'full_name') final String? name,
       @IsEmail(message: "Invalid email") required final String email,
-      @HasMin(8) required final String password}) = _$AnotherSampleImpl;
+      @HasMin(8) required final String password,
+      final String type}) = _$AnotherSampleImpl;
 
   factory _AnotherSample.fromJson(Map<String, dynamic> json) =
       _$AnotherSampleImpl.fromJson;
@@ -219,7 +248,12 @@ abstract class _AnotherSample implements AnotherSample {
   @HasMin(8)
   String get password;
   @override
-  @JsonKey(ignore: true)
+  String get type;
+
+  /// Create a copy of AnotherSample
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AnotherSampleImplCopyWith<_$AnotherSampleImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

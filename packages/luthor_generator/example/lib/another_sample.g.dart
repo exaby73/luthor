@@ -12,6 +12,7 @@ _$AnotherSampleImpl _$$AnotherSampleImplFromJson(Map<String, dynamic> json) =>
       name: json['full_name'] as String?,
       email: json['email'] as String,
       password: json['password'] as String,
+      type: json['type'] as String? ?? 'user',
     );
 
 Map<String, dynamic> _$$AnotherSampleImplToJson(_$AnotherSampleImpl instance) =>
@@ -20,6 +21,7 @@ Map<String, dynamic> _$$AnotherSampleImplToJson(_$AnotherSampleImpl instance) =>
       'full_name': instance.name,
       'email': instance.email,
       'password': instance.password,
+      'type': instance.type,
     };
 
 // **************************************************************************
@@ -31,6 +33,7 @@ Validator $AnotherSampleSchema = l.schema({
   'full_name': l.string(),
   'email': l.string().email(message: 'Invalid email').required(),
   'password': l.string().min(8).required(),
+  'type': l.string(),
 });
 
 SchemaValidationResult<AnotherSample> $AnotherSampleValidate(

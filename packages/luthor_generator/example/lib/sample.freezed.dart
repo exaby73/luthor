@@ -65,8 +65,12 @@ mixin _$Sample {
   String get custom => throw _privateConstructorUsedError;
   List<int> get numbers => throw _privateConstructorUsedError;
 
+  /// Serializes this Sample to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Sample
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SampleCopyWith<Sample> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -114,6 +118,8 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Sample
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -242,6 +248,8 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
     ) as $Val);
   }
 
+  /// Create a copy of Sample
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $AnotherSampleCopyWith<$Res> get anotherSample {
@@ -296,6 +304,8 @@ class __$$SampleImplCopyWithImpl<$Res>
       _$SampleImpl _value, $Res Function(_$SampleImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Sample
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -594,7 +604,7 @@ class _$SampleImpl implements _Sample {
             const DeepCollectionEquality().equals(other._numbers, _numbers));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
@@ -624,7 +634,9 @@ class _$SampleImpl implements _Sample {
         const DeepCollectionEquality().hash(_numbers)
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Sample
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SampleImplCopyWith<_$SampleImpl> get copyWith =>
@@ -679,9 +691,10 @@ abstract class _Sample implements Sample {
   @override
   int get intValue;
   @override
-  List<String> get listValue;
-  @override // The following will work with luthor_generator, but not with json_serializable
+  List<String>
+      get listValue; // The following will work with luthor_generator, but not with json_serializable
 // Null? nullValue,
+  @override
   num get numValue;
   @override
   String get stringValue;
@@ -737,8 +750,11 @@ abstract class _Sample implements Sample {
   String get custom;
   @override
   List<int> get numbers;
+
+  /// Create a copy of Sample
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SampleImplCopyWith<_$SampleImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

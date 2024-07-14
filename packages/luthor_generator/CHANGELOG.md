@@ -1,3 +1,7 @@
+## 0.4.4+2
+
+ - **FIX**(luthor_generator): Improper check for fromJson ([#88](https://github.com/exaby73/luthor/issues/88)).
+
 ## 0.4.4+1
 
  - Update a dependency to the latest release.

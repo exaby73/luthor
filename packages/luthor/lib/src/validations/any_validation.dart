@@ -15,4 +15,14 @@ class AnyValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() => 'AnyValidation{}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'any',
+    };
+  }
 }

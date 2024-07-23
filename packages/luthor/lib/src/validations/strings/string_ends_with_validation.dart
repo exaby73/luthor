@@ -24,4 +24,18 @@ class StringEndsWithValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() {
+    return 'StringEndsWithValidation{message: $message, string: $string}';
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'string_ends_with',
+      'message': message,
+      'string': string,
+    };
+  }
 }

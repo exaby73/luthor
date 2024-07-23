@@ -19,4 +19,15 @@ class DoubleValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() => 'DoubleValidation{message: $message}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'double',
+      'message': message,
+    };
+  }
 }

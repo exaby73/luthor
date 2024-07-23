@@ -25,4 +25,15 @@ class StringEmailValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() => 'StringEmailValidation{message: $message}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'string_email',
+      'message': message,
+    };
+  }
 }

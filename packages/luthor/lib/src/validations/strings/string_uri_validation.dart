@@ -36,4 +36,16 @@ class StringUriValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() => 'StringUriValidation{message: $message}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'string_uri',
+      'message': message,
+      'allowedSchemes': allowedSchemes,
+    };
+  }
 }

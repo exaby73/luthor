@@ -25,4 +25,15 @@ class StringDateTimeValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() => 'StringDateTimeValidation{message: $message}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'string_date_time',
+      'message': message,
+    };
+  }
 }

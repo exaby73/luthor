@@ -27,4 +27,17 @@ class NumberMaxValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() =>
+      'NumberMaxValidation{message: $message, maxValue: $maxValue}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'number_max',
+      'maxValue': maxValue,
+      'message': message,
+    };
+  }
 }

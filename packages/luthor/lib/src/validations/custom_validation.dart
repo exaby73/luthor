@@ -32,4 +32,15 @@ class CustomValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() => 'CustomValidation{message: $message}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'custom',
+      'message': message,
+    };
+  }
 }

@@ -24,4 +24,18 @@ class StringContainsValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() {
+    return 'StringContainsValidation{message: $message, string: $string}';
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'string_contains',
+      'message': message,
+      'string': string,
+    };
+  }
 }

@@ -19,4 +19,15 @@ class NumberValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() => 'NumberValidation{message: $message}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'number',
+      'message': message,
+    };
+  }
 }

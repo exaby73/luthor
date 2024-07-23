@@ -24,4 +24,17 @@ class StringRegexValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() =>
+      'StringRegexValidation{message: $message, pattern: $pattern}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'string_regex',
+      'message': message,
+      'pattern': pattern,
+    };
+  }
 }

@@ -18,4 +18,15 @@ class NullValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() => 'NullValidation{message: $message}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'null',
+      'message': message,
+    };
+  }
 }

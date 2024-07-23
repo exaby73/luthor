@@ -29,4 +29,17 @@ class StringMinValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() =>
+      'StringMinValidation{message: $message, minLength: $minLength}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'string_min',
+      'message': message,
+      'minLength': minLength,
+    };
+  }
 }

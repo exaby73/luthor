@@ -46,4 +46,19 @@ class SchemaValidation extends Validation {
 
   @override
   String? get message => null;
+
+  @override
+  String toString() {
+    return 'SchemaValidation{message: $message, validatorSchema: $validatorSchema}';
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'schema',
+      'message': message,
+      'validatorSchema':
+          validatorSchema.map((key, value) => MapEntry(key, value.toJson())),
+    };
+  }
 }

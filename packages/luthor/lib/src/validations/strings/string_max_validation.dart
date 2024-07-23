@@ -28,4 +28,17 @@ class StringMaxValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() =>
+      'StringMaxValidation{message: $message, maxLength: $maxLength}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'string_max',
+      'message': message,
+      'maxLength': maxLength,
+    };
+  }
 }

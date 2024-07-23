@@ -166,4 +166,13 @@ class Validator {
     }
     return SchemaValidationSuccess(data: fromJson?.call(value) ?? value as T);
   }
+
+  @override
+  String toString() => 'Validator{validations: $validations}';
+
+  Map<String, dynamic> toJson() {
+    return {
+      'validations': validations.map((v) => v.toJson()).toList(),
+    };
+  }
 }

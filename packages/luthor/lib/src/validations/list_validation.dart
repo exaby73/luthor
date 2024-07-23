@@ -42,4 +42,18 @@ class ListValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() {
+    return 'ListValidation{message: $message, validators: $validators}';
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'list',
+      'message': message,
+      'validators': validators?.map((e) => e.toJson()).toList(),
+    };
+  }
 }

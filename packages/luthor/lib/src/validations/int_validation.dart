@@ -19,4 +19,15 @@ class IntValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() => 'IntValidation{message: $message}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'int',
+      'message': message,
+    };
+  }
 }

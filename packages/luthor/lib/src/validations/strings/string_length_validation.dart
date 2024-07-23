@@ -28,4 +28,17 @@ class StringLengthValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() =>
+      'StringLengthValidation{message: $message, length: $length}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'string_length',
+      'message': message,
+      'length': length,
+    };
+  }
 }

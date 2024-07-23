@@ -24,4 +24,15 @@ class StringCuidValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() => 'StringCuidValidation{message: $message}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'string_cuid',
+      'message': message,
+    };
+  }
 }

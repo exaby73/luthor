@@ -25,4 +25,15 @@ class StringUuidValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() => 'StringUuidValidation{message: $message}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'string_uuid',
+      'message': message,
+    };
+  }
 }

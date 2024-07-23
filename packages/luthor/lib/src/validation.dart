@@ -21,4 +21,6 @@ abstract class Validation {
     errors = null;
     return true;
   }
+
+  Map<String, dynamic> toJson();
 }

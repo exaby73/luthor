@@ -25,4 +25,15 @@ class StringEmojiValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() => 'StringEmojiValidation{message: $message}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'string_emoji',
+      'message': message,
+    };
+  }
 }

@@ -19,4 +19,15 @@ class BoolValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() => 'BoolValidation{message: $message}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'bool',
+      'message': message,
+    };
+  }
 }

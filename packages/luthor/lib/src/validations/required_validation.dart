@@ -18,4 +18,15 @@ class RequiredValidation extends Validation {
 
   @override
   Map<String, List<String>>? get errors => null;
+
+  @override
+  String toString() => 'RequiredValidation{message: $message}';
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': 'required',
+      'message': message,
+    };
+  }
 }

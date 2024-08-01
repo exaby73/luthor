@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:luthor/src/validation.dart';
 import 'package:luthor/src/validation_result.dart';
 import 'package:luthor/src/validations/any_validation.dart';
@@ -141,14 +143,16 @@ class Validator {
     Map<String, Object?> value, {
     FromJson<T>? fromJson,
   }) {
-    final errors = _isValid(null, value);
+    final jsonEncoded = jsonDecode(jsonEncode(value)) as Map<String, Object?>;
+
+    final errors = _isValid(null, jsonEncoded);
     if (errors != null) {
       return SchemaValidationError(
-        data: fromJson != null ? null : value as T,
+        data: fromJson != null ? null : jsonEncoded as T,
         errors: errors,
       );
     }
-    return SchemaValidationSuccess(data: fromJson?.call(value) ?? value as T);
+    return SchemaValidationSuccess(data: fromJson?.call(jsonEncoded) ?? value as T);
   }
 
   /// Validates a schema with a field name.

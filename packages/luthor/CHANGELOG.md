@@ -1,3 +1,8 @@
+## 0.4.2+2
+
+ - **FIX**: jsonEncode value before schema validation.
+ - **FIX**(luthor): String validator return types for email and dateTime ([#84](https://github.com/exaby73/luthor/issues/84)).
+
 ## 0.4.2+1
 
  - **FIX**: jsonEncode value before schema validation.

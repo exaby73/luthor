@@ -15,6 +15,37 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`luthor` - `v0.4.2+2`](#luthor---v0422)
+ - [`luthor_forms` - `v0.0.1+2`](#luthor_forms---v0012)
+ - [`luthor_generator` - `v0.4.3+2`](#luthor_generator---v0432)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `luthor_forms` - `v0.0.1+2`
+ - `luthor_generator` - `v0.4.3+2`
+
+---
+
+#### `luthor` - `v0.4.2+2`
+
+ - **FIX**: jsonEncode value before schema validation.
+ - **FIX**(luthor): String validator return types for email and dateTime ([#84](https://github.com/exaby73/luthor/issues/84)).
+
+
+## 2024-08-01
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`luthor` - `v0.4.2+1`](#luthor---v0421)
  - [`luthor_generator` - `v0.4.3+1`](#luthor_generator---v0431)
  - [`luthor_forms` - `v0.0.1+1`](#luthor_forms---v0011)

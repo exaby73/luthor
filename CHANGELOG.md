@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-08-01
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor` - `v0.4.2+1`](#luthor---v0421)
+ - [`luthor_generator` - `v0.4.3+1`](#luthor_generator---v0431)
+ - [`luthor_forms` - `v0.0.1+1`](#luthor_forms---v0011)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `luthor_forms` - `v0.0.1+1`
+
+---
+
+#### `luthor` - `v0.4.2+1`
+
+ - **FIX**: jsonEncode value before schema validation.
+
+#### `luthor_generator` - `v0.4.3+1`
+
+ - **FIX**: jsonEncode value before schema validation.
+
+
 ## 2024-06-27
 
 ### Changes

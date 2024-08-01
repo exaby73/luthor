@@ -1,6 +1,6 @@
 name: luthor_forms
 description: Easy to use form validation and submission for Dart and Flutter applications using Luthor for validation.
-version: 0.0.1
+version: 0.0.1+1
 repository: https://github.com/exaby73/luthor/tree/main/packages/luthor_forms
 
 environment:
@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   bloc: ^8.1.4
-  luthor: ^0.4.2
+  luthor: ^0.4.2+1
   state_notifier: ^1.0.0
 
 dev_dependencies:

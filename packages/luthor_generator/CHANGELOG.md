@@ -1,3 +1,7 @@
+## 0.4.3+1
+
+ - **FIX**: jsonEncode value before schema validation.
+
 ## 0.4.3
 
  - **FIX**(luthor_generator): invalid identifier.

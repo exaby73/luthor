@@ -1,10 +1,12 @@
 import 'package:luthor/src/validation.dart';
 
+enum IpVersion { v4, v6 }
+
 class StringIpValidation extends Validation {
   StringIpValidation({this.version, required this.customMessage});
 
   final String? customMessage;
-  final String? version;
+  final IpVersion? version;
 
   static const _ipv4Regex =
       r'\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b';
@@ -21,9 +23,9 @@ class StringIpValidation extends Validation {
     if (value is! String) return false;
 
     switch (version) {
-      case 'v4':
+      case IpVersion.v4:
         return RegExp(_ipv4Regex).hasMatch(value);
-      case 'v6':
+      case IpVersion.v6:
         return RegExp(_ipv6Regex).hasMatch(value);
       default:
         return RegExp(_ipRegex).hasMatch(value);

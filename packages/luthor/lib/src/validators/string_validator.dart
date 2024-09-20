@@ -1,3 +1,4 @@
+import 'package:luthor/src/annotations/validators/ip.dart';
 import 'package:luthor/src/validations/strings/string_contains_validation.dart';
 import 'package:luthor/src/validations/strings/string_cuid_2_validation.dart';
 import 'package:luthor/src/validations/strings/string_cuid_validation.dart';
@@ -84,7 +85,7 @@ class StringValidator extends Validator {
   }
 
   /// Validates that the string is an ip with optional parameter for IPv4 and IPv6 as "v4" and "v6" respectively.
-  StringValidator ip({String? message, String? version}) {
+  StringValidator ip({String? message, IpVersion? version}) {
     validations
         .add(StringIpValidation(customMessage: message, version: version));
     return this;

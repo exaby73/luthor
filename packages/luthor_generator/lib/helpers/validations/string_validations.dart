@@ -15,6 +15,7 @@ String getStringValidations(ParameterElement param) {
   _checkAndWriteStartsWithValidation(buffer, param);
   _checkAndWriteEndsWithValidation(buffer, param);
   _checkAndWriteContainsValidation(buffer, param);
+  _checkAndWriteIpValidation(buffer, param);
 
   return buffer.toString();
 }
@@ -178,6 +179,32 @@ void _checkAndWriteContainsValidation(
     final message = containsAnnotation.getField('message')?.toStringValue();
     buffer.write('r"$string"');
     if (message != null) buffer.write(", message: '$message'");
+    buffer.write(')');
+  }
+}
+
+void _checkAndWriteIpValidation(
+  StringBuffer buffer,
+  ParameterElement param,
+) {
+  final ipAnnotation = getAnnotation(isIpChecker, param);
+  if (ipAnnotation != null) {
+    buffer.write('.ip(');
+
+    final version = ipAnnotation.getField('version')?.toStringValue();
+    String? ipEnum;
+    if (version != null) {
+      if (version == 'v4') ipEnum = 'IpVersion.v4';
+      if (version == 'v6') ipEnum = 'IpVersion.v6';
+      buffer.write('version: $ipEnum,');
+    }
+
+    final message = ipAnnotation.getField('message')?.toStringValue();
+    if (message != null) {
+      buffer.write("message: '$message");
+      buffer.write(')');
+    }
+
     buffer.write(')');
   }
 }

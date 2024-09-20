@@ -5,6 +5,7 @@ import 'package:luthor/src/validations/strings/string_date_time_validation.dart'
 import 'package:luthor/src/validations/strings/string_email_validation.dart';
 import 'package:luthor/src/validations/strings/string_emoji_validation.dart';
 import 'package:luthor/src/validations/strings/string_ends_with_validation.dart';
+import 'package:luthor/src/validations/strings/string_ip_validation.dart';
 import 'package:luthor/src/validations/strings/string_length_validation.dart';
 import 'package:luthor/src/validations/strings/string_max_validation.dart';
 import 'package:luthor/src/validations/strings/string_min_validation.dart';
@@ -79,6 +80,13 @@ class StringValidator extends Validator {
   /// Validates that the string is a valid CUID2.
   StringValidator cuid2({String? message}) {
     validations.add(StringCuid2Validation(message: message));
+    return this;
+  }
+
+  /// Validates that the string is an ip with optional parameter for IPv4 and IPv6 as "v4" and "v6" respectively.
+  StringValidator ip({String? message, String? version}) {
+    validations
+        .add(StringIpValidation(customMessage: message, version: version));
     return this;
   }
 

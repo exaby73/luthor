@@ -85,8 +85,9 @@ class StringValidator extends Validator {
 
   /// Validates that the string is an ip with optional parameter for IPv4 and IPv6 as "v4" and "v6" respectively.
   StringValidator ip({String? message, IpVersion? version}) {
-    validations
-        .add(StringIpValidation(customMessage: message, version: version));
+    validations.add(
+      StringIpValidation(customMessage: message, version: version),
+    );
     return this;
   }
 

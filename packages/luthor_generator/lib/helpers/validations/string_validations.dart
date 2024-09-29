@@ -1,4 +1,5 @@
 import 'package:analyzer/dart/element/element.dart';
+import 'package:luthor/luthor.dart';
 import 'package:luthor_generator/checkers.dart';
 import 'package:luthor_generator/helpers/validations/base_validations.dart';
 
@@ -15,6 +16,7 @@ String getStringValidations(ParameterElement param) {
   _checkAndWriteStartsWithValidation(buffer, param);
   _checkAndWriteEndsWithValidation(buffer, param);
   _checkAndWriteContainsValidation(buffer, param);
+  _checkAndWriteIpValidation(buffer, param);
 
   return buffer.toString();
 }
@@ -25,7 +27,7 @@ void _checkAndWriteDateTimeValidation(
 ) {
   final dateTimeAnnotation = getAnnotation(isDateTimeChecker, param);
   if (dateTimeAnnotation != null ||
-      param.type.getDisplayString(withNullability: false) == 'DateTime') {
+      param.type.getDisplayString() == 'DateTime') {
     buffer.write('.dateTime(');
     final message = dateTimeAnnotation?.getField('message')?.toStringValue();
     if (message != null) buffer.write("message: '$message'");
@@ -178,6 +180,31 @@ void _checkAndWriteContainsValidation(
     final message = containsAnnotation.getField('message')?.toStringValue();
     buffer.write('r"$string"');
     if (message != null) buffer.write(", message: '$message'");
+    buffer.write(')');
+  }
+}
+
+void _checkAndWriteIpValidation(
+  StringBuffer buffer,
+  ParameterElement param,
+) {
+  final ipAnnotation = getAnnotation(isIpChecker, param);
+  if (ipAnnotation != null) {
+    buffer.write('.ip(');
+
+    final version =
+        ipAnnotation.getField('version')?.getField('_name')?.toStringValue();
+    final message = ipAnnotation.getField('message')?.toStringValue();
+
+    if (version != null) {
+      String? ipEnum;
+      if (version == 'v4') ipEnum = 'IpVersion.v4';
+      if (version == 'v6') ipEnum = 'IpVersion.v6';
+      buffer.write('version: $ipEnum');
+    }
+
+    if (message != null) buffer.write(", message: '$message'");
+
     buffer.write(')');
   }
 }

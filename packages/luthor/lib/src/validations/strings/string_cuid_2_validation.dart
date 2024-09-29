@@ -8,6 +8,7 @@ class StringCuid2Validation extends Validation {
   }) : customMessage = message;
 
   static const String _regex = r'''^[a-z][a-z0-9]*$''';
+  static final _regexObject = RegExp(_regex);
 
   @override
   bool call(String? fieldName, Object? value) {
@@ -15,7 +16,7 @@ class StringCuid2Validation extends Validation {
 
     if (value == null) return true;
     if (value is! String) return false;
-    return RegExp(_regex).hasMatch(value);
+    return _regexObject.hasMatch(value);
   }
 
   @override

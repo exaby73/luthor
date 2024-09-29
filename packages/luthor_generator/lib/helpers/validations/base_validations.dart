@@ -48,7 +48,7 @@ String getValidations(ParameterElement param) {
   }
 
   if (param.type.isDartCoreString ||
-      param.type.getDisplayString(withNullability: false) == 'DateTime') {
+      param.type.getDisplayString() == 'DateTime') {
     buffer.write('l.string()');
     buffer.write(getStringValidations(param));
   }
@@ -71,19 +71,19 @@ void _checkAndAddCustomSchema(StringBuffer buffer, ParameterElement param) {
   final element = param.type.element;
   if (element == null) {
     throw UnsupportedTypeError(
-      'Cannot determine type of ${param.type.getDisplayString(withNullability: false)}',
+      'Cannot determine type of ${param.type.getDisplayString()}',
     );
   }
 
   final hasLuthorAnnotation = getAnnotation(luthorChecker, element) != null;
   if (!hasLuthorAnnotation) {
     throw UnsupportedTypeError(
-      'Type ${param.type.getDisplayString(withNullability: false)} '
+      'Type ${param.type.getDisplayString()} '
       'does not have @luthor annotation.',
     );
   }
   buffer
-      .write('\$${param.type.getDisplayString(withNullability: false)}Schema');
+      .write('\$${param.type.getDisplayString()}Schema');
 }
 
 DartObject? getAnnotation(TypeChecker checker, Element field) {
@@ -93,7 +93,7 @@ DartObject? getAnnotation(TypeChecker checker, Element field) {
 void _writeListValidations(StringBuffer buffer, ParameterElement param) {
   buffer.write('l.list(validators: [');
   final listType = param.type
-      .getDisplayString(withNullability: false)
+      .getDisplayString()
       .replaceFirst('List<', '')
       .replaceFirst('>', '');
 

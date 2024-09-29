@@ -8,6 +8,7 @@ class StringCuidValidation extends Validation {
   }) : customMessage = message;
 
   static const String _regex = r'''c[^\s-]{8,}$''';
+  static final _regexObject = RegExp(_regex, caseSensitive: false);
 
   @override
   bool call(String? fieldName, Object? value) {
@@ -15,7 +16,7 @@ class StringCuidValidation extends Validation {
 
     if (value == null) return true;
     if (value is! String) return false;
-    return RegExp(_regex, caseSensitive: false).hasMatch(value);
+    return _regexObject.hasMatch(value);
   }
 
   @override

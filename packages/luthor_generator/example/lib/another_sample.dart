@@ -12,6 +12,7 @@ class AnotherSample with _$AnotherSample {
     required int id,
     @JsonKey(name: 'full_name') String? name,
     @IsEmail(message: "Invalid email") required String email,
+    @IsIp(version: IpVersion.v4) String? ip,
     @HasMin(8) required String password,
     @Default('user') String type,
   }) = _AnotherSample;

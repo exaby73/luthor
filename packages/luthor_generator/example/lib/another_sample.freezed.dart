@@ -25,6 +25,8 @@ mixin _$AnotherSample {
   String? get name => throw _privateConstructorUsedError;
   @IsEmail(message: "Invalid email")
   String get email => throw _privateConstructorUsedError;
+  @IsIp(version: IpVersion.v4)
+  String? get ip => throw _privateConstructorUsedError;
   @HasMin(8)
   String get password => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
@@ -49,6 +51,7 @@ abstract class $AnotherSampleCopyWith<$Res> {
       {int id,
       @JsonKey(name: 'full_name') String? name,
       @IsEmail(message: "Invalid email") String email,
+      @IsIp(version: IpVersion.v4) String? ip,
       @HasMin(8) String password,
       String type});
 }
@@ -71,6 +74,7 @@ class _$AnotherSampleCopyWithImpl<$Res, $Val extends AnotherSample>
     Object? id = null,
     Object? name = freezed,
     Object? email = null,
+    Object? ip = freezed,
     Object? password = null,
     Object? type = null,
   }) {
@@ -87,6 +91,10 @@ class _$AnotherSampleCopyWithImpl<$Res, $Val extends AnotherSample>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
+      ip: freezed == ip
+          ? _value.ip
+          : ip // ignore: cast_nullable_to_non_nullable
+              as String?,
       password: null == password
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
@@ -111,6 +119,7 @@ abstract class _$$AnotherSampleImplCopyWith<$Res>
       {int id,
       @JsonKey(name: 'full_name') String? name,
       @IsEmail(message: "Invalid email") String email,
+      @IsIp(version: IpVersion.v4) String? ip,
       @HasMin(8) String password,
       String type});
 }
@@ -131,6 +140,7 @@ class __$$AnotherSampleImplCopyWithImpl<$Res>
     Object? id = null,
     Object? name = freezed,
     Object? email = null,
+    Object? ip = freezed,
     Object? password = null,
     Object? type = null,
   }) {
@@ -147,6 +157,10 @@ class __$$AnotherSampleImplCopyWithImpl<$Res>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
+      ip: freezed == ip
+          ? _value.ip
+          : ip // ignore: cast_nullable_to_non_nullable
+              as String?,
       password: null == password
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
@@ -166,6 +180,7 @@ class _$AnotherSampleImpl implements _AnotherSample {
       {required this.id,
       @JsonKey(name: 'full_name') this.name,
       @IsEmail(message: "Invalid email") required this.email,
+      @IsIp(version: IpVersion.v4) this.ip,
       @HasMin(8) required this.password,
       this.type = 'user'});
 
@@ -181,6 +196,9 @@ class _$AnotherSampleImpl implements _AnotherSample {
   @IsEmail(message: "Invalid email")
   final String email;
   @override
+  @IsIp(version: IpVersion.v4)
+  final String? ip;
+  @override
   @HasMin(8)
   final String password;
   @override
@@ -189,7 +207,7 @@ class _$AnotherSampleImpl implements _AnotherSample {
 
   @override
   String toString() {
-    return 'AnotherSample(id: $id, name: $name, email: $email, password: $password, type: $type)';
+    return 'AnotherSample(id: $id, name: $name, email: $email, ip: $ip, password: $password, type: $type)';
   }
 
   @override
@@ -200,6 +218,7 @@ class _$AnotherSampleImpl implements _AnotherSample {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.email, email) || other.email == email) &&
+            (identical(other.ip, ip) || other.ip == ip) &&
             (identical(other.password, password) ||
                 other.password == password) &&
             (identical(other.type, type) || other.type == type));
@@ -207,7 +226,8 @@ class _$AnotherSampleImpl implements _AnotherSample {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, email, password, type);
+  int get hashCode =>
+      Object.hash(runtimeType, id, name, email, ip, password, type);
 
   /// Create a copy of AnotherSample
   /// with the given fields replaced by the non-null parameter values.
@@ -230,6 +250,7 @@ abstract class _AnotherSample implements AnotherSample {
       {required final int id,
       @JsonKey(name: 'full_name') final String? name,
       @IsEmail(message: "Invalid email") required final String email,
+      @IsIp(version: IpVersion.v4) final String? ip,
       @HasMin(8) required final String password,
       final String type}) = _$AnotherSampleImpl;
 
@@ -244,6 +265,9 @@ abstract class _AnotherSample implements AnotherSample {
   @override
   @IsEmail(message: "Invalid email")
   String get email;
+  @override
+  @IsIp(version: IpVersion.v4)
+  String? get ip;
   @override
   @HasMin(8)
   String get password;

@@ -8,6 +8,7 @@ void main() {
   final anEmoji = '🦄';
   final aUuid = '123e4567-e89b-12d3-a456-426614174000';
   final aCuid = 'ckjv4ys4h0000hjzv5y6y1q1t';
+  final aIp = '192.168.1.1';
 
   final aNumber = 42;
   final anInt = 42;
@@ -30,6 +31,7 @@ void main() {
   print(l.string().cuid().validateValue(aCuid));
   print(l.string().cuid2().validateValue(aCuid));
   print(l.string().regex(r'([A-Za-z]+)').validateValue(aString));
+  print(l.string().ip().validateValue(aIp));
 
   // Other primitive types can be validated as well
   print(l.number().validateValue(aNumber));

@@ -16,6 +16,7 @@ const matchRegexChecker = TypeChecker.fromRuntime(MatchRegex);
 const startsWithChecker = TypeChecker.fromRuntime(StartsWith);
 const endsWithChecker = TypeChecker.fromRuntime(EndsWith);
 const containsChecker = TypeChecker.fromRuntime(Contains);
+const isIpChecker = TypeChecker.fromRuntime(IsIp);
 
 const hasMaxDoubleChecker = TypeChecker.fromRuntime(HasMaxDouble);
 const hasMinDoubleChecker = TypeChecker.fromRuntime(HasMinDouble);

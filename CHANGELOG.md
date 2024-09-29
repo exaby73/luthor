@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-09-30
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor` - `v0.4.3`](#luthor---v043)
+ - [`luthor_generator` - `v0.4.6`](#luthor_generator---v046)
+
+---
+
+#### `luthor` - `v0.4.3`
+
+ - **FEAT**: Add ip string validator ([#92](https://github.com/exaby73/luthor/issues/92)).
+
+#### `luthor_generator` - `v0.4.6`
+
+ - **FEAT**: Add ip string validator ([#92](https://github.com/exaby73/luthor/issues/92)).
+
+
 ## 2024-07-14
 
 ### Changes

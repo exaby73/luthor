@@ -1,3 +1,7 @@
+## 0.4.3
+
+ - **FEAT**: Add ip string validator ([#92](https://github.com/exaby73/luthor/issues/92)).
+
 ## 0.4.2+1
 
  - **FIX**(luthor): String validator return types for email and dateTime ([#84](https://github.com/exaby73/luthor/issues/84)).

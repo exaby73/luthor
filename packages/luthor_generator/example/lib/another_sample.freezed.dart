@@ -25,7 +25,7 @@ mixin _$AnotherSample {
   String? get name => throw _privateConstructorUsedError;
   @IsEmail(message: "Invalid email")
   String get email => throw _privateConstructorUsedError;
-  @IsIp(version: "v4")
+  @IsIp(version: IpVersion.v4)
   String? get ip => throw _privateConstructorUsedError;
   @HasMin(8)
   String get password => throw _privateConstructorUsedError;
@@ -51,7 +51,7 @@ abstract class $AnotherSampleCopyWith<$Res> {
       {int id,
       @JsonKey(name: 'full_name') String? name,
       @IsEmail(message: "Invalid email") String email,
-      @IsIp(version: "v4") String? ip,
+      @IsIp(version: IpVersion.v4) String? ip,
       @HasMin(8) String password,
       String type});
 }
@@ -119,7 +119,7 @@ abstract class _$$AnotherSampleImplCopyWith<$Res>
       {int id,
       @JsonKey(name: 'full_name') String? name,
       @IsEmail(message: "Invalid email") String email,
-      @IsIp(version: "v4") String? ip,
+      @IsIp(version: IpVersion.v4) String? ip,
       @HasMin(8) String password,
       String type});
 }
@@ -180,7 +180,7 @@ class _$AnotherSampleImpl implements _AnotherSample {
       {required this.id,
       @JsonKey(name: 'full_name') this.name,
       @IsEmail(message: "Invalid email") required this.email,
-      @IsIp(version: "v4") this.ip,
+      @IsIp(version: IpVersion.v4) this.ip,
       @HasMin(8) required this.password,
       this.type = 'user'});
 
@@ -196,7 +196,7 @@ class _$AnotherSampleImpl implements _AnotherSample {
   @IsEmail(message: "Invalid email")
   final String email;
   @override
-  @IsIp(version: "v4")
+  @IsIp(version: IpVersion.v4)
   final String? ip;
   @override
   @HasMin(8)
@@ -250,7 +250,7 @@ abstract class _AnotherSample implements AnotherSample {
       {required final int id,
       @JsonKey(name: 'full_name') final String? name,
       @IsEmail(message: "Invalid email") required final String email,
-      @IsIp(version: "v4") final String? ip,
+      @IsIp(version: IpVersion.v4) final String? ip,
       @HasMin(8) required final String password,
       final String type}) = _$AnotherSampleImpl;
 
@@ -266,7 +266,7 @@ abstract class _AnotherSample implements AnotherSample {
   @IsEmail(message: "Invalid email")
   String get email;
   @override
-  @IsIp(version: "v4")
+  @IsIp(version: IpVersion.v4)
   String? get ip;
   @override
   @HasMin(8)

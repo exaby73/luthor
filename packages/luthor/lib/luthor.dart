@@ -12,7 +12,7 @@ export 'src/annotations/validators/regex.dart';
 export 'src/annotations/validators/starts_with.dart';
 export 'src/annotations/validators/uri.dart';
 export 'src/l.dart';
+export 'src/types/ip.dart';
 export 'src/validation_result.dart';
-export 'src/validations/strings/string_ip_validation.dart';
 export 'src/validator.dart';
 export 'src/validators/string_validator.dart';

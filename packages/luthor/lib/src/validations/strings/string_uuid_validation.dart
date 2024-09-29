@@ -9,6 +9,7 @@ class StringUuidValidation extends Validation {
 
   static const String _regex =
       r'''^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$''';
+  static final _regexObject = RegExp(_regex, caseSensitive: false);
 
   @override
   bool call(String? fieldName, Object? value) {
@@ -16,7 +17,7 @@ class StringUuidValidation extends Validation {
 
     if (value == null) return true;
     if (value is! String) return false;
-    return RegExp(_regex, caseSensitive: false).hasMatch(value);
+    return _regexObject.hasMatch(value);
   }
 
   @override

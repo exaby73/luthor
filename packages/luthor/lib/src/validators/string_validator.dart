@@ -1,4 +1,4 @@
-import 'package:luthor/src/annotations/validators/ip.dart';
+import 'package:luthor/luthor.dart';
 import 'package:luthor/src/validations/strings/string_contains_validation.dart';
 import 'package:luthor/src/validations/strings/string_cuid_2_validation.dart';
 import 'package:luthor/src/validations/strings/string_cuid_validation.dart';
@@ -14,7 +14,6 @@ import 'package:luthor/src/validations/strings/string_regex_validation.dart';
 import 'package:luthor/src/validations/strings/string_starts_with_validation.dart';
 import 'package:luthor/src/validations/strings/string_uri_validation.dart';
 import 'package:luthor/src/validations/strings/string_uuid_validation.dart';
-import 'package:luthor/src/validator.dart';
 
 /// Validator for strings.
 class StringValidator extends Validator {

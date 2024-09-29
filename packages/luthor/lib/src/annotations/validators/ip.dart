@@ -1,5 +1,7 @@
+import 'package:luthor/luthor.dart';
+
 class IsIp {
-  final String? version;
+  final IpVersion? version;
   final String? message;
 
   const IsIp({this.version, this.message});

@@ -34,9 +34,7 @@ Validator $AnotherSampleSchema = l.schema({
   'id': l.int().required(),
   'full_name': l.string(),
   'email': l.string().email(message: 'Invalid email').required(),
-  'ip': l.string().ip(
-        version: IpVersion.v4,
-      ),
+  'ip': l.string().ip(version: IpVersion.v4),
   'password': l.string().min(8).required(),
   'type': l.string(),
 });

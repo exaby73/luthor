@@ -1,3 +1,4 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:luthor/luthor.dart';
 import 'package:source_gen/source_gen.dart';
@@ -5,6 +6,7 @@ import 'package:source_gen/source_gen.dart';
 const luthorChecker = TypeChecker.fromRuntime(Luthor);
 const jsonKeyChecker = TypeChecker.fromRuntime(JsonKey);
 const defaultChecker = TypeChecker.fromRuntime(Default);
+const dartMappableChecker = TypeChecker.fromRuntime(MappableClass);
 
 const isEmailChecker = TypeChecker.fromRuntime(IsEmail);
 const isDateTimeChecker = TypeChecker.fromRuntime(IsDateTime);

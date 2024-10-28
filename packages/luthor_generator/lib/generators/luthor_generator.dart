@@ -29,10 +29,12 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
     final name = element.name;
     final constructor = element.constructors.first;
 
+    final isDartMappableClass =
+        getAnnotation(dartMappableChecker, element) != null;
     final hasFromJsonCtor = element.constructors.any(
       (element) => element.isFactory && element.name == 'fromJson',
     );
-    if (!hasFromJsonCtor) {
+    if (!hasFromJsonCtor && !isDartMappableClass) {
       throw InvalidGenerationSourceError(
         'Luthor can only be applied to classes with a factory fromJson constructor',
         element: element,
@@ -61,24 +63,44 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
 
     buffer.write('});\n\n');
 
-    _writeValidateMethod(buffer, name);
+    _writeValidateMethod(buffer, name, isDartMappable: isDartMappableClass);
 
-    _writeExtension(buffer, name);
+    _writeExtension(buffer, name, isDartMappable: isDartMappableClass);
 
     return buffer.toString();
   }
 
-  void _writeValidateMethod(StringBuffer buffer, String name) {
+  void _writeValidateMethod(
+    StringBuffer buffer,
+    String name, {
+    required bool isDartMappable,
+  }) {
+    late final String fromJsonString;
+    if (isDartMappable) {
+      fromJsonString = '${name}Mapper.fromMap';
+    } else {
+      fromJsonString = '$name.fromJson';
+    }
     buffer.write(
       'SchemaValidationResult<$name> \$${name}Validate(Map<String, dynamic> json) => '
-      '\$${name}Schema.validateSchema(json, fromJson: $name.fromJson);',
+      '\$${name}Schema.validateSchema(json, fromJson: $fromJsonString);',
     );
   }
 
-  void _writeExtension(StringBuffer buffer, String name) {
+  void _writeExtension(
+    StringBuffer buffer,
+    String name, {
+    required bool isDartMappable,
+  }) {
+    late final String toJsonString;
+    if (isDartMappable) {
+      toJsonString = 'toMap()';
+    } else {
+      toJsonString = 'toJson()';
+    }
     buffer.write(
       '\n\nextension ${name}ValidationExtension on $name {\n'
-      '  SchemaValidationResult<$name> validateSelf() => \$${name}Validate(toJson());\n'
+      '  SchemaValidationResult<$name> validateSelf() => \$${name}Validate($toJsonString);\n'
       '}\n',
     );
   }

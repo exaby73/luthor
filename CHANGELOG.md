@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-10-28
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor_generator` - `v0.5.0`](#luthor_generator---v050)
+
+---
+
+#### `luthor_generator` - `v0.5.0`
+
+ - **FEAT**(luthor_generator): Add support for dart_mappable classes ([#94](https://github.com/exaby73/luthor/issues/94)).
+
+
 ## 2024-09-30
 
 ### Changes

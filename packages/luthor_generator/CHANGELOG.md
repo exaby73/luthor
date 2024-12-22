@@ -1,3 +1,7 @@
+## 0.5.1
+
+ - **FEAT**: Updated dependencies.
+
 ## 0.5.0
 
  - **FEAT**(luthor_generator): Add support for dart_mappable classes ([#94](https://github.com/exaby73/luthor/issues/94)).

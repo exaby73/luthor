@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-12-23
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor` - `v0.4.4`](#luthor---v044)
+ - [`luthor_generator` - `v0.5.1`](#luthor_generator---v051)
+
+---
+
+#### `luthor` - `v0.4.4`
+
+ - **FEAT**: Updated dependencies.
+
+#### `luthor_generator` - `v0.5.1`
+
+ - **FEAT**: Updated dependencies.
+
+
 ## 2024-10-28
 
 ### Changes

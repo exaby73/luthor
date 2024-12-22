@@ -1,3 +1,7 @@
+## 0.4.4
+
+ - **FEAT**: Updated dependencies.
+
 ## 0.4.3
 
  - **FEAT**: Add ip string validator ([#92](https://github.com/exaby73/luthor/issues/92)).

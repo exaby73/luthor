@@ -1,5 +1,4 @@
 import 'package:analyzer/dart/element/element.dart';
-import 'package:luthor/luthor.dart';
 import 'package:luthor_generator/checkers.dart';
 import 'package:luthor_generator/helpers/validations/base_validations.dart';
 

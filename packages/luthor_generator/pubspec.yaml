@@ -15,7 +15,7 @@ dependencies:
   freezed_annotation: ^2.4.3
   json_annotation: ^4.8.1
   luthor: ^0.4.4
-  source_gen: ^2.0.0
+  source_gen: ^1.5.0
 
 dev_dependencies:
   lint: ^2.3.0

@@ -21,7 +21,7 @@ String getValidations(ParameterElement param) {
   }
 
   if (param.type.isDartCoreBool) {
-    buffer.write('l.bool()');
+    buffer.write('l.boolean()');
   }
 
   if (param.type.isDartCoreDouble) {
@@ -82,8 +82,7 @@ void _checkAndAddCustomSchema(StringBuffer buffer, ParameterElement param) {
       'does not have @luthor annotation.',
     );
   }
-  buffer
-      .write('\$${param.type.getDisplayString()}Schema');
+  buffer.write('\$${param.type.getDisplayString()}Schema');
 }
 
 DartObject? getAnnotation(TypeChecker checker, Element field) {

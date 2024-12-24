@@ -25,7 +25,7 @@ void main() {
   });
 
   test('should return false if the value is null with required()', () {
-    final result = l.bool().required().validateValue(null);
+    final result = l.boolean().required().validateValue(null);
 
     switch (result) {
       case SingleValidationSuccess(data: _):

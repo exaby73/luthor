@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('should return true when value is a valid bool', () {
-    final result = l.bool().validateValue(true);
+    final result = l.boolean().validateValue(true);
 
     switch (result) {
       case SingleValidationSuccess(data: _):
@@ -14,7 +14,7 @@ void main() {
   });
 
   test('should return false when value is not a valid bool', () {
-    final result = l.bool().validateValue('user');
+    final result = l.boolean().validateValue('user');
 
     switch (result) {
       case SingleValidationSuccess(data: _):
@@ -25,7 +25,7 @@ void main() {
   });
 
   test('should return false if the value is null with required()', () {
-    final result = l.required().bool().validateValue(null);
+    final result = l.required().boolean().validateValue(null);
 
     switch (result) {
       case SingleValidationSuccess(data: _):

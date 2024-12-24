@@ -15,6 +15,7 @@ import 'package:luthor/src/validators/double_validator.dart';
 import 'package:luthor/src/validators/int_validator.dart';
 import 'package:luthor/src/validators/number_validator.dart';
 import 'package:luthor/src/validators/string_validator.dart';
+import 'package:meta/meta.dart';
 
 typedef FromJson<T> = T Function(Map<String, Object?> json);
 
@@ -23,7 +24,17 @@ class Validator {
   Validator({List<Validation> initialValidations = const []})
       : validations = List.from(initialValidations);
 
+  String? _name;
+
+  String? get name => _name;
+
+  @protected
   final List<Validation> validations;
+
+  Validator withName(String? name) {
+    _name = name;
+    return this;
+  }
 
   /// Validates a value against a custom validator function.
   Validator custom(CustomValidator customValidator, {String? message}) {

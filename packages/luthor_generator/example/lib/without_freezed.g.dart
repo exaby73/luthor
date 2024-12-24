@@ -6,7 +6,7 @@ part of 'without_freezed.dart';
 // LuthorGenerator
 // **************************************************************************
 
-Validator $WithoutFreezedSchema = l.schema({
+Validator $WithoutFreezedSchema = l.withName('WithoutFreezed').schema({
   'name': l.string().email().required(),
   'age': l.int().required(),
 });
@@ -21,7 +21,7 @@ extension WithoutFreezedValidationExtension on WithoutFreezed {
       $WithoutFreezedValidate(toJson());
 }
 
-Validator $WithDartMappableSchema = l.schema({
+Validator $WithDartMappableSchema = l.withName('WithDartMappable').schema({
   'email': l.string().email().required(),
   'password': l.string().min(8).required(),
 });

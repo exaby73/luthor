@@ -30,7 +30,7 @@ Map<String, dynamic> _$$AnotherSampleImplToJson(_$AnotherSampleImpl instance) =>
 // LuthorGenerator
 // **************************************************************************
 
-Validator $AnotherSampleSchema = l.schema({
+Validator $AnotherSampleSchema = l.withName('AnotherSample').schema({
   'id': l.int().required(),
   'full_name': l.string(),
   'email': l.string().email(message: 'Invalid email').required(),

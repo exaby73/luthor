@@ -37,7 +37,7 @@ void main() {
   print(l.number().validateValue(aNumber));
   print(l.int().validateValue(anInt));
   print(l.double().validateValue(aDouble));
-  print(l.bool().validateValue(aBoolean));
+  print(l.boolean().validateValue(aBoolean));
   print(l.nullValue().validateValue(aNullValue));
 
   // General validations

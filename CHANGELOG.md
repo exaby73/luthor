@@ -15,6 +15,32 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`luthor` - `v0.5.2+1`](#luthor---v0521)
+ - [`luthor_generator` - `v0.6.2+1`](#luthor_generator---v0621)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `luthor_generator` - `v0.6.2+1`
+
+---
+
+#### `luthor` - `v0.5.2+1`
+
+
+## 2024-12-25
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`luthor` - `v0.5.2`](#luthor---v052)
  - [`luthor_generator` - `v0.6.2`](#luthor_generator---v062)
 

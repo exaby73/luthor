@@ -1,37 +1,41 @@
+## 0.5.2+1
+
+- **CHORE**: Export validations
+
 ## 0.5.2
 
- - **FEAT**: Add support for generic map validator ([#99](https://github.com/exaby73/luthor/issues/99)).
+- **FEAT**: Add support for generic map validator ([#99](https://github.com/exaby73/luthor/issues/99)).
 
 ## 0.5.1
 
- - **FEAT**: Add name support ([#98](https://github.com/exaby73/luthor/issues/98)).
+- **FEAT**: Add name support ([#98](https://github.com/exaby73/luthor/issues/98)).
 
 ## 0.5.0
 
 > Note: This release has breaking changes.
 
- - **BREAKING** **FIX**: Rename bool to boolean ([#97](https://github.com/exaby73/luthor/issues/97)).
+- **BREAKING** **FIX**: Rename bool to boolean ([#97](https://github.com/exaby73/luthor/issues/97)).
 
 ## 0.4.4
 
- - **FEAT**: Updated dependencies.
+- **FEAT**: Updated dependencies.
 
 ## 0.4.3
 
- - **FEAT**: Add ip string validator ([#92](https://github.com/exaby73/luthor/issues/92)).
+- **FEAT**: Add ip string validator ([#92](https://github.com/exaby73/luthor/issues/92)).
 
 ## 0.4.2+1
 
- - **FIX**(luthor): String validator return types for email and dateTime ([#84](https://github.com/exaby73/luthor/issues/84)).
+- **FIX**(luthor): String validator return types for email and dateTime ([#84](https://github.com/exaby73/luthor/issues/84)).
 
 ## 0.4.2
 
- - **FEAT**(luthor_generator): remove validate method ([#78](https://github.com/exaby73/luthor/issues/78)).
+- **FEAT**(luthor_generator): remove validate method ([#78](https://github.com/exaby73/luthor/issues/78)).
 
 ## 0.4.1
 
- - **FEAT**: deprecate luthor_annotation ([#77](https://github.com/exaby73/luthor/issues/77)).
- - **FEAT**: Deprecate luthor_annoation and add annotations to luthor package.
+- **FEAT**: deprecate luthor_annotation ([#77](https://github.com/exaby73/luthor/issues/77)).
+- **FEAT**: Deprecate luthor_annoation and add annotations to luthor package.
 
 ## 0.4.0
 

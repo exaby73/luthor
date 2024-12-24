@@ -1,3 +1,7 @@
+## 0.6.1
+
+ - **FEAT**: Add name support ([#98](https://github.com/exaby73/luthor/issues/98)).
+
 ## 0.6.0
 
 > Note: This release has breaking changes.

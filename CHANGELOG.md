@@ -11,6 +11,32 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 Packages with breaking changes:
 
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor` - `v0.5.1`](#luthor---v051)
+ - [`luthor_generator` - `v0.6.1`](#luthor_generator---v061)
+
+---
+
+#### `luthor` - `v0.5.1`
+
+ - **FEAT**: Add name support ([#98](https://github.com/exaby73/luthor/issues/98)).
+
+#### `luthor_generator` - `v0.6.1`
+
+ - **FEAT**: Add name support ([#98](https://github.com/exaby73/luthor/issues/98)).
+
+
+## 2024-12-25
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
  - [`luthor` - `v0.5.0`](#luthor---v050)
  - [`luthor_generator` - `v0.6.0`](#luthor_generator---v060)
 

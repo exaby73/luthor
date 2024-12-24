@@ -15,6 +15,32 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`luthor` - `v0.5.2`](#luthor---v052)
+ - [`luthor_generator` - `v0.6.2`](#luthor_generator---v062)
+
+---
+
+#### `luthor` - `v0.5.2`
+
+ - **FEAT**: Add support for generic map validator ([#99](https://github.com/exaby73/luthor/issues/99)).
+
+#### `luthor_generator` - `v0.6.2`
+
+ - **FEAT**: Add support for generic map validator ([#99](https://github.com/exaby73/luthor/issues/99)).
+
+
+## 2024-12-25
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`luthor` - `v0.5.1`](#luthor---v051)
  - [`luthor_generator` - `v0.6.1`](#luthor_generator---v061)
 

@@ -1,3 +1,7 @@
+## 0.5.2
+
+ - **FEAT**: Add support for generic map validator ([#99](https://github.com/exaby73/luthor/issues/99)).
+
 ## 0.5.1
 
  - **FEAT**: Add name support ([#98](https://github.com/exaby73/luthor/issues/98)).

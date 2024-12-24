@@ -69,7 +69,7 @@ Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
 // LuthorGenerator
 // **************************************************************************
 
-Validator $SampleSchema = l.schema({
+Validator $SampleSchema = l.withName('Sample').schema({
   'anyValue': l.any(),
   'boolValue': l.boolean().required(),
   'doubleValue': l.double().required(),

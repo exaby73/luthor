@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-12-25
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`luthor` - `v0.5.0`](#luthor---v050)
+ - [`luthor_generator` - `v0.6.0`](#luthor_generator---v060)
+
+Packages with other changes:
+
+ - There are no other changes in this release.
+
+---
+
+#### `luthor` - `v0.5.0`
+
+ - **BREAKING** **FIX**: Rename bool to boolean ([#97](https://github.com/exaby73/luthor/issues/97)).
+
+#### `luthor_generator` - `v0.6.0`
+
+ - **BREAKING** **FIX**: Rename bool to boolean ([#97](https://github.com/exaby73/luthor/issues/97)).
+
+
 ## 2024-12-23
 
 ### Changes

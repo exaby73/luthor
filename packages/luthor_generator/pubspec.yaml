@@ -1,6 +1,6 @@
 name: luthor_generator
 description: Generate luthor schemas
-version: 0.5.1
+version: 0.6.0
 repository: https://github.com/exaby73/luthor/tree/main/packages/luthor_generator
 homepage: https://luthor.netlify.app
 
@@ -14,7 +14,7 @@ dependencies:
   dart_mappable: ^4.3.0
   freezed_annotation: ^2.4.3
   json_annotation: ^4.8.1
-  luthor: ^0.4.4
+  luthor: ^0.5.0
   source_gen: ^1.5.0
 
 dev_dependencies:

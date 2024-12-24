@@ -71,7 +71,7 @@ Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
 
 Validator $SampleSchema = l.schema({
   'anyValue': l.any(),
-  'boolValue': l.bool().required(),
+  'boolValue': l.boolean().required(),
   'doubleValue': l.double().required(),
   'intValue': l.int().required(),
   'listValue': l.list(validators: [l.string()]).required(),

@@ -6,6 +6,7 @@ import 'package:luthor/src/validations/custom_validation.dart';
 import 'package:luthor/src/validations/double_validation.dart';
 import 'package:luthor/src/validations/int_validation.dart';
 import 'package:luthor/src/validations/list_validation.dart';
+import 'package:luthor/src/validations/map_validation.dart';
 import 'package:luthor/src/validations/null_validation.dart';
 import 'package:luthor/src/validations/number_validation.dart';
 import 'package:luthor/src/validations/required_validation.dart';
@@ -93,6 +94,12 @@ class Validator {
   /// Validates that the value is a list.
   Validator list({List<Validator>? validators, String? message}) {
     validations.add(ListValidation(validators: validators, message: message));
+    return this;
+  }
+
+  /// Validates that the value is a map.
+  Validator map({String? message}) {
+    validations.add(MapValidation(message: message));
     return this;
   }
 

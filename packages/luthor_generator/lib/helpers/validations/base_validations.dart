@@ -38,6 +38,10 @@ String getValidations(ParameterElement param) {
     _writeListValidations(buffer, param);
   }
 
+  if (param.type.isDartCoreMap) {
+    buffer.write('l.map()');
+  }
+
   if (param.type.isDartCoreNull) {
     buffer.write('l.nullValue()');
   }

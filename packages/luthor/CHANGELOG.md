@@ -1,3 +1,5 @@
+## 0.5.2+1
+
 ## 0.5.2
 
  - **FEAT**: Add support for generic map validator ([#99](https://github.com/exaby73/luthor/issues/99)).

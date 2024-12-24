@@ -14,7 +14,7 @@ dependencies:
   dart_mappable: ^4.3.0
   freezed_annotation: ^2.4.3
   json_annotation: ^4.8.1
-  luthor: ^0.5.2
+  luthor: ^0.5.2+1
   source_gen: ^1.5.0
 
 dev_dependencies:

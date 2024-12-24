@@ -74,7 +74,7 @@ class Validator {
   }
 
   /// Validates that the value is a bool.
-  Validator bool({String? message}) {
+  Validator boolean({String? message}) {
     validations.add(BoolValidation(message: message));
     return this;
   }

@@ -86,7 +86,9 @@ void _checkAndAddCustomSchema(StringBuffer buffer, ParameterElement param) {
       'does not have @luthor annotation.',
     );
   }
-  buffer.write('\$${param.type.getDisplayString()}Schema');
+  buffer.write(
+    '\$${param.type.getDisplayString().replaceFirst('?', '')}Schema',
+  );
 }
 
 DartObject? getAnnotation(TypeChecker checker, Element field) {

@@ -14,6 +14,10 @@ _$AnotherSampleImpl _$$AnotherSampleImplFromJson(Map<String, dynamic> json) =>
       ip: json['ip'] as String?,
       password: json['password'] as String,
       type: json['type'] as String? ?? 'user',
+      sample: Sample.fromJson(json['sample'] as Map<String, dynamic>),
+      optionalSample: json['optionalSample'] == null
+          ? null
+          : Sample.fromJson(json['optionalSample'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$AnotherSampleImplToJson(_$AnotherSampleImpl instance) =>
@@ -24,6 +28,8 @@ Map<String, dynamic> _$$AnotherSampleImplToJson(_$AnotherSampleImpl instance) =>
       'ip': instance.ip,
       'password': instance.password,
       'type': instance.type,
+      'sample': instance.sample,
+      'optionalSample': instance.optionalSample,
     };
 
 // **************************************************************************
@@ -37,6 +43,8 @@ Validator $AnotherSampleSchema = l.withName('AnotherSample').schema({
   'ip': l.string().ip(version: IpVersion.v4),
   'password': l.string().min(8).required(),
   'type': l.string(),
+  'sample': $SampleSchema.required(),
+  'optionalSample': $SampleSchema,
 });
 
 SchemaValidationResult<AnotherSample> $AnotherSampleValidate(

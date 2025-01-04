@@ -43,6 +43,7 @@ class Sample with _$Sample {
     @JsonKey(name: 'jsonKeyName') required String foo,
     @WithCustomValidator(customValidatorFn) required String custom,
     required List<int> numbers,
+    String? hello,
   }) = _Sample;
 
   factory Sample.fromJson(Map<String, dynamic> json) => _$SampleFromJson(json);

@@ -35,6 +35,7 @@ _$SampleImpl _$$SampleImplFromJson(Map<String, dynamic> json) => _$SampleImpl(
       numbers: (json['numbers'] as List<dynamic>)
           .map((e) => (e as num).toInt())
           .toList(),
+      hello: json['hello'] as String?,
     );
 
 Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
@@ -63,6 +64,7 @@ Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
       'jsonKeyName': instance.foo,
       'custom': instance.custom,
       'numbers': instance.numbers,
+      'hello': instance.hello,
     };
 
 // **************************************************************************
@@ -95,6 +97,7 @@ Validator $SampleSchema = l.withName('Sample').schema({
   'jsonKeyName': l.string().required(),
   'custom': l.string().custom(customValidatorFn).required(),
   'numbers': l.list(validators: [l.int()]).required(),
+  'hello': l.string(),
 });
 
 SchemaValidationResult<Sample> $SampleValidate(Map<String, dynamic> json) =>

@@ -1,3 +1,4 @@
+import 'package:example/sample.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:luthor/luthor.dart';
 
@@ -15,6 +16,8 @@ class AnotherSample with _$AnotherSample {
     @IsIp(version: IpVersion.v4) String? ip,
     @HasMin(8) required String password,
     @Default('user') String type,
+    required Sample sample,
+    Sample? optionalSample,
   }) = _AnotherSample;
 
   factory AnotherSample.fromJson(Map<String, dynamic> json) =>

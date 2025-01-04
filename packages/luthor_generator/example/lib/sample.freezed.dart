@@ -64,6 +64,7 @@ mixin _$Sample {
   @WithCustomValidator(customValidatorFn)
   String get custom => throw _privateConstructorUsedError;
   List<int> get numbers => throw _privateConstructorUsedError;
+  String? get hello => throw _privateConstructorUsedError;
 
   /// Serializes this Sample to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -103,7 +104,8 @@ abstract class $SampleCopyWith<$Res> {
       AnotherSample anotherSample,
       @JsonKey(name: 'jsonKeyName') String foo,
       @WithCustomValidator(customValidatorFn) String custom,
-      List<int> numbers});
+      List<int> numbers,
+      String? hello});
 
   $AnotherSampleCopyWith<$Res> get anotherSample;
 }
@@ -147,6 +149,7 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
     Object? foo = null,
     Object? custom = null,
     Object? numbers = null,
+    Object? hello = freezed,
   }) {
     return _then(_value.copyWith(
       anyValue: freezed == anyValue
@@ -245,6 +248,10 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
           ? _value.numbers
           : numbers // ignore: cast_nullable_to_non_nullable
               as List<int>,
+      hello: freezed == hello
+          ? _value.hello
+          : hello // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -290,7 +297,8 @@ abstract class _$$SampleImplCopyWith<$Res> implements $SampleCopyWith<$Res> {
       AnotherSample anotherSample,
       @JsonKey(name: 'jsonKeyName') String foo,
       @WithCustomValidator(customValidatorFn) String custom,
-      List<int> numbers});
+      List<int> numbers,
+      String? hello});
 
   @override
   $AnotherSampleCopyWith<$Res> get anotherSample;
@@ -333,6 +341,7 @@ class __$$SampleImplCopyWithImpl<$Res>
     Object? foo = null,
     Object? custom = null,
     Object? numbers = null,
+    Object? hello = freezed,
   }) {
     return _then(_$SampleImpl(
       anyValue: freezed == anyValue
@@ -431,6 +440,10 @@ class __$$SampleImplCopyWithImpl<$Res>
           ? _value._numbers
           : numbers // ignore: cast_nullable_to_non_nullable
               as List<int>,
+      hello: freezed == hello
+          ? _value.hello
+          : hello // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -463,7 +476,8 @@ class _$SampleImpl implements _Sample {
       required this.anotherSample,
       @JsonKey(name: 'jsonKeyName') required this.foo,
       @WithCustomValidator(customValidatorFn) required this.custom,
-      required final List<int> numbers})
+      required final List<int> numbers,
+      this.hello})
       : _listValue = listValue,
         _numbers = numbers;
 
@@ -551,8 +565,11 @@ class _$SampleImpl implements _Sample {
   }
 
   @override
+  final String? hello;
+
+  @override
   String toString() {
-    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, dateTime: $dateTime, exactly10Characters: $exactly10Characters, minAndMaxString: $minAndMaxString, startsWithFoo: $startsWithFoo, endsWithBar: $endsWithBar, containsBaz: $containsBaz, minAndMaxInt: $minAndMaxInt, minAndMaxDouble: $minAndMaxDouble, minAndMaxNumber: $minAndMaxNumber, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample, foo: $foo, custom: $custom, numbers: $numbers)';
+    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, dateTime: $dateTime, exactly10Characters: $exactly10Characters, minAndMaxString: $minAndMaxString, startsWithFoo: $startsWithFoo, endsWithBar: $endsWithBar, containsBaz: $containsBaz, minAndMaxInt: $minAndMaxInt, minAndMaxDouble: $minAndMaxDouble, minAndMaxNumber: $minAndMaxNumber, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample, foo: $foo, custom: $custom, numbers: $numbers, hello: $hello)';
   }
 
   @override
@@ -601,7 +618,8 @@ class _$SampleImpl implements _Sample {
                 other.anotherSample == anotherSample) &&
             (identical(other.foo, foo) || other.foo == foo) &&
             (identical(other.custom, custom) || other.custom == custom) &&
-            const DeepCollectionEquality().equals(other._numbers, _numbers));
+            const DeepCollectionEquality().equals(other._numbers, _numbers) &&
+            (identical(other.hello, hello) || other.hello == hello));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -631,7 +649,8 @@ class _$SampleImpl implements _Sample {
         anotherSample,
         foo,
         custom,
-        const DeepCollectionEquality().hash(_numbers)
+        const DeepCollectionEquality().hash(_numbers),
+        hello
       ]);
 
   /// Create a copy of Sample
@@ -678,7 +697,8 @@ abstract class _Sample implements Sample {
       required final AnotherSample anotherSample,
       @JsonKey(name: 'jsonKeyName') required final String foo,
       @WithCustomValidator(customValidatorFn) required final String custom,
-      required final List<int> numbers}) = _$SampleImpl;
+      required final List<int> numbers,
+      final String? hello}) = _$SampleImpl;
 
   factory _Sample.fromJson(Map<String, dynamic> json) = _$SampleImpl.fromJson;
 
@@ -750,6 +770,8 @@ abstract class _Sample implements Sample {
   String get custom;
   @override
   List<int> get numbers;
+  @override
+  String? get hello;
 
   /// Create a copy of Sample
   /// with the given fields replaced by the non-null parameter values.

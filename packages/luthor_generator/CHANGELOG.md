@@ -1,3 +1,7 @@
+## 0.6.3
+
+ - **FIX**: Nullable ? in generated code.
+
 ## 0.6.2
 
  - **FEAT**: Add support for generic map validator ([#99](https://github.com/exaby73/luthor/issues/99)).

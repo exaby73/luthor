@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-01-05
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor_generator` - `v0.6.3`](#luthor_generator---v063)
+
+---
+
+#### `luthor_generator` - `v0.6.3`
+
+ - **FIX**: Nullable ? in generated code.
+
+
 ## 2024-12-25
 
 ### Changes

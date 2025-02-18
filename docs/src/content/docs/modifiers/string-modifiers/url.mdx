@@ -1,0 +1,76 @@
+---
+title: URL Validation
+---
+
+import CodeGenContentSwitcher from '../../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+  <div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() {
+  final validator = l.string().url();
+  print(validator.validateValue('https://dart.dev')); // Success
+  print(validator.validateValue('not a url')); // Error
+
+  // With allowed schemes
+  final httpsOnly = l.string().url(allowedSchemes: ['https']);
+  print(httpsOnly.validateValue('https://dart.dev')); // Success
+  print(httpsOnly.validateValue('http://dart.dev')); // Error
+}
+```
+  </div>
+
+  <div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'url_schema.freezed.dart';
+part 'url_schema.g.dart';
+
+@freezed
+@luthor
+class UrlSchema extends _$UrlSchema {
+  const factory UrlSchema({
+    @IsUrl() required String url,
+    @IsUrl(allowedSchemes: ['https']) required String secureUrl,
+  }) = _$UrlSchema;
+
+  static SchemaValidationResult<UrlSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$UrlSchemaValidate(json);
+
+  factory UrlSchema.fromJson(Map<String, dynamic> json) =>
+      _$UrlSchemaFromJson(json);
+}
+
+void main() {
+  print(UrlSchema.validate({
+    'url': 'https://dart.dev',
+    'secureUrl': 'https://dart.dev',
+  })); // Success
+
+  print(UrlSchema.validate({
+    'url': 'not a url',
+    'secureUrl': 'http://dart.dev',
+  })); // Error
+}
+```
+  </div>
+</CodeGenContentSwitcher>
+
+The URL validator ensures that a string is a valid URL with a scheme and host. By default, it accepts any valid URL scheme, but you can restrict allowed schemes using the `allowedSchemes` parameter.
+
+A URL is considered valid if:
+- It has a valid scheme (e.g., 'http', 'https', 'ftp', etc.)
+- It has a valid host
+- It contains no whitespace characters
+- The scheme matches one of the `allowedSchemes` if specified
+
+You can also provide a custom error message:
+```dart
+l.string().url(message: 'Please enter a valid website URL');
+``` 

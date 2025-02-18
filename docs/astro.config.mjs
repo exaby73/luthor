@@ -155,6 +155,10 @@ export default defineConfig({
                   link: "/modifiers/string-modifiers/uri",
                 },
                 {
+                  label: "URL",
+                  link: "/modifiers/string-modifiers/url",
+                },
+                {
                   label: "UUID",
                   link: "/modifiers/string-modifiers/uuid",
                 },

@@ -16,7 +16,6 @@ class StringUrlValidation extends Validation {
     if (value == null) return true;
     if (value is! String) return false;
 
-    // Check for any whitespace in URL
     if (RegExp(r'\s').hasMatch(value)) return false;
 
     final uri = Uri.tryParse(value);

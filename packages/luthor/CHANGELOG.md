@@ -1,3 +1,7 @@
+## 0.5.3
+
+ - **FEAT**: Add URL validator support ([#103](https://github.com/exaby73/luthor/issues/103)).
+
 ## 0.5.2+1
 
 - **CHORE**: Export validations

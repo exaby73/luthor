@@ -56,6 +56,8 @@ mixin _$Sample {
   num get minAndMaxNumber => throw _privateConstructorUsedError;
   @IsUri(allowedSchemes: ['https'])
   String? get httpsLink => throw _privateConstructorUsedError;
+  @IsUrl()
+  String? get aUrl => throw _privateConstructorUsedError;
   @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
   String get luthorPath => throw _privateConstructorUsedError;
   AnotherSample get anotherSample => throw _privateConstructorUsedError;
@@ -100,6 +102,7 @@ abstract class $SampleCopyWith<$Res> {
       @HasMinDouble(2.0) @HasMaxDouble(4.0) double minAndMaxDouble,
       @HasMinNumber(2) @HasMaxNumber(3.0) num minAndMaxNumber,
       @IsUri(allowedSchemes: ['https']) String? httpsLink,
+      @IsUrl() String? aUrl,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor') String luthorPath,
       AnotherSample anotherSample,
       @JsonKey(name: 'jsonKeyName') String foo,
@@ -144,6 +147,7 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
     Object? minAndMaxDouble = null,
     Object? minAndMaxNumber = null,
     Object? httpsLink = freezed,
+    Object? aUrl = freezed,
     Object? luthorPath = null,
     Object? anotherSample = null,
     Object? foo = null,
@@ -228,6 +232,10 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
           ? _value.httpsLink
           : httpsLink // ignore: cast_nullable_to_non_nullable
               as String?,
+      aUrl: freezed == aUrl
+          ? _value.aUrl
+          : aUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       luthorPath: null == luthorPath
           ? _value.luthorPath
           : luthorPath // ignore: cast_nullable_to_non_nullable
@@ -293,6 +301,7 @@ abstract class _$$SampleImplCopyWith<$Res> implements $SampleCopyWith<$Res> {
       @HasMinDouble(2.0) @HasMaxDouble(4.0) double minAndMaxDouble,
       @HasMinNumber(2) @HasMaxNumber(3.0) num minAndMaxNumber,
       @IsUri(allowedSchemes: ['https']) String? httpsLink,
+      @IsUrl() String? aUrl,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor') String luthorPath,
       AnotherSample anotherSample,
       @JsonKey(name: 'jsonKeyName') String foo,
@@ -336,6 +345,7 @@ class __$$SampleImplCopyWithImpl<$Res>
     Object? minAndMaxDouble = null,
     Object? minAndMaxNumber = null,
     Object? httpsLink = freezed,
+    Object? aUrl = freezed,
     Object? luthorPath = null,
     Object? anotherSample = null,
     Object? foo = null,
@@ -420,6 +430,10 @@ class __$$SampleImplCopyWithImpl<$Res>
           ? _value.httpsLink
           : httpsLink // ignore: cast_nullable_to_non_nullable
               as String?,
+      aUrl: freezed == aUrl
+          ? _value.aUrl
+          : aUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       luthorPath: null == luthorPath
           ? _value.luthorPath
           : luthorPath // ignore: cast_nullable_to_non_nullable
@@ -471,6 +485,7 @@ class _$SampleImpl implements _Sample {
       @HasMinDouble(2.0) @HasMaxDouble(4.0) required this.minAndMaxDouble,
       @HasMinNumber(2) @HasMaxNumber(3.0) required this.minAndMaxNumber,
       @IsUri(allowedSchemes: ['https']) this.httpsLink,
+      @IsUrl() this.aUrl,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
       required this.luthorPath,
       required this.anotherSample,
@@ -546,6 +561,9 @@ class _$SampleImpl implements _Sample {
   @IsUri(allowedSchemes: ['https'])
   final String? httpsLink;
   @override
+  @IsUrl()
+  final String? aUrl;
+  @override
   @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
   final String luthorPath;
   @override
@@ -569,7 +587,7 @@ class _$SampleImpl implements _Sample {
 
   @override
   String toString() {
-    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, dateTime: $dateTime, exactly10Characters: $exactly10Characters, minAndMaxString: $minAndMaxString, startsWithFoo: $startsWithFoo, endsWithBar: $endsWithBar, containsBaz: $containsBaz, minAndMaxInt: $minAndMaxInt, minAndMaxDouble: $minAndMaxDouble, minAndMaxNumber: $minAndMaxNumber, httpsLink: $httpsLink, luthorPath: $luthorPath, anotherSample: $anotherSample, foo: $foo, custom: $custom, numbers: $numbers, hello: $hello)';
+    return 'Sample(anyValue: $anyValue, boolValue: $boolValue, doubleValue: $doubleValue, intValue: $intValue, listValue: $listValue, numValue: $numValue, stringValue: $stringValue, email: $email, date: $date, dateTime: $dateTime, exactly10Characters: $exactly10Characters, minAndMaxString: $minAndMaxString, startsWithFoo: $startsWithFoo, endsWithBar: $endsWithBar, containsBaz: $containsBaz, minAndMaxInt: $minAndMaxInt, minAndMaxDouble: $minAndMaxDouble, minAndMaxNumber: $minAndMaxNumber, httpsLink: $httpsLink, aUrl: $aUrl, luthorPath: $luthorPath, anotherSample: $anotherSample, foo: $foo, custom: $custom, numbers: $numbers, hello: $hello)';
   }
 
   @override
@@ -612,6 +630,7 @@ class _$SampleImpl implements _Sample {
                 other.minAndMaxNumber == minAndMaxNumber) &&
             (identical(other.httpsLink, httpsLink) ||
                 other.httpsLink == httpsLink) &&
+            (identical(other.aUrl, aUrl) || other.aUrl == aUrl) &&
             (identical(other.luthorPath, luthorPath) ||
                 other.luthorPath == luthorPath) &&
             (identical(other.anotherSample, anotherSample) ||
@@ -645,6 +664,7 @@ class _$SampleImpl implements _Sample {
         minAndMaxDouble,
         minAndMaxNumber,
         httpsLink,
+        aUrl,
         luthorPath,
         anotherSample,
         foo,
@@ -692,6 +712,7 @@ abstract class _Sample implements Sample {
       required final double minAndMaxDouble,
       @HasMinNumber(2) @HasMaxNumber(3.0) required final num minAndMaxNumber,
       @IsUri(allowedSchemes: ['https']) final String? httpsLink,
+      @IsUrl() final String? aUrl,
       @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
       required final String luthorPath,
       required final AnotherSample anotherSample,
@@ -757,6 +778,9 @@ abstract class _Sample implements Sample {
   @override
   @IsUri(allowedSchemes: ['https'])
   String? get httpsLink;
+  @override
+  @IsUrl()
+  String? get aUrl;
   @override
   @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
   String get luthorPath;

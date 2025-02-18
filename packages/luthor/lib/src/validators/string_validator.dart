@@ -14,6 +14,7 @@ import 'package:luthor/src/validations/strings/string_regex_validation.dart';
 import 'package:luthor/src/validations/strings/string_starts_with_validation.dart';
 import 'package:luthor/src/validations/strings/string_uri_validation.dart';
 import 'package:luthor/src/validations/strings/string_uuid_validation.dart';
+import 'package:luthor/src/validations/strings/string_url_validation.dart';
 
 /// Validator for strings.
 class StringValidator extends Validator {
@@ -55,6 +56,14 @@ class StringValidator extends Validator {
   StringValidator uri({List<String>? allowedSchemes, String? message}) {
     validations.add(
       StringUriValidation(allowedSchemes: allowedSchemes, message: message),
+    );
+    return this;
+  }
+
+  /// Validates that the string is a valid URL (must have scheme and host).
+  StringValidator url({List<String>? allowedSchemes, String? message}) {
+    validations.add(
+      StringUrlValidation(allowedSchemes: allowedSchemes, message: message),
     );
     return this;
   }

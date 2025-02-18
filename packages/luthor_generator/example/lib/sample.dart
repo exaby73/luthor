@@ -37,6 +37,7 @@ class Sample with _$Sample {
     @HasMinDouble(2.0) @HasMaxDouble(4.0) required double minAndMaxDouble,
     @HasMinNumber(2) @HasMaxNumber(3.0) required num minAndMaxNumber,
     @IsUri(allowedSchemes: ['https']) String? httpsLink,
+    @IsUrl() String? aUrl,
     @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
     required String luthorPath,
     required AnotherSample anotherSample,

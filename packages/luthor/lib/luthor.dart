@@ -11,6 +11,7 @@ export 'src/annotations/validators/min.dart';
 export 'src/annotations/validators/regex.dart';
 export 'src/annotations/validators/starts_with.dart';
 export 'src/annotations/validators/uri.dart';
+export 'src/annotations/validators/url.dart';
 export 'src/l.dart';
 export 'src/types/ip.dart';
 export 'src/validation.dart';

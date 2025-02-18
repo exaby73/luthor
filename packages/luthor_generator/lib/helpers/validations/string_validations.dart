@@ -11,6 +11,7 @@ String getStringValidations(ParameterElement param) {
   _checkAndWriteMaxValidation(buffer, param);
   _checkAndWriteMinValidation(buffer, param);
   _checkAndWriteUriValidation(buffer, param);
+  _checkAndWriteUrlValidation(buffer, param);
   _checkAndWriteRegexValidation(buffer, param);
   _checkAndWriteStartsWithValidation(buffer, param);
   _checkAndWriteEndsWithValidation(buffer, param);
@@ -110,6 +111,33 @@ void _checkAndWriteUriValidation(
     if (allowedSchemas != null) {
       buffer.write('allowedSchemes: [');
       buffer.write(allowedSchemas.map((e) => "'$e'").join(', '));
+      buffer.write(']');
+      if (message != null) buffer.write(', ');
+    }
+
+    if (message != null) buffer.write("message: '$message'");
+    buffer.write(')');
+  }
+}
+
+void _checkAndWriteUrlValidation(
+  StringBuffer buffer,
+  ParameterElement param,
+) {
+  final urlAnnotation = getAnnotation(isUrlChecker, param);
+  if (urlAnnotation != null) {
+    buffer.write('.url(');
+
+    final allowedSchemes = urlAnnotation
+        .getField('allowedSchemes')
+        ?.toListValue()
+        ?.map((e) => e.toStringValue()!)
+        .toList();
+    final message = urlAnnotation.getField('message')?.toStringValue();
+
+    if (allowedSchemes != null) {
+      buffer.write('allowedSchemes: [');
+      buffer.write(allowedSchemes.map((e) => "'$e'").join(', '));
       buffer.write(']');
       if (message != null) buffer.write(', ');
     }

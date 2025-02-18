@@ -14,6 +14,7 @@ const hasLengthChecker = TypeChecker.fromRuntime(HasLength);
 const hasMaxChecker = TypeChecker.fromRuntime(HasMax);
 const hasMinChecker = TypeChecker.fromRuntime(HasMin);
 const isUriChecker = TypeChecker.fromRuntime(IsUri);
+const isUrlChecker = TypeChecker.fromRuntime(IsUrl);
 const matchRegexChecker = TypeChecker.fromRuntime(MatchRegex);
 const startsWithChecker = TypeChecker.fromRuntime(StartsWith);
 const endsWithChecker = TypeChecker.fromRuntime(EndsWith);

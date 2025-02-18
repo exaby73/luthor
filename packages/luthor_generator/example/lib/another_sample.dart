@@ -16,6 +16,7 @@ class AnotherSample with _$AnotherSample {
     @IsIp(version: IpVersion.v4) String? ip,
     @HasMin(8) required String password,
     @Default('user') String type,
+    @IsUrl(allowedSchemes: ['http', 'https']) String? url,
     required Sample sample,
     Sample? optionalSample,
   }) = _AnotherSample;

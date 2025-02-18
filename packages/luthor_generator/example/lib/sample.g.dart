@@ -27,6 +27,7 @@ _$SampleImpl _$$SampleImplFromJson(Map<String, dynamic> json) => _$SampleImpl(
       minAndMaxDouble: (json['minAndMaxDouble'] as num).toDouble(),
       minAndMaxNumber: json['minAndMaxNumber'] as num,
       httpsLink: json['httpsLink'] as String?,
+      aUrl: json['aUrl'] as String?,
       luthorPath: json['luthorPath'] as String,
       anotherSample:
           AnotherSample.fromJson(json['anotherSample'] as Map<String, dynamic>),
@@ -59,6 +60,7 @@ Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
       'minAndMaxDouble': instance.minAndMaxDouble,
       'minAndMaxNumber': instance.minAndMaxNumber,
       'httpsLink': instance.httpsLink,
+      'aUrl': instance.aUrl,
       'luthorPath': instance.luthorPath,
       'anotherSample': instance.anotherSample,
       'jsonKeyName': instance.foo,
@@ -91,6 +93,7 @@ Validator $SampleSchema = l.withName('Sample').schema({
   'minAndMaxDouble': l.double().max(4.0).min(2.0).required(),
   'minAndMaxNumber': l.number().max(3.0).min(2).required(),
   'httpsLink': l.string().uri(allowedSchemes: ['https']),
+  'aUrl': l.string().url(),
   'luthorPath':
       l.string().regex(r"^https:\/\/pub\.dev\/packages\/luthor").required(),
   'anotherSample': $AnotherSampleSchema.required(),

@@ -30,6 +30,8 @@ mixin _$AnotherSample {
   @HasMin(8)
   String get password => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
+  @IsUrl(allowedSchemes: ['http', 'https'])
+  String? get url => throw _privateConstructorUsedError;
   Sample get sample => throw _privateConstructorUsedError;
   Sample? get optionalSample => throw _privateConstructorUsedError;
 
@@ -56,6 +58,7 @@ abstract class $AnotherSampleCopyWith<$Res> {
       @IsIp(version: IpVersion.v4) String? ip,
       @HasMin(8) String password,
       String type,
+      @IsUrl(allowedSchemes: ['http', 'https']) String? url,
       Sample sample,
       Sample? optionalSample});
 
@@ -84,6 +87,7 @@ class _$AnotherSampleCopyWithImpl<$Res, $Val extends AnotherSample>
     Object? ip = freezed,
     Object? password = null,
     Object? type = null,
+    Object? url = freezed,
     Object? sample = null,
     Object? optionalSample = freezed,
   }) {
@@ -112,6 +116,10 @@ class _$AnotherSampleCopyWithImpl<$Res, $Val extends AnotherSample>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
+      url: freezed == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String?,
       sample: null == sample
           ? _value.sample
           : sample // ignore: cast_nullable_to_non_nullable
@@ -163,6 +171,7 @@ abstract class _$$AnotherSampleImplCopyWith<$Res>
       @IsIp(version: IpVersion.v4) String? ip,
       @HasMin(8) String password,
       String type,
+      @IsUrl(allowedSchemes: ['http', 'https']) String? url,
       Sample sample,
       Sample? optionalSample});
 
@@ -191,6 +200,7 @@ class __$$AnotherSampleImplCopyWithImpl<$Res>
     Object? ip = freezed,
     Object? password = null,
     Object? type = null,
+    Object? url = freezed,
     Object? sample = null,
     Object? optionalSample = freezed,
   }) {
@@ -219,6 +229,10 @@ class __$$AnotherSampleImplCopyWithImpl<$Res>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
+      url: freezed == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String?,
       sample: null == sample
           ? _value.sample
           : sample // ignore: cast_nullable_to_non_nullable
@@ -241,6 +255,7 @@ class _$AnotherSampleImpl implements _AnotherSample {
       @IsIp(version: IpVersion.v4) this.ip,
       @HasMin(8) required this.password,
       this.type = 'user',
+      @IsUrl(allowedSchemes: ['http', 'https']) this.url,
       required this.sample,
       this.optionalSample});
 
@@ -265,13 +280,16 @@ class _$AnotherSampleImpl implements _AnotherSample {
   @JsonKey()
   final String type;
   @override
+  @IsUrl(allowedSchemes: ['http', 'https'])
+  final String? url;
+  @override
   final Sample sample;
   @override
   final Sample? optionalSample;
 
   @override
   String toString() {
-    return 'AnotherSample(id: $id, name: $name, email: $email, ip: $ip, password: $password, type: $type, sample: $sample, optionalSample: $optionalSample)';
+    return 'AnotherSample(id: $id, name: $name, email: $email, ip: $ip, password: $password, type: $type, url: $url, sample: $sample, optionalSample: $optionalSample)';
   }
 
   @override
@@ -286,6 +304,7 @@ class _$AnotherSampleImpl implements _AnotherSample {
             (identical(other.password, password) ||
                 other.password == password) &&
             (identical(other.type, type) || other.type == type) &&
+            (identical(other.url, url) || other.url == url) &&
             (identical(other.sample, sample) || other.sample == sample) &&
             (identical(other.optionalSample, optionalSample) ||
                 other.optionalSample == optionalSample));
@@ -293,8 +312,8 @@ class _$AnotherSampleImpl implements _AnotherSample {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, name, email, ip, password, type, sample, optionalSample);
+  int get hashCode => Object.hash(runtimeType, id, name, email, ip, password,
+      type, url, sample, optionalSample);
 
   /// Create a copy of AnotherSample
   /// with the given fields replaced by the non-null parameter values.
@@ -320,6 +339,7 @@ abstract class _AnotherSample implements AnotherSample {
       @IsIp(version: IpVersion.v4) final String? ip,
       @HasMin(8) required final String password,
       final String type,
+      @IsUrl(allowedSchemes: ['http', 'https']) final String? url,
       required final Sample sample,
       final Sample? optionalSample}) = _$AnotherSampleImpl;
 
@@ -342,6 +362,9 @@ abstract class _AnotherSample implements AnotherSample {
   String get password;
   @override
   String get type;
+  @override
+  @IsUrl(allowedSchemes: ['http', 'https'])
+  String? get url;
   @override
   Sample get sample;
   @override

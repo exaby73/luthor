@@ -1,3 +1,7 @@
+## 0.6.4
+
+ - **FEAT**: Add URL validator support ([#103](https://github.com/exaby73/luthor/issues/103)).
+
 ## 0.6.3
 
  - **FIX**: Nullable ? in generated code.

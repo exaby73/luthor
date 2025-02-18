@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-02-18
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`luthor` - `v0.5.3`](#luthor---v053)
+ - [`luthor_generator` - `v0.6.4`](#luthor_generator---v064)
+
+---
+
+#### `luthor` - `v0.5.3`
+
+ - **FEAT**: Add URL validator support ([#103](https://github.com/exaby73/luthor/issues/103)).
+
+#### `luthor_generator` - `v0.6.4`
+
+ - **FEAT**: Add URL validator support ([#103](https://github.com/exaby73/luthor/issues/103)).
+
+
 ## 2025-01-05
 
 ### Changes

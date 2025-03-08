@@ -14,7 +14,7 @@ bool customValidatorFn(Object? value) {
 
 @luthor
 @freezed
-class Sample with _$Sample {
+abstract class Sample with _$Sample {
   const factory Sample({
     dynamic anyValue,
     required bool boolValue,

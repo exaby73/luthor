@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-03-08
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`luthor` - `v0.6.0`](#luthor---v060)
+ - [`luthor_generator` - `v0.7.0`](#luthor_generator---v070)
+
+Packages with other changes:
+
+ - There are no other changes in this release.
+
+---
+
+#### `luthor` - `v0.6.0`
+
+ - **BREAKING** **FEAT**(luthor_generator): Add support for Freezed 3.0 ([#106](https://github.com/exaby73/luthor/issues/106)).
+
+#### `luthor_generator` - `v0.7.0`
+
+ - **BREAKING** **FEAT**(luthor_generator): Add support for Freezed 3.0 ([#106](https://github.com/exaby73/luthor/issues/106)).
+
+
 ## 2025-02-18
 
 ### Changes

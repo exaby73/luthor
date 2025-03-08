@@ -1,3 +1,9 @@
+## 0.7.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FEAT**(luthor_generator): Add support for Freezed 3.0 ([#106](https://github.com/exaby73/luthor/issues/106)).
+
 ## 0.6.4
 
  - **FEAT**: Add URL validator support ([#103](https://github.com/exaby73/luthor/issues/103)).

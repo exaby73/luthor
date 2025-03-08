@@ -8,7 +8,7 @@ part 'another_sample.g.dart';
 
 @luthor
 @freezed
-class AnotherSample with _$AnotherSample {
+abstract class AnotherSample with _$AnotherSample {
   const factory AnotherSample({
     required int id,
     @JsonKey(name: 'full_name') String? name,

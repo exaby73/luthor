@@ -8,14 +8,14 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  analyzer: ^6.3.0
+  analyzer: ^7.0.0
   build: ^2.4.2
   collection: ^1.18.0
   dart_mappable: ^4.3.0
-  freezed_annotation: ^2.4.3
+  freezed_annotation: ^3.0.0
   json_annotation: ^4.8.1
   luthor: ^0.5.3
-  source_gen: ^1.5.0
+  source_gen: ^2.0.0
 
 dev_dependencies:
   lint: ^2.3.0

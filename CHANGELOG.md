@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-04-28
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`luthor` - `v0.7.0`](#luthor---v070)
+ - [`luthor_generator` - `v0.8.0`](#luthor_generator---v080)
+
+Packages with other changes:
+
+ - There are no other changes in this release.
+
+---
+
+#### `luthor` - `v0.6.1`
+
+ - **FIX**: failedMessage not set is value is not a Map for SchemaValidation ([#108](https://github.com/exaby73/luthor/issues/108)).
+
+#### `luthor_generator` - `v0.7.1`
+
+- **FIX**: failedMessage not set is value is not a Map for SchemaValidation ([#108](https://github.com/exaby73/luthor/issues/108)).
+
+
 ## 2025-03-08
 
 ### Changes

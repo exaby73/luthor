@@ -1,3 +1,9 @@
+## 0.6.1
+
+> Note: This release has breaking changes.
+
+ - **FIX**: failedMessage not set is value is not a Map for SchemaValidation ([#108](https://github.com/exaby73/luthor/issues/108)).
+
 ## 0.6.0
 
 > Note: This release has breaking changes.

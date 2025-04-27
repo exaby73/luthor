@@ -1,5 +1,4 @@
 import 'package:luthor/luthor.dart';
-import 'package:luthor/src/validation.dart';
 
 class SchemaValidation extends Validation {
   Map<String, dynamic>? failedMessage;
@@ -13,7 +12,11 @@ class SchemaValidation extends Validation {
     failedMessage = null;
 
     if (value == null) return true;
-    if (value is! Map) return false;
+    if (value is! Map) {
+      failedMessage ??= {};
+      failedMessage![fieldName ?? '[DEFAULT]'] = ['value must be a map'];
+      return false;
+    }
 
     for (final entry in validatorSchema.entries) {
       final name = entry.key;

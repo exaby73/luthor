@@ -1,3 +1,7 @@
+## 0.7.2
+
+- **FIX**: Add support for nullable types and custom types in list validations. Lists can now contain nullable primitives (e.g., `List<String?>`) and custom objects with `@luthor` annotations (e.g., `List<MyClass>`).
+
 ## 0.7.1
 
 > Note: This release has breaking changes.

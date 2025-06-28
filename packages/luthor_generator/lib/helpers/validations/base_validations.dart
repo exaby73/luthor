@@ -97,31 +97,89 @@ DartObject? getAnnotation(TypeChecker checker, Element field) {
 
 void _writeListValidations(StringBuffer buffer, ParameterElement param) {
   buffer.write('l.list(validators: [');
-  final listType = param.type
-      .getDisplayString()
-      .replaceFirst('List<', '')
-      .replaceFirst('>', '');
-
-  const types = ['dynamic', 'bool', 'double', 'Null', 'int', 'num', 'String'];
-
-  if (!types.contains(listType)) {
-    throw UnsupportedTypeError('List<$listType> is not supported.');
+  
+  // Use proper analyzer API to extract list element type
+  if (param.type is ParameterizedType) {
+    final parameterizedType = param.type as ParameterizedType;
+    final typeArgs = parameterizedType.typeArguments;
+    
+    if (typeArgs.isNotEmpty) {
+      final elementType = typeArgs.first;
+      
+      // Create a mock ParameterElement for the list element type
+      // to reuse getValidations logic
+      final elementValidation = _getValidationForType(elementType);
+      buffer.write(elementValidation);
+    } else {
+      // Fallback for List without type argument (raw List)
+      buffer.write('l.any()');
+    }
+  } else {
+    // Fallback for non-parameterized types
+    buffer.write('l.any()');
   }
+  
+  buffer.write('])');
+}
 
-  if (listType == 'dynamic') {
-    buffer.write('l.any()])');
-    return;
+String _getValidationForType(DartType type) {
+  final buffer = StringBuffer();
+  
+  final isNullable = type.nullabilitySuffix == NullabilitySuffix.question;
+  
+  if (type is DynamicType) {
+    buffer.write('l.any()');
+  } else if (type.isDartCoreBool) {
+    buffer.write('l.boolean()');
+  } else if (type.isDartCoreDouble) {
+    buffer.write('l.double()');
+  } else if (type.isDartCoreInt) {
+    buffer.write('l.int()');
+  } else if (type.isDartCoreList) {
+    // Handle nested lists
+    if (type is ParameterizedType) {
+      final nestedTypeArgs = type.typeArguments;
+      if (nestedTypeArgs.isNotEmpty) {
+        final nestedElementType = nestedTypeArgs.first;
+        final nestedValidation = _getValidationForType(nestedElementType);
+        buffer.write('l.list(validators: [$nestedValidation])');
+      } else {
+        buffer.write('l.list(validators: [l.any()])');
+      }
+    } else {
+      buffer.write('l.list(validators: [l.any()])');
+    }
+  } else if (type.isDartCoreMap) {
+    buffer.write('l.map()');
+  } else if (type.isDartCoreNull) {
+    buffer.write('l.nullValue()');
+  } else if (type.isDartCoreNum) {
+    buffer.write('l.number()');
+  } else if (type.isDartCoreString || type.getDisplayString() == 'DateTime') {
+    buffer.write('l.string()');
+  } else {
+    // Handle custom types with @luthor annotation
+    final element = type.element;
+    if (element != null) {
+      final hasLuthorAnnotation = getAnnotation(luthorChecker, element) != null;
+      if (hasLuthorAnnotation) {
+        buffer.write('\$${type.getDisplayString().replaceFirst('?', '')}Schema');
+      } else {
+        throw UnsupportedTypeError(
+          'Type ${type.getDisplayString()} does not have @luthor annotation.',
+        );
+      }
+    } else {
+      throw UnsupportedTypeError(
+        'Cannot determine type of ${type.getDisplayString()}',
+      );
+    }
   }
-
-  if (listType == 'num') {
-    buffer.write('l.number()])');
-    return;
+  
+  // Add required() if not nullable and not dynamic
+  if (type is! DynamicType && !isNullable) {
+    buffer.write('.required()');
   }
-
-  if (listType == 'Null') {
-    buffer.write('l.nullValue()])');
-    return;
-  }
-
-  buffer.write('l.${listType.toLowerCase()}()])');
+  
+  return buffer.toString();
 }

@@ -62,8 +62,9 @@ mixin WithDartMappableMappable {
   }
 
   WithDartMappableCopyWith<WithDartMappable, WithDartMappable, WithDartMappable>
-      get copyWith => _WithDartMappableCopyWithImpl(
-          this as WithDartMappable, $identity, $identity);
+      get copyWith =>
+          _WithDartMappableCopyWithImpl<WithDartMappable, WithDartMappable>(
+              this as WithDartMappable, $identity, $identity);
   @override
   String toString() {
     return WithDartMappableMapper.ensureInitialized()
@@ -86,8 +87,8 @@ mixin WithDartMappableMappable {
 extension WithDartMappableValueCopy<$R, $Out>
     on ObjectCopyWith<$R, WithDartMappable, $Out> {
   WithDartMappableCopyWith<$R, WithDartMappable, $Out>
-      get $asWithDartMappable =>
-          $base.as((v, t, t2) => _WithDartMappableCopyWithImpl(v, t, t2));
+      get $asWithDartMappable => $base
+          .as((v, t, t2) => _WithDartMappableCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class WithDartMappableCopyWith<$R, $In extends WithDartMappable, $Out>
@@ -118,5 +119,5 @@ class _WithDartMappableCopyWithImpl<$R, $Out>
   @override
   WithDartMappableCopyWith<$R2, WithDartMappable, $Out2> $chain<$R2, $Out2>(
           Then<$Out2, $R2> t) =>
-      _WithDartMappableCopyWithImpl($value, $cast, t);
+      _WithDartMappableCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }

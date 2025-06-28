@@ -11,6 +11,21 @@ import 'package:luthor_generator/helpers/validations/number_validations.dart';
 import 'package:luthor_generator/helpers/validations/string_validations.dart';
 import 'package:source_gen/source_gen.dart';
 
+// Global context for tracking discovered classes during generation
+class GenerationContext {
+  const GenerationContext._();
+
+  static final Set<ClassElement> discoveredClasses = {};
+
+  static void reset() {
+    discoveredClasses.clear();
+  }
+
+  static void addDiscoveredClass(ClassElement element) {
+    discoveredClasses.add(element);
+  }
+}
+
 String getValidations(ParameterElement param) {
   final buffer = StringBuffer();
 
@@ -80,32 +95,69 @@ void _checkAndAddCustomSchema(StringBuffer buffer, ParameterElement param) {
   }
 
   final hasLuthorAnnotation = getAnnotation(luthorChecker, element) != null;
-  if (!hasLuthorAnnotation) {
+
+  if (hasLuthorAnnotation) {
+    // Class has @luthor annotation, use existing logic
+    buffer.write(
+      '\$${param.type.getDisplayString().replaceFirst('?', '')}Schema',
+    );
+  } else if (element is ClassElement &&
+      isCompatibleForAutoGeneration(element)) {
+    // Class is compatible for auto-generation, add to discovered classes
+    GenerationContext.addDiscoveredClass(element);
+    buffer.write(
+      '\$${param.type.getDisplayString().replaceFirst('?', '')}Schema',
+    );
+  } else {
     throw UnsupportedTypeError(
-      'Type ${param.type.getDisplayString()} '
-      'does not have @luthor annotation.',
+      'Type ${param.type.getDisplayString()} does not have @luthor annotation and is not compatible for auto-generation. '
+      'To make it compatible, ensure it has:\n'
+      '1. A constructor with named parameters\n'
+      '2. A fromJson factory constructor OR @MappableClass annotation',
     );
   }
-  buffer.write(
-    '\$${param.type.getDisplayString().replaceFirst('?', '')}Schema',
-  );
 }
 
 DartObject? getAnnotation(TypeChecker checker, Element field) {
   return checker.firstAnnotationOf(field);
 }
 
+/// Checks if a class is compatible for auto-generation
+bool isCompatibleForAutoGeneration(ClassElement element) {
+  // Must have at least one constructor
+  if (element.constructors.isEmpty) {
+    return false;
+  }
+
+  // Check if has fromJson factory constructor OR is dart_mappable
+  final hasFromJson = element.constructors.any(
+    (ctor) => ctor.isFactory && ctor.name == 'fromJson',
+  );
+  final isDartMappable = getAnnotation(dartMappableChecker, element) != null;
+
+  if (!hasFromJson && !isDartMappable) {
+    return false;
+  }
+
+  // Check if has constructor with named parameters
+  final hasNamedParameters = element.constructors.any(
+    (ctor) => ctor.parameters.any((p) => p.isNamed),
+  );
+
+  return hasNamedParameters;
+}
+
 void _writeListValidations(StringBuffer buffer, ParameterElement param) {
   buffer.write('l.list(validators: [');
-  
+
   // Use proper analyzer API to extract list element type
   if (param.type is ParameterizedType) {
     final parameterizedType = param.type as ParameterizedType;
     final typeArgs = parameterizedType.typeArguments;
-    
+
     if (typeArgs.isNotEmpty) {
       final elementType = typeArgs.first;
-      
+
       // Create a mock ParameterElement for the list element type
       // to reuse getValidations logic
       final elementValidation = _getValidationForType(elementType);
@@ -118,15 +170,15 @@ void _writeListValidations(StringBuffer buffer, ParameterElement param) {
     // Fallback for non-parameterized types
     buffer.write('l.any()');
   }
-  
+
   buffer.write('])');
 }
 
 String _getValidationForType(DartType type) {
   final buffer = StringBuffer();
-  
+
   final isNullable = type.nullabilitySuffix == NullabilitySuffix.question;
-  
+
   if (type is DynamicType) {
     buffer.write('l.any()');
   } else if (type.isDartCoreBool) {
@@ -158,15 +210,26 @@ String _getValidationForType(DartType type) {
   } else if (type.isDartCoreString || type.getDisplayString() == 'DateTime') {
     buffer.write('l.string()');
   } else {
-    // Handle custom types with @luthor annotation
+    // Handle custom types with @luthor annotation or auto-generation
     final element = type.element;
     if (element != null) {
       final hasLuthorAnnotation = getAnnotation(luthorChecker, element) != null;
+
       if (hasLuthorAnnotation) {
-        buffer.write('\$${type.getDisplayString().replaceFirst('?', '')}Schema');
+        buffer
+            .write('\$${type.getDisplayString().replaceFirst('?', '')}Schema');
+      } else if (element is ClassElement &&
+          isCompatibleForAutoGeneration(element)) {
+        // Class is compatible for auto-generation, add to discovered classes
+        GenerationContext.addDiscoveredClass(element);
+        buffer
+            .write('\$${type.getDisplayString().replaceFirst('?', '')}Schema');
       } else {
         throw UnsupportedTypeError(
-          'Type ${type.getDisplayString()} does not have @luthor annotation.',
+          'Type ${type.getDisplayString()} does not have @luthor annotation and is not compatible for auto-generation. '
+          'To make it compatible, ensure it has:\n'
+          '1. A constructor with named parameters\n'
+          '2. A fromJson factory constructor OR @MappableClass annotation',
         );
       }
     } else {
@@ -175,11 +238,11 @@ String _getValidationForType(DartType type) {
       );
     }
   }
-  
+
   // Add required() if not nullable and not dynamic
   if (type is! DynamicType && !isNullable) {
     buffer.write('.required()');
   }
-  
+
   return buffer.toString();
 }

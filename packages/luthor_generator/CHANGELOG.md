@@ -1,3 +1,7 @@
+## 0.8.0
+
+- **FEAT**: Add auto-generation support for classes without @luthor annotation. Compatible classes (with fromJson constructor or @MappableClass annotation and named parameters) are now automatically discovered and schemas are generated for them when referenced in @luthor classes.
+
 ## 0.7.2
 
 - **FIX**: Add support for nullable types and custom types in list validations. Lists can now contain nullable primitives (e.g., `List<String?>`) and custom objects with `@luthor` annotations (e.g., `List<MyClass>`).

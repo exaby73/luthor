@@ -8,3 +8,6 @@ pubspec.lock
 .fvmrc
 
 .nvim.lua
+.asdf
+.claude
+CLAUDE.md

@@ -77,7 +77,7 @@ Validator $SampleSchema = l.withName('Sample').schema({
   'boolValue': l.boolean().required(),
   'doubleValue': l.double().required(),
   'intValue': l.int().required(),
-  'listValue': l.list(validators: [l.string()]).required(),
+  'listValue': l.list(validators: [l.string().required()]).required(),
   'numValue': l.number().required(),
   'stringValue': l.string().required(),
   'email': l.string().email().required(),
@@ -98,7 +98,7 @@ Validator $SampleSchema = l.withName('Sample').schema({
   'anotherSample': $AnotherSampleSchema.required(),
   'jsonKeyName': l.string().required(),
   'custom': l.string().custom(customValidatorFn).required(),
-  'numbers': l.list(validators: [l.int()]).required(),
+  'numbers': l.list(validators: [l.int().required()]).required(),
   'hello': l.string(),
 });
 

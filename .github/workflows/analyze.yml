@@ -13,4 +13,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: dart-lang/setup-dart@v1
       - run: dart pub global activate dpk
+      - name: Generate code in example
+        run: (cd packages/luthor_generator/example && dart pub get && dart run build_runner build -d)
       - run: dpk run analyze

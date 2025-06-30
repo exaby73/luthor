@@ -1,5 +1,4 @@
 import 'package:luthor/luthor.dart';
-import 'package:luthor/src/validation.dart';
 
 class StringIpValidation extends Validation {
   StringIpValidation({this.version, required this.customMessage});

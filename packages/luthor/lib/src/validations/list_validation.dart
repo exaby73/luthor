@@ -1,5 +1,4 @@
 import 'package:luthor/luthor.dart';
-import 'package:luthor/src/validation.dart';
 
 class ListValidation extends Validation {
   final List<Validator>? validators;

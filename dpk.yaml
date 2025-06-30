@@ -4,6 +4,11 @@ scripts:
     runInPackages:
       - packages/*
 
+  fix:
+    command: dart fix --apply
+    runInPackages:
+      - packages/*
+
   format:
     command: dart format --set-exit-if-changed .
     runInPackages:

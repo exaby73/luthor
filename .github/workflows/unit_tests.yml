@@ -13,4 +13,5 @@ jobs:
       - uses: actions/checkout@v2
       - uses: dart-lang/setup-dart@v1
       - run: dart pub global activate dpk
+      - run: dpk get
       - run: dpk run test

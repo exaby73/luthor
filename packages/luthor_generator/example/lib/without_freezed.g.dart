@@ -12,9 +12,11 @@ Validator $WithoutFreezedSchema = l.withName('WithoutFreezed').schema({
 });
 
 SchemaValidationResult<WithoutFreezed> $WithoutFreezedValidate(
-        Map<String, dynamic> json) =>
-    $WithoutFreezedSchema.validateSchema(json,
-        fromJson: WithoutFreezed.fromJson);
+  Map<String, dynamic> json,
+) => $WithoutFreezedSchema.validateSchema(
+  json,
+  fromJson: WithoutFreezed.fromJson,
+);
 
 extension WithoutFreezedValidationExtension on WithoutFreezed {
   SchemaValidationResult<WithoutFreezed> validateSelf() =>
@@ -27,9 +29,11 @@ Validator $WithDartMappableSchema = l.withName('WithDartMappable').schema({
 });
 
 SchemaValidationResult<WithDartMappable> $WithDartMappableValidate(
-        Map<String, dynamic> json) =>
-    $WithDartMappableSchema.validateSchema(json,
-        fromJson: WithDartMappableMapper.fromMap);
+  Map<String, dynamic> json,
+) => $WithDartMappableSchema.validateSchema(
+  json,
+  fromJson: WithDartMappableMapper.fromMap,
+);
 
 extension WithDartMappableValidationExtension on WithDartMappable {
   SchemaValidationResult<WithDartMappable> validateSelf() =>

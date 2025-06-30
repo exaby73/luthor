@@ -1,6 +1,6 @@
-import 'package:example/another_sample.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:luthor/luthor.dart';
+import 'package:luthor_generator_example/another_sample.dart';
 
 part 'list_validation_test.freezed.dart';
 part 'list_validation_test.g.dart';

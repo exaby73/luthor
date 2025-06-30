@@ -1,14 +1,14 @@
-name: example
+name: luthor_example
 description: An example package for luthor
 version: 1.0.0
 publish_to: none
+resolution: workspace
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
   luthor:
-    path: ..
 
 dev_dependencies:
-  lints: ^2.0.0
+  lints: ^4.0.0

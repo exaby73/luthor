@@ -18,9 +18,11 @@ _ListValidationTest _$ListValidationTestFromJson(Map<String, dynamic> json) =>
           .map((e) => AnotherSample.fromJson(e as Map<String, dynamic>))
           .toList(),
       nullableCustomObjects: (json['nullableCustomObjects'] as List<dynamic>)
-          .map((e) => e == null
-              ? null
-              : AnotherSample.fromJson(e as Map<String, dynamic>))
+          .map(
+            (e) => e == null
+                ? null
+                : AnotherSample.fromJson(e as Map<String, dynamic>),
+          )
           .toList(),
       optionalNullableStrings:
           (json['optionalNullableStrings'] as List<dynamic>?)
@@ -44,17 +46,21 @@ Map<String, dynamic> _$ListValidationTestToJson(_ListValidationTest instance) =>
 Validator $ListValidationTestSchema = l.withName('ListValidationTest').schema({
   'nullableStrings': l.list(validators: [l.string()]).required(),
   'nullableInts': l.list(validators: [l.int()]).required(),
-  'customObjects':
-      l.list(validators: [$AnotherSampleSchema.required()]).required(),
-  'nullableCustomObjects':
-      l.list(validators: [$AnotherSampleSchema]).required(),
+  'customObjects': l
+      .list(validators: [$AnotherSampleSchema.required()])
+      .required(),
+  'nullableCustomObjects': l
+      .list(validators: [$AnotherSampleSchema])
+      .required(),
   'optionalNullableStrings': l.list(validators: [l.string()]),
 });
 
 SchemaValidationResult<ListValidationTest> $ListValidationTestValidate(
-        Map<String, dynamic> json) =>
-    $ListValidationTestSchema.validateSchema(json,
-        fromJson: ListValidationTest.fromJson);
+  Map<String, dynamic> json,
+) => $ListValidationTestSchema.validateSchema(
+  json,
+  fromJson: ListValidationTest.fromJson,
+);
 
 extension ListValidationTestValidationExtension on ListValidationTest {
   SchemaValidationResult<ListValidationTest> validateSelf() =>

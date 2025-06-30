@@ -38,17 +38,10 @@ abstract class UserProfile with _$UserProfile {
 void main() {
   final json = {
     'id': 1,
-    'user': {
-      'name': 'John Doe',
-      'email': 'john@example.com',
-      'age': 30,
-    },
+    'user': {'name': 'John Doe', 'email': 'john@example.com', 'age': 30},
     // 'user2': null, // Test omitting nullable field
     'friends': [
-      {
-        'name': 'Jane Smith',
-        'email': 'jane@example.com',
-      }
+      {'name': 'Jane Smith', 'email': 'jane@example.com'},
     ],
     'tags': ['developer', 'flutter'],
     'createdAt': '2021-01-01T00:00:00Z',

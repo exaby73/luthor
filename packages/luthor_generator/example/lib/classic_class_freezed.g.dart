@@ -13,26 +13,23 @@ ClassicClassFreezed _$ClassicClassFreezedFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$ClassicClassFreezedToJson(
-        ClassicClassFreezed instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'age': instance.age,
-    };
+  ClassicClassFreezed instance,
+) => <String, dynamic>{'name': instance.name, 'age': instance.age};
 
 // **************************************************************************
 // LuthorGenerator
 // **************************************************************************
 
-Validator $ClassicClassFreezedSchema =
-    l.withName('ClassicClassFreezed').schema({
-  'name': l.string().min(3).required(),
-  'age': l.int().required(),
-});
+Validator $ClassicClassFreezedSchema = l.withName('ClassicClassFreezed').schema(
+  {'name': l.string().min(3).required(), 'age': l.int().required()},
+);
 
 SchemaValidationResult<ClassicClassFreezed> $ClassicClassFreezedValidate(
-        Map<String, dynamic> json) =>
-    $ClassicClassFreezedSchema.validateSchema(json,
-        fromJson: ClassicClassFreezed.fromJson);
+  Map<String, dynamic> json,
+) => $ClassicClassFreezedSchema.validateSchema(
+  json,
+  fromJson: ClassicClassFreezed.fromJson,
+);
 
 extension ClassicClassFreezedValidationExtension on ClassicClassFreezed {
   SchemaValidationResult<ClassicClassFreezed> validateSelf() =>

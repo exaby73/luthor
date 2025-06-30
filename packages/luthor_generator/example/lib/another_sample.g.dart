@@ -51,7 +51,8 @@ Validator $AnotherSampleSchema = l.withName('AnotherSample').schema({
 });
 
 SchemaValidationResult<AnotherSample> $AnotherSampleValidate(
-        Map<String, dynamic> json) =>
+  Map<String, dynamic> json,
+) =>
     $AnotherSampleSchema.validateSchema(json, fromJson: AnotherSample.fromJson);
 
 extension AnotherSampleValidationExtension on AnotherSample {

@@ -15,5 +15,5 @@ jobs:
       - run: dart pub global activate dpk
       - run: dpk get
       - name: Generate code in example
-        run: (cd packages/luthor_generator/example && dart pub get && dart run build_runner build -d)
+        run: (cd packages/luthor_generator/example && dart run build_runner build -d)
       - run: dpk run analyze

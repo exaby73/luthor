@@ -1,6 +1,6 @@
 // ignore_for_file: invalid_annotation_target
 
-import 'package:example/another_sample.dart';
+import 'package:luthor_generator_example/another_sample.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:luthor/luthor.dart';
 

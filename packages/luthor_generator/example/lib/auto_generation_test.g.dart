@@ -21,20 +21,20 @@ Map<String, dynamic> _$ExternalUserToJson(_ExternalUser instance) =>
     };
 
 _UserProfile _$UserProfileFromJson(Map<String, dynamic> json) => _UserProfile(
-      id: (json['id'] as num).toInt(),
-      user: ExternalUser.fromJson(json['user'] as Map<String, dynamic>),
-      user2: json['user2'] == null
-          ? null
-          : ExternalUser.fromJson(json['user2'] as Map<String, dynamic>),
-      friends: (json['friends'] as List<dynamic>?)
-          ?.map((e) => ExternalUser.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] == null
-          ? null
-          : DateTime.parse(json['updatedAt'] as String),
-    );
+  id: (json['id'] as num).toInt(),
+  user: ExternalUser.fromJson(json['user'] as Map<String, dynamic>),
+  user2: json['user2'] == null
+      ? null
+      : ExternalUser.fromJson(json['user2'] as Map<String, dynamic>),
+  friends: (json['friends'] as List<dynamic>?)
+      ?.map((e) => ExternalUser.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
+  createdAt: DateTime.parse(json['createdAt'] as String),
+  updatedAt: json['updatedAt'] == null
+      ? null
+      : DateTime.parse(json['updatedAt'] as String),
+);
 
 Map<String, dynamic> _$UserProfileToJson(_UserProfile instance) =>
     <String, dynamic>{
@@ -62,8 +62,8 @@ Validator $UserProfileSchema = l.withName('UserProfile').schema({
 });
 
 SchemaValidationResult<UserProfile> $UserProfileValidate(
-        Map<String, dynamic> json) =>
-    $UserProfileSchema.validateSchema(json, fromJson: UserProfile.fromJson);
+  Map<String, dynamic> json,
+) => $UserProfileSchema.validateSchema(json, fromJson: UserProfile.fromJson);
 
 extension UserProfileValidationExtension on UserProfile {
   SchemaValidationResult<UserProfile> validateSelf() =>
@@ -78,8 +78,8 @@ Validator $ExternalUserSchema = l.withName('ExternalUser').schema({
 });
 
 SchemaValidationResult<ExternalUser> $ExternalUserValidate(
-        Map<String, dynamic> json) =>
-    $ExternalUserSchema.validateSchema(json, fromJson: ExternalUser.fromJson);
+  Map<String, dynamic> json,
+) => $ExternalUserSchema.validateSchema(json, fromJson: ExternalUser.fromJson);
 
 extension ExternalUserValidationExtension on ExternalUser {
   SchemaValidationResult<ExternalUser> validateSelf() =>

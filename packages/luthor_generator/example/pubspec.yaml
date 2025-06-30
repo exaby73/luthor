@@ -1,20 +1,17 @@
-name: example
+name: luthor_generator_example
 description: A sample command-line application.
 version: 1.0.0
 publish_to: none
+resolution: workspace
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
   dart_mappable: ^4.3.0
   freezed_annotation: ^3.0.0
   json_annotation: ^4.9.0
   luthor: any
-
-dependency_overrides:
-  luthor:
-    path: ../../luthor
 
 dev_dependencies:
   luthor_generator:

@@ -13,3 +13,18 @@ scripts:
     command: dart test
     runInPackages:
       - packages/luthor
+
+  publish:luthor:
+    command: dart pub publish -f
+    runInPackages:
+      - packages/luthor
+
+  publish:luthor_generator:
+    command: dart pub publish -f
+    runInPackages:
+      - packages/luthor_generator
+
+  publish:all:
+    command: dart pub publish -f
+    runInPackages:
+      - packages/*

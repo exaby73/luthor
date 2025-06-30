@@ -6,10 +6,8 @@ class CustomValidation extends Validation {
   String? customMessage;
   final CustomValidator customValidator;
 
-  CustomValidation(
-    this.customValidator, {
-    String? message,
-  }) : customMessage = message;
+  CustomValidation(this.customValidator, {String? message})
+    : customMessage = message;
 
   @override
   bool call(String? fieldName, Object? value) {

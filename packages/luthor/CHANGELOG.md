@@ -1,3 +1,8 @@
+## 0.9.0
+
+- **BREAKING**: Validators are now immutable - chaining methods like `.required()` returns new instances instead of mutating the original validator. This fixes issues where reusing validators would have unexpected side effects.
+- **FIX**: Fix schema validation to properly skip validation for missing optional fields.
+
 ## 0.6.1
 
 > Note: This release has breaking changes.

@@ -4,10 +4,8 @@ class StringRegexValidation extends Validation {
   final String pattern;
   String? customMessage;
 
-  StringRegexValidation(
-    this.pattern, {
-    String? message,
-  }) : customMessage = message;
+  StringRegexValidation(this.pattern, {String? message})
+    : customMessage = message;
 
   @override
   bool call(String? fieldName, Object? value) {

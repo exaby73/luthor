@@ -17,8 +17,10 @@ void main() {
 
   group('validateWithFieldName', () {
     test('should have the fieldName in the error message', () {
-      final result =
-          l.required().string().validateValueWithFieldName('name', null);
+      final result = l.required().string().validateValueWithFieldName(
+        'name',
+        null,
+      );
 
       switch (result) {
         case SingleValidationSuccess(data: _):

@@ -14,8 +14,10 @@ void _checkAndWriteCustomValidation(
   if (customAnnotation != null) {
     buffer.write('.custom(');
     final message = customAnnotation.getField('message')?.toStringValue();
-    final customFuntion =
-        customAnnotation.getField('customValidator')!.toFunctionValue()!.name;
+    final customFuntion = customAnnotation
+        .getField('customValidator')!
+        .toFunctionValue()!
+        .name;
 
     buffer.write(customFuntion);
     if (message != null) buffer.write(", message: '$message'");

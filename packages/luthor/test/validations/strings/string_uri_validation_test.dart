@@ -13,35 +13,38 @@ void main() {
     }
   });
 
-  test('should return true when value is a valid uri and matches the scheme',
-      () {
-    final result = l
-        .string()
-        .uri(allowedSchemes: ['https']).validateValue('https://dart.dev');
+  test(
+    'should return true when value is a valid uri and matches the scheme',
+    () {
+      final result = l
+          .string()
+          .uri(allowedSchemes: ['https'])
+          .validateValue('https://dart.dev');
 
-    switch (result) {
-      case SingleValidationSuccess(data: _):
-        expect(result.data, 'https://dart.dev');
-      case SingleValidationError(data: _, errors: _):
-        fail('should not have errors');
-    }
-  });
+      switch (result) {
+        case SingleValidationSuccess(data: _):
+          expect(result.data, 'https://dart.dev');
+        case SingleValidationError(data: _, errors: _):
+          fail('should not have errors');
+      }
+    },
+  );
 
   test(
     'should return false when value is a valid uri but does not match the scheme',
     () {
       final result = l
           .string()
-          .uri(allowedSchemes: ['https']).validateValue('http://dart.dev');
+          .uri(allowedSchemes: ['https'])
+          .validateValue('http://dart.dev');
 
       switch (result) {
         case SingleValidationSuccess(data: _):
           fail('should not be a success');
         case SingleValidationError(data: _, errors: final errors):
-          expect(
-            errors,
-            ['value must be a valid uri. Allowed scheme is https'],
-          );
+          expect(errors, [
+            'value must be a valid uri. Allowed scheme is https',
+          ]);
       }
     },
   );

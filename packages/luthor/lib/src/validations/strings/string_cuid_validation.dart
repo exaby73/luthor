@@ -3,9 +3,7 @@ import 'package:luthor/src/validation.dart';
 class StringCuidValidation extends Validation {
   String? customMessage;
 
-  StringCuidValidation({
-    String? message,
-  }) : customMessage = message;
+  StringCuidValidation({String? message}) : customMessage = message;
 
   static const String _regex = r'''c[^\s-]{8,}$''';
   static final _regexObject = RegExp(_regex, caseSensitive: false);

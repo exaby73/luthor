@@ -190,8 +190,11 @@ class __$ExternalUserCopyWithImpl<$Res>
 mixin _$UserProfile {
   int get id;
   ExternalUser get user;
+  ExternalUser? get user2;
   List<ExternalUser>? get friends;
   List<String> get tags;
+  DateTime get createdAt;
+  DateTime? get updatedAt;
 
   /// Create a copy of UserProfile
   /// with the given fields replaced by the non-null parameter values.
@@ -210,8 +213,13 @@ mixin _$UserProfile {
             other is UserProfile &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.user, user) || other.user == user) &&
+            (identical(other.user2, user2) || other.user2 == user2) &&
             const DeepCollectionEquality().equals(other.friends, friends) &&
-            const DeepCollectionEquality().equals(other.tags, tags));
+            const DeepCollectionEquality().equals(other.tags, tags) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -220,12 +228,15 @@ mixin _$UserProfile {
       runtimeType,
       id,
       user,
+      user2,
       const DeepCollectionEquality().hash(friends),
-      const DeepCollectionEquality().hash(tags));
+      const DeepCollectionEquality().hash(tags),
+      createdAt,
+      updatedAt);
 
   @override
   String toString() {
-    return 'UserProfile(id: $id, user: $user, friends: $friends, tags: $tags)';
+    return 'UserProfile(id: $id, user: $user, user2: $user2, friends: $friends, tags: $tags, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }
 
@@ -238,10 +249,14 @@ abstract mixin class $UserProfileCopyWith<$Res> {
   $Res call(
       {int id,
       ExternalUser user,
+      ExternalUser? user2,
       List<ExternalUser>? friends,
-      List<String> tags});
+      List<String> tags,
+      DateTime createdAt,
+      DateTime? updatedAt});
 
   $ExternalUserCopyWith<$Res> get user;
+  $ExternalUserCopyWith<$Res>? get user2;
 }
 
 /// @nodoc
@@ -258,8 +273,11 @@ class _$UserProfileCopyWithImpl<$Res> implements $UserProfileCopyWith<$Res> {
   $Res call({
     Object? id = null,
     Object? user = null,
+    Object? user2 = freezed,
     Object? friends = freezed,
     Object? tags = null,
+    Object? createdAt = null,
+    Object? updatedAt = freezed,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -270,6 +288,10 @@ class _$UserProfileCopyWithImpl<$Res> implements $UserProfileCopyWith<$Res> {
           ? _self.user
           : user // ignore: cast_nullable_to_non_nullable
               as ExternalUser,
+      user2: freezed == user2
+          ? _self.user2
+          : user2 // ignore: cast_nullable_to_non_nullable
+              as ExternalUser?,
       friends: freezed == friends
           ? _self.friends
           : friends // ignore: cast_nullable_to_non_nullable
@@ -278,6 +300,14 @@ class _$UserProfileCopyWithImpl<$Res> implements $UserProfileCopyWith<$Res> {
           ? _self.tags
           : tags // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      createdAt: null == createdAt
+          ? _self.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: freezed == updatedAt
+          ? _self.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 
@@ -290,6 +320,20 @@ class _$UserProfileCopyWithImpl<$Res> implements $UserProfileCopyWith<$Res> {
       return _then(_self.copyWith(user: value));
     });
   }
+
+  /// Create a copy of UserProfile
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ExternalUserCopyWith<$Res>? get user2 {
+    if (_self.user2 == null) {
+      return null;
+    }
+
+    return $ExternalUserCopyWith<$Res>(_self.user2!, (value) {
+      return _then(_self.copyWith(user2: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -298,8 +342,11 @@ class _UserProfile implements UserProfile {
   const _UserProfile(
       {required this.id,
       required this.user,
+      this.user2,
       final List<ExternalUser>? friends,
-      required final List<String> tags})
+      required final List<String> tags,
+      required this.createdAt,
+      this.updatedAt})
       : _friends = friends,
         _tags = tags;
   factory _UserProfile.fromJson(Map<String, dynamic> json) =>
@@ -309,6 +356,8 @@ class _UserProfile implements UserProfile {
   final int id;
   @override
   final ExternalUser user;
+  @override
+  final ExternalUser? user2;
   final List<ExternalUser>? _friends;
   @override
   List<ExternalUser>? get friends {
@@ -326,6 +375,11 @@ class _UserProfile implements UserProfile {
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_tags);
   }
+
+  @override
+  final DateTime createdAt;
+  @override
+  final DateTime? updatedAt;
 
   /// Create a copy of UserProfile
   /// with the given fields replaced by the non-null parameter values.
@@ -349,8 +403,13 @@ class _UserProfile implements UserProfile {
             other is _UserProfile &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.user, user) || other.user == user) &&
+            (identical(other.user2, user2) || other.user2 == user2) &&
             const DeepCollectionEquality().equals(other._friends, _friends) &&
-            const DeepCollectionEquality().equals(other._tags, _tags));
+            const DeepCollectionEquality().equals(other._tags, _tags) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -359,12 +418,15 @@ class _UserProfile implements UserProfile {
       runtimeType,
       id,
       user,
+      user2,
       const DeepCollectionEquality().hash(_friends),
-      const DeepCollectionEquality().hash(_tags));
+      const DeepCollectionEquality().hash(_tags),
+      createdAt,
+      updatedAt);
 
   @override
   String toString() {
-    return 'UserProfile(id: $id, user: $user, friends: $friends, tags: $tags)';
+    return 'UserProfile(id: $id, user: $user, user2: $user2, friends: $friends, tags: $tags, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }
 
@@ -379,11 +441,16 @@ abstract mixin class _$UserProfileCopyWith<$Res>
   $Res call(
       {int id,
       ExternalUser user,
+      ExternalUser? user2,
       List<ExternalUser>? friends,
-      List<String> tags});
+      List<String> tags,
+      DateTime createdAt,
+      DateTime? updatedAt});
 
   @override
   $ExternalUserCopyWith<$Res> get user;
+  @override
+  $ExternalUserCopyWith<$Res>? get user2;
 }
 
 /// @nodoc
@@ -400,8 +467,11 @@ class __$UserProfileCopyWithImpl<$Res> implements _$UserProfileCopyWith<$Res> {
   $Res call({
     Object? id = null,
     Object? user = null,
+    Object? user2 = freezed,
     Object? friends = freezed,
     Object? tags = null,
+    Object? createdAt = null,
+    Object? updatedAt = freezed,
   }) {
     return _then(_UserProfile(
       id: null == id
@@ -412,6 +482,10 @@ class __$UserProfileCopyWithImpl<$Res> implements _$UserProfileCopyWith<$Res> {
           ? _self.user
           : user // ignore: cast_nullable_to_non_nullable
               as ExternalUser,
+      user2: freezed == user2
+          ? _self.user2
+          : user2 // ignore: cast_nullable_to_non_nullable
+              as ExternalUser?,
       friends: freezed == friends
           ? _self._friends
           : friends // ignore: cast_nullable_to_non_nullable
@@ -420,6 +494,14 @@ class __$UserProfileCopyWithImpl<$Res> implements _$UserProfileCopyWith<$Res> {
           ? _self._tags
           : tags // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      createdAt: null == createdAt
+          ? _self.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: freezed == updatedAt
+          ? _self.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 
@@ -430,6 +512,20 @@ class __$UserProfileCopyWithImpl<$Res> implements _$UserProfileCopyWith<$Res> {
   $ExternalUserCopyWith<$Res> get user {
     return $ExternalUserCopyWith<$Res>(_self.user, (value) {
       return _then(_self.copyWith(user: value));
+    });
+  }
+
+  /// Create a copy of UserProfile
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ExternalUserCopyWith<$Res>? get user2 {
+    if (_self.user2 == null) {
+      return null;
+    }
+
+    return $ExternalUserCopyWith<$Res>(_self.user2!, (value) {
+      return _then(_self.copyWith(user2: value));
     });
   }
 }

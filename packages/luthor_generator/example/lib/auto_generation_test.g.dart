@@ -23,18 +23,28 @@ Map<String, dynamic> _$ExternalUserToJson(_ExternalUser instance) =>
 _UserProfile _$UserProfileFromJson(Map<String, dynamic> json) => _UserProfile(
       id: (json['id'] as num).toInt(),
       user: ExternalUser.fromJson(json['user'] as Map<String, dynamic>),
+      user2: json['user2'] == null
+          ? null
+          : ExternalUser.fromJson(json['user2'] as Map<String, dynamic>),
       friends: (json['friends'] as List<dynamic>?)
           ?.map((e) => ExternalUser.fromJson(e as Map<String, dynamic>))
           .toList(),
       tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      updatedAt: json['updatedAt'] == null
+          ? null
+          : DateTime.parse(json['updatedAt'] as String),
     );
 
 Map<String, dynamic> _$UserProfileToJson(_UserProfile instance) =>
     <String, dynamic>{
       'id': instance.id,
       'user': instance.user,
+      'user2': instance.user2,
       'friends': instance.friends,
       'tags': instance.tags,
+      'createdAt': instance.createdAt.toIso8601String(),
+      'updatedAt': instance.updatedAt?.toIso8601String(),
     };
 
 // **************************************************************************
@@ -44,8 +54,11 @@ Map<String, dynamic> _$UserProfileToJson(_UserProfile instance) =>
 Validator $UserProfileSchema = l.withName('UserProfile').schema({
   'id': l.int().required(),
   'user': $ExternalUserSchema.required(),
+  'user2': $ExternalUserSchema,
   'friends': l.list(validators: [$ExternalUserSchema.required()]),
   'tags': l.list(validators: [l.string().required()]).required(),
+  'createdAt': l.string().dateTime().required(),
+  'updatedAt': l.string(),
 });
 
 SchemaValidationResult<UserProfile> $UserProfileValidate(

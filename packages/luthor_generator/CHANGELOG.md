@@ -1,3 +1,7 @@
+## 0.9.0
+
+- **FIX**: Fix nullable DateTime handling in auto-generated schemas. Nullable DateTime fields now properly validate without requiring @luthor annotation.
+
 ## 0.8.0
 
 - **FEAT**: Add auto-generation support for classes without @luthor annotation. Compatible classes (with fromJson constructor or @MappableClass annotation and named parameters) are now automatically discovered and schemas are generated for them when referenced in @luthor classes.

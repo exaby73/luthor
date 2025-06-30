@@ -22,34 +22,57 @@ class StringValidator extends Validator {
 
   /// Validates that the string is a valid date.
   StringValidator dateTime({String? message}) {
-    validations.add(StringDateTimeValidation(message: message));
-    return this;
+    final newValidations = List<Validation>.from(validations)
+      ..add(StringDateTimeValidation(message: message));
+    final newValidator = StringValidator(initialValidations: newValidations);
+    if (name != null) {
+      newValidator.withName(name);
+    }
+    return newValidator;
   }
 
   /// Validates that the string is a valid email.
   StringValidator email({String? message}) {
-    validations.add(StringEmailValidation(message: message));
-    return this;
+    final newValidations = List<Validation>.from(validations)
+      ..add(StringEmailValidation(message: message));
+    final newValidator = StringValidator(initialValidations: newValidations);
+    if (name != null) {
+      newValidator.withName(name);
+    }
+    return newValidator;
   }
 
   /// Validates that the string has a minimum character length.
   StringValidator min(int minLength, {String? message}) {
-    validations
-        .add(StringMinValidation(minLength: minLength, message: message));
-    return this;
+    final newValidations = List<Validation>.from(validations)
+      ..add(StringMinValidation(minLength: minLength, message: message));
+    final newValidator = StringValidator(initialValidations: newValidations);
+    if (name != null) {
+      newValidator.withName(name);
+    }
+    return newValidator;
   }
 
   /// Validates that the string has a maximum character length.
   StringValidator max(int maxLength, {String? message}) {
-    validations
-        .add(StringMaxValidation(maxLength: maxLength, message: message));
-    return this;
+    final newValidations = List<Validation>.from(validations)
+      ..add(StringMaxValidation(maxLength: maxLength, message: message));
+    final newValidator = StringValidator(initialValidations: newValidations);
+    if (name != null) {
+      newValidator.withName(name);
+    }
+    return newValidator;
   }
 
   /// Validates that the string has a specific character length.
   StringValidator length(int length, {String? message}) {
-    validations.add(StringLengthValidation(length: length, message: message));
-    return this;
+    final newValidations = List<Validation>.from(validations)
+      ..add(StringLengthValidation(length: length, message: message));
+    final newValidator = StringValidator(initialValidations: newValidations);
+    if (name != null) {
+      newValidator.withName(name);
+    }
+    return newValidator;
   }
 
   /// Validates that the string is a valid URI.

@@ -63,10 +63,7 @@ void _checkAndWriteLengthValidation(
   }
 }
 
-void _checkAndWriteMaxValidation(
-  StringBuffer buffer,
-  ParameterElement param,
-) {
+void _checkAndWriteMaxValidation(StringBuffer buffer, ParameterElement param) {
   final maxAnnotation = getAnnotation(hasMaxChecker, param);
   if (maxAnnotation != null) {
     buffer.write('.max(');
@@ -78,10 +75,7 @@ void _checkAndWriteMaxValidation(
   }
 }
 
-void _checkAndWriteMinValidation(
-  StringBuffer buffer,
-  ParameterElement param,
-) {
+void _checkAndWriteMinValidation(StringBuffer buffer, ParameterElement param) {
   final minAnnotation = getAnnotation(hasMinChecker, param);
   if (minAnnotation != null) {
     buffer.write('.min(');
@@ -93,10 +87,7 @@ void _checkAndWriteMinValidation(
   }
 }
 
-void _checkAndWriteUriValidation(
-  StringBuffer buffer,
-  ParameterElement param,
-) {
+void _checkAndWriteUriValidation(StringBuffer buffer, ParameterElement param) {
   final uriAnnotation = getAnnotation(isUriChecker, param);
   if (uriAnnotation != null) {
     buffer.write('.uri(');
@@ -120,10 +111,7 @@ void _checkAndWriteUriValidation(
   }
 }
 
-void _checkAndWriteUrlValidation(
-  StringBuffer buffer,
-  ParameterElement param,
-) {
+void _checkAndWriteUrlValidation(StringBuffer buffer, ParameterElement param) {
   final urlAnnotation = getAnnotation(isUrlChecker, param);
   if (urlAnnotation != null) {
     buffer.write('.url(');
@@ -211,16 +199,15 @@ void _checkAndWriteContainsValidation(
   }
 }
 
-void _checkAndWriteIpValidation(
-  StringBuffer buffer,
-  ParameterElement param,
-) {
+void _checkAndWriteIpValidation(StringBuffer buffer, ParameterElement param) {
   final ipAnnotation = getAnnotation(isIpChecker, param);
   if (ipAnnotation != null) {
     buffer.write('.ip(');
 
-    final version =
-        ipAnnotation.getField('version')?.getField('_name')?.toStringValue();
+    final version = ipAnnotation
+        .getField('version')
+        ?.getField('_name')
+        ?.toStringValue();
     final message = ipAnnotation.getField('message')?.toStringValue();
 
     if (version != null) {

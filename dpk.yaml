@@ -1,0 +1,15 @@
+scripts:
+  analyze:
+    command: dart analyze
+    runInPackages:
+      - packages/*
+
+  format:
+    command: dart format --set-exit-if-changed .
+    runInPackages:
+      - packages/*
+
+  test:
+    command: dart test
+    runInPackages:
+      - packages/luthor

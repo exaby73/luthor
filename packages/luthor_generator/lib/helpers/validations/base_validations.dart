@@ -67,7 +67,7 @@ String getValidations(ParameterElement param) {
   }
 
   if (param.type.isDartCoreString ||
-      param.type.getDisplayString() == 'DateTime') {
+      param.type.getDisplayString().replaceFirst('?', '') == 'DateTime') {
     buffer.write('l.string()');
     buffer.write(getStringValidations(param));
   }
@@ -207,7 +207,8 @@ String _getValidationForType(DartType type) {
     buffer.write('l.nullValue()');
   } else if (type.isDartCoreNum) {
     buffer.write('l.number()');
-  } else if (type.isDartCoreString || type.getDisplayString() == 'DateTime') {
+  } else if (type.isDartCoreString ||
+      type.getDisplayString().replaceFirst('?', '') == 'DateTime') {
     buffer.write('l.string()');
   } else {
     // Handle custom types with @luthor annotation or auto-generation
@@ -216,14 +217,16 @@ String _getValidationForType(DartType type) {
       final hasLuthorAnnotation = getAnnotation(luthorChecker, element) != null;
 
       if (hasLuthorAnnotation) {
-        buffer
-            .write('\$${type.getDisplayString().replaceFirst('?', '')}Schema');
+        buffer.write(
+          '\$${type.getDisplayString().replaceFirst('?', '')}Schema',
+        );
       } else if (element is ClassElement &&
           isCompatibleForAutoGeneration(element)) {
         // Class is compatible for auto-generation, add to discovered classes
         GenerationContext.addDiscoveredClass(element);
-        buffer
-            .write('\$${type.getDisplayString().replaceFirst('?', '')}Schema');
+        buffer.write(
+          '\$${type.getDisplayString().replaceFirst('?', '')}Schema',
+        );
       } else {
         throw UnsupportedTypeError(
           'Type ${type.getDisplayString()} does not have @luthor annotation and is not compatible for auto-generation. '

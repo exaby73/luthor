@@ -3,9 +3,7 @@ import 'package:luthor/src/validation.dart';
 class StringCuid2Validation extends Validation {
   String? customMessage;
 
-  StringCuid2Validation({
-    String? message,
-  }) : customMessage = message;
+  StringCuid2Validation({String? message}) : customMessage = message;
 
   static const String _regex = r'''^[a-z][a-z0-9]*$''';
   static final _regexObject = RegExp(_regex);

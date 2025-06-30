@@ -3,9 +3,7 @@ import 'package:luthor/src/validation.dart';
 class MapValidation extends Validation {
   String? customMessage;
 
-  MapValidation({
-    String? message,
-  }) : customMessage = message;
+  MapValidation({String? message}) : customMessage = message;
 
   @override
   bool call(String? fieldName, Object? value) {

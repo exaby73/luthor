@@ -4,10 +4,8 @@ class StringContainsValidation extends Validation {
   String string;
   String? customMessage;
 
-  StringContainsValidation(
-    this.string, {
-    String? message,
-  }) : customMessage = message;
+  StringContainsValidation(this.string, {String? message})
+    : customMessage = message;
 
   @override
   bool call(String? fieldName, Object? value) {

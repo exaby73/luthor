@@ -4,10 +4,8 @@ class StringUriValidation extends Validation {
   final List<String>? allowedSchemes;
   final String? customMessage;
 
-  StringUriValidation({
-    this.allowedSchemes,
-    String? message,
-  }) : customMessage = message;
+  StringUriValidation({this.allowedSchemes, String? message})
+    : customMessage = message;
 
   @override
   bool call(String? fieldName, Object? value) {

@@ -3,9 +3,7 @@ import 'package:luthor/src/validation.dart';
 class DoubleValidation extends Validation {
   String? customMessage;
 
-  DoubleValidation({
-    String? message,
-  }) : customMessage = message;
+  DoubleValidation({String? message}) : customMessage = message;
 
   @override
   bool call(String? fieldName, Object? value) {

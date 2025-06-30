@@ -4,10 +4,8 @@ class NumberMaxValidation extends Validation {
   num maxValue;
   String? customMessage;
 
-  NumberMaxValidation({
-    required this.maxValue,
-    String? message,
-  }) : customMessage = message;
+  NumberMaxValidation({required this.maxValue, String? message})
+    : customMessage = message;
 
   @override
   bool call(String? fieldName, Object? value) {

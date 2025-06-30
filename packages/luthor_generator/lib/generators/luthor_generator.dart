@@ -114,14 +114,16 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
     );
   }
 
-
   /// Generates schema for a compatible class
   String _generateAutoSchema(ClassElement element, String className) {
     final constructor = element.constructors.first;
-    final isDartMappableClass = getAnnotation(dartMappableChecker, element) != null;
-    
+    final isDartMappableClass =
+        getAnnotation(dartMappableChecker, element) != null;
+
     final buffer = StringBuffer();
-    buffer.write("Validator \$${className}Schema = l.withName('$className').schema({\n");
+    buffer.write(
+      "Validator \$${className}Schema = l.withName('$className').schema({\n",
+    );
 
     for (final param in constructor.parameters) {
       var name = param.name;
@@ -141,7 +143,11 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
 
     buffer.write('});\n\n');
 
-    _writeValidateMethod(buffer, className, isDartMappable: isDartMappableClass);
+    _writeValidateMethod(
+      buffer,
+      className,
+      isDartMappable: isDartMappableClass,
+    );
     _writeExtension(buffer, className, isDartMappable: isDartMappableClass);
 
     return buffer.toString();
@@ -156,14 +162,14 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
     while (GenerationContext.discoveredClasses.isNotEmpty) {
       final currentClass = GenerationContext.discoveredClasses.first;
       GenerationContext.discoveredClasses.remove(currentClass);
-      
+
       final className = currentClass.name;
-      
+
       // Skip if already processed
       if (processedClasses.contains(className)) {
         continue;
       }
-      
+
       // Generate schema for this class
       buffer.write(_generateAutoSchema(currentClass, className));
       processedClasses.add(className);

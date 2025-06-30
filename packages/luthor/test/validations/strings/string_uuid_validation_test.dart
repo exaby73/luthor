@@ -3,8 +3,9 @@ import 'package:test/test.dart';
 
 void main() {
   test('should return true when value is a valid uuid', () {
-    final result =
-        l.string().uuid().validateValue('b058f7f6-e1e1-11ed-b5ea-0242ac120002');
+    final result = l.string().uuid().validateValue(
+      'b058f7f6-e1e1-11ed-b5ea-0242ac120002',
+    );
 
     switch (result) {
       case SingleValidationSuccess(data: _):

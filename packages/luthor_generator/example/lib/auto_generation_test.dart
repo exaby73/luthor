@@ -24,8 +24,11 @@ abstract class UserProfile with _$UserProfile {
   const factory UserProfile({
     required int id,
     required ExternalUser user,
+    ExternalUser? user2,
     List<ExternalUser>? friends,
     required List<String> tags,
+    required DateTime createdAt,
+    DateTime? updatedAt,
   }) = _UserProfile;
 
   factory UserProfile.fromJson(Map<String, dynamic> json) =>
@@ -40,6 +43,7 @@ void main() {
       'email': 'john@example.com',
       'age': 30,
     },
+    // 'user2': null, // Test omitting nullable field
     'friends': [
       {
         'name': 'Jane Smith',
@@ -47,6 +51,8 @@ void main() {
       }
     ],
     'tags': ['developer', 'flutter'],
+    'createdAt': '2021-01-01T00:00:00Z',
+    'updatedAt': null, // Test nullable DateTime
   };
 
   final result = $UserProfileValidate(json);

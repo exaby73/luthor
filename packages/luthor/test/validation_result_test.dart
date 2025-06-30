@@ -5,9 +5,7 @@ void main() {
   group('SchemaValidationError', () {
     final schema = l.schema({
       'value': l.int().required(),
-      'nested': l.schema({
-        'value': l.string().required(),
-      }).required(),
+      'nested': l.schema({'value': l.string().required()}).required(),
     });
 
     test('should return null if no errors', () {

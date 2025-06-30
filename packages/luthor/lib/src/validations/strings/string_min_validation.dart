@@ -4,11 +4,9 @@ class StringMinValidation extends Validation {
   int minLength;
   String? customMessage;
 
-  StringMinValidation({
-    required this.minLength,
-    String? message,
-  })  : assert(minLength >= 0, 'minLength must be greater than or equal to 0'),
-        customMessage = message;
+  StringMinValidation({required this.minLength, String? message})
+    : assert(minLength >= 0, 'minLength must be greater than or equal to 0'),
+      customMessage = message;
 
   @override
   bool call(String? fieldName, Object? value) {

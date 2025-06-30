@@ -4,10 +4,8 @@ class StringStartsWithValidation extends Validation {
   String string;
   String? customMessage;
 
-  StringStartsWithValidation(
-    this.string, {
-    String? message,
-  }) : customMessage = message;
+  StringStartsWithValidation(this.string, {String? message})
+    : customMessage = message;
 
   @override
   bool call(String? fieldName, Object? value) {

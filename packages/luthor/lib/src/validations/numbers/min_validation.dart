@@ -4,10 +4,8 @@ class NumberMinValidation extends Validation {
   num minValue;
   String? customMessage;
 
-  NumberMinValidation({
-    required this.minValue,
-    String? message,
-  }) : customMessage = message;
+  NumberMinValidation({required this.minValue, String? message})
+    : customMessage = message;
 
   @override
   bool call(String? fieldName, Object? value) {

@@ -3,9 +3,7 @@ import 'package:luthor/src/validation.dart';
 class RequiredValidation extends Validation {
   String? customMessage;
 
-  RequiredValidation({
-    String? message,
-  }) : customMessage = message;
+  RequiredValidation({String? message}) : customMessage = message;
 
   @override
   bool call(String? fieldName, Object? value) {

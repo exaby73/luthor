@@ -3,9 +3,11 @@ import 'package:test/test.dart';
 
 void main() {
   test('should return true when custom validator passes', () {
-    final result = l.custom((value) {
-      return value! as bool;
-    }).validateValue(true);
+    final result = l
+        .custom((value) {
+          return value! as bool;
+        })
+        .validateValue(true);
 
     switch (result) {
       case SingleValidationSuccess(data: _):
@@ -16,9 +18,11 @@ void main() {
   });
 
   test('should return false when custom validator fails', () {
-    final result = l.custom((value) {
-      return !(value! as bool);
-    }).validateValue(true);
+    final result = l
+        .custom((value) {
+          return !(value! as bool);
+        })
+        .validateValue(true);
 
     switch (result) {
       case SingleValidationSuccess(data: _):
@@ -29,9 +33,12 @@ void main() {
   });
 
   test('should return false if the value is null with required()', () {
-    final result = l.required().custom((value) {
-      return true;
-    }).validateValue(null);
+    final result = l
+        .required()
+        .custom((value) {
+          return true;
+        })
+        .validateValue(null);
 
     switch (result) {
       case SingleValidationSuccess(data: _):

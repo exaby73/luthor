@@ -23,6 +23,17 @@ class SchemaValidation extends Validation {
       final validator = entry.value;
       final fieldValue = value[name];
 
+      // Check if the field is missing from input
+      final fieldExists = value.containsKey(name);
+
+      // Check if this validator requires the field
+      final hasRequiredValidation = validator.hasRequiredValidation;
+
+      // Skip validation for missing optional fields
+      if (!fieldExists && !hasRequiredValidation) {
+        continue;
+      }
+
       if (fieldValue is Map<String, Object?>) {
         final result = validator.validateSchemaWithFieldName(name, fieldValue);
 

@@ -23,7 +23,7 @@ typedef FromJson<T> = T Function(Map<String, Object?> json);
 /// Base validator class.
 class Validator {
   Validator({List<Validation> initialValidations = const []})
-      : validations = List.from(initialValidations);
+    : validations = List.from(initialValidations);
 
   String? _name;
 
@@ -37,76 +37,125 @@ class Validator {
     return this;
   }
 
+  /// Checks if this validator has a required validation.
+  bool get hasRequiredValidation {
+    return validations.any((v) => v is RequiredValidation);
+  }
+
   /// Validates a value against a custom validator function.
   Validator custom(CustomValidator customValidator, {String? message}) {
-    validations.add(CustomValidation(customValidator, message: message));
-    return this;
+    final newValidations = List<Validation>.from(validations)
+      ..add(CustomValidation(customValidator, message: message));
+    final newValidator = Validator(initialValidations: newValidations);
+    if (_name != null) {
+      newValidator._name = _name;
+    }
+    return newValidator;
   }
 
   /// Validates a value as dynamic. Always returns true.
   Validator any() {
-    validations.add(AnyValidation());
-    return this;
+    final newValidations = List<Validation>.from(validations)
+      ..add(AnyValidation());
+    final newValidator = Validator(initialValidations: newValidations);
+    if (_name != null) {
+      newValidator._name = _name;
+    }
+    return newValidator;
   }
 
   /// Validates that the value is not null.
   Validator required({String? message}) {
-    validations.add(RequiredValidation(message: message));
-    return this;
+    final newValidations = List<Validation>.from(validations)
+      ..add(RequiredValidation(message: message));
+    final newValidator = Validator(initialValidations: newValidations);
+    if (_name != null) {
+      newValidator._name = _name;
+    }
+    return newValidator;
   }
 
   /// Validates that the value is null.
   Validator nullValue({String? message}) {
-    validations.add(NullValidation(message: message));
-    return this;
+    final newValidations = List<Validation>.from(validations)
+      ..add(NullValidation(message: message));
+    final newValidator = Validator(initialValidations: newValidations);
+    if (_name != null) {
+      newValidator._name = _name;
+    }
+    return newValidator;
   }
 
   /// Validates that the value is a string.
   StringValidator string({String? message}) {
-    validations.add(StringValidation(message: message));
-    return StringValidator(initialValidations: validations);
+    final newValidations = List<Validation>.from(validations)
+      ..add(StringValidation(message: message));
+    return StringValidator(initialValidations: newValidations);
   }
 
   /// Validates that the value is a number (int or double).
   NumberValidator number({String? message}) {
-    validations.add(NumberValidation(message: message));
-    return NumberValidator(initialValidations: validations);
+    final newValidations = List<Validation>.from(validations)
+      ..add(NumberValidation(message: message));
+    return NumberValidator(initialValidations: newValidations);
   }
 
   /// Validates that the value is an int.
   IntValidator int({String? message}) {
-    validations.add(IntValidation(message: message));
-    return IntValidator(initialValidations: validations);
+    final newValidations = List<Validation>.from(validations)
+      ..add(IntValidation(message: message));
+    return IntValidator(initialValidations: newValidations);
   }
 
   /// Validates that the value is a double.
   DoubleValidator double({String? message}) {
-    validations.add(DoubleValidation(message: message));
-    return DoubleValidator(initialValidations: validations);
+    final newValidations = List<Validation>.from(validations)
+      ..add(DoubleValidation(message: message));
+    return DoubleValidator(initialValidations: newValidations);
   }
 
   /// Validates that the value is a bool.
   Validator boolean({String? message}) {
-    validations.add(BoolValidation(message: message));
-    return this;
+    final newValidations = List<Validation>.from(validations)
+      ..add(BoolValidation(message: message));
+    final newValidator = Validator(initialValidations: newValidations);
+    if (_name != null) {
+      newValidator._name = _name;
+    }
+    return newValidator;
   }
 
   /// Validates that the value is a list.
   Validator list({List<Validator>? validators, String? message}) {
-    validations.add(ListValidation(validators: validators, message: message));
-    return this;
+    final newValidations = List<Validation>.from(validations)
+      ..add(ListValidation(validators: validators, message: message));
+    final newValidator = Validator(initialValidations: newValidations);
+    if (_name != null) {
+      newValidator._name = _name;
+    }
+    return newValidator;
   }
 
   /// Validates that the value is a map.
   Validator map({String? message}) {
-    validations.add(MapValidation(message: message));
-    return this;
+    final newValidations = List<Validation>.from(validations)
+      ..add(MapValidation(message: message));
+    final newValidator = Validator(initialValidations: newValidations);
+    if (_name != null) {
+      newValidator._name = _name;
+    }
+    return newValidator;
   }
 
   /// Validates that the value matches the given schema.
   Validator schema(Map<String, Validator> validatorSchema) {
-    validations.add(SchemaValidation(validatorSchema));
-    return this;
+    final newValidations = List<Validation>.from(validations)
+      ..add(SchemaValidation(validatorSchema));
+    final newValidator = Validator(initialValidations: newValidations);
+    if (_name != null) {
+      newValidator._name = _name;
+    }
+    return newValidator;
   }
 
   Map<String, dynamic>? _isValid(String? fieldName, dynamic value) {
@@ -117,8 +166,9 @@ class Validator {
         if (validation is SchemaValidation) {
           errors.addAll(validation.errors);
         } else {
-          (errors.putIfAbsent(fieldName ?? '[DEFAULT]', () => []) as List)
-              .add(validation.message);
+          (errors.putIfAbsent(fieldName ?? '[DEFAULT]', () => []) as List).add(
+            validation.message,
+          );
         }
       }
     }

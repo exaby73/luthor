@@ -11,10 +11,7 @@ String getIntValidations(ParameterElement param) {
   return buffer.toString();
 }
 
-void _checkAndWriteMaxValidation(
-  StringBuffer buffer,
-  ParameterElement param,
-) {
+void _checkAndWriteMaxValidation(StringBuffer buffer, ParameterElement param) {
   final maxAnnotation = getAnnotation(hasMaxChecker, param);
   if (maxAnnotation != null) {
     buffer.write('.max(');
@@ -26,10 +23,7 @@ void _checkAndWriteMaxValidation(
   }
 }
 
-void _checkAndWriteMinValidation(
-  StringBuffer buffer,
-  ParameterElement param,
-) {
+void _checkAndWriteMinValidation(StringBuffer buffer, ParameterElement param) {
   final minAnnotation = getAnnotation(hasMinChecker, param);
   if (minAnnotation != null) {
     buffer.write('.min(');

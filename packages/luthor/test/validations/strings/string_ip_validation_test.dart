@@ -3,10 +3,9 @@ import 'package:test/test.dart';
 
 void main() {
   test('should return true when value is a valid IP', () {
-    final result = l
-        .string()
-        .ip()
-        .validateValue('84d5:51a0:9114:1855:4cfa:f2d7:1f12:7003');
+    final result = l.string().ip().validateValue(
+      '84d5:51a0:9114:1855:4cfa:f2d7:1f12:7003',
+    );
 
     switch (result) {
       case SingleValidationSuccess(data: _):
@@ -28,8 +27,10 @@ void main() {
   });
 
   test('should return true when value is a valid IPv4 ', () {
-    final result =
-        l.string().ip(version: IpVersion.v4).validateValue('192.168.1.1');
+    final result = l
+        .string()
+        .ip(version: IpVersion.v4)
+        .validateValue('192.168.1.1');
 
     switch (result) {
       case SingleValidationSuccess(data: _):
@@ -68,8 +69,10 @@ void main() {
   });
 
   test('should return false when the value is not a valid IPv6 address', () {
-    final result =
-        l.string().ip(version: IpVersion.v6).validateValue('192.168.1.1');
+    final result = l
+        .string()
+        .ip(version: IpVersion.v6)
+        .validateValue('192.168.1.1');
 
     switch (result) {
       case SingleValidationSuccess(data: _):

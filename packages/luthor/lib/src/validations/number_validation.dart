@@ -3,9 +3,7 @@ import 'package:luthor/src/validation.dart';
 class NumberValidation extends Validation {
   String? customMessage;
 
-  NumberValidation({
-    String? message,
-  }) : customMessage = message;
+  NumberValidation({String? message}) : customMessage = message;
 
   @override
   bool call(String? fieldName, Object? value) {

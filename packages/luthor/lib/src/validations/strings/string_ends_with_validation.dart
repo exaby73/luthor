@@ -4,10 +4,8 @@ class StringEndsWithValidation extends Validation {
   String string;
   String? customMessage;
 
-  StringEndsWithValidation(
-    this.string, {
-    String? message,
-  }) : customMessage = message;
+  StringEndsWithValidation(this.string, {String? message})
+    : customMessage = message;
 
   @override
   bool call(String? fieldName, Object? value) {

@@ -99,8 +99,170 @@ print(successResult.isValid); // true
 print(errorResult.isValid); // false
 ```
 
-When dealing with a `SchemaValidationError`, you can use the `getError()` method to get first the error message for a specific key or nested key using a dot-separated path. If there no errors for the specified key, it will return `null`.
+When dealing with a `SchemaValidationError`, you can use the `getError()` method to get the first error message for a specific key or nested key using a dot-separated path. If there are no errors for the specified key, it will return `null`.
 
 ```dart
 print(errorResult.getError('address.city')); // value is required
 ```
+
+## Type-Safe Error Access with ErrorKeys
+
+When using code generation, Luthor generates `ErrorKeys` constants that provide type-safe access to validation errors. This eliminates the need for error-prone string literals and provides IDE autocomplete support.
+
+### Generated ErrorKeys
+
+For each `@luthor` annotated class, ErrorKeys are generated with proper dot notation for nested fields:
+
+```dart
+// Simple class ErrorKeys
+const UserErrorKeys = (
+  name: "name",
+  email: "email",
+  age: "age",
+);
+
+// Nested class ErrorKeys with dot notation
+const ProfileErrorKeys = (
+  id: "id",
+  user: (
+    name: "user.name",
+    email: "user.email", 
+    age: "user.age",
+  ),
+  settings: (
+    theme: "settings.theme",
+    notifications: "settings.notifications",
+  ),
+);
+```
+
+### Using ErrorKeys with getError()
+
+Instead of using string literals that can contain typos:
+
+```dart
+// ❌ Error-prone - no compile-time checking
+final emailError = result.getError('user.email');
+final themeError = result.getError('settings.theme');
+final typoError = result.getError('user.emial'); // Typo! Won't be caught until runtime
+```
+
+Use type-safe ErrorKeys with full IDE support:
+
+```dart
+// ✅ Type-safe with autocomplete and compile-time checking
+final emailError = result.getError(ProfileErrorKeys.user.email);
+final themeError = result.getError(ProfileErrorKeys.settings.theme);
+// Typos are caught at compile time!
+```
+
+### Complete Example with ErrorKeys
+
+```dart
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:luthor/luthor.dart';
+
+part 'user_profile.freezed.dart';
+part 'user_profile.g.dart';
+
+@luthor
+@freezed
+abstract class UserProfile with _$UserProfile {
+  const factory UserProfile({
+    required String name,
+    required String email,
+    required UserSettings settings,
+  }) = _UserProfile;
+
+  factory UserProfile.fromJson(Map<String, dynamic> json) => 
+      _$UserProfileFromJson(json);
+}
+
+@luthor
+@freezed
+abstract class UserSettings with _$UserSettings {
+  const factory UserSettings({
+    required String theme,
+    required bool notifications,
+  }) = _UserSettings;
+
+  factory UserSettings.fromJson(Map<String, dynamic> json) =>
+      _$UserSettingsFromJson(json);
+}
+
+void main() {
+  final result = $UserProfileValidate({
+    'name': '', // Invalid - empty string
+    'email': 'invalid-email', // Invalid - not an email
+    'settings': {
+      'theme': null, // Invalid - required field
+      'notifications': 'yes', // Invalid - should be boolean
+    },
+  });
+
+  switch (result) {
+    case SchemaValidationError():
+      print('Validation failed:');
+      
+      // Type-safe error access with ErrorKeys
+      final nameError = result.getError(UserProfileErrorKeys.name);
+      final emailError = result.getError(UserProfileErrorKeys.email);
+      final themeError = result.getError(UserProfileErrorKeys.settings.theme);
+      final notificationsError = result.getError(UserProfileErrorKeys.settings.notifications);
+      
+      if (nameError != null) print('Name: $nameError');
+      if (emailError != null) print('Email: $emailError');
+      if (themeError != null) print('Theme: $themeError');
+      if (notificationsError != null) print('Notifications: $notificationsError');
+      
+    case SchemaValidationSuccess(data: final profile):
+      print('✅ Valid profile: ${profile.name}');
+  }
+}
+```
+
+### Benefits of ErrorKeys
+
+1. **Compile-time Safety** - Typos in field names are caught during compilation
+2. **IDE Support** - Full autocomplete and go-to-definition support
+3. **Refactoring Safety** - Renaming fields automatically updates ErrorKeys
+4. **Nested Field Support** - Automatic dot-notation handling for nested objects
+5. **JsonKey Respect** - Properly maps to JSON field names when using `@JsonKey` annotations
+
+### JsonKey Integration
+
+ErrorKeys automatically handle `@JsonKey` annotations:
+
+```dart
+@luthor
+@freezed
+abstract class ApiUser with _$ApiUser {
+  const factory ApiUser({
+    required String name,
+    @JsonKey(name: 'email_address') required String email,
+  }) = _ApiUser;
+
+  factory ApiUser.fromJson(Map<String, dynamic> json) => _$ApiUserFromJson(json);
+}
+
+// Generated ErrorKeys respect JsonKey mapping
+const ApiUserErrorKeys = (
+  name: "name",
+  email: "email_address", // Uses JsonKey name
+);
+
+void main() {
+  final result = $ApiUserValidate({'email_address': 'invalid'});
+  
+  switch (result) {
+    case SchemaValidationError():
+      // Use Dart field name as key, but accesses JSON field name
+      final emailError = result.getError(ApiUserErrorKeys.email);
+      print('Email error: $emailError');
+    case SchemaValidationSuccess():
+      break;
+  }
+}
+```
+
+Using ErrorKeys makes error handling both safer and more maintainable, especially in large applications with complex nested validation schemas.

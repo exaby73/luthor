@@ -6,9 +6,12 @@ part of 'without_freezed.dart';
 // LuthorGenerator
 // **************************************************************************
 
+// ignore: constant_identifier_names
+const WithoutFreezedSchemaKeys = (name: "name", age: "age");
+
 Validator $WithoutFreezedSchema = l.withName('WithoutFreezed').schema({
-  'name': l.string().email().required(),
-  'age': l.int().required(),
+  WithoutFreezedSchemaKeys.name: l.string().email().required(),
+  WithoutFreezedSchemaKeys.age: l.int().required(),
 });
 
 SchemaValidationResult<WithoutFreezed> $WithoutFreezedValidate(
@@ -26,9 +29,12 @@ extension WithoutFreezedValidationExtension on WithoutFreezed {
 // ignore: constant_identifier_names
 const WithoutFreezedErrorKeys = (name: "name", age: "age");
 
+// ignore: constant_identifier_names
+const WithDartMappableSchemaKeys = (email: "email", password: "password");
+
 Validator $WithDartMappableSchema = l.withName('WithDartMappable').schema({
-  'email': l.string().email().required(),
-  'password': l.string().min(8).required(),
+  WithDartMappableSchemaKeys.email: l.string().email().required(),
+  WithDartMappableSchemaKeys.password: l.string().min(8).required(),
 });
 
 SchemaValidationResult<WithDartMappable> $WithDartMappableValidate(

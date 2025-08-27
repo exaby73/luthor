@@ -44,6 +44,10 @@ export default defineConfig({
               label: "Validation Result",
               link: "/result",
             },
+            {
+              label: "Comprehensive Example",
+              link: "/comprehensive-example",
+            },
           ],
         },
         {
@@ -180,6 +184,10 @@ export default defineConfig({
             {
               label: "Defining schemas",
               link: "/schemas/defining-schemas",
+            },
+            {
+              label: "Code Generation",
+              link: "/schemas/code-generation",
             },
           ],
         },

@@ -1,6 +1,7 @@
 import 'package:luthor/src/validation.dart';
 
 typedef CustomValidator = bool Function(Object? value);
+typedef SchemaCustomValidator = bool Function(Object? value, Map<String, Object?> data);
 
 class CustomValidation extends Validation {
   String? customMessage;

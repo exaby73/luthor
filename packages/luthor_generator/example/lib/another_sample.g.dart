@@ -38,16 +38,34 @@ Map<String, dynamic> _$AnotherSampleToJson(_AnotherSample instance) =>
 // LuthorGenerator
 // **************************************************************************
 
+// ignore: constant_identifier_names
+const AnotherSampleSchemaKeys = (
+  id: "id",
+  name: "full_name",
+  email: "email",
+  ip: "ip",
+  password: "password",
+  type: "type",
+  url: "url",
+  sample: "sample",
+  optionalSample: "optionalSample",
+);
+
 Validator $AnotherSampleSchema = l.withName('AnotherSample').schema({
-  'id': l.int().required(),
-  'full_name': l.string(),
-  'email': l.string().email(message: 'Invalid email').required(),
-  'ip': l.string().ip(version: IpVersion.v4),
-  'password': l.string().min(8).required(),
-  'type': l.string(),
-  'url': l.string().url(allowedSchemes: ['http', 'https']),
-  'sample': $SampleSchema.required(),
-  'optionalSample': $SampleSchema,
+  AnotherSampleSchemaKeys.id: l.int().required(),
+  AnotherSampleSchemaKeys.name: l.string(),
+  AnotherSampleSchemaKeys.email: l
+      .string()
+      .email(message: 'Invalid email')
+      .required(),
+  AnotherSampleSchemaKeys.ip: l.string().ip(version: IpVersion.v4),
+  AnotherSampleSchemaKeys.password: l.string().min(8).required(),
+  AnotherSampleSchemaKeys.type: l.string(),
+  AnotherSampleSchemaKeys.url: l.string().url(
+    allowedSchemes: ['http', 'https'],
+  ),
+  AnotherSampleSchemaKeys.sample: $SampleSchema.required(),
+  AnotherSampleSchemaKeys.optionalSample: $SampleSchema,
 });
 
 SchemaValidationResult<AnotherSample> $AnotherSampleValidate(

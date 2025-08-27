@@ -23,6 +23,9 @@ class SchemaValidation extends Validation {
       final validator = entry.value;
       final fieldValue = value[name];
 
+      // Set schema data for any SchemaCustomValidation instances
+      validator.setSchemaDataForValidations(value.cast<String, Object?>());
+
       // Check if the field is missing from input
       final fieldExists = value.containsKey(name);
 
@@ -60,4 +63,5 @@ class SchemaValidation extends Validation {
 
   @override
   String? get message => null;
+
 }

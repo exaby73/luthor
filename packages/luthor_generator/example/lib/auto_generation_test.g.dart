@@ -51,14 +51,29 @@ Map<String, dynamic> _$UserProfileToJson(_UserProfile instance) =>
 // LuthorGenerator
 // **************************************************************************
 
+// ignore: constant_identifier_names
+const UserProfileSchemaKeys = (
+  id: "id",
+  user: "user",
+  user2: "user2",
+  friends: "friends",
+  tags: "tags",
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+);
+
 Validator $UserProfileSchema = l.withName('UserProfile').schema({
-  'id': l.int().required(),
-  'user': $ExternalUserSchema.required(),
-  'user2': $ExternalUserSchema,
-  'friends': l.list(validators: [$ExternalUserSchema.required()]),
-  'tags': l.list(validators: [l.string().required()]).required(),
-  'createdAt': l.string().dateTime().required(),
-  'updatedAt': l.string(),
+  UserProfileSchemaKeys.id: l.int().required(),
+  UserProfileSchemaKeys.user: $ExternalUserSchema.required(),
+  UserProfileSchemaKeys.user2: $ExternalUserSchema,
+  UserProfileSchemaKeys.friends: l.list(
+    validators: [$ExternalUserSchema.required()],
+  ),
+  UserProfileSchemaKeys.tags: l
+      .list(validators: [l.string().required()])
+      .required(),
+  UserProfileSchemaKeys.createdAt: l.string().dateTime().required(),
+  UserProfileSchemaKeys.updatedAt: l.string(),
 });
 
 SchemaValidationResult<UserProfile> $UserProfileValidate(
@@ -82,10 +97,14 @@ const UserProfileErrorKeys = (
 );
 
 // Auto-generated schemas for discovered classes
+
+// ignore: constant_identifier_names
+const ExternalUserSchemaKeys = (name: "name", email: "email", age: "age");
+
 Validator $ExternalUserSchema = l.withName('ExternalUser').schema({
-  'name': l.string().required(),
-  'email': l.string().required(),
-  'age': l.int(),
+  ExternalUserSchemaKeys.name: l.string().required(),
+  ExternalUserSchemaKeys.email: l.string().required(),
+  ExternalUserSchemaKeys.age: l.int(),
 });
 
 SchemaValidationResult<ExternalUser> $ExternalUserValidate(

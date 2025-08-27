@@ -27,3 +27,4 @@ const hasMaxNumberChecker = TypeChecker.fromRuntime(HasMaxNumber);
 const hasMinNumberChecker = TypeChecker.fromRuntime(HasMinNumber);
 
 const customValidatorChecker = TypeChecker.fromRuntime(WithCustomValidator);
+const schemaCustomValidatorChecker = TypeChecker.fromRuntime(WithSchemaCustomValidator);

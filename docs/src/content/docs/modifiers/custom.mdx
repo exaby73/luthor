@@ -4,7 +4,14 @@ title: Define a custom validation function
 
 import CodeGenContentSwitcher from '../../../components/CodeGenContentSwitcher.astro'
 
-You can provide a custom validation function to validate a value. This function should accept an `Object?` and return a `bool`.
+You can provide custom validation functions to validate values. Luthor supports two types of custom validation:
+
+1. **Single-value validation** - Validates a single value in isolation
+2. **Schema-aware validation** - Validates a value with access to the entire schema data (cross-field validation)
+
+## Single-Value Custom Validation
+
+For validating a single value independently, use a function that accepts an `Object?` and returns a `bool`.
 
 The `typedef` for the custom validation function is:
 
@@ -41,23 +48,201 @@ bool customValidatorFn(Object? value) => value == 42;
 
 @freezed
 @luthor
-class CustomSchema extends _$CustomSchema {
+abstract class CustomSchema with _$CustomSchema {
   const factory CustomSchema({
     @WithCustomValidator(customValidatorFn) required int value,
-  }) = _$CustomSchema;
-
-  static SchemaValidationResult<CustomSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$CustomSchemaValidate(json);
+  }) = _CustomSchema;
 
   factory CustomSchema.fromJson(Map<String, dynamic> json) =>
       _$CustomSchemaFromJson(json);
 }
 
 void main() {
-  print(CustomSchema.validate({'value': 42}));
+  print($CustomSchemaValidate({'value': 42}));
 }
 ```
 </div>
 </CodeGenContentSwitcher>
+
+## Schema-Aware Custom Validation (Cross-Field Validation)
+
+For validating a field against other fields in the same schema, use schema-aware custom validation. This is perfect for scenarios like password confirmation, date range validation, or any validation that depends on multiple fields.
+
+The `typedef` for schema custom validation is:
+
+```dart
+typedef SchemaCustomValidator = bool Function(Object? value, Map<String, Object?> data);
+```
+
+<CodeGenContentSwitcher>
+<div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+bool passwordsMatch(Object? value, Map<String, Object?> data) {
+  return value == data['password'];
+}
+
+bool maxAgeGreaterThanMin(Object? value, Map<String, Object?> data) {
+  if (value is int && data['minAge'] is int) {
+    return value > (data['minAge'] as int);
+  }
+  return false;
+}
+
+void main() {
+  final schema = l.schema({
+    'password': l.string().min(8).required(),
+    'confirmPassword': l
+        .string()
+        .customWithSchema(passwordsMatch, message: 'Passwords must match')
+        .required(),
+    'minAge': l.int().required(),
+    'maxAge': l
+        .int()
+        .customWithSchema(
+          maxAgeGreaterThanMin,
+          message: 'Max age must be greater than min age',
+        )
+        .required(),
+  });
+
+  final result = schema.validateSchema({
+    'password': 'password123',
+    'confirmPassword': 'password123',
+    'minAge': 18,
+    'maxAge': 65,
+  });
+
+  print(result); // Success
+}
+```
+</div>
+
+<div slot="true">
+
+With Code Generation, use the `@WithSchemaCustomValidator` annotation for cross-field validation:
+
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'signup_form.freezed.dart';
+part 'signup_form.g.dart';
+
+// Schema custom validation functions
+bool passwordsMatch(Object? value, Map<String, Object?> data) {
+  return value == data['password'];
+}
+
+bool isGreaterThanMinAge(Object? value, Map<String, Object?> data) {
+  if (value is int && data['minAge'] is int) {
+    return value > (data['minAge'] as int);
+  }
+  return false;
+}
+
+@luthor
+@freezed
+abstract class SignupForm with _$SignupForm {
+  const factory SignupForm({
+    @IsEmail() required String email,
+    @HasMin(8) required String password,
+    @WithSchemaCustomValidator(passwordsMatch, message: 'Passwords must match')
+    required String confirmPassword,
+    required int minAge,
+    @WithSchemaCustomValidator(isGreaterThanMinAge, message: 'Max age must be greater than min age')
+    required int maxAge,
+  }) = _SignupForm;
+
+  factory SignupForm.fromJson(Map<String, dynamic> json) =>
+      _$SignupFormFromJson(json);
+}
+
+void main() {
+  // Test with valid data
+  final validResult = $SignupFormValidate({
+    'email': 'user@example.com',
+    'password': 'password123',
+    'confirmPassword': 'password123',
+    'minAge': 18,
+    'maxAge': 65,
+  });
+
+  print(validResult); // Success
+
+  // Test with invalid data
+  final invalidResult = $SignupFormValidate({
+    'email': 'user@example.com',
+    'password': 'password123',
+    'confirmPassword': 'different_password', // Doesn't match
+    'minAge': 65,
+    'maxAge': 18, // Less than minAge
+  });
+
+  switch (invalidResult) {
+    case SchemaValidationError(errors: final errors):
+      // Use generated ErrorKeys for type-safe error access
+      final confirmPasswordError = invalidResult.getError(SignupFormErrorKeys.confirmPassword);
+      final maxAgeError = invalidResult.getError(SignupFormErrorKeys.maxAge);
+      
+      print('Password confirmation error: $confirmPasswordError');
+      print('Max age error: $maxAgeError');
+    case SchemaValidationSuccess():
+      // Won't be reached
+      break;
+  }
+}
+```
+</div>
+</CodeGenContentSwitcher>
+
+## Common Use Cases for Schema Custom Validation
+
+### Password Confirmation
+```dart
+bool passwordsMatch(Object? value, Map<String, Object?> data) {
+  return value == data['password'];
+}
+```
+
+### Date Range Validation
+```dart
+bool endDateAfterStartDate(Object? value, Map<String, Object?> data) {
+  if (value is DateTime && data['startDate'] is DateTime) {
+    return value.isAfter(data['startDate'] as DateTime);
+  }
+  return false;
+}
+```
+
+### Conditional Required Fields
+```dart
+bool conditionallyRequired(Object? value, Map<String, Object?> data) {
+  final shouldRequire = data['requireField'] as bool? ?? false;
+  if (shouldRequire) {
+    return value != null && value.toString().isNotEmpty;
+  }
+  return true; // Not required when condition is false
+}
+```
+
+### Numeric Comparisons
+```dart
+bool maxGreaterThanMin(Object? value, Map<String, Object?> data) {
+  if (value is num && data['minValue'] is num) {
+    return value > (data['minValue'] as num);
+  }
+  return false;
+}
+```
+
+## Best Practices
+
+1. **Use descriptive function names** - `passwordsMatch` is clearer than `customValidator1`
+2. **Handle type safety** - Always check types before casting in your validation functions
+3. **Provide custom messages** - Use the `message` parameter for user-friendly error messages
+4. **Keep validators pure** - Avoid side effects in validation functions
+5. **Test thoroughly** - Cross-field validation can be complex, so test all edge cases
+
+Schema custom validation enables powerful cross-field validation scenarios while maintaining type safety and clean, readable code.

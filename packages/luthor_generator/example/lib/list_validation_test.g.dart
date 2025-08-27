@@ -43,16 +43,31 @@ Map<String, dynamic> _$ListValidationTestToJson(_ListValidationTest instance) =>
 // LuthorGenerator
 // **************************************************************************
 
+// ignore: constant_identifier_names
+const ListValidationTestSchemaKeys = (
+  nullableStrings: "nullableStrings",
+  nullableInts: "nullableInts",
+  customObjects: "customObjects",
+  nullableCustomObjects: "nullableCustomObjects",
+  optionalNullableStrings: "optionalNullableStrings",
+);
+
 Validator $ListValidationTestSchema = l.withName('ListValidationTest').schema({
-  'nullableStrings': l.list(validators: [l.string()]).required(),
-  'nullableInts': l.list(validators: [l.int()]).required(),
-  'customObjects': l
+  ListValidationTestSchemaKeys.nullableStrings: l
+      .list(validators: [l.string()])
+      .required(),
+  ListValidationTestSchemaKeys.nullableInts: l
+      .list(validators: [l.int()])
+      .required(),
+  ListValidationTestSchemaKeys.customObjects: l
       .list(validators: [$AnotherSampleSchema.required()])
       .required(),
-  'nullableCustomObjects': l
+  ListValidationTestSchemaKeys.nullableCustomObjects: l
       .list(validators: [$AnotherSampleSchema])
       .required(),
-  'optionalNullableStrings': l.list(validators: [l.string()]),
+  ListValidationTestSchemaKeys.optionalNullableStrings: l.list(
+    validators: [l.string()],
+  ),
 });
 
 SchemaValidationResult<ListValidationTest> $ListValidationTestValidate(

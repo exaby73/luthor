@@ -20,9 +20,15 @@ Map<String, dynamic> _$ClassicClassFreezedToJson(
 // LuthorGenerator
 // **************************************************************************
 
-Validator $ClassicClassFreezedSchema = l.withName('ClassicClassFreezed').schema(
-  {'name': l.string().min(3).required(), 'age': l.int().required()},
-);
+// ignore: constant_identifier_names
+const ClassicClassFreezedSchemaKeys = (name: "name", age: "age");
+
+Validator $ClassicClassFreezedSchema = l
+    .withName('ClassicClassFreezed')
+    .schema({
+      ClassicClassFreezedSchemaKeys.name: l.string().min(3).required(),
+      ClassicClassFreezedSchemaKeys.age: l.int().required(),
+    });
 
 SchemaValidationResult<ClassicClassFreezed> $ClassicClassFreezedValidate(
   Map<String, dynamic> json,

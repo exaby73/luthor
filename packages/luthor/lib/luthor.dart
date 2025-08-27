@@ -1,6 +1,7 @@
 export 'src/annotations/luthor.dart';
 export 'src/annotations/validators/contains.dart';
 export 'src/annotations/validators/custom.dart';
+export 'src/annotations/validators/custom_with_schema.dart';
 export 'src/annotations/validators/date_time.dart';
 export 'src/annotations/validators/email.dart';
 export 'src/annotations/validators/ends_with.dart';
@@ -19,6 +20,7 @@ export 'src/validation_result.dart';
 export 'src/validations/any_validation.dart';
 export 'src/validations/bool_validation.dart';
 export 'src/validations/custom_validation.dart';
+export 'src/validations/schema_custom_validation.dart';
 export 'src/validations/double_validation.dart';
 export 'src/validations/int_validation.dart';
 export 'src/validations/list_validation.dart';

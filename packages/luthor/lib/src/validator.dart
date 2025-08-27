@@ -10,6 +10,7 @@ import 'package:luthor/src/validations/map_validation.dart';
 import 'package:luthor/src/validations/null_validation.dart';
 import 'package:luthor/src/validations/number_validation.dart';
 import 'package:luthor/src/validations/required_validation.dart';
+import 'package:luthor/src/validations/schema_custom_validation.dart';
 import 'package:luthor/src/validations/schema_validation.dart';
 import 'package:luthor/src/validations/string_validation.dart';
 import 'package:luthor/src/validators/double_validator.dart';
@@ -42,10 +43,30 @@ class Validator {
     return validations.any((v) => v is RequiredValidation);
   }
 
+  /// Sets schema data for any SchemaCustomValidation instances in this validator
+  void setSchemaDataForValidations(Map<String, Object?> data) {
+    for (final validation in validations) {
+      if (validation is SchemaCustomValidation) {
+        validation.setSchemaData(data);
+      }
+    }
+  }
+
   /// Validates a value against a custom validator function.
   Validator custom(CustomValidator customValidator, {String? message}) {
     final newValidations = List<Validation>.from(validations)
       ..add(CustomValidation(customValidator, message: message));
+    final newValidator = Validator(initialValidations: newValidations);
+    if (_name != null) {
+      newValidator._name = _name;
+    }
+    return newValidator;
+  }
+
+  /// Validates a value against a custom validator function that has access to the entire schema data.
+  Validator customWithSchema(SchemaCustomValidator customValidator, {String? message}) {
+    final newValidations = List<Validation>.from(validations)
+      ..add(SchemaCustomValidation(customValidator, message: message));
     final newValidator = Validator(initialValidations: newValidations);
     if (_name != null) {
       newValidator._name = _name;

@@ -1,0 +1,239 @@
+---
+title: Code Generation
+---
+
+Luthor provides powerful code generation capabilities that enhance type safety and developer experience when working with validation schemas. The code generator creates type-safe constants and validation functions from your annotated classes.
+
+## Setup
+
+First, add the necessary development dependencies:
+
+```bash
+dart pub add dev:build_runner dev:luthor_generator
+```
+
+Then add the `@luthor` annotation to your classes and run code generation:
+
+```bash
+dart run build_runner build
+```
+
+## Generated Code Overview
+
+For each `@luthor` annotated class, the generator creates:
+
+- **SchemaKeys** - Type-safe constants for defining schemas
+- **ErrorKeys** - Type-safe constants for accessing validation errors  
+- **Schema** - The actual validation schema using SchemaKeys
+- **Validation Function** - A function to validate and optionally deserialize data
+
+## SchemaKeys - Type-Safe Schema Definition
+
+SchemaKeys provide compile-time safety when defining your validation schemas by generating constants that match your class fields.
+
+```dart
+@luthor
+@freezed 
+abstract class User with _$User {
+  const factory User({
+    required String name,
+    required String email,
+    required int age,
+  }) = _User;
+
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+}
+```
+
+### Generated SchemaKeys
+
+```dart
+// Generated code
+const UserSchemaKeys = (
+  name: "name",
+  email: "email", 
+  age: "age",
+);
+```
+
+### Usage in Schema Definition
+
+The generated schema automatically uses these keys:
+
+```dart
+// Generated schema using SchemaKeys
+Validator $UserSchema = l.withName('User').schema({
+  UserSchemaKeys.name: l.string().required(),
+  UserSchemaKeys.email: l.string().email().required(),
+  UserSchemaKeys.age: l.int().required(),
+});
+```
+
+### Benefits of SchemaKeys
+
+- **Refactoring Safety** - Renaming fields updates keys automatically
+- **IDE Support** - Autocomplete and go-to-definition
+- **Typo Prevention** - Compile-time errors for invalid field names
+
+## ErrorKeys - Type-Safe Error Access
+
+ErrorKeys provide type-safe access to validation errors with support for nested fields using dot notation.
+
+### Generated ErrorKeys
+
+```dart
+// For a simple class
+const UserErrorKeys = (
+  name: "name",
+  email: "email",
+  age: "age",
+);
+
+// For nested classes  
+const ProfileErrorKeys = (
+  id: "id",
+  user: (
+    name: "user.name",
+    email: "user.email", 
+    age: "user.age",
+  ),
+  settings: (
+    theme: "settings.theme",
+    notifications: "settings.notifications",
+  ),
+);
+```
+
+### Using ErrorKeys with getError()
+
+Instead of using error-prone strings:
+
+```dart
+// ❌ Error-prone string literals
+final emailError = result.getError('user.email');
+final themeError = result.getError('settings.theme');
+```
+
+Use type-safe ErrorKeys:
+
+```dart
+// ✅ Type-safe with autocomplete
+final emailError = result.getError(ProfileErrorKeys.user.email);  
+final themeError = result.getError(ProfileErrorKeys.settings.theme);
+```
+
+## JsonKey Support
+
+The generator respects `@JsonKey` annotations for proper field mapping:
+
+```dart
+@luthor
+@freezed
+abstract class ApiUser with _$ApiUser {
+  const factory ApiUser({
+    required String name,
+    @JsonKey(name: 'email_address') required String email,
+    @JsonKey(name: 'user_age') required int age,
+  }) = _ApiUser;
+
+  factory ApiUser.fromJson(Map<String, dynamic> json) => _$ApiUserFromJson(json);
+}
+```
+
+### Generated Keys with JsonKey Mapping
+
+```dart
+// SchemaKeys use JSON field names
+const ApiUserSchemaKeys = (
+  name: "name",
+  email: "email_address",  // Maps to JsonKey name
+  age: "user_age",         // Maps to JsonKey name  
+);
+
+// ErrorKeys use Dart field names as keys, JSON names as values
+const ApiUserErrorKeys = (
+  name: "name",
+  email: "email_address",    // Dart field: email -> JSON: email_address
+  age: "user_age",          // Dart field: age -> JSON: user_age
+);
+```
+
+## Complete Example
+
+Here's a comprehensive example showing all generated code features:
+
+```dart
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:luthor/luthor.dart';
+
+part 'user_profile.freezed.dart';
+part 'user_profile.g.dart';
+
+@luthor
+@freezed
+abstract class UserProfile with _$UserProfile {
+  const factory UserProfile({
+    required int id,
+    required String name,
+    @JsonKey(name: 'email_addr') required String email,
+    required UserSettings settings,
+  }) = _UserProfile;
+
+  factory UserProfile.fromJson(Map<String, dynamic> json) => 
+      _$UserProfileFromJson(json);
+}
+
+@luthor  
+@freezed
+abstract class UserSettings with _$UserSettings {
+  const factory UserSettings({
+    required String theme,
+    required bool notifications,
+  }) = _UserSettings;
+
+  factory UserSettings.fromJson(Map<String, dynamic> json) =>
+      _$UserSettingsFromJson(json);
+}
+
+void main() {
+  // Using generated validation
+  final result = $UserProfileValidate({
+    'id': 1,
+    'name': 'John Doe',
+    'email_addr': 'john@example.com',
+    'settings': {
+      'theme': 'dark',
+      'notifications': true,
+    },
+  });
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final profile):
+      print('✅ Valid profile: ${profile.name}');
+      
+    case SchemaValidationError(errors: final errors):
+      // Type-safe error access
+      final nameError = result.getError(UserProfileErrorKeys.name);
+      final emailError = result.getError(UserProfileErrorKeys.email);  
+      final themeError = result.getError(UserProfileErrorKeys.settings.theme);
+      
+      print('❌ Validation errors:');
+      if (nameError != null) print('Name: $nameError');
+      if (emailError != null) print('Email: $emailError');  
+      if (themeError != null) print('Theme: $themeError');
+  }
+}
+```
+
+## Cross-Field Validation
+
+Code generation also supports cross-field validation using `@WithSchemaCustomValidator`. See the [Custom Validation](/modifiers/custom) documentation for details on implementing validators that can access the entire schema data.
+
+## Best Practices
+
+1. **Use SchemaKeys** - Always use generated SchemaKeys in your schema definitions for type safety
+2. **Use ErrorKeys** - Replace string literals with ErrorKeys when accessing validation errors
+3. **Consistent Annotations** - Apply `@luthor` consistently across related classes
+4. **Run Generation** - Run `dart run build_runner build` after making changes to annotated classes
+
+The code generation features make Luthor validation both more powerful and safer to use, providing compile-time guarantees and excellent IDE support for your validation logic.

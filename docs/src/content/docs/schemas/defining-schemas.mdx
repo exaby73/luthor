@@ -2,7 +2,14 @@
 title: Defining Schemas
 ---
 
+import CodeGenContentSwitcher from '../../../components/CodeGenContentSwitcher.astro'
+
 Luthor has a concept of "schemas" which are used to define the structure of the data that you want to validate. Essentially, a schema is a `Map` that defines the structure of the data that you want to validate. The keys of the `Map` are the names of the fields that you want to validate, and the values are the rules that you want to apply to those fields.
+
+<CodeGenContentSwitcher>
+<div slot="false">
+
+## Manual Schema Definition
 
 Here's an example of a simple schema:
 
@@ -51,3 +58,235 @@ void main() {
   });
 }
 ```
+
+</div>
+<div slot="true">
+
+## Code Generation with SchemaKeys
+
+When using code generation, Luthor automatically generates type-safe SchemaKeys that provide compile-time safety and IDE support for schema definition. This eliminates typos and makes refactoring safer.
+
+### Basic Schema with Code Generation
+
+```dart
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:luthor/luthor.dart';
+
+part 'person.freezed.dart';
+part 'person.g.dart';
+
+@luthor
+@freezed
+abstract class Person with _$Person {
+  const factory Person({
+    @HasMin(1) required String name,
+    required int age,
+  }) = _Person;
+
+  factory Person.fromJson(Map<String, dynamic> json) => _$PersonFromJson(json);
+}
+
+void main() {
+  final result = $PersonValidate({
+    'name': 'John Doe',
+    'age': 30,
+  });
+
+  print(result);
+}
+```
+
+### Generated SchemaKeys
+
+The code generator automatically creates SchemaKeys constants:
+
+```dart
+// Generated code
+const PersonSchemaKeys = (
+  name: "name",
+  age: "age",
+);
+
+// Generated schema using SchemaKeys for type safety
+Validator $PersonSchema = l.withName('Person').schema({
+  PersonSchemaKeys.name: l.string().min(1).required(),
+  PersonSchemaKeys.age: l.int().required(),
+});
+```
+
+### Nested Schemas with Code Generation
+
+```dart
+@luthor
+@freezed
+abstract class Address with _$Address {
+  const factory Address({
+    required String street,
+    required String city,
+    required String zip,
+  }) = _Address;
+
+  factory Address.fromJson(Map<String, dynamic> json) => _$AddressFromJson(json);
+}
+
+@luthor
+@freezed  
+abstract class PersonWithAddress with _$PersonWithAddress {
+  const factory PersonWithAddress({
+    @HasMin(1) required String name,
+    required int age,
+    required Address address,
+  }) = _PersonWithAddress;
+
+  factory PersonWithAddress.fromJson(Map<String, dynamic> json) => 
+      _$PersonWithAddressFromJson(json);
+}
+
+void main() {
+  final result = $PersonWithAddressValidate({
+    'name': 'John Doe',
+    'age': 30,
+    'address': {
+      'street': '123 Main St',
+      'city': 'Springfield',
+      'zip': '12345',
+    },
+  });
+
+  print(result);
+}
+```
+
+### Benefits of SchemaKeys
+
+1. **Type Safety** - No more string typos in field names
+2. **IDE Support** - Full autocomplete and go-to-definition
+3. **Refactoring Safety** - Renaming fields updates keys automatically
+4. **JsonKey Support** - Automatically respects `@JsonKey` annotations
+
+### JsonKey Integration
+
+SchemaKeys automatically handle `@JsonKey` annotations:
+
+```dart
+@luthor
+@freezed
+abstract class ApiPerson with _$ApiPerson {
+  const factory ApiPerson({
+    @JsonKey(name: 'full_name') @HasMin(1) required String name,
+    @JsonKey(name: 'user_age') required int age,
+  }) = _ApiPerson;
+
+  factory ApiPerson.fromJson(Map<String, dynamic> json) => 
+      _$ApiPersonFromJson(json);
+}
+
+// Generated SchemaKeys use JsonKey names
+const ApiPersonSchemaKeys = (
+  name: "full_name",  // Uses JsonKey name
+  age: "user_age",    // Uses JsonKey name  
+);
+
+// Schema validation uses JSON field names
+final result = $ApiPersonValidate({
+  'full_name': 'John Doe',
+  'user_age': 30,
+});
+```
+
+</div>
+</CodeGenContentSwitcher>
+
+## Advanced Schema Features
+
+### Named Schemas
+
+You can create named schemas for better error messages and debugging:
+
+```dart
+final userSchema = l.withName('User').schema({
+  'email': l.string().email().required(),
+  'password': l.string().min(8).required(),
+});
+```
+
+### Optional vs Required Fields
+
+By default, fields in schemas are optional. Use `.required()` to make them mandatory:
+
+```dart
+final schema = l.schema({
+  'required_field': l.string().required(),     // Must be present
+  'optional_field': l.string(),                // Can be null/missing
+});
+```
+
+### Schema Reuse
+
+Schemas can be reused and composed:
+
+```dart
+final addressSchema = l.schema({
+  'street': l.string().required(),
+  'city': l.string().required(), 
+  'zip': l.string().required(),
+});
+
+final personSchema = l.schema({
+  'name': l.string().required(),
+  'home_address': addressSchema.required(),
+  'work_address': addressSchema,  // Optional
+});
+```
+
+### Schema Validation with Deserialization
+
+When using code generation, you can validate and deserialize in one step:
+
+<CodeGenContentSwitcher>
+<div slot="false">
+```dart
+class User {
+  final String name;
+  final String email;
+  
+  User({required this.name, required this.email});
+  
+  factory User.fromJson(Map<String, dynamic> json) => User(
+    name: json['name'] as String,
+    email: json['email'] as String,
+  );
+}
+
+final result = userSchema.validateSchema(
+  {'name': 'John', 'email': 'john@example.com'},
+  fromJson: User.fromJson,
+);
+
+switch (result) {
+  case SchemaValidationSuccess(data: final User user):
+    print('User: ${user.name}');
+  case SchemaValidationError():
+    print('Validation failed');
+}
+```
+</div>
+<div slot="true">
+```dart
+// Using generated validation function
+final result = $UserValidate({
+  'name': 'John',
+  'email': 'john@example.com',
+});
+
+switch (result) {
+  case SchemaValidationSuccess(data: final User user):
+    print('User: ${user.name}'); // Already deserialized!
+  case SchemaValidationError():
+    print('Validation failed');
+}
+```
+</div>
+</CodeGenContentSwitcher>
+
+Schemas provide a powerful way to validate complex nested data structures while maintaining type safety and clear validation rules.

@@ -1,3 +1,8 @@
+## 0.11.0
+
+- **FEAT**: Add schema-aware custom validation with `customWithSchema()` method for cross-field validation scenarios like password confirmation.
+- **FEAT**: Add `WithSchemaCustomValidator` annotation for code generation support of cross-field validation.
+
 ## 0.10.0
 
 - **FEAT**: Add support for generating type safe error keys in luthor_generator.

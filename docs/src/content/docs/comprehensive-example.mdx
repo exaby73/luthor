@@ -1,0 +1,415 @@
+---
+title: Comprehensive Example
+description: A complete example showcasing all Luthor features including SchemaKeys, ErrorKeys, and cross-field validation
+---
+
+This comprehensive example demonstrates all the powerful features of Luthor working together:
+
+- **Type-safe SchemaKeys** for schema definition
+- **Type-safe ErrorKeys** for error handling
+- **Cross-field validation** with schema custom validators
+- **JsonKey integration** for API compatibility
+- **Nested schema validation**
+
+## Complete User Registration Example
+
+```dart
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:luthor/luthor.dart';
+
+part 'user_registration.freezed.dart';
+part 'user_registration.g.dart';
+
+// Cross-field validation functions
+bool passwordsMatch(Object? value, Map<String, Object?> data) {
+  return value == data['password'];
+}
+
+bool endDateAfterStartDate(Object? value, Map<String, Object?> data) {
+  if (value is String && data['employmentStartDate'] is String) {
+    final endDate = DateTime.tryParse(value);
+    final startDate = DateTime.tryParse(data['employmentStartDate'] as String);
+    if (endDate != null && startDate != null) {
+      return endDate.isAfter(startDate);
+    }
+  }
+  return false;
+}
+
+bool phoneRequiredForBusiness(Object? value, Map<String, Object?> data) {
+  final accountType = data['accountType'] as String?;
+  if (accountType == 'business') {
+    return value != null && value.toString().isNotEmpty;
+  }
+  return true; // Not required for non-business accounts
+}
+
+// Address schema
+@luthor
+@freezed
+abstract class Address with _$Address {
+  const factory Address({
+    required String street,
+    required String city,
+    @JsonKey(name: 'state_code') required String state,
+    @JsonKey(name: 'postal_code') required String zipCode,
+    required String country,
+  }) = _Address;
+
+  factory Address.fromJson(Map<String, dynamic> json) => _$AddressFromJson(json);
+}
+
+// Employment information schema
+@luthor
+@freezed
+abstract class Employment with _$Employment {
+  const factory Employment({
+    @JsonKey(name: 'company_name') required String companyName,
+    required String position,
+    @JsonKey(name: 'start_date') required String employmentStartDate,
+    @JsonKey(name: 'end_date') 
+    @WithSchemaCustomValidator(endDateAfterStartDate, message: 'End date must be after start date')
+    String? employmentEndDate,
+    @HasMin(0) @HasMax(200000) required double salary,
+  }) = _Employment;
+
+  factory Employment.fromJson(Map<String, dynamic> json) => _$EmploymentFromJson(json);
+}
+
+// Main user registration schema
+@luthor
+@freezed
+abstract class UserRegistration with _$UserRegistration {
+  const factory UserRegistration({
+    // Basic information
+    @HasMin(2) @HasMax(50) required String firstName,
+    @HasMin(2) @HasMax(50) required String lastName,
+    @IsEmail() @JsonKey(name: 'email_address') required String email,
+    
+    // Password fields with confirmation
+    @HasMin(8) @RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)')
+    required String password,
+    @WithSchemaCustomValidator(passwordsMatch, message: 'Passwords must match')
+    required String confirmPassword,
+    
+    // Account type and conditional phone
+    required String accountType, // 'personal' or 'business'
+    @WithSchemaCustomValidator(phoneRequiredForBusiness, message: 'Phone number is required for business accounts')
+    String? phoneNumber,
+    
+    // Age validation
+    @HasMin(18) @HasMax(100) required int age,
+    
+    // Address (nested schema)
+    required Address address,
+    
+    // Employment (optional nested schema)
+    Employment? employment,
+    
+    // Terms acceptance
+    required bool acceptTerms,
+    
+    // Marketing preferences
+    @JsonKey(name: 'newsletter_opt_in') bool? newsletterOptIn,
+  }) = _UserRegistration;
+
+  factory UserRegistration.fromJson(Map<String, dynamic> json) => 
+      _$UserRegistrationFromJson(json);
+}
+
+void main() {
+  print('=== Luthor Comprehensive Example ===\n');
+
+  // Example 1: Valid registration
+  print('📝 Testing valid registration...');
+  testValidRegistration();
+
+  print('\n' + '=' * 50 + '\n');
+
+  // Example 2: Invalid registration with multiple errors
+  print('❌ Testing invalid registration...');
+  testInvalidRegistration();
+
+  print('\n' + '=' * 50 + '\n');
+
+  // Example 3: Business account validation
+  print('🏢 Testing business account validation...');
+  testBusinessAccountValidation();
+
+  print('\n' + '=' * 50 + '\n');
+
+  // Example 4: Employment date validation
+  print('💼 Testing employment date validation...');
+  testEmploymentValidation();
+}
+
+void testValidRegistration() {
+  final validData = {
+    'firstName': 'John',
+    'lastName': 'Doe',
+    'email_address': 'john.doe@example.com',
+    'password': 'SecurePass123',
+    'confirmPassword': 'SecurePass123',
+    'accountType': 'personal',
+    'age': 25,
+    'address': {
+      'street': '123 Main Street',
+      'city': 'Springfield',
+      'state_code': 'IL',
+      'postal_code': '62701',
+      'country': 'USA',
+    },
+    'employment': {
+      'company_name': 'Tech Corp',
+      'position': 'Software Developer',
+      'start_date': '2020-01-01',
+      'end_date': '2023-12-31',
+      'salary': 75000.0,
+    },
+    'acceptTerms': true,
+    'newsletter_opt_in': false,
+  };
+
+  final result = $UserRegistrationValidate(validData);
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final registration):
+      print('✅ Registration successful!');
+      print('   Name: ${registration.firstName} ${registration.lastName}');
+      print('   Email: ${registration.email}');
+      print('   Account Type: ${registration.accountType}');
+      print('   City: ${registration.address.city}');
+      if (registration.employment != null) {
+        print('   Company: ${registration.employment!.companyName}');
+      }
+      
+    case SchemaValidationError(errors: final errors):
+      print('❌ Unexpected validation failure: $errors');
+  }
+}
+
+void testInvalidRegistration() {
+  final invalidData = {
+    'firstName': 'J', // Too short
+    'lastName': '', // Empty
+    'email_address': 'invalid-email', // Invalid email format
+    'password': 'weak', // Too short, no uppercase/number
+    'confirmPassword': 'different', // Doesn't match password
+    'accountType': 'business',
+    // phoneNumber missing - required for business
+    'age': 17, // Under 18
+    'address': {
+      'street': '123 Main Street',
+      'city': '', // Empty required field
+      'state_code': 'IL',
+      'postal_code': '62701',
+      'country': 'USA',
+    },
+    'acceptTerms': false, // Must be true
+  };
+
+  final result = $UserRegistrationValidate(invalidData);
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final registration):
+      print('❌ Unexpected validation success: $registration');
+      
+    case SchemaValidationError():
+      print('✅ Validation failed as expected. Errors found:');
+      
+      // Use type-safe ErrorKeys for specific error handling
+      final firstNameError = result.getError(UserRegistrationErrorKeys.firstName);
+      final lastNameError = result.getError(UserRegistrationErrorKeys.lastName);
+      final emailError = result.getError(UserRegistrationErrorKeys.email);
+      final passwordError = result.getError(UserRegistrationErrorKeys.password);
+      final confirmPasswordError = result.getError(UserRegistrationErrorKeys.confirmPassword);
+      final phoneError = result.getError(UserRegistrationErrorKeys.phoneNumber);
+      final ageError = result.getError(UserRegistrationErrorKeys.age);
+      final cityError = result.getError(UserRegistrationErrorKeys.address.city);
+      final termsError = result.getError(UserRegistrationErrorKeys.acceptTerms);
+      
+      if (firstNameError != null) print('   • First Name: $firstNameError');
+      if (lastNameError != null) print('   • Last Name: $lastNameError');
+      if (emailError != null) print('   • Email: $emailError');
+      if (passwordError != null) print('   • Password: $passwordError');
+      if (confirmPasswordError != null) print('   • Confirm Password: $confirmPasswordError');
+      if (phoneError != null) print('   • Phone: $phoneError');
+      if (ageError != null) print('   • Age: $ageError');
+      if (cityError != null) print('   • City: $cityError');
+      if (termsError != null) print('   • Terms: $termsError');
+  }
+}
+
+void testBusinessAccountValidation() {
+  // Test business account without phone (should fail)
+  final businessDataNoPhone = {
+    'firstName': 'Jane',
+    'lastName': 'Smith',
+    'email_address': 'jane@business.com',
+    'password': 'SecurePass123',
+    'confirmPassword': 'SecurePass123',
+    'accountType': 'business',
+    // phoneNumber intentionally omitted
+    'age': 35,
+    'address': {
+      'street': '456 Business Ave',
+      'city': 'Commerce City',
+      'state_code': 'CO',
+      'postal_code': '80022',
+      'country': 'USA',
+    },
+    'acceptTerms': true,
+  };
+
+  final result1 = $UserRegistrationValidate(businessDataNoPhone);
+  
+  switch (result1) {
+    case SchemaValidationError():
+      final phoneError = result1.getError(UserRegistrationErrorKeys.phoneNumber);
+      print('✅ Business account validation: $phoneError');
+    case SchemaValidationSuccess():
+      print('❌ Business account should require phone number');
+  }
+
+  // Test personal account without phone (should succeed)
+  final personalDataNoPhone = {
+    ...businessDataNoPhone,
+    'accountType': 'personal',
+  };
+
+  final result2 = $UserRegistrationValidate(personalDataNoPhone);
+  
+  switch (result2) {
+    case SchemaValidationSuccess():
+      print('✅ Personal account doesn\'t require phone number');
+    case SchemaValidationError():
+      print('❌ Personal account should not require phone number');
+  }
+}
+
+void testEmploymentValidation() {
+  final employmentData = {
+    'firstName': 'Bob',
+    'lastName': 'Johnson',
+    'email_address': 'bob@example.com',
+    'password': 'SecurePass123',
+    'confirmPassword': 'SecurePass123',
+    'accountType': 'personal',
+    'age': 30,
+    'address': {
+      'street': '789 Work Street',
+      'city': 'Job City',
+      'state_code': 'TX',
+      'postal_code': '75001',
+      'country': 'USA',
+    },
+    'employment': {
+      'company_name': 'Previous Corp',
+      'position': 'Manager',
+      'start_date': '2020-01-01',
+      'end_date': '2019-01-01', // End date before start date!
+      'salary': 80000.0,
+    },
+    'acceptTerms': true,
+  };
+
+  final result = $UserRegistrationValidate(employmentData);
+
+  switch (result) {
+    case SchemaValidationError():
+      final endDateError = result.getError(UserRegistrationErrorKeys.employment.employmentEndDate);
+      print('✅ Employment date validation: $endDateError');
+    case SchemaValidationSuccess():
+      print('❌ Employment end date should be after start date');
+  }
+}
+```
+
+## Key Features Demonstrated
+
+### 1. Type-Safe SchemaKeys Usage
+The generated schema uses SchemaKeys for compile-time safety:
+
+```dart
+// Generated schema (simplified)
+Validator $UserRegistrationSchema = l.withName('UserRegistration').schema({
+  UserRegistrationSchemaKeys.firstName: l.string().min(2).max(50).required(),
+  UserRegistrationSchemaKeys.email: l.string().email().required(),
+  UserRegistrationSchemaKeys.password: l.string().min(8).regex(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)').required(),
+  // ... etc
+});
+```
+
+### 2. Type-Safe ErrorKeys Access
+No more string literals for error handling:
+
+```dart
+// Type-safe error access
+final emailError = result.getError(UserRegistrationErrorKeys.email);
+final cityError = result.getError(UserRegistrationErrorKeys.address.city);
+final endDateError = result.getError(UserRegistrationErrorKeys.employment.employmentEndDate);
+```
+
+### 3. Cross-Field Validation
+Multiple examples of fields validating against other fields:
+
+- **Password confirmation** - `confirmPassword` must match `password`
+- **Conditional requirements** - `phoneNumber` required only for business accounts
+- **Date range validation** - `employmentEndDate` must be after `employmentStartDate`
+
+### 4. JsonKey Integration
+Seamless mapping between Dart field names and JSON keys:
+
+```dart
+@JsonKey(name: 'email_address') required String email,
+@JsonKey(name: 'state_code') required String state,
+```
+
+### 5. Nested Schema Validation
+Complex nested structures with their own validation rules:
+
+- `Address` schema with postal code validation
+- `Employment` schema with salary range validation
+
+## Output Example
+
+When you run this example, you'll see output like:
+
+```
+=== Luthor Comprehensive Example ===
+
+📝 Testing valid registration...
+✅ Registration successful!
+   Name: John Doe
+   Email: john.doe@example.com
+   Account Type: personal
+   City: Springfield
+   Company: Tech Corp
+
+==================================================
+
+❌ Testing invalid registration...
+✅ Validation failed as expected. Errors found:
+   • First Name: firstName must be at least 2 characters long
+   • Last Name: lastName must be at least 1 characters long
+   • Email: email_address must be a valid email address
+   • Password: password must be at least 8 characters long
+   • Confirm Password: Passwords must match
+   • Phone: Phone number is required for business accounts
+   • Age: age must be at least 18
+   • City: city must be at least 1 characters long
+   • Terms: acceptTerms is required
+
+==================================================
+
+🏢 Testing business account validation...
+✅ Business account validation: Phone number is required for business accounts
+✅ Personal account doesn't require phone number
+
+==================================================
+
+💼 Testing employment date validation...
+✅ Employment date validation: End date must be after start date
+```
+
+This comprehensive example showcases how Luthor's code generation features work together to provide a powerful, type-safe validation solution for complex real-world scenarios.

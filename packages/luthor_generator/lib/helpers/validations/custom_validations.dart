@@ -6,6 +6,7 @@ import 'package:luthor_generator/helpers/validations/base_validations.dart';
 
 void getCustomValidations(ParameterElement param, StringBuffer buffer) {
   _checkAndWriteCustomValidation(buffer, param);
+  _checkAndWriteSchemaCustomValidation(buffer, param);
 }
 
 void _checkAndWriteCustomValidation(
@@ -22,6 +23,25 @@ void _checkAndWriteCustomValidation(
         .name;
 
     buffer.write(customFuntion);
+    if (message != null) buffer.write(", message: '$message'");
+    buffer.write(')');
+  }
+}
+
+void _checkAndWriteSchemaCustomValidation(
+  StringBuffer buffer,
+  ParameterElement param,
+) {
+  final schemaCustomAnnotation = getAnnotation(schemaCustomValidatorChecker, param);
+  if (schemaCustomAnnotation != null) {
+    buffer.write('.customWithSchema(');
+    final message = schemaCustomAnnotation.getField('message')?.toStringValue();
+    final customFunction = schemaCustomAnnotation
+        .getField('customValidator')!
+        .toFunctionValue()!
+        .name;
+
+    buffer.write(customFunction);
     if (message != null) buffer.write(", message: '$message'");
     buffer.write(')');
   }

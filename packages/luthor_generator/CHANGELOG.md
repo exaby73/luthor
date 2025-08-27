@@ -1,3 +1,10 @@
+## 0.11.0
+
+- **FEAT**: Add generation of type-safe `SchemaKeys` constants for schema field access with compile-time safety.
+- **FEAT**: Add support for `@WithSchemaCustomValidator` annotation to enable cross-field validation in generated schemas.
+- **FEAT**: Enhanced `ErrorKeys` generation with improved nested field support and dot-notation access.
+- **FEAT**: Automatic JsonKey integration - SchemaKeys and ErrorKeys respect `@JsonKey` annotations for proper field mapping.
+
 ## 0.10.0
 
 - **FEAT**: Add support for generating type safe error keys.

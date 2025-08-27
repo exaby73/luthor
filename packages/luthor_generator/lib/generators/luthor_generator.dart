@@ -47,20 +47,16 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
 
     final params = constructor.parameters;
     final buffer = StringBuffer();
-    buffer.write("Validator \$${name}Schema = l.withName('$name').schema({\n");
+    
+    // Generate SchemaKeys first (needed by schema)
+    _writeSchemaKeysRecord(buffer, name, constructor);
+    
+    // Generate schema using SchemaKeys
+    buffer.write("\nValidator \$${name}Schema = l.withName('$name').schema({\n");
 
     for (final param in params) {
-      var name = param.name;
-      final jsonKeyName = jsonKeyChecker
-          .firstAnnotationOf(param)
-          ?.getField('name')
-          ?.toStringValue();
-
-      if (jsonKeyName != null) {
-        name = jsonKeyName;
-      }
-
-      buffer.write("'$name': ");
+      final fieldName = param.name;
+      buffer.write("  ${name}SchemaKeys.$fieldName: ");
       buffer.write(getValidations(param));
       buffer.write(',\n');
     }
@@ -116,6 +112,26 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
       '  SchemaValidationResult<$name> validateSelf() => \$${name}Validate($toJsonString);\n'
       '}\n',
     );
+  }
+
+  void _writeSchemaKeysRecord(
+    StringBuffer buffer,
+    String name,
+    ConstructorElement constructor,
+  ) {
+    buffer.write('\n\n');
+    
+    // Generate SchemaKeys constant
+    buffer.write('// ignore: constant_identifier_names\n');
+    buffer.write('const ${name}SchemaKeys = (\n');
+    
+    for (final param in constructor.parameters) {
+      final fieldName = _getRecordFieldName(param.name);
+      final jsonKeyName = _getJsonKeyName(param);
+      buffer.write('  $fieldName: "$jsonKeyName",\n');
+    }
+    
+    buffer.write(');\n');
   }
 
   void _writeErrorKeysRecord(
@@ -227,22 +243,18 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
         getAnnotation(dartMappableChecker, element) != null;
 
     final buffer = StringBuffer();
+    
+    // Generate SchemaKeys first (needed by schema)
+    _writeSchemaKeysRecord(buffer, className, constructor);
+    
+    // Generate schema using SchemaKeys
     buffer.write(
-      "Validator \$${className}Schema = l.withName('$className').schema({\n",
+      "\nValidator \$${className}Schema = l.withName('$className').schema({\n",
     );
 
     for (final param in constructor.parameters) {
-      var name = param.name;
-      final jsonKeyName = jsonKeyChecker
-          .firstAnnotationOf(param)
-          ?.getField('name')
-          ?.toStringValue();
-
-      if (jsonKeyName != null) {
-        name = jsonKeyName;
-      }
-
-      buffer.write("'$name': ");
+      final fieldName = param.name;
+      buffer.write("  ${className}SchemaKeys.$fieldName: ");
       buffer.write(getValidations(param));
       buffer.write(',\n');
     }

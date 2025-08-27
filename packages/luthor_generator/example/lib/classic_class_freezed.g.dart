@@ -35,3 +35,6 @@ extension ClassicClassFreezedValidationExtension on ClassicClassFreezed {
   SchemaValidationResult<ClassicClassFreezed> validateSelf() =>
       $ClassicClassFreezedValidate(toJson());
 }
+
+// ignore: constant_identifier_names
+const ClassicClassFreezedErrorKeys = (name: "name", age: "age");

@@ -2,13 +2,13 @@ name: luthor
 description: |
   A Dart validation library inspired by https://zod.dev 
   with support for code generation.
-version: 0.9.0
+version: 0.10.0
 repository: https://github.com/exaby73/luthor/tree/main/packages/luthor
 homepage: https://luthor.netlify.app
 resolution: workspace
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
+  sdk: '>=3.8.0 <4.0.0'
 
 dependencies:
   meta: any

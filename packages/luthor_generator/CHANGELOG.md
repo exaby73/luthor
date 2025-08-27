@@ -1,3 +1,7 @@
+## 0.10.0
+
+- **FEAT**: Add support for generating type safe error keys.
+
 ## 0.9.0
 
 - **FIX**: Fix nullable DateTime handling in auto-generated schemas. Nullable DateTime fields now properly validate without requiring @luthor annotation.
@@ -20,107 +24,107 @@
 
 > Note: This release has breaking changes.
 
- - **BREAKING** **FEAT**(luthor_generator): Add support for Freezed 3.0 ([#106](https://github.com/exaby73/luthor/issues/106)).
+- **BREAKING** **FEAT**(luthor_generator): Add support for Freezed 3.0 ([#106](https://github.com/exaby73/luthor/issues/106)).
 
 ## 0.6.4
 
- - **FEAT**: Add URL validator support ([#103](https://github.com/exaby73/luthor/issues/103)).
+- **FEAT**: Add URL validator support ([#103](https://github.com/exaby73/luthor/issues/103)).
 
 ## 0.6.3
 
- - **FIX**: Nullable ? in generated code.
+- **FIX**: Nullable ? in generated code.
 
 ## 0.6.2
 
- - **FEAT**: Add support for generic map validator ([#99](https://github.com/exaby73/luthor/issues/99)).
+- **FEAT**: Add support for generic map validator ([#99](https://github.com/exaby73/luthor/issues/99)).
 
 ## 0.6.1
 
- - **FEAT**: Add name support ([#98](https://github.com/exaby73/luthor/issues/98)).
+- **FEAT**: Add name support ([#98](https://github.com/exaby73/luthor/issues/98)).
 
 ## 0.6.0
 
 > Note: This release has breaking changes.
 
- - **BREAKING** **FIX**: Rename bool to boolean ([#97](https://github.com/exaby73/luthor/issues/97)).
+- **BREAKING** **FIX**: Rename bool to boolean ([#97](https://github.com/exaby73/luthor/issues/97)).
 
 ## 0.5.1
 
- - **FEAT**: Updated dependencies.
+- **FEAT**: Updated dependencies.
 
 ## 0.5.0
 
- - **FEAT**(luthor_generator): Add support for dart_mappable classes ([#94](https://github.com/exaby73/luthor/issues/94)).
+- **FEAT**(luthor_generator): Add support for dart_mappable classes ([#94](https://github.com/exaby73/luthor/issues/94)).
 
 ## 0.4.6
 
- - **FEAT**: Add ip string validator ([#92](https://github.com/exaby73/luthor/issues/92)).
+- **FEAT**: Add ip string validator ([#92](https://github.com/exaby73/luthor/issues/92)).
 
 ## 0.4.5
 
- - **FEAT**(luthor_generator): Support of freezed's Default ([#87](https://github.com/exaby73/luthor/issues/87)).
+- **FEAT**(luthor_generator): Support of freezed's Default ([#87](https://github.com/exaby73/luthor/issues/87)).
 
 ## 0.4.4+2
 
- - **FIX**(luthor_generator): Improper check for fromJson ([#88](https://github.com/exaby73/luthor/issues/88)).
+- **FIX**(luthor_generator): Improper check for fromJson ([#88](https://github.com/exaby73/luthor/issues/88)).
 
 ## 0.4.4+1
 
- - Update a dependency to the latest release.
+- Update a dependency to the latest release.
 
 ## 0.4.4
 
- - **FEAT**: Support non-freezed classes by ignoring previous requirement for factory ctors ([#82](https://github.com/exaby73/luthor/issues/82)).
+- **FEAT**: Support non-freezed classes by ignoring previous requirement for factory ctors ([#82](https://github.com/exaby73/luthor/issues/82)).
 
 ## 0.4.3
 
- - **FIX**(luthor_generator): invalid identifier.
- - **FEAT**(luthor_generator): remove validate method ([#78](https://github.com/exaby73/luthor/issues/78)).
- - **FEAT**(luthor_generator): remove need for validate method.
+- **FIX**(luthor_generator): invalid identifier.
+- **FEAT**(luthor_generator): remove validate method ([#78](https://github.com/exaby73/luthor/issues/78)).
+- **FEAT**(luthor_generator): remove need for validate method.
 
 ## 0.4.2
 
- - **FEAT**(luthor_generator): remove need for validate method.
- - **FEAT**: deprecate luthor_annotation ([#77](https://github.com/exaby73/luthor/issues/77)).
+- **FEAT**(luthor_generator): remove need for validate method.
+- **FEAT**: deprecate luthor_annotation ([#77](https://github.com/exaby73/luthor/issues/77)).
 
 ## 0.4.1
 
- - **FEAT**: getErrors method ([#74](https://github.com/exaby73/luthor/issues/74)).
+- **FEAT**: getErrors method ([#74](https://github.com/exaby73/luthor/issues/74)).
 
 ## 0.4.0+1
 
 ## 0.4.0
 
- - **FEAT**(luthor,luthor_annotation,luthor_generator): add startsWith, endsWith and contains string validations ([#63](https://github.com/exaby73/luthor/issues/63)).
- - **FEAT**: custom validators ([#61](https://github.com/exaby73/luthor/issues/61)).
- - **FEAT**(luthor_generator): added generation for min and max validator for int, double and num.
+- **FEAT**(luthor,luthor_annotation,luthor_generator): add startsWith, endsWith and contains string validations ([#63](https://github.com/exaby73/luthor/issues/63)).
+- **FEAT**: custom validators ([#61](https://github.com/exaby73/luthor/issues/61)).
+- **FEAT**(luthor_generator): added generation for min and max validator for int, double and num.
 
 ## 0.3.2
 
- - **FEAT**: update analyzer.
+- **FEAT**: update analyzer.
 
 ## 0.3.1
 
- - **FEAT**(luthor_generator): add support for DateTime.
+- **FEAT**(luthor_generator): add support for DateTime.
 
 ## 0.3.0
 
- - **FEAT**(luthor_generator): validate method generates unique methods allowing multiple luthor classes in one file.
+- **FEAT**(luthor_generator): validate method generates unique methods allowing multiple luthor classes in one file.
 
 ## 0.2.4
 
- - **FIX**: dependencies.
- - **FIX**(luthor): SchemaValidation null error due to covariant.
- - **FEAT**(luthor_generator): Add support for JsonKey.name.
- - **FEAT**(luthor_generator): luthor classes now require a validate method instead of exposing the raw schema.
- - **FEAT**(luthor): add fromJson argument to validateSchema.
+- **FIX**: dependencies.
+- **FIX**(luthor): SchemaValidation null error due to covariant.
+- **FEAT**(luthor_generator): Add support for JsonKey.name.
+- **FEAT**(luthor_generator): luthor classes now require a validate method instead of exposing the raw schema.
+- **FEAT**(luthor): add fromJson argument to validateSchema.
 
 ## 0.2.3
 
- - **FIX**: dependencies.
- - **FIX**(luthor): SchemaValidation null error due to covariant.
- - **FEAT**(luthor_generator): luthor classes now require a validate method instead of exposing the raw schema.
- - **FEAT**(luthor): add fromJson argument to validateSchema.
+- **FIX**: dependencies.
+- **FIX**(luthor): SchemaValidation null error due to covariant.
+- **FEAT**(luthor_generator): luthor classes now require a validate method instead of exposing the raw schema.
+- **FEAT**(luthor): add fromJson argument to validateSchema.
 
 ## 0.2.2
 

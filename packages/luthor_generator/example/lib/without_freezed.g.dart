@@ -23,6 +23,9 @@ extension WithoutFreezedValidationExtension on WithoutFreezed {
       $WithoutFreezedValidate(toJson());
 }
 
+// ignore: constant_identifier_names
+const WithoutFreezedErrorKeys = (name: "name", age: "age");
+
 Validator $WithDartMappableSchema = l.withName('WithDartMappable').schema({
   'email': l.string().email().required(),
   'password': l.string().min(8).required(),
@@ -39,3 +42,6 @@ extension WithDartMappableValidationExtension on WithDartMappable {
   SchemaValidationResult<WithDartMappable> validateSelf() =>
       $WithDartMappableValidate(toMap());
 }
+
+// ignore: constant_identifier_names
+const WithDartMappableErrorKeys = (email: "email", password: "password");

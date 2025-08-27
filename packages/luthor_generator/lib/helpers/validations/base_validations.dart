@@ -18,9 +18,11 @@ class GenerationContext {
   const GenerationContext._();
 
   static final Set<ClassElement> discoveredClasses = {};
+  static Set<String>? typedefVisitedTypes;
 
   static void reset() {
     discoveredClasses.clear();
+    typedefVisitedTypes = null;
   }
 
   static void addDiscoveredClass(ClassElement element) {

@@ -1,3 +1,7 @@
+## 0.10.0
+
+- **FEAT**: Add support for generating type safe error keys in luthor_generator.
+
 ## 0.9.0
 
 - **BREAKING**: Validators are now immutable - chaining methods like `.required()` returns new instances instead of mutating the original validator. This fixes issues where reusing validators would have unexpected side effects.
@@ -7,17 +11,17 @@
 
 > Note: This release has breaking changes.
 
- - **FIX**: failedMessage not set is value is not a Map for SchemaValidation ([#108](https://github.com/exaby73/luthor/issues/108)).
+- **FIX**: failedMessage not set is value is not a Map for SchemaValidation ([#108](https://github.com/exaby73/luthor/issues/108)).
 
 ## 0.6.0
 
 > Note: This release has breaking changes.
 
- - **BREAKING** **FEAT**(luthor_generator): Add support for Freezed 3.0 ([#106](https://github.com/exaby73/luthor/issues/106)).
+- **BREAKING** **FEAT**(luthor_generator): Add support for Freezed 3.0 ([#106](https://github.com/exaby73/luthor/issues/106)).
 
 ## 0.5.3
 
- - **FEAT**: Add URL validator support ([#103](https://github.com/exaby73/luthor/issues/103)).
+- **FEAT**: Add URL validator support ([#103](https://github.com/exaby73/luthor/issues/103)).
 
 ## 0.5.2+1
 

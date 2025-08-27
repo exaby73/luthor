@@ -66,3 +66,12 @@ extension ListValidationTestValidationExtension on ListValidationTest {
   SchemaValidationResult<ListValidationTest> validateSelf() =>
       $ListValidationTestValidate(toJson());
 }
+
+// ignore: constant_identifier_names
+const ListValidationTestErrorKeys = (
+  nullableStrings: "nullableStrings",
+  nullableInts: "nullableInts",
+  customObjects: "customObjects",
+  nullableCustomObjects: "nullableCustomObjects",
+  optionalNullableStrings: "optionalNullableStrings",
+);

@@ -70,6 +70,17 @@ extension UserProfileValidationExtension on UserProfile {
       $UserProfileValidate(toJson());
 }
 
+// ignore: constant_identifier_names
+const UserProfileErrorKeys = (
+  id: "id",
+  user: (name: "user.name", email: "user.email", age: "user.age"),
+  user2: (name: "user2.name", email: "user2.email", age: "user2.age"),
+  friends: "friends",
+  tags: "tags",
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+);
+
 // Auto-generated schemas for discovered classes
 Validator $ExternalUserSchema = l.withName('ExternalUser').schema({
   'name': l.string().required(),
@@ -85,3 +96,6 @@ extension ExternalUserValidationExtension on ExternalUser {
   SchemaValidationResult<ExternalUser> validateSelf() =>
       $ExternalUserValidate(toJson());
 }
+
+// ignore: constant_identifier_names
+const ExternalUserErrorKeys = (name: "name", email: "email", age: "age");

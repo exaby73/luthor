@@ -71,6 +71,8 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
 
     _writeExtension(buffer, name, isDartMappable: isDartMappableClass);
 
+    _writeErrorKeysRecord(buffer, name, constructor);
+
     // Generate schemas for discovered classes
     final discoveredSchemas = _generateDiscoveredSchemas();
     if (discoveredSchemas.isNotEmpty) {
@@ -116,6 +118,108 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
     );
   }
 
+  void _writeErrorKeysRecord(
+    StringBuffer buffer,
+    String name,
+    ConstructorElement constructor,
+  ) {
+    buffer.write('\n\n');
+
+    // Generate constant instance (no typedef)
+    buffer.write('// ignore: constant_identifier_names\n');
+    buffer.write('const ${name}ErrorKeys = (\n');
+    final visitedTypesForValues = <String>{};
+    _writeErrorKeysValues(
+      buffer,
+      constructor.parameters,
+      '  ',
+      '',
+      visitedTypesForValues,
+    );
+    buffer.write(');\n');
+  }
+
+  void _writeErrorKeysValues(
+    StringBuffer buffer,
+    List<ParameterElement> parameters,
+    String indent,
+    String prefix,
+    Set<String> visitedTypes,
+  ) {
+    for (final param in parameters) {
+      final fieldName = _getRecordFieldName(param.name);
+      final jsonKeyName = _getJsonKeyName(param);
+      final fullKey = prefix.isEmpty ? jsonKeyName : '$prefix.$jsonKeyName';
+      final isNestedSchema = _isNestedSchema(param);
+
+      if (isNestedSchema) {
+        final nestedClass = _getNestedClassElement(param);
+        if (nestedClass != null) {
+          final className = nestedClass.name;
+
+          // Check for circular reference
+          if (visitedTypes.contains(className)) {
+            // For circular references, just provide the key as a string
+            buffer.write('$indent$fieldName: "$fullKey",\n');
+          } else {
+            // Generate the nested record inline with prefixed keys
+            visitedTypes.add(className);
+            buffer.write('$indent$fieldName: (\n');
+            _writeErrorKeysValues(
+              buffer,
+              nestedClass.constructors.first.parameters,
+              '$indent  ',
+              fullKey,
+              visitedTypes,
+            );
+            buffer.write('$indent),\n');
+            visitedTypes.remove(className);
+          }
+        }
+      } else {
+        buffer.write('$indent$fieldName: "$fullKey",\n');
+      }
+    }
+  }
+
+  String _getRecordFieldName(String paramName) {
+    // Convert to camelCase for record field names
+    return paramName;
+  }
+
+  String _getJsonKeyName(ParameterElement param) {
+    final jsonKeyName = jsonKeyChecker
+        .firstAnnotationOf(param)
+        ?.getField('name')
+        ?.toStringValue();
+    return jsonKeyName ?? param.name;
+  }
+
+  bool _isNestedSchema(ParameterElement param) {
+    final element = param.type.element;
+    if (element == null) return false;
+
+    final hasLuthorAnnotation = getAnnotation(luthorChecker, element) != null;
+    if (hasLuthorAnnotation) return true;
+
+    if (element is ClassElement && isCompatibleForAutoGeneration(element)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  ClassElement? _getNestedClassElement(ParameterElement param) {
+    final element = param.type.element;
+    if (element is ClassElement) {
+      final hasLuthorAnnotation = getAnnotation(luthorChecker, element) != null;
+      if (hasLuthorAnnotation || isCompatibleForAutoGeneration(element)) {
+        return element;
+      }
+    }
+    return null;
+  }
+
   /// Generates schema for a compatible class
   String _generateAutoSchema(ClassElement element, String className) {
     final constructor = element.constructors.first;
@@ -151,6 +255,8 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
       isDartMappable: isDartMappableClass,
     );
     _writeExtension(buffer, className, isDartMappable: isDartMappableClass);
+
+    _writeErrorKeysRecord(buffer, className, constructor);
 
     return buffer.toString();
   }

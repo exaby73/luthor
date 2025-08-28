@@ -26,7 +26,10 @@ abstract class SignupForm with _$SignupForm {
     @WithSchemaCustomValidator(passwordsMatch, message: 'Passwords must match')
     required String confirmPassword,
     required int minAge,
-    @WithSchemaCustomValidator(isGreaterThanMinAge, message: 'Max age must be greater than min age')
+    @WithSchemaCustomValidator(
+      isGreaterThanMinAge,
+      message: 'Max age must be greater than min age',
+    )
     required int maxAge,
   }) = _SignupForm;
 
@@ -70,7 +73,9 @@ void main() {
     case SchemaValidationError(errors: final errors):
       print('✅ Validation failed as expected: $errors');
       final errorResult = invalidPasswordResult as SchemaValidationError;
-      print('Password confirmation error: ${errorResult.getError(SignupFormErrorKeys.confirmPassword)}');
+      print(
+        'Password confirmation error: ${errorResult.getError(SignupFormErrorKeys.confirmPassword)}',
+      );
   }
 
   // Test invalid data - age comparison
@@ -90,7 +95,9 @@ void main() {
     case SchemaValidationError(errors: final errors):
       print('✅ Validation failed as expected: $errors');
       final errorResult = invalidAgeResult as SchemaValidationError;
-      print('Max age error: ${errorResult.getError(SignupFormErrorKeys.maxAge)}');
+      print(
+        'Max age error: ${errorResult.getError(SignupFormErrorKeys.maxAge)}',
+      );
   }
 
   // Test using SchemaKeys for type-safe field access

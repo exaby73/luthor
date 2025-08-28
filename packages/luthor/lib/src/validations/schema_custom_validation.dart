@@ -4,24 +4,20 @@ import 'package:luthor/src/validations/custom_validation.dart';
 class SchemaCustomValidation extends Validation {
   final SchemaCustomValidator customValidator;
   final String? customMessage;
-  Map<String, Object?>? _schemaData;
+  Map<String, Object?>? schemaData;
 
   SchemaCustomValidation(this.customValidator, {String? message})
-      : customMessage = message;
-
-  void setSchemaData(Map<String, Object?> data) {
-    _schemaData = data;
-  }
+    : customMessage = message;
 
   @override
   bool call(String? fieldName, Object? value) {
     super.call(fieldName, value);
     try {
-      if (_schemaData == null) {
+      if (schemaData == null) {
         // Fallback to true if no schema data is available
         return true;
       }
-      return customValidator(value, _schemaData!);
+      return customValidator(value, schemaData!);
     } catch (e, s) {
       // ignore: avoid_print
       print(e);

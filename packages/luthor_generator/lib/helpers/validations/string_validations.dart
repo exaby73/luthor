@@ -1,10 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:luthor_generator/checkers.dart';
 import 'package:luthor_generator/helpers/validations/base_validations.dart';
 
-String getStringValidations(ParameterElement param) {
+String getStringValidations(FormalParameterElement param) {
   final buffer = StringBuffer();
 
   _checkAndWriteDateTimeValidation(buffer, param);
@@ -25,7 +25,7 @@ String getStringValidations(ParameterElement param) {
 
 void _checkAndWriteDateTimeValidation(
   StringBuffer buffer,
-  ParameterElement param,
+  FormalParameterElement param,
 ) {
   final dateTimeAnnotation = getAnnotation(isDateTimeChecker, param);
   if (dateTimeAnnotation != null ||
@@ -39,7 +39,7 @@ void _checkAndWriteDateTimeValidation(
 
 void _checkAndWriteEmailValidation(
   StringBuffer buffer,
-  ParameterElement param,
+  FormalParameterElement param,
 ) {
   final emailAnnotation = getAnnotation(isEmailChecker, param);
   if (emailAnnotation != null) {
@@ -52,7 +52,7 @@ void _checkAndWriteEmailValidation(
 
 void _checkAndWriteLengthValidation(
   StringBuffer buffer,
-  ParameterElement param,
+  FormalParameterElement param,
 ) {
   final lengthAnnotation = getAnnotation(hasLengthChecker, param);
   if (lengthAnnotation != null) {
@@ -65,7 +65,10 @@ void _checkAndWriteLengthValidation(
   }
 }
 
-void _checkAndWriteMaxValidation(StringBuffer buffer, ParameterElement param) {
+void _checkAndWriteMaxValidation(
+  StringBuffer buffer,
+  FormalParameterElement param,
+) {
   final maxAnnotation = getAnnotation(hasMaxChecker, param);
   if (maxAnnotation != null) {
     buffer.write('.max(');
@@ -77,7 +80,10 @@ void _checkAndWriteMaxValidation(StringBuffer buffer, ParameterElement param) {
   }
 }
 
-void _checkAndWriteMinValidation(StringBuffer buffer, ParameterElement param) {
+void _checkAndWriteMinValidation(
+  StringBuffer buffer,
+  FormalParameterElement param,
+) {
   final minAnnotation = getAnnotation(hasMinChecker, param);
   if (minAnnotation != null) {
     buffer.write('.min(');
@@ -89,7 +95,10 @@ void _checkAndWriteMinValidation(StringBuffer buffer, ParameterElement param) {
   }
 }
 
-void _checkAndWriteUriValidation(StringBuffer buffer, ParameterElement param) {
+void _checkAndWriteUriValidation(
+  StringBuffer buffer,
+  FormalParameterElement param,
+) {
   final uriAnnotation = getAnnotation(isUriChecker, param);
   if (uriAnnotation != null) {
     buffer.write('.uri(');
@@ -113,7 +122,10 @@ void _checkAndWriteUriValidation(StringBuffer buffer, ParameterElement param) {
   }
 }
 
-void _checkAndWriteUrlValidation(StringBuffer buffer, ParameterElement param) {
+void _checkAndWriteUrlValidation(
+  StringBuffer buffer,
+  FormalParameterElement param,
+) {
   final urlAnnotation = getAnnotation(isUrlChecker, param);
   if (urlAnnotation != null) {
     buffer.write('.url(');
@@ -139,7 +151,7 @@ void _checkAndWriteUrlValidation(StringBuffer buffer, ParameterElement param) {
 
 void _checkAndWriteRegexValidation(
   StringBuffer buffer,
-  ParameterElement param,
+  FormalParameterElement param,
 ) {
   final regexAnnotation = getAnnotation(matchRegexChecker, param);
   if (regexAnnotation != null) {
@@ -155,7 +167,7 @@ void _checkAndWriteRegexValidation(
 
 void _checkAndWriteStartsWithValidation(
   StringBuffer buffer,
-  ParameterElement param,
+  FormalParameterElement param,
 ) {
   final startsWithAnnotation = getAnnotation(startsWithChecker, param);
   if (startsWithAnnotation != null) {
@@ -171,7 +183,7 @@ void _checkAndWriteStartsWithValidation(
 
 void _checkAndWriteEndsWithValidation(
   StringBuffer buffer,
-  ParameterElement param,
+  FormalParameterElement param,
 ) {
   final endsWithAnnotation = getAnnotation(endsWithChecker, param);
   if (endsWithAnnotation != null) {
@@ -187,7 +199,7 @@ void _checkAndWriteEndsWithValidation(
 
 void _checkAndWriteContainsValidation(
   StringBuffer buffer,
-  ParameterElement param,
+  FormalParameterElement param,
 ) {
   final containsAnnotation = getAnnotation(containsChecker, param);
   if (containsAnnotation != null) {
@@ -201,7 +213,10 @@ void _checkAndWriteContainsValidation(
   }
 }
 
-void _checkAndWriteIpValidation(StringBuffer buffer, ParameterElement param) {
+void _checkAndWriteIpValidation(
+  StringBuffer buffer,
+  FormalParameterElement param,
+) {
   final ipAnnotation = getAnnotation(isIpChecker, param);
   if (ipAnnotation != null) {
     buffer.write('.ip(');

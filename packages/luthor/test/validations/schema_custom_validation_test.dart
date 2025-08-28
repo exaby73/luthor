@@ -64,7 +64,9 @@ void main() {
         case SchemaValidationSuccess(data: _):
           fail('should not be a success');
         case SchemaValidationError(errors: final errors):
-          expect(errors['confirmPassword'], ['confirmPassword does not pass schema custom validation']);
+          expect(errors['confirmPassword'], [
+            'confirmPassword does not pass schema custom validation',
+          ]);
       }
     });
 
@@ -96,8 +98,7 @@ void main() {
     test('should work with numeric comparisons', () {
       final schema = l.schema({
         'minAge': l.int().required(),
-        'maxAge': l
-            .int()
+        'maxAge': l.int()
             .customWithSchema(
               ageComparisonValidator,
               message: 'Max age must be greater than min age',
@@ -105,10 +106,7 @@ void main() {
             .required(),
       });
 
-      final validResult = schema.validateSchema({
-        'minAge': 18,
-        'maxAge': 65,
-      });
+      final validResult = schema.validateSchema({'minAge': 18, 'maxAge': 65});
 
       switch (validResult) {
         case SchemaValidationSuccess(data: final data):
@@ -119,10 +117,7 @@ void main() {
           fail('should not have errors: $errors');
       }
 
-      final invalidResult = schema.validateSchema({
-        'minAge': 65,
-        'maxAge': 18,
-      });
+      final invalidResult = schema.validateSchema({'minAge': 65, 'maxAge': 18});
 
       switch (invalidResult) {
         case SchemaValidationSuccess(data: _):
@@ -135,12 +130,10 @@ void main() {
     test('should work with conditional validation based on other fields', () {
       final schema = l.schema({
         'requireField': l.boolean().required(),
-        'conditionalField': l
-            .string()
-            .customWithSchema(
-              conditionalRequiredValidator,
-              message: 'Field is required when requireField is true',
-            ),
+        'conditionalField': l.string().customWithSchema(
+          conditionalRequiredValidator,
+          message: 'Field is required when requireField is true',
+        ),
       });
 
       final validResult1 = schema.validateSchema({
@@ -180,45 +173,49 @@ void main() {
         case SchemaValidationSuccess(data: _):
           fail('should not be a success');
         case SchemaValidationError(errors: final errors):
-          expect(errors['conditionalField'], ['Field is required when requireField is true']);
+          expect(errors['conditionalField'], [
+            'Field is required when requireField is true',
+          ]);
       }
     });
 
-    test('should work with multiple schema custom validations on same field', () {
-      final schema = l.schema({
-        'password': l.string().required(),
-        'minAge': l.int().required(),
-        'confirmPassword': l
-            .string()
-            .customWithSchema(
-              passwordConfirmationValidator,
-              message: 'Passwords must match',
-            )
-            .required(),
-        'maxAge': l
-            .int()
-            .customWithSchema(
-              ageComparisonValidator,
-              message: 'Max age must be greater than min age',
-            )
-            .required(),
-      });
+    test(
+      'should work with multiple schema custom validations on same field',
+      () {
+        final schema = l.schema({
+          'password': l.string().required(),
+          'minAge': l.int().required(),
+          'confirmPassword': l
+              .string()
+              .customWithSchema(
+                passwordConfirmationValidator,
+                message: 'Passwords must match',
+              )
+              .required(),
+          'maxAge': l.int()
+              .customWithSchema(
+                ageComparisonValidator,
+                message: 'Max age must be greater than min age',
+              )
+              .required(),
+        });
 
-      final result = schema.validateSchema({
-        'password': 'password123',
-        'confirmPassword': 'different_password',
-        'minAge': 65,
-        'maxAge': 18,
-      });
+        final result = schema.validateSchema({
+          'password': 'password123',
+          'confirmPassword': 'different_password',
+          'minAge': 65,
+          'maxAge': 18,
+        });
 
-      switch (result) {
-        case SchemaValidationSuccess(data: _):
-          fail('should not be a success');
-        case SchemaValidationError(errors: final errors):
-          expect(errors['confirmPassword'], ['Passwords must match']);
-          expect(errors['maxAge'], ['Max age must be greater than min age']);
-      }
-    });
+        switch (result) {
+          case SchemaValidationSuccess(data: _):
+            fail('should not be a success');
+          case SchemaValidationError(errors: final errors):
+            expect(errors['confirmPassword'], ['Passwords must match']);
+            expect(errors['maxAge'], ['Max age must be greater than min age']);
+        }
+      },
+    );
 
     test('should combine with other validations', () {
       final schema = l.schema({
@@ -242,7 +239,9 @@ void main() {
         case SchemaValidationSuccess(data: _):
           fail('should not be a success');
         case SchemaValidationError(errors: final errors):
-          expect(errors['password'], ['password must be at least 8 characters long']);
+          expect(errors['password'], [
+            'password must be at least 8 characters long',
+          ]);
           expect(errors['confirmPassword'], [
             'confirmPassword must be at least 8 characters long',
             'Passwords must match',
@@ -253,9 +252,9 @@ void main() {
     test('should handle null values correctly', () {
       final schema = l.schema({
         'password': l.string(),
-        'confirmPassword': l
-            .string()
-            .customWithSchema(passwordConfirmationValidator),
+        'confirmPassword': l.string().customWithSchema(
+          passwordConfirmationValidator,
+        ),
       });
 
       final result = schema.validateSchema({

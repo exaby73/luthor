@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:analyzer/dart/constant/value.dart';
-import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:luthor_generator/checkers.dart';
@@ -17,7 +17,7 @@ import 'package:source_gen/source_gen.dart';
 class GenerationContext {
   const GenerationContext._();
 
-  static final Set<ClassElement> discoveredClasses = {};
+  static final Set<ClassElement2> discoveredClasses = {};
   static Set<String>? typedefVisitedTypes;
 
   static void reset() {
@@ -25,12 +25,12 @@ class GenerationContext {
     typedefVisitedTypes = null;
   }
 
-  static void addDiscoveredClass(ClassElement element) {
+  static void addDiscoveredClass(ClassElement2 element) {
     discoveredClasses.add(element);
   }
 }
 
-String getValidations(ParameterElement param) {
+String getValidations(FormalParameterElement param) {
   final buffer = StringBuffer();
 
   final isNullable = param.type.nullabilitySuffix == NullabilitySuffix.question;
@@ -90,8 +90,11 @@ String getValidations(ParameterElement param) {
   return buffer.toString();
 }
 
-void _checkAndAddCustomSchema(StringBuffer buffer, ParameterElement param) {
-  final element = param.type.element;
+void _checkAndAddCustomSchema(
+  StringBuffer buffer,
+  FormalParameterElement param,
+) {
+  final element = param.type.element3;
   if (element == null) {
     throw UnsupportedTypeError(
       'Cannot determine type of ${param.type.getDisplayString()}',
@@ -105,7 +108,7 @@ void _checkAndAddCustomSchema(StringBuffer buffer, ParameterElement param) {
     buffer.write(
       '\$${param.type.getDisplayString().replaceFirst('?', '')}Schema',
     );
-  } else if (element is ClassElement &&
+  } else if (element is ClassElement2 &&
       isCompatibleForAutoGeneration(element)) {
     // Class is compatible for auto-generation, add to discovered classes
     GenerationContext.addDiscoveredClass(element);
@@ -122,20 +125,20 @@ void _checkAndAddCustomSchema(StringBuffer buffer, ParameterElement param) {
   }
 }
 
-DartObject? getAnnotation(TypeChecker checker, Element field) {
+DartObject? getAnnotation(TypeChecker checker, Element2 field) {
   return checker.firstAnnotationOf(field);
 }
 
 /// Checks if a class is compatible for auto-generation
-bool isCompatibleForAutoGeneration(ClassElement element) {
+bool isCompatibleForAutoGeneration(ClassElement2 element) {
   // Must have at least one constructor
-  if (element.constructors.isEmpty) {
+  if (element.constructors2.isEmpty) {
     return false;
   }
 
   // Check if has fromJson factory constructor OR is dart_mappable
-  final hasFromJson = element.constructors.any(
-    (ctor) => ctor.isFactory && ctor.name == 'fromJson',
+  final hasFromJson = element.constructors2.any(
+    (ctor) => ctor.isFactory && ctor.name3 == 'fromJson',
   );
   final isDartMappable = getAnnotation(dartMappableChecker, element) != null;
 
@@ -144,14 +147,14 @@ bool isCompatibleForAutoGeneration(ClassElement element) {
   }
 
   // Check if has constructor with named parameters
-  final hasNamedParameters = element.constructors.any(
-    (ctor) => ctor.parameters.any((p) => p.isNamed),
+  final hasNamedParameters = element.constructors2.any(
+    (ctor) => ctor.formalParameters.any((p) => p.isNamed),
   );
 
   return hasNamedParameters;
 }
 
-void _writeListValidations(StringBuffer buffer, ParameterElement param) {
+void _writeListValidations(StringBuffer buffer, FormalParameterElement param) {
   buffer.write('l.list(validators: [');
 
   // Use proper analyzer API to extract list element type
@@ -216,7 +219,7 @@ String _getValidationForType(DartType type) {
     buffer.write('l.string()');
   } else {
     // Handle custom types with @luthor annotation or auto-generation
-    final element = type.element;
+    final element = type.element3;
     if (element != null) {
       final hasLuthorAnnotation = getAnnotation(luthorChecker, element) != null;
 
@@ -224,7 +227,7 @@ String _getValidationForType(DartType type) {
         buffer.write(
           '\$${type.getDisplayString().replaceFirst('?', '')}Schema',
         );
-      } else if (element is ClassElement &&
+      } else if (element is ClassElement2 &&
           isCompatibleForAutoGeneration(element)) {
         // Class is compatible for auto-generation, add to discovered classes
         GenerationContext.addDiscoveredClass(element);

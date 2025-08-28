@@ -1,10 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:luthor_generator/checkers.dart';
 import 'package:luthor_generator/helpers/validations/base_validations.dart';
 
-String getNumberValidations(ParameterElement param) {
+String getNumberValidations(FormalParameterElement param) {
   final buffer = StringBuffer();
 
   _checkAndWriteMaxValidation(buffer, param);
@@ -13,7 +13,10 @@ String getNumberValidations(ParameterElement param) {
   return buffer.toString();
 }
 
-void _checkAndWriteMaxValidation(StringBuffer buffer, ParameterElement param) {
+void _checkAndWriteMaxValidation(
+  StringBuffer buffer,
+  FormalParameterElement param,
+) {
   final maxAnnotation = getAnnotation(hasMaxNumberChecker, param);
   if (maxAnnotation != null) {
     buffer.write('.max(');
@@ -26,7 +29,10 @@ void _checkAndWriteMaxValidation(StringBuffer buffer, ParameterElement param) {
   }
 }
 
-void _checkAndWriteMinValidation(StringBuffer buffer, ParameterElement param) {
+void _checkAndWriteMinValidation(
+  StringBuffer buffer,
+  FormalParameterElement param,
+) {
   final minAnnotation = getAnnotation(hasMinNumberChecker, param);
   if (minAnnotation != null) {
     buffer.write('.min(');

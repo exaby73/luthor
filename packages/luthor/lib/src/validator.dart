@@ -47,7 +47,7 @@ class Validator {
   void setSchemaDataForValidations(Map<String, Object?> data) {
     for (final validation in validations) {
       if (validation is SchemaCustomValidation) {
-        validation.setSchemaData(data);
+        validation.schemaData = data;
       }
     }
   }
@@ -64,7 +64,10 @@ class Validator {
   }
 
   /// Validates a value against a custom validator function that has access to the entire schema data.
-  Validator customWithSchema(SchemaCustomValidator customValidator, {String? message}) {
+  Validator customWithSchema(
+    SchemaCustomValidator customValidator, {
+    String? message,
+  }) {
     final newValidations = List<Validation>.from(validations)
       ..add(SchemaCustomValidation(customValidator, message: message));
     final newValidator = Validator(initialValidations: newValidations);

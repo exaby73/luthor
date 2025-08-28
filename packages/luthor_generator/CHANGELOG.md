@@ -1,3 +1,7 @@
+# 0.12.0
+
+- **FEAT**: Update dependencies.
+
 ## 0.11.0
 
 - **FEAT**: Add generation of type-safe `SchemaKeys` constants for schema field access with compile-time safety.

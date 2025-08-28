@@ -1,17 +1,17 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:luthor_generator/checkers.dart';
 import 'package:luthor_generator/helpers/validations/base_validations.dart';
 
-void getCustomValidations(ParameterElement param, StringBuffer buffer) {
+void getCustomValidations(FormalParameterElement param, StringBuffer buffer) {
   _checkAndWriteCustomValidation(buffer, param);
   _checkAndWriteSchemaCustomValidation(buffer, param);
 }
 
 void _checkAndWriteCustomValidation(
   StringBuffer buffer,
-  ParameterElement param,
+  FormalParameterElement param,
 ) {
   final customAnnotation = getAnnotation(customValidatorChecker, param);
   if (customAnnotation != null) {
@@ -30,9 +30,12 @@ void _checkAndWriteCustomValidation(
 
 void _checkAndWriteSchemaCustomValidation(
   StringBuffer buffer,
-  ParameterElement param,
+  FormalParameterElement param,
 ) {
-  final schemaCustomAnnotation = getAnnotation(schemaCustomValidatorChecker, param);
+  final schemaCustomAnnotation = getAnnotation(
+    schemaCustomValidatorChecker,
+    param,
+  );
   if (schemaCustomAnnotation != null) {
     buffer.write('.customWithSchema(');
     final message = schemaCustomAnnotation.getField('message')?.toStringValue();

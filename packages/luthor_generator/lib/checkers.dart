@@ -3,28 +3,30 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:luthor/luthor.dart';
 import 'package:source_gen/source_gen.dart';
 
-const luthorChecker = TypeChecker.fromRuntime(Luthor);
-const jsonKeyChecker = TypeChecker.fromRuntime(JsonKey);
-const defaultChecker = TypeChecker.fromRuntime(Default);
-const dartMappableChecker = TypeChecker.fromRuntime(MappableClass);
+const luthorChecker = TypeChecker.typeNamed(Luthor);
+const jsonKeyChecker = TypeChecker.typeNamed(JsonKey);
+const defaultChecker = TypeChecker.typeNamed(Default);
+const dartMappableChecker = TypeChecker.typeNamed(MappableClass);
 
-const isEmailChecker = TypeChecker.fromRuntime(IsEmail);
-const isDateTimeChecker = TypeChecker.fromRuntime(IsDateTime);
-const hasLengthChecker = TypeChecker.fromRuntime(HasLength);
-const hasMaxChecker = TypeChecker.fromRuntime(HasMax);
-const hasMinChecker = TypeChecker.fromRuntime(HasMin);
-const isUriChecker = TypeChecker.fromRuntime(IsUri);
-const isUrlChecker = TypeChecker.fromRuntime(IsUrl);
-const matchRegexChecker = TypeChecker.fromRuntime(MatchRegex);
-const startsWithChecker = TypeChecker.fromRuntime(StartsWith);
-const endsWithChecker = TypeChecker.fromRuntime(EndsWith);
-const containsChecker = TypeChecker.fromRuntime(Contains);
-const isIpChecker = TypeChecker.fromRuntime(IsIp);
+const isEmailChecker = TypeChecker.typeNamed(IsEmail);
+const isDateTimeChecker = TypeChecker.typeNamed(IsDateTime);
+const hasLengthChecker = TypeChecker.typeNamed(HasLength);
+const hasMaxChecker = TypeChecker.typeNamed(HasMax);
+const hasMinChecker = TypeChecker.typeNamed(HasMin);
+const isUriChecker = TypeChecker.typeNamed(IsUri);
+const isUrlChecker = TypeChecker.typeNamed(IsUrl);
+const matchRegexChecker = TypeChecker.typeNamed(MatchRegex);
+const startsWithChecker = TypeChecker.typeNamed(StartsWith);
+const endsWithChecker = TypeChecker.typeNamed(EndsWith);
+const containsChecker = TypeChecker.typeNamed(Contains);
+const isIpChecker = TypeChecker.typeNamed(IsIp);
 
-const hasMaxDoubleChecker = TypeChecker.fromRuntime(HasMaxDouble);
-const hasMinDoubleChecker = TypeChecker.fromRuntime(HasMinDouble);
-const hasMaxNumberChecker = TypeChecker.fromRuntime(HasMaxNumber);
-const hasMinNumberChecker = TypeChecker.fromRuntime(HasMinNumber);
+const hasMaxDoubleChecker = TypeChecker.typeNamed(HasMaxDouble);
+const hasMinDoubleChecker = TypeChecker.typeNamed(HasMinDouble);
+const hasMaxNumberChecker = TypeChecker.typeNamed(HasMaxNumber);
+const hasMinNumberChecker = TypeChecker.typeNamed(HasMinNumber);
 
-const customValidatorChecker = TypeChecker.fromRuntime(WithCustomValidator);
-const schemaCustomValidatorChecker = TypeChecker.fromRuntime(WithSchemaCustomValidator);
+const customValidatorChecker = TypeChecker.typeNamed(WithCustomValidator);
+const schemaCustomValidatorChecker = TypeChecker.typeNamed(
+  WithSchemaCustomValidator,
+);

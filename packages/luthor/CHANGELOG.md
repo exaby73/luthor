@@ -1,3 +1,7 @@
+# 0.12.0
+
+- **FEAT**: Update dependencies.
+
 ## 0.11.0
 
 - **FEAT**: Add schema-aware custom validation with `customWithSchema()` method for cross-field validation scenarios like password confirmation.

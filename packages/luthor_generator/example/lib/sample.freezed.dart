@@ -1,6 +1,5 @@
-// dart format width=80
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -111,6 +110,136 @@ $AnotherSampleCopyWith<$Res> get anotherSample {
 }
 }
 
+
+/// Adds pattern-matching-related methods to [Sample].
+extension SamplePatterns on Sample {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _Sample value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _Sample() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _Sample value)  $default,){
+final _that = this;
+switch (_that) {
+case _Sample():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _Sample value)?  $default,){
+final _that = this;
+switch (_that) {
+case _Sample() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( dynamic anyValue,  bool boolValue,  double doubleValue,  int intValue,  List<String> listValue,  num numValue,  String stringValue, @isEmail  String email, @isDateTime  String date,  DateTime dateTime, @HasLength(10)  String? exactly10Characters, @HasMin(8)@HasMax(200)  String minAndMaxString, @StartsWith('foo')  String startsWithFoo, @EndsWith('bar')  String endsWithBar, @Contains('baz')  String containsBaz, @HasMin(2)@HasMax(4)  int minAndMaxInt, @HasMinDouble(2.0)@HasMaxDouble(4.0)  double minAndMaxDouble, @HasMinNumber(2)@HasMaxNumber(3.0)  num minAndMaxNumber, @IsUri(allowedSchemes: ['https'])  String? httpsLink, @IsUrl()  String? aUrl, @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')  String luthorPath,  AnotherSample anotherSample, @JsonKey(name: 'jsonKeyName')  String foo, @WithCustomValidator(customValidatorFn)  String custom,  List<int> numbers,  String? hello)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _Sample() when $default != null:
+return $default(_that.anyValue,_that.boolValue,_that.doubleValue,_that.intValue,_that.listValue,_that.numValue,_that.stringValue,_that.email,_that.date,_that.dateTime,_that.exactly10Characters,_that.minAndMaxString,_that.startsWithFoo,_that.endsWithBar,_that.containsBaz,_that.minAndMaxInt,_that.minAndMaxDouble,_that.minAndMaxNumber,_that.httpsLink,_that.aUrl,_that.luthorPath,_that.anotherSample,_that.foo,_that.custom,_that.numbers,_that.hello);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( dynamic anyValue,  bool boolValue,  double doubleValue,  int intValue,  List<String> listValue,  num numValue,  String stringValue, @isEmail  String email, @isDateTime  String date,  DateTime dateTime, @HasLength(10)  String? exactly10Characters, @HasMin(8)@HasMax(200)  String minAndMaxString, @StartsWith('foo')  String startsWithFoo, @EndsWith('bar')  String endsWithBar, @Contains('baz')  String containsBaz, @HasMin(2)@HasMax(4)  int minAndMaxInt, @HasMinDouble(2.0)@HasMaxDouble(4.0)  double minAndMaxDouble, @HasMinNumber(2)@HasMaxNumber(3.0)  num minAndMaxNumber, @IsUri(allowedSchemes: ['https'])  String? httpsLink, @IsUrl()  String? aUrl, @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')  String luthorPath,  AnotherSample anotherSample, @JsonKey(name: 'jsonKeyName')  String foo, @WithCustomValidator(customValidatorFn)  String custom,  List<int> numbers,  String? hello)  $default,) {final _that = this;
+switch (_that) {
+case _Sample():
+return $default(_that.anyValue,_that.boolValue,_that.doubleValue,_that.intValue,_that.listValue,_that.numValue,_that.stringValue,_that.email,_that.date,_that.dateTime,_that.exactly10Characters,_that.minAndMaxString,_that.startsWithFoo,_that.endsWithBar,_that.containsBaz,_that.minAndMaxInt,_that.minAndMaxDouble,_that.minAndMaxNumber,_that.httpsLink,_that.aUrl,_that.luthorPath,_that.anotherSample,_that.foo,_that.custom,_that.numbers,_that.hello);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( dynamic anyValue,  bool boolValue,  double doubleValue,  int intValue,  List<String> listValue,  num numValue,  String stringValue, @isEmail  String email, @isDateTime  String date,  DateTime dateTime, @HasLength(10)  String? exactly10Characters, @HasMin(8)@HasMax(200)  String minAndMaxString, @StartsWith('foo')  String startsWithFoo, @EndsWith('bar')  String endsWithBar, @Contains('baz')  String containsBaz, @HasMin(2)@HasMax(4)  int minAndMaxInt, @HasMinDouble(2.0)@HasMaxDouble(4.0)  double minAndMaxDouble, @HasMinNumber(2)@HasMaxNumber(3.0)  num minAndMaxNumber, @IsUri(allowedSchemes: ['https'])  String? httpsLink, @IsUrl()  String? aUrl, @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')  String luthorPath,  AnotherSample anotherSample, @JsonKey(name: 'jsonKeyName')  String foo, @WithCustomValidator(customValidatorFn)  String custom,  List<int> numbers,  String? hello)?  $default,) {final _that = this;
+switch (_that) {
+case _Sample() when $default != null:
+return $default(_that.anyValue,_that.boolValue,_that.doubleValue,_that.intValue,_that.listValue,_that.numValue,_that.stringValue,_that.email,_that.date,_that.dateTime,_that.exactly10Characters,_that.minAndMaxString,_that.startsWithFoo,_that.endsWithBar,_that.containsBaz,_that.minAndMaxInt,_that.minAndMaxDouble,_that.minAndMaxNumber,_that.httpsLink,_that.aUrl,_that.luthorPath,_that.anotherSample,_that.foo,_that.custom,_that.numbers,_that.hello);case _:
+  return null;
+
+}
+}
+
+}
 
 /// @nodoc
 @JsonSerializable()

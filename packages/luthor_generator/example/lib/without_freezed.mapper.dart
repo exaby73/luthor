@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format off
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, unnecessary_cast, override_on_non_overriding_member
 // ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
@@ -21,11 +22,15 @@ class WithDartMappableMapper extends ClassMapperBase<WithDartMappable> {
   final String id = 'WithDartMappable';
 
   static String _$email(WithDartMappable v) => v.email;
-  static const Field<WithDartMappable, String> _f$email =
-      Field('email', _$email);
+  static const Field<WithDartMappable, String> _f$email = Field(
+    'email',
+    _$email,
+  );
   static String _$password(WithDartMappable v) => v.password;
-  static const Field<WithDartMappable, String> _f$password =
-      Field('password', _$password);
+  static const Field<WithDartMappable, String> _f$password = Field(
+    'password',
+    _$password,
+  );
 
   @override
   final MappableFields<WithDartMappable> fields = const {
@@ -35,7 +40,9 @@ class WithDartMappableMapper extends ClassMapperBase<WithDartMappable> {
 
   static WithDartMappable _instantiate(DecodingData data) {
     return WithDartMappable(
-        email: data.dec(_f$email), password: data.dec(_f$password));
+      email: data.dec(_f$email),
+      password: data.dec(_f$password),
+    );
   }
 
   @override
@@ -62,40 +69,48 @@ mixin WithDartMappableMappable {
   }
 
   WithDartMappableCopyWith<WithDartMappable, WithDartMappable, WithDartMappable>
-      get copyWith =>
-          _WithDartMappableCopyWithImpl<WithDartMappable, WithDartMappable>(
-              this as WithDartMappable, $identity, $identity);
+  get copyWith =>
+      _WithDartMappableCopyWithImpl<WithDartMappable, WithDartMappable>(
+        this as WithDartMappable,
+        $identity,
+        $identity,
+      );
   @override
   String toString() {
-    return WithDartMappableMapper.ensureInitialized()
-        .stringifyValue(this as WithDartMappable);
+    return WithDartMappableMapper.ensureInitialized().stringifyValue(
+      this as WithDartMappable,
+    );
   }
 
   @override
   bool operator ==(Object other) {
-    return WithDartMappableMapper.ensureInitialized()
-        .equalsValue(this as WithDartMappable, other);
+    return WithDartMappableMapper.ensureInitialized().equalsValue(
+      this as WithDartMappable,
+      other,
+    );
   }
 
   @override
   int get hashCode {
-    return WithDartMappableMapper.ensureInitialized()
-        .hashValue(this as WithDartMappable);
+    return WithDartMappableMapper.ensureInitialized().hashValue(
+      this as WithDartMappable,
+    );
   }
 }
 
 extension WithDartMappableValueCopy<$R, $Out>
     on ObjectCopyWith<$R, WithDartMappable, $Out> {
   WithDartMappableCopyWith<$R, WithDartMappable, $Out>
-      get $asWithDartMappable => $base
-          .as((v, t, t2) => _WithDartMappableCopyWithImpl<$R, $Out>(v, t, t2));
+  get $asWithDartMappable =>
+      $base.as((v, t, t2) => _WithDartMappableCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class WithDartMappableCopyWith<$R, $In extends WithDartMappable, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
   $R call({String? email, String? password});
   WithDartMappableCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
-      Then<$Out2, $R2> t);
+    Then<$Out2, $R2> t,
+  );
 }
 
 class _WithDartMappableCopyWithImpl<$R, $Out>
@@ -107,17 +122,21 @@ class _WithDartMappableCopyWithImpl<$R, $Out>
   late final ClassMapperBase<WithDartMappable> $mapper =
       WithDartMappableMapper.ensureInitialized();
   @override
-  $R call({String? email, String? password}) => $apply(FieldCopyWithData({
-        if (email != null) #email: email,
-        if (password != null) #password: password
-      }));
+  $R call({String? email, String? password}) => $apply(
+    FieldCopyWithData({
+      if (email != null) #email: email,
+      if (password != null) #password: password,
+    }),
+  );
   @override
   WithDartMappable $make(CopyWithData data) => WithDartMappable(
-      email: data.get(#email, or: $value.email),
-      password: data.get(#password, or: $value.password));
+    email: data.get(#email, or: $value.email),
+    password: data.get(#password, or: $value.password),
+  );
 
   @override
   WithDartMappableCopyWith<$R2, WithDartMappable, $Out2> $chain<$R2, $Out2>(
-          Then<$Out2, $R2> t) =>
-      _WithDartMappableCopyWithImpl<$R2, $Out2>($value, $cast, t);
+    Then<$Out2, $R2> t,
+  ) => _WithDartMappableCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }
+

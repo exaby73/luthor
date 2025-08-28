@@ -12,6 +12,23 @@ bool customValidatorFn(Object? value) {
   return value == 'custom';
 }
 
+// Message function examples
+String emailErrorMessage() {
+  return 'Please provide a valid email address';
+}
+
+String lengthErrorMessage() {
+  return 'Length must be exactly 10 characters';
+}
+
+String customValidatorMessage() {
+  return 'Custom validation failed - value must equal "custom"';
+}
+
+String regexErrorMessage() {
+  return 'Path must be a valid Luthor package URL on pub.dev';
+}
+
 @luthor
 @freezed
 abstract class Sample with _$Sample {
@@ -25,10 +42,10 @@ abstract class Sample with _$Sample {
     // Null? nullValue,
     required num numValue,
     required String stringValue,
-    @isEmail required String email,
+    @IsEmail(messageFn: emailErrorMessage) required String email,
     @isDateTime required String date,
     required DateTime dateTime,
-    @HasLength(10) String? exactly10Characters,
+    @HasLength(10, messageFn: lengthErrorMessage) String? exactly10Characters,
     @HasMin(8) @HasMax(200) required String minAndMaxString,
     @StartsWith('foo') required String startsWithFoo,
     @EndsWith('bar') required String endsWithBar,
@@ -38,11 +55,15 @@ abstract class Sample with _$Sample {
     @HasMinNumber(2) @HasMaxNumber(3.0) required num minAndMaxNumber,
     @IsUri(allowedSchemes: ['https']) String? httpsLink,
     @IsUrl() String? aUrl,
-    @MatchRegex(r'^https:\/\/pub\.dev\/packages\/luthor')
+    @MatchRegex(
+      r'^https:\/\/pub\.dev\/packages\/luthor',
+      messageFn: regexErrorMessage,
+    )
     required String luthorPath,
     required AnotherSample anotherSample,
     @JsonKey(name: 'jsonKeyName') required String foo,
-    @WithCustomValidator(customValidatorFn) required String custom,
+    @WithCustomValidator(customValidatorFn, messageFn: customValidatorMessage)
+    required String custom,
     required List<int> numbers,
     String? hello,
   }) = _Sample;
@@ -87,6 +108,7 @@ void main() {
     "minAndMaxDouble": 5.0,
     "minAndMaxNumber": 5,
     "custom": 1,
+    "luthorPath": "https://pub.dev/packages/not_luthor",
   });
   switch (result3) {
     case SchemaValidationError(errors: final errors):

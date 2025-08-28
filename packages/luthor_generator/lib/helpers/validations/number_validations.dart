@@ -21,10 +21,15 @@ void _checkAndWriteMaxValidation(
   if (maxAnnotation != null) {
     buffer.write('.max(');
     final message = maxAnnotation.getField('message')?.toStringValue();
+    final messageFn = maxAnnotation.getField('messageFn')?.toFunctionValue();
     final maxInt = maxAnnotation.getField('max')!.toIntValue();
     final maxDouble = maxAnnotation.getField('max')!.toDoubleValue();
-    buffer.write(maxInt ?? maxDouble);
-    if (message != null) buffer.write(", message: '$message'");
+    
+    final params = <String>[(maxInt ?? maxDouble).toString()];
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
+    
+    buffer.write(params.join(', '));
     buffer.write(')');
   }
 }
@@ -37,10 +42,15 @@ void _checkAndWriteMinValidation(
   if (minAnnotation != null) {
     buffer.write('.min(');
     final message = minAnnotation.getField('message')?.toStringValue();
+    final messageFn = minAnnotation.getField('messageFn')?.toFunctionValue();
     final minInt = minAnnotation.getField('min')!.toIntValue();
     final minDouble = minAnnotation.getField('min')!.toDoubleValue();
-    buffer.write(minInt ?? minDouble);
-    if (message != null) buffer.write(", message: '$message'");
+    
+    final params = <String>[(minInt ?? minDouble).toString()];
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
+    
+    buffer.write(params.join(', '));
     buffer.write(')');
   }
 }

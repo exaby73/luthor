@@ -17,13 +17,17 @@ void _checkAndWriteCustomValidation(
   if (customAnnotation != null) {
     buffer.write('.custom(');
     final message = customAnnotation.getField('message')?.toStringValue();
+    final messageFn = customAnnotation.getField('messageFn')?.toFunctionValue();
     final customFuntion = customAnnotation
         .getField('customValidator')!
         .toFunctionValue()!
         .name;
 
-    buffer.write(customFuntion);
-    if (message != null) buffer.write(", message: '$message'");
+    final params = <String>[customFuntion];
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
+
+    buffer.write(params.join(', '));
     buffer.write(')');
   }
 }
@@ -39,13 +43,17 @@ void _checkAndWriteSchemaCustomValidation(
   if (schemaCustomAnnotation != null) {
     buffer.write('.customWithSchema(');
     final message = schemaCustomAnnotation.getField('message')?.toStringValue();
+    final messageFn = schemaCustomAnnotation.getField('messageFn')?.toFunctionValue();
     final customFunction = schemaCustomAnnotation
         .getField('customValidator')!
         .toFunctionValue()!
         .name;
 
-    buffer.write(customFunction);
-    if (message != null) buffer.write(", message: '$message'");
+    final params = <String>[customFunction];
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
+
+    buffer.write(params.join(', '));
     buffer.write(')');
   }
 }

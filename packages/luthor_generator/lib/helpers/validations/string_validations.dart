@@ -32,7 +32,13 @@ void _checkAndWriteDateTimeValidation(
       param.type.getDisplayString() == 'DateTime') {
     buffer.write('.dateTime(');
     final message = dateTimeAnnotation?.getField('message')?.toStringValue();
-    if (message != null) buffer.write("message: '$message'");
+    final messageFn = dateTimeAnnotation?.getField('messageFn')?.toFunctionValue();
+    
+    final params = <String>[];
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
+    
+    buffer.write(params.join(', '));
     buffer.write(')');
   }
 }
@@ -45,7 +51,13 @@ void _checkAndWriteEmailValidation(
   if (emailAnnotation != null) {
     buffer.write('.email(');
     final message = emailAnnotation.getField('message')?.toStringValue();
-    if (message != null) buffer.write("message: '$message'");
+    final messageFn = emailAnnotation.getField('messageFn')?.toFunctionValue();
+    
+    final params = <String>[];
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
+    
+    buffer.write(params.join(', '));
     buffer.write(')');
   }
 }
@@ -58,9 +70,14 @@ void _checkAndWriteLengthValidation(
   if (lengthAnnotation != null) {
     buffer.write('.length(');
     final message = lengthAnnotation.getField('message')?.toStringValue();
+    final messageFn = lengthAnnotation.getField('messageFn')?.toFunctionValue();
     final length = lengthAnnotation.getField('length')!.toIntValue()!;
-    buffer.write(length);
-    if (message != null) buffer.write(", message: '$message'");
+    
+    final params = <String>[length.toString()];
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
+    
+    buffer.write(params.join(', '));
     buffer.write(')');
   }
 }
@@ -73,9 +90,14 @@ void _checkAndWriteMaxValidation(
   if (maxAnnotation != null) {
     buffer.write('.max(');
     final message = maxAnnotation.getField('message')?.toStringValue();
+    final messageFn = maxAnnotation.getField('messageFn')?.toFunctionValue();
     final max = maxAnnotation.getField('max')!.toIntValue()!;
-    buffer.write(max);
-    if (message != null) buffer.write(", message: '$message'");
+    
+    final params = <String>[max.toString()];
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
+    
+    buffer.write(params.join(', '));
     buffer.write(')');
   }
 }
@@ -88,9 +110,14 @@ void _checkAndWriteMinValidation(
   if (minAnnotation != null) {
     buffer.write('.min(');
     final message = minAnnotation.getField('message')?.toStringValue();
+    final messageFn = minAnnotation.getField('messageFn')?.toFunctionValue();
     final min = minAnnotation.getField('min')!.toIntValue()!;
-    buffer.write(min);
-    if (message != null) buffer.write(", message: '$message'");
+    
+    final params = <String>[min.toString()];
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
+    
+    buffer.write(params.join(', '));
     buffer.write(')');
   }
 }
@@ -109,15 +136,16 @@ void _checkAndWriteUriValidation(
         ?.map((e) => e.toStringValue()!)
         .toList();
     final message = uriAnnotation.getField('message')?.toStringValue();
+    final messageFn = uriAnnotation.getField('messageFn')?.toFunctionValue();
 
+    final params = <String>[];
     if (allowedSchemas != null) {
-      buffer.write('allowedSchemes: [');
-      buffer.write(allowedSchemas.map((e) => "'$e'").join(', '));
-      buffer.write(']');
-      if (message != null) buffer.write(', ');
+      params.add('allowedSchemes: [${allowedSchemas.map((e) => "'$e'").join(', ')}]');
     }
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
 
-    if (message != null) buffer.write("message: '$message'");
+    buffer.write(params.join(', '));
     buffer.write(')');
   }
 }
@@ -136,15 +164,16 @@ void _checkAndWriteUrlValidation(
         ?.map((e) => e.toStringValue()!)
         .toList();
     final message = urlAnnotation.getField('message')?.toStringValue();
+    final messageFn = urlAnnotation.getField('messageFn')?.toFunctionValue();
 
+    final params = <String>[];
     if (allowedSchemes != null) {
-      buffer.write('allowedSchemes: [');
-      buffer.write(allowedSchemes.map((e) => "'$e'").join(', '));
-      buffer.write(']');
-      if (message != null) buffer.write(', ');
+      params.add('allowedSchemes: [${allowedSchemes.map((e) => "'$e'").join(', ')}]');
     }
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
 
-    if (message != null) buffer.write("message: '$message'");
+    buffer.write(params.join(', '));
     buffer.write(')');
   }
 }
@@ -159,8 +188,13 @@ void _checkAndWriteRegexValidation(
 
     final pattern = regexAnnotation.getField('pattern')!.toStringValue();
     final message = regexAnnotation.getField('message')?.toStringValue();
-    buffer.write('r"$pattern"');
-    if (message != null) buffer.write(", message: '$message'");
+    final messageFn = regexAnnotation.getField('messageFn')?.toFunctionValue();
+    
+    final params = <String>['r"$pattern"'];
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
+    
+    buffer.write(params.join(', '));
     buffer.write(')');
   }
 }
@@ -175,8 +209,13 @@ void _checkAndWriteStartsWithValidation(
 
     final string = startsWithAnnotation.getField('string')!.toStringValue();
     final message = startsWithAnnotation.getField('message')?.toStringValue();
-    buffer.write('r"$string"');
-    if (message != null) buffer.write(", message: '$message'");
+    final messageFn = startsWithAnnotation.getField('messageFn')?.toFunctionValue();
+    
+    final params = <String>['r"$string"'];
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
+    
+    buffer.write(params.join(', '));
     buffer.write(')');
   }
 }
@@ -191,8 +230,13 @@ void _checkAndWriteEndsWithValidation(
 
     final string = endsWithAnnotation.getField('string')!.toStringValue();
     final message = endsWithAnnotation.getField('message')?.toStringValue();
-    buffer.write('r"$string"');
-    if (message != null) buffer.write(", message: '$message'");
+    final messageFn = endsWithAnnotation.getField('messageFn')?.toFunctionValue();
+    
+    final params = <String>['r"$string"'];
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
+    
+    buffer.write(params.join(', '));
     buffer.write(')');
   }
 }
@@ -207,8 +251,13 @@ void _checkAndWriteContainsValidation(
 
     final string = containsAnnotation.getField('string')!.toStringValue();
     final message = containsAnnotation.getField('message')?.toStringValue();
-    buffer.write('r"$string"');
-    if (message != null) buffer.write(", message: '$message'");
+    final messageFn = containsAnnotation.getField('messageFn')?.toFunctionValue();
+    
+    final params = <String>['r"$string"'];
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
+    
+    buffer.write(params.join(', '));
     buffer.write(')');
   }
 }
@@ -226,16 +275,19 @@ void _checkAndWriteIpValidation(
         ?.getField('_name')
         ?.toStringValue();
     final message = ipAnnotation.getField('message')?.toStringValue();
+    final messageFn = ipAnnotation.getField('messageFn')?.toFunctionValue();
 
+    final params = <String>[];
     if (version != null) {
       String? ipEnum;
       if (version == 'v4') ipEnum = 'IpVersion.v4';
       if (version == 'v6') ipEnum = 'IpVersion.v6';
-      buffer.write('version: $ipEnum');
+      if (ipEnum != null) params.add('version: $ipEnum');
     }
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
 
-    if (message != null) buffer.write(", message: '$message'");
-
+    buffer.write(params.join(', '));
     buffer.write(')');
   }
 }

@@ -2,8 +2,11 @@ import 'package:luthor/src/validation.dart';
 
 class StringEmojiValidation extends Validation {
   String? customMessage;
+  String? Function()? customMessageFn;
 
-  StringEmojiValidation({String? message}) : customMessage = message;
+  StringEmojiValidation({String? message, String? Function()? messageFn})
+    : customMessage = message,
+      customMessageFn = messageFn;
 
   static const String _regex =
       r'''^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$''';
@@ -19,7 +22,9 @@ class StringEmojiValidation extends Validation {
 
   @override
   String get message =>
-      customMessage ?? '${fieldName ?? 'value'} must be a valid emoji';
+      customMessage ??
+      customMessageFn?.call() ??
+      '${fieldName ?? 'value'} must be a valid emoji';
 
   @override
   Map<String, List<String>>? get errors => null;

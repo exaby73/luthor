@@ -53,9 +53,19 @@ class Validator {
   }
 
   /// Validates a value against a custom validator function.
-  Validator custom(CustomValidator customValidator, {String? message}) {
+  Validator custom(
+    CustomValidator customValidator, {
+    String? message,
+    String? Function()? messageFn,
+  }) {
     final newValidations = List<Validation>.from(validations)
-      ..add(CustomValidation(customValidator, message: message));
+      ..add(
+        CustomValidation(
+          customValidator,
+          message: message,
+          messageFn: messageFn,
+        ),
+      );
     final newValidator = Validator(initialValidations: newValidations);
     if (_name != null) {
       newValidator._name = _name;
@@ -67,9 +77,16 @@ class Validator {
   Validator customWithSchema(
     SchemaCustomValidator customValidator, {
     String? message,
+    String? Function()? messageFn,
   }) {
     final newValidations = List<Validation>.from(validations)
-      ..add(SchemaCustomValidation(customValidator, message: message));
+      ..add(
+        SchemaCustomValidation(
+          customValidator,
+          message: message,
+          messageFn: messageFn,
+        ),
+      );
     final newValidator = Validator(initialValidations: newValidations);
     if (_name != null) {
       newValidator._name = _name;
@@ -89,9 +106,9 @@ class Validator {
   }
 
   /// Validates that the value is not null.
-  Validator required({String? message}) {
+  Validator required({String? message, String? Function()? messageFn}) {
     final newValidations = List<Validation>.from(validations)
-      ..add(RequiredValidation(message: message));
+      ..add(RequiredValidation(message: message, messageFn: messageFn));
     final newValidator = Validator(initialValidations: newValidations);
     if (_name != null) {
       newValidator._name = _name;
@@ -100,9 +117,9 @@ class Validator {
   }
 
   /// Validates that the value is null.
-  Validator nullValue({String? message}) {
+  Validator nullValue({String? message, String? Function()? messageFn}) {
     final newValidations = List<Validation>.from(validations)
-      ..add(NullValidation(message: message));
+      ..add(NullValidation(message: message, messageFn: messageFn));
     final newValidator = Validator(initialValidations: newValidations);
     if (_name != null) {
       newValidator._name = _name;
@@ -111,37 +128,37 @@ class Validator {
   }
 
   /// Validates that the value is a string.
-  StringValidator string({String? message}) {
+  StringValidator string({String? message, String? Function()? messageFn}) {
     final newValidations = List<Validation>.from(validations)
-      ..add(StringValidation(message: message));
+      ..add(StringValidation(message: message, messageFn: messageFn));
     return StringValidator(initialValidations: newValidations);
   }
 
   /// Validates that the value is a number (int or double).
-  NumberValidator number({String? message}) {
+  NumberValidator number({String? message, String? Function()? messageFn}) {
     final newValidations = List<Validation>.from(validations)
-      ..add(NumberValidation(message: message));
+      ..add(NumberValidation(message: message, messageFn: messageFn));
     return NumberValidator(initialValidations: newValidations);
   }
 
   /// Validates that the value is an int.
-  IntValidator int({String? message}) {
+  IntValidator int({String? message, String? Function()? messageFn}) {
     final newValidations = List<Validation>.from(validations)
-      ..add(IntValidation(message: message));
+      ..add(IntValidation(message: message, messageFn: messageFn));
     return IntValidator(initialValidations: newValidations);
   }
 
   /// Validates that the value is a double.
-  DoubleValidator double({String? message}) {
+  DoubleValidator double({String? message, String? Function()? messageFn}) {
     final newValidations = List<Validation>.from(validations)
-      ..add(DoubleValidation(message: message));
+      ..add(DoubleValidation(message: message, messageFn: messageFn));
     return DoubleValidator(initialValidations: newValidations);
   }
 
   /// Validates that the value is a bool.
-  Validator boolean({String? message}) {
+  Validator boolean({String? message, String? Function()? messageFn}) {
     final newValidations = List<Validation>.from(validations)
-      ..add(BoolValidation(message: message));
+      ..add(BoolValidation(message: message, messageFn: messageFn));
     final newValidator = Validator(initialValidations: newValidations);
     if (_name != null) {
       newValidator._name = _name;
@@ -150,9 +167,19 @@ class Validator {
   }
 
   /// Validates that the value is a list.
-  Validator list({List<Validator>? validators, String? message}) {
+  Validator list({
+    List<Validator>? validators,
+    String? message,
+    String? Function()? messageFn,
+  }) {
     final newValidations = List<Validation>.from(validations)
-      ..add(ListValidation(validators: validators, message: message));
+      ..add(
+        ListValidation(
+          validators: validators,
+          message: message,
+          messageFn: messageFn,
+        ),
+      );
     final newValidator = Validator(initialValidations: newValidations);
     if (_name != null) {
       newValidator._name = _name;
@@ -161,9 +188,9 @@ class Validator {
   }
 
   /// Validates that the value is a map.
-  Validator map({String? message}) {
+  Validator map({String? message, String? Function()? messageFn}) {
     final newValidations = List<Validation>.from(validations)
-      ..add(MapValidation(message: message));
+      ..add(MapValidation(message: message, messageFn: messageFn));
     final newValidator = Validator(initialValidations: newValidations);
     if (_name != null) {
       newValidator._name = _name;

@@ -3,10 +3,15 @@ import 'package:luthor/src/validation.dart';
 class StringMinValidation extends Validation {
   int minLength;
   String? customMessage;
+  String? Function()? customMessageFn;
 
-  StringMinValidation({required this.minLength, String? message})
-    : assert(minLength >= 0, 'minLength must be greater than or equal to 0'),
-      customMessage = message;
+  StringMinValidation({
+    required this.minLength,
+    String? message,
+    String? Function()? messageFn,
+  }) : assert(minLength >= 0, 'minLength must be greater than or equal to 0'),
+       customMessage = message,
+       customMessageFn = messageFn;
 
   @override
   bool call(String? fieldName, Object? value) {
@@ -21,6 +26,10 @@ class StringMinValidation extends Validation {
   @override
   String get message {
     if (customMessage != null) return customMessage!;
+    if (customMessageFn != null) {
+      final m = customMessageFn!();
+      if (m != null) return m;
+    }
     return '${fieldName ?? 'value'} must be at least '
         '$minLength character${minLength != 1 ? 's' : ''} long';
   }

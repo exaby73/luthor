@@ -63,5 +63,4 @@ class SchemaValidation extends Validation {
 
   @override
   String? get message => null;
-
 }

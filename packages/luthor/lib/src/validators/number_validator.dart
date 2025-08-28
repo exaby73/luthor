@@ -7,14 +7,34 @@ class NumberValidator extends Validator {
   NumberValidator({super.initialValidations});
 
   /// Validates that the int is greater than or equal to minValue.
-  NumberValidator min(num minValue, {String? message}) {
-    validations.add(NumberMinValidation(minValue: minValue, message: message));
+  NumberValidator min(
+    num minValue, {
+    String? message,
+    String? Function()? messageFn,
+  }) {
+    validations.add(
+      NumberMinValidation(
+        minValue: minValue,
+        message: message,
+        messageFn: messageFn,
+      ),
+    );
     return this;
   }
 
   /// Validates that the int is less than or equal to minValue.
-  NumberValidator max(num maxValue, {String? message}) {
-    validations.add(NumberMaxValidation(maxValue: maxValue, message: message));
+  NumberValidator max(
+    num maxValue, {
+    String? message,
+    String? Function()? messageFn,
+  }) {
+    validations.add(
+      NumberMaxValidation(
+        maxValue: maxValue,
+        message: message,
+        messageFn: messageFn,
+      ),
+    );
     return this;
   }
 }

@@ -1,10 +1,16 @@
 import 'package:luthor/luthor.dart';
 
 class StringIpValidation extends Validation {
-  StringIpValidation({this.version, required this.customMessage});
-
-  final String? customMessage;
   final IpVersion? version;
+  final String? customMessage;
+  final String? Function()? customMessageFn;
+
+  StringIpValidation({
+    this.version,
+    String? message,
+    String? Function()? messageFn,
+  }) : customMessage = message,
+       customMessageFn = messageFn;
 
   static const _ipv4Regex =
       r'\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b';

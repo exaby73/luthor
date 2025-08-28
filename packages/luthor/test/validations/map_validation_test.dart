@@ -45,4 +45,51 @@ void main() {
         expect(errors, ['value is required']);
     }
   });
+
+  test('should use custom message when message is provided', () {
+    final result = l.map(message: 'Custom map error').validateValue('not a map');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['Custom map error']);
+    }
+  });
+
+  test('should use messageFn when messageFn is provided', () {
+    final result = l.map(messageFn: () => 'Dynamic map error').validateValue('not a map');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['Dynamic map error']);
+    }
+  });
+
+  test('should prioritize custom message over messageFn when both are provided', () {
+    final result = l.map(
+      message: 'Static message',
+      messageFn: () => 'Dynamic message'
+    ).validateValue('not a map');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['Static message']);
+    }
+  });
+
+  test('should handle null return from messageFn and fallback to default', () {
+    final result = l.map(messageFn: () => null).validateValue('not a map');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['value must be a Map']);
+    }
+  });
 }

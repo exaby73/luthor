@@ -51,4 +51,51 @@ void main() {
         expect(errors, ['value is required']);
     }
   });
+
+  test('should use custom message when message is provided', () {
+    final result = l.string().regex('pattern', message: 'Pattern mismatch').validateValue('bad value');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['Pattern mismatch']);
+    }
+  });
+
+  test('should use messageFn when messageFn is provided', () {
+    final result = l.string().regex('pattern', messageFn: () => 'Dynamic regex error').validateValue('bad value');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['Dynamic regex error']);
+    }
+  });
+
+  test('should prioritize custom message over messageFn when both are provided', () {
+    final result = l.string().regex('pattern',
+      message: 'Static message',
+      messageFn: () => 'Dynamic message'
+    ).validateValue('bad value');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['Static message']);
+    }
+  });
+
+  test('should handle null return from messageFn and fallback to default', () {
+    final result = l.string().regex('pattern', messageFn: () => null).validateValue('bad value');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['value must match regex']);
+    }
+  });
 }

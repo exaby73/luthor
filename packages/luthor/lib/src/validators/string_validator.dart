@@ -6,9 +6,9 @@ class StringValidator extends Validator {
   StringValidator({super.initialValidations});
 
   /// Validates that the string is a valid date.
-  StringValidator dateTime({String? message}) {
+  StringValidator dateTime({String? message, String? Function()? messageFn}) {
     final newValidations = List<Validation>.from(validations)
-      ..add(StringDateTimeValidation(message: message));
+      ..add(StringDateTimeValidation(message: message, messageFn: messageFn));
     final newValidator = StringValidator(initialValidations: newValidations);
     if (name != null) {
       newValidator.withName(name);
@@ -17,9 +17,9 @@ class StringValidator extends Validator {
   }
 
   /// Validates that the string is a valid email.
-  StringValidator email({String? message}) {
+  StringValidator email({String? message, String? Function()? messageFn}) {
     final newValidations = List<Validation>.from(validations)
-      ..add(StringEmailValidation(message: message));
+      ..add(StringEmailValidation(message: message, messageFn: messageFn));
     final newValidator = StringValidator(initialValidations: newValidations);
     if (name != null) {
       newValidator.withName(name);
@@ -28,9 +28,19 @@ class StringValidator extends Validator {
   }
 
   /// Validates that the string has a minimum character length.
-  StringValidator min(int minLength, {String? message}) {
+  StringValidator min(
+    int minLength, {
+    String? message,
+    String? Function()? messageFn,
+  }) {
     final newValidations = List<Validation>.from(validations)
-      ..add(StringMinValidation(minLength: minLength, message: message));
+      ..add(
+        StringMinValidation(
+          minLength: minLength,
+          message: message,
+          messageFn: messageFn,
+        ),
+      );
     final newValidator = StringValidator(initialValidations: newValidations);
     if (name != null) {
       newValidator.withName(name);
@@ -39,9 +49,19 @@ class StringValidator extends Validator {
   }
 
   /// Validates that the string has a maximum character length.
-  StringValidator max(int maxLength, {String? message}) {
+  StringValidator max(
+    int maxLength, {
+    String? message,
+    String? Function()? messageFn,
+  }) {
     final newValidations = List<Validation>.from(validations)
-      ..add(StringMaxValidation(maxLength: maxLength, message: message));
+      ..add(
+        StringMaxValidation(
+          maxLength: maxLength,
+          message: message,
+          messageFn: messageFn,
+        ),
+      );
     final newValidator = StringValidator(initialValidations: newValidations);
     if (name != null) {
       newValidator.withName(name);
@@ -50,9 +70,19 @@ class StringValidator extends Validator {
   }
 
   /// Validates that the string has a specific character length.
-  StringValidator length(int length, {String? message}) {
+  StringValidator length(
+    int length, {
+    String? message,
+    String? Function()? messageFn,
+  }) {
     final newValidations = List<Validation>.from(validations)
-      ..add(StringLengthValidation(length: length, message: message));
+      ..add(
+        StringLengthValidation(
+          length: length,
+          message: message,
+          messageFn: messageFn,
+        ),
+      );
     final newValidator = StringValidator(initialValidations: newValidations);
     if (name != null) {
       newValidator.withName(name);
@@ -61,74 +91,134 @@ class StringValidator extends Validator {
   }
 
   /// Validates that the string is a valid URI.
-  StringValidator uri({List<String>? allowedSchemes, String? message}) {
+  StringValidator uri({
+    List<String>? allowedSchemes,
+    String? message,
+    String? Function()? messageFn,
+  }) {
     validations.add(
-      StringUriValidation(allowedSchemes: allowedSchemes, message: message),
+      StringUriValidation(
+        allowedSchemes: allowedSchemes,
+        message: message,
+        messageFn: messageFn,
+      ),
     );
     return this;
   }
 
   /// Validates that the string is a valid URL (must have scheme and host).
-  StringValidator url({List<String>? allowedSchemes, String? message}) {
+  StringValidator url({
+    List<String>? allowedSchemes,
+    String? message,
+    String? Function()? messageFn,
+  }) {
     validations.add(
-      StringUrlValidation(allowedSchemes: allowedSchemes, message: message),
+      StringUrlValidation(
+        allowedSchemes: allowedSchemes,
+        message: message,
+        messageFn: messageFn,
+      ),
     );
     return this;
   }
 
   /// Validates that the string is a valid emoji.
-  StringValidator emoji({String? message}) {
-    validations.add(StringEmojiValidation(message: message));
+  StringValidator emoji({String? message, String? Function()? messageFn}) {
+    validations.add(
+      StringEmojiValidation(message: message, messageFn: messageFn),
+    );
     return this;
   }
 
   /// Validates that the string is a valid UUID.
-  StringValidator uuid({String? message}) {
-    validations.add(StringUuidValidation(message: message));
+  StringValidator uuid({String? message, String? Function()? messageFn}) {
+    validations.add(
+      StringUuidValidation(message: message, messageFn: messageFn),
+    );
     return this;
   }
 
   /// Validates that the string is a valid CUID.
-  StringValidator cuid({String? message}) {
-    validations.add(StringCuidValidation(message: message));
+  StringValidator cuid({String? message, String? Function()? messageFn}) {
+    validations.add(
+      StringCuidValidation(message: message, messageFn: messageFn),
+    );
     return this;
   }
 
   /// Validates that the string is a valid CUID2.
-  StringValidator cuid2({String? message}) {
-    validations.add(StringCuid2Validation(message: message));
+  StringValidator cuid2({String? message, String? Function()? messageFn}) {
+    validations.add(
+      StringCuid2Validation(message: message, messageFn: messageFn),
+    );
     return this;
   }
 
   /// Validates that the string is an ip with optional parameter for IPv4 and IPv6 as "v4" and "v6" respectively.
-  StringValidator ip({String? message, IpVersion? version}) {
+  StringValidator ip({
+    String? message,
+    String? Function()? messageFn,
+    IpVersion? version,
+  }) {
     validations.add(
-      StringIpValidation(customMessage: message, version: version),
+      StringIpValidation(
+        message: message,
+        messageFn: messageFn,
+        version: version,
+      ),
     );
     return this;
   }
 
   /// Validates that the string matches a regular expression.
-  StringValidator regex(String pattern, {String? message}) {
-    validations.add(StringRegexValidation(pattern, message: message));
+  StringValidator regex(
+    String pattern, {
+    String? message,
+    String? Function()? messageFn,
+  }) {
+    validations.add(
+      StringRegexValidation(pattern, message: message, messageFn: messageFn),
+    );
     return this;
   }
 
   /// Validates that the string starts with a string.
-  StringValidator startsWith(String string, {String? message}) {
-    validations.add(StringStartsWithValidation(string, message: message));
+  StringValidator startsWith(
+    String string, {
+    String? message,
+    String? Function()? messageFn,
+  }) {
+    validations.add(
+      StringStartsWithValidation(
+        string,
+        message: message,
+        messageFn: messageFn,
+      ),
+    );
     return this;
   }
 
   /// Validates that the string ends with a string.
-  StringValidator endsWith(String string, {String? message}) {
-    validations.add(StringEndsWithValidation(string, message: message));
+  StringValidator endsWith(
+    String string, {
+    String? message,
+    String? Function()? messageFn,
+  }) {
+    validations.add(
+      StringEndsWithValidation(string, message: message, messageFn: messageFn),
+    );
     return this;
   }
 
   /// Validates that the string contains a string.
-  StringValidator contains(String string, {String? message}) {
-    validations.add(StringContainsValidation(string, message: message));
+  StringValidator contains(
+    String string, {
+    String? message,
+    String? Function()? messageFn,
+  }) {
+    validations.add(
+      StringContainsValidation(string, message: message, messageFn: messageFn),
+    );
     return this;
   }
 }

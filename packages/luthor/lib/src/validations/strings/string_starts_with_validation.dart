@@ -3,9 +3,14 @@ import 'package:luthor/src/validation.dart';
 class StringStartsWithValidation extends Validation {
   String string;
   String? customMessage;
+  String? Function()? customMessageFn;
 
-  StringStartsWithValidation(this.string, {String? message})
-    : customMessage = message;
+  StringStartsWithValidation(
+    this.string, {
+    String? message,
+    String? Function()? messageFn,
+  }) : customMessage = message,
+       customMessageFn = messageFn;
 
   @override
   bool call(String? fieldName, Object? value) {
@@ -18,7 +23,9 @@ class StringStartsWithValidation extends Validation {
 
   @override
   String get message =>
-      customMessage ?? '${fieldName ?? 'value'} does not start with "$string"';
+      customMessage ??
+      customMessageFn?.call() ??
+      '${fieldName ?? 'value'} does not start with "$string"';
 
   @override
   Map<String, List<String>>? get errors => null;

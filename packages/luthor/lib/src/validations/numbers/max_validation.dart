@@ -3,9 +3,14 @@ import 'package:luthor/src/validation.dart';
 class NumberMaxValidation extends Validation {
   num maxValue;
   String? customMessage;
+  String? Function()? customMessageFn;
 
-  NumberMaxValidation({required this.maxValue, String? message})
-    : customMessage = message;
+  NumberMaxValidation({
+    required this.maxValue,
+    String? message,
+    String? Function()? messageFn,
+  }) : customMessage = message,
+       customMessageFn = messageFn;
 
   @override
   bool call(String? fieldName, Object? value) {
@@ -18,10 +23,10 @@ class NumberMaxValidation extends Validation {
   }
 
   @override
-  String get message {
-    if (customMessage != null) return customMessage!;
-    return '${fieldName ?? 'value'} must be less than or equal to $maxValue';
-  }
+  String get message =>
+      customMessage ??
+      customMessageFn?.call() ??
+      '${fieldName ?? 'value'} must be less than or equal to $maxValue';
 
   @override
   Map<String, List<String>>? get errors => null;

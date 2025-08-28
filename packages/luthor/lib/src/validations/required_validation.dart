@@ -2,8 +2,11 @@ import 'package:luthor/src/validation.dart';
 
 class RequiredValidation extends Validation {
   String? customMessage;
+  String? Function()? customMessageFn;
 
-  RequiredValidation({String? message}) : customMessage = message;
+  RequiredValidation({String? message, String? Function()? messageFn})
+    : customMessage = message,
+      customMessageFn = messageFn;
 
   @override
   bool call(String? fieldName, Object? value) {
@@ -12,7 +15,10 @@ class RequiredValidation extends Validation {
   }
 
   @override
-  String get message => customMessage ?? '${fieldName ?? 'value'} is required';
+  String get message =>
+      customMessage ??
+      customMessageFn?.call() ??
+      '${fieldName ?? 'value'} is required';
 
   @override
   Map<String, List<String>>? get errors => null;

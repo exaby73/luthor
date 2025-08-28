@@ -2,8 +2,11 @@ import 'package:luthor/src/validation.dart';
 
 class StringDateTimeValidation extends Validation {
   String? customMessage;
+  String? Function()? customMessageFn;
 
-  StringDateTimeValidation({String? message}) : customMessage = message;
+  StringDateTimeValidation({String? message, String? Function()? messageFn})
+    : customMessage = message,
+      customMessageFn = messageFn;
 
   @override
   bool call(String? fieldName, Object? value) {
@@ -19,7 +22,9 @@ class StringDateTimeValidation extends Validation {
 
   @override
   String get message =>
-      customMessage ?? '${fieldName ?? 'value'} must be a valid date';
+      customMessage ??
+      customMessageFn?.call() ??
+      '${fieldName ?? 'value'} must be a valid date';
 
   @override
   Map<String, List<String>>? get errors => null;

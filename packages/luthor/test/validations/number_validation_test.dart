@@ -56,4 +56,51 @@ void main() {
         expect(errors, ['value is required']);
     }
   });
+
+  test('should use custom message when message is provided', () {
+    final result = l.number(message: 'Custom number error').validateValue('not a number');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['Custom number error']);
+    }
+  });
+
+  test('should use messageFn when messageFn is provided', () {
+    final result = l.number(messageFn: () => 'Dynamic number error').validateValue('not a number');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['Dynamic number error']);
+    }
+  });
+
+  test('should prioritize custom message over messageFn when both are provided', () {
+    final result = l.number(
+      message: 'Static message',
+      messageFn: () => 'Dynamic message'
+    ).validateValue('not a number');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['Static message']);
+    }
+  });
+
+  test('should handle null return from messageFn and fallback to default', () {
+    final result = l.number(messageFn: () => null).validateValue('not a number');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['value must be a number']);
+    }
+  });
 }

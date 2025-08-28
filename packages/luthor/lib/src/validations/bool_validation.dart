@@ -2,8 +2,11 @@ import 'package:luthor/src/validation.dart';
 
 class BoolValidation extends Validation {
   String? customMessage;
+  String? Function()? customMessageFn;
 
-  BoolValidation({String? message}) : customMessage = message;
+  BoolValidation({String? message, String? Function()? messageFn})
+    : customMessage = message,
+      customMessageFn = messageFn;
 
   @override
   bool call(String? fieldName, Object? value) {
@@ -13,7 +16,9 @@ class BoolValidation extends Validation {
 
   @override
   String get message =>
-      customMessage ?? '${fieldName ?? 'value'} must be a bool';
+      customMessage ??
+      customMessageFn?.call() ??
+      '${fieldName ?? 'value'} must be a bool';
 
   @override
   Map<String, List<String>>? get errors => null;

@@ -271,5 +271,83 @@ void main() {
           fail('should not have errors: $errors');
       }
     });
+
+    test('should use messageFn when messageFn is provided', () {
+      final schema = l.schema({
+        'password': l.string().required(),
+        'confirmPassword': l
+            .string()
+            .customWithSchema(
+              passwordConfirmationValidator,
+              messageFn: () => 'Dynamic password mismatch error',
+            )
+            .required(),
+      });
+
+      final result = schema.validateSchema({
+        'password': 'password123',
+        'confirmPassword': 'different_password',
+      });
+
+      switch (result) {
+        case SchemaValidationSuccess(data: _):
+          fail('should not be a success');
+        case SchemaValidationError(errors: final errors):
+          expect(errors['confirmPassword'], ['Dynamic password mismatch error']);
+      }
+    });
+
+    test('should prioritize custom message over messageFn when both are provided', () {
+      final schema = l.schema({
+        'password': l.string().required(),
+        'confirmPassword': l
+            .string()
+            .customWithSchema(
+              passwordConfirmationValidator,
+              message: 'Static message',
+              messageFn: () => 'Dynamic message',
+            )
+            .required(),
+      });
+
+      final result = schema.validateSchema({
+        'password': 'password123',
+        'confirmPassword': 'different_password',
+      });
+
+      switch (result) {
+        case SchemaValidationSuccess(data: _):
+          fail('should not be a success');
+        case SchemaValidationError(errors: final errors):
+          expect(errors['confirmPassword'], ['Static message']);
+      }
+    });
+
+    test('should handle null return from messageFn and fallback to default', () {
+      final schema = l.schema({
+        'password': l.string().required(),
+        'confirmPassword': l
+            .string()
+            .customWithSchema(
+              passwordConfirmationValidator,
+              messageFn: () => null,
+            )
+            .required(),
+      });
+
+      final result = schema.validateSchema({
+        'password': 'password123',
+        'confirmPassword': 'different_password',
+      });
+
+      switch (result) {
+        case SchemaValidationSuccess(data: _):
+          fail('should not be a success');
+        case SchemaValidationError(errors: final errors):
+          expect(errors['confirmPassword'], [
+            'confirmPassword does not pass schema custom validation',
+          ]);
+      }
+    });
   });
 }

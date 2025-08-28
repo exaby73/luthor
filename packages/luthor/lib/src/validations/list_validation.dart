@@ -3,8 +3,14 @@ import 'package:luthor/luthor.dart';
 class ListValidation extends Validation {
   final List<Validator>? validators;
   final String? customMessage;
+  String? Function()? customMessageFn;
 
-  ListValidation({this.validators, String? message}) : customMessage = message;
+  ListValidation({
+    this.validators,
+    String? message,
+    String? Function()? messageFn,
+  }) : customMessage = message,
+       customMessageFn = messageFn;
 
   bool _isValid(Validator validation, dynamic e) {
     if (e is Map<String, Object?>) {
@@ -34,6 +40,10 @@ class ListValidation extends Validation {
   @override
   String get message {
     if (customMessage != null) return customMessage!;
+    if (customMessageFn != null) {
+      final m = customMessageFn!();
+      if (m != null) return m;
+    }
     final m = '${fieldName ?? 'value'} must be a list';
     if (validators == null) return m;
     return '$m or does not match the validations';

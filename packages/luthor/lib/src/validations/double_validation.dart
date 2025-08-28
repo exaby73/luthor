@@ -2,8 +2,11 @@ import 'package:luthor/src/validation.dart';
 
 class DoubleValidation extends Validation {
   String? customMessage;
+  String? Function()? customMessageFn;
 
-  DoubleValidation({String? message}) : customMessage = message;
+  DoubleValidation({String? message, String? Function()? messageFn})
+    : customMessage = message,
+      customMessageFn = messageFn;
 
   @override
   bool call(String? fieldName, Object? value) {
@@ -13,7 +16,9 @@ class DoubleValidation extends Validation {
 
   @override
   String get message =>
-      customMessage ?? '${fieldName ?? 'value'} must be a double';
+      customMessage ??
+      customMessageFn?.call() ??
+      '${fieldName ?? 'value'} must be a double';
 
   @override
   Map<String, List<String>>? get errors => null;

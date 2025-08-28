@@ -51,4 +51,51 @@ void main() {
     expect(result.data, isNull);
     expect(result.errors, ['value is required']);
   });
+
+  test('should use custom message when message is provided', () {
+    final result = l.string().max(3, message: 'Too long').validateValue('abcd');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['Too long']);
+    }
+  });
+
+  test('should use messageFn when messageFn is provided', () {
+    final result = l.string().max(3, messageFn: () => 'Dynamic length error').validateValue('abcd');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['Dynamic length error']);
+    }
+  });
+
+  test('should prioritize custom message over messageFn when both are provided', () {
+    final result = l.string().max(3, 
+      message: 'Static message',
+      messageFn: () => 'Dynamic message'
+    ).validateValue('abcd');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['Static message']);
+    }
+  });
+
+  test('should handle null return from messageFn and fallback to default', () {
+    final result = l.string().max(3, messageFn: () => null).validateValue('abcd');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['value must not be more than 3 characters long']);
+    }
+  });
 }

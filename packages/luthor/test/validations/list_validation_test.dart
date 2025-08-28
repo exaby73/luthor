@@ -75,6 +75,53 @@ void main() {
     },
   );
 
+  test('should use custom message when message is provided', () {
+    final result = l.list(message: 'Custom list error').validateValue('not a list');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['Custom list error']);
+    }
+  });
+
+  test('should use messageFn when messageFn is provided', () {
+    final result = l.list(messageFn: () => 'Dynamic list error').validateValue('not a list');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['Dynamic list error']);
+    }
+  });
+
+  test('should prioritize custom message over messageFn when both are provided', () {
+    final result = l.list(
+      message: 'Static message',
+      messageFn: () => 'Dynamic message'
+    ).validateValue('not a list');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['Static message']);
+    }
+  });
+
+  test('should handle null return from messageFn and fallback to default', () {
+    final result = l.list(messageFn: () => null).validateValue('not a list');
+
+    switch (result) {
+      case SingleValidationSuccess(data: _):
+        fail('should not be a success');
+      case SingleValidationError(data: _, errors: final errors):
+        expect(errors, ['value must be a list']);
+    }
+  });
+
   group('Issues', () {
     test('#33', () {
       final result = l.list(validators: [l.string().required()]).validateValue([

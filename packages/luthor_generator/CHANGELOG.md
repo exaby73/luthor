@@ -1,4 +1,8 @@
-# 0.12.0
+# 0.13.0
+
+- **FEAT**: Add `messageFn` support to all validation annotations, enabling dynamic error message generation in generated schemas through top-level function references.
+
+## 0.12.0
 
 - **FEAT**: Update dependencies.
 

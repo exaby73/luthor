@@ -1,4 +1,8 @@
-# 0.12.0
+# 0.13.0
+
+- **FEAT**: Add `messageFn` parameter to all validation methods and annotations, allowing dynamic error message generation through top-level functions.
+
+## 0.12.0
 
 - **FEAT**: Update dependencies.
 

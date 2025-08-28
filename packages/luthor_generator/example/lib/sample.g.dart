@@ -144,7 +144,7 @@ Validator $SampleSchema = l.withName('Sample').schema({
   SampleSchemaKeys.foo: l.string().required(),
   SampleSchemaKeys.custom: l
       .string()
-      .custom(customValidatorFn, messageFn: customValidatorMessage)
+      .custom(customValidatorFn, messageFn: Sample.customValidatorMessage)
       .required(),
   SampleSchemaKeys.numbers: l.list(validators: [l.int().required()]).required(),
   SampleSchemaKeys.hello: l.string(),

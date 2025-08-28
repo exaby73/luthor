@@ -21,10 +21,6 @@ String lengthErrorMessage() {
   return 'Length must be exactly 10 characters';
 }
 
-String customValidatorMessage() {
-  return 'Custom validation failed - value must equal "custom"';
-}
-
 String regexErrorMessage() {
   return 'Path must be a valid Luthor package URL on pub.dev';
 }
@@ -62,11 +58,18 @@ abstract class Sample with _$Sample {
     required String luthorPath,
     required AnotherSample anotherSample,
     @JsonKey(name: 'jsonKeyName') required String foo,
-    @WithCustomValidator(customValidatorFn, messageFn: customValidatorMessage)
+    @WithCustomValidator(
+      customValidatorFn,
+      messageFn: Sample.customValidatorMessage,
+    )
     required String custom,
     required List<int> numbers,
     String? hello,
   }) = _Sample;
+
+  static String customValidatorMessage() {
+    return 'Custom validation failed - value must equal "custom"';
+  }
 
   factory Sample.fromJson(Map<String, dynamic> json) => _$SampleFromJson(json);
 }

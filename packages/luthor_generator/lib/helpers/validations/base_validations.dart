@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:analyzer/dart/constant/value.dart';
+import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/element2.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
@@ -127,6 +128,16 @@ void _checkAndAddCustomSchema(
 
 DartObject? getAnnotation(TypeChecker checker, Element2 field) {
   return checker.firstAnnotationOf(field);
+}
+
+/// Gets the qualified function name for use in generated code.
+/// Returns 'ClassName.methodName' for static methods, or just 'functionName' for top-level functions.
+String getQualifiedFunctionName(ExecutableElement function) {
+  final enclosingElement = function.enclosingElement3;
+  if (enclosingElement is InterfaceElement && function.isStatic) {
+    return '${enclosingElement.name}.${function.name}';
+  }
+  return function.name;
 }
 
 /// Checks if a class is compatible for auto-generation

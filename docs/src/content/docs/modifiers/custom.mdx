@@ -35,7 +35,7 @@ void main() {
 
 With Code Generation, we can use the `@WithCustomValidator` annotation to provide a custom validation function.
 
-> Note: The custom validation function should be a top level function when using Code Generation. Anonymous functions are not supported due to Dart limitations.
+> Note: The custom validation function should be either a top-level function or a static class method when using Code Generation. Anonymous functions are not supported due to Dart limitations.
 
 ```dart
 import 'package:luthor/luthor.dart';

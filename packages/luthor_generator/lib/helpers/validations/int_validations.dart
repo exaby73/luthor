@@ -26,7 +26,7 @@ void _checkAndWriteMaxValidation(
     
     final params = <String>[max.toString()];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
+    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -46,7 +46,7 @@ void _checkAndWriteMinValidation(
     
     final params = <String>[min.toString()];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
+    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     
     buffer.write(params.join(', '));
     buffer.write(')');

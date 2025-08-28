@@ -18,14 +18,14 @@ void _checkAndWriteCustomValidation(
     buffer.write('.custom(');
     final message = customAnnotation.getField('message')?.toStringValue();
     final messageFn = customAnnotation.getField('messageFn')?.toFunctionValue();
-    final customFuntion = customAnnotation
+    final customFunction = customAnnotation
         .getField('customValidator')!
-        .toFunctionValue()!
-        .name;
+        .toFunctionValue()!;
+    final customFunctionName = getQualifiedFunctionName(customFunction);
 
-    final params = <String>[customFuntion];
+    final params = <String>[customFunctionName];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
+    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -46,12 +46,12 @@ void _checkAndWriteSchemaCustomValidation(
     final messageFn = schemaCustomAnnotation.getField('messageFn')?.toFunctionValue();
     final customFunction = schemaCustomAnnotation
         .getField('customValidator')!
-        .toFunctionValue()!
-        .name;
+        .toFunctionValue()!;
+    final customFunctionName = getQualifiedFunctionName(customFunction);
 
-    final params = <String>[customFunction];
+    final params = <String>[customFunctionName];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${messageFn.name}");
+    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
 
     buffer.write(params.join(', '));
     buffer.write(')');

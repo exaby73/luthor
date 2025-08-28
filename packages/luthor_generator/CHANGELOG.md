@@ -1,3 +1,24 @@
+# 0.13.1
+
+- **FEAT**: Functions passed to annotations now resolve with full qualified names.
+  Before, if you had a function like this:
+
+```dart
+@WithCustomValidator(MyClass.customValidator)
+```
+
+The generated code would look like this:
+
+```dart
+.custom(customValidator)
+```
+
+This causes an analysis error because the function is not found. This version fixes this by resolving the function name to the full qualified name. Now, the generated code will look like this:
+
+```dart
+.custom(MyClass.customValidator)
+```
+
 # 0.13.0
 
 - **FEAT**: Add `messageFn` support to all validation annotations, enabling dynamic error message generation in generated schemas through top-level function references.

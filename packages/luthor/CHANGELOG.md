@@ -1,3 +1,7 @@
+# 0.13.1
+
+- **CHORE**: Update version to match luthor_generator.
+
 # 0.13.0
 
 - **FEAT**: Add `messageFn` parameter to all validation methods and annotations, allowing dynamic error message generation through top-level functions.

@@ -19,6 +19,10 @@ String getStringValidations(FormalParameterElement param) {
   _checkAndWriteEndsWithValidation(buffer, param);
   _checkAndWriteContainsValidation(buffer, param);
   _checkAndWriteIpValidation(buffer, param);
+  _checkAndWriteUuidValidation(buffer, param);
+  _checkAndWriteCuidValidation(buffer, param);
+  _checkAndWriteCuid2Validation(buffer, param);
+  _checkAndWriteEmojiValidation(buffer, param);
 
   return buffer.toString();
 }
@@ -32,12 +36,15 @@ void _checkAndWriteDateTimeValidation(
       param.type.getDisplayString() == 'DateTime') {
     buffer.write('.dateTime(');
     final message = dateTimeAnnotation?.getField('message')?.toStringValue();
-    final messageFn = dateTimeAnnotation?.getField('messageFn')?.toFunctionValue();
-    
+    final messageFn = dateTimeAnnotation
+        ?.getField('messageFn')
+        ?.toFunctionValue();
+
     final params = <String>[];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
-    
+    if (messageFn != null)
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+
     buffer.write(params.join(', '));
     buffer.write(')');
   }
@@ -52,11 +59,12 @@ void _checkAndWriteEmailValidation(
     buffer.write('.email(');
     final message = emailAnnotation.getField('message')?.toStringValue();
     final messageFn = emailAnnotation.getField('messageFn')?.toFunctionValue();
-    
+
     final params = <String>[];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
-    
+    if (messageFn != null)
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+
     buffer.write(params.join(', '));
     buffer.write(')');
   }
@@ -72,11 +80,12 @@ void _checkAndWriteLengthValidation(
     final message = lengthAnnotation.getField('message')?.toStringValue();
     final messageFn = lengthAnnotation.getField('messageFn')?.toFunctionValue();
     final length = lengthAnnotation.getField('length')!.toIntValue()!;
-    
+
     final params = <String>[length.toString()];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
-    
+    if (messageFn != null)
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+
     buffer.write(params.join(', '));
     buffer.write(')');
   }
@@ -92,11 +101,12 @@ void _checkAndWriteMaxValidation(
     final message = maxAnnotation.getField('message')?.toStringValue();
     final messageFn = maxAnnotation.getField('messageFn')?.toFunctionValue();
     final max = maxAnnotation.getField('max')!.toIntValue()!;
-    
+
     final params = <String>[max.toString()];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
-    
+    if (messageFn != null)
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+
     buffer.write(params.join(', '));
     buffer.write(')');
   }
@@ -112,11 +122,12 @@ void _checkAndWriteMinValidation(
     final message = minAnnotation.getField('message')?.toStringValue();
     final messageFn = minAnnotation.getField('messageFn')?.toFunctionValue();
     final min = minAnnotation.getField('min')!.toIntValue()!;
-    
+
     final params = <String>[min.toString()];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
-    
+    if (messageFn != null)
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+
     buffer.write(params.join(', '));
     buffer.write(')');
   }
@@ -140,10 +151,13 @@ void _checkAndWriteUriValidation(
 
     final params = <String>[];
     if (allowedSchemas != null) {
-      params.add('allowedSchemes: [${allowedSchemas.map((e) => "'$e'").join(', ')}]');
+      params.add(
+        'allowedSchemes: [${allowedSchemas.map((e) => "'$e'").join(', ')}]',
+      );
     }
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    if (messageFn != null)
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -168,10 +182,13 @@ void _checkAndWriteUrlValidation(
 
     final params = <String>[];
     if (allowedSchemes != null) {
-      params.add('allowedSchemes: [${allowedSchemes.map((e) => "'$e'").join(', ')}]');
+      params.add(
+        'allowedSchemes: [${allowedSchemes.map((e) => "'$e'").join(', ')}]',
+      );
     }
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    if (messageFn != null)
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -189,11 +206,12 @@ void _checkAndWriteRegexValidation(
     final pattern = regexAnnotation.getField('pattern')!.toStringValue();
     final message = regexAnnotation.getField('message')?.toStringValue();
     final messageFn = regexAnnotation.getField('messageFn')?.toFunctionValue();
-    
+
     final params = <String>['r"$pattern"'];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
-    
+    if (messageFn != null)
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+
     buffer.write(params.join(', '));
     buffer.write(')');
   }
@@ -209,12 +227,15 @@ void _checkAndWriteStartsWithValidation(
 
     final string = startsWithAnnotation.getField('string')!.toStringValue();
     final message = startsWithAnnotation.getField('message')?.toStringValue();
-    final messageFn = startsWithAnnotation.getField('messageFn')?.toFunctionValue();
-    
+    final messageFn = startsWithAnnotation
+        .getField('messageFn')
+        ?.toFunctionValue();
+
     final params = <String>['r"$string"'];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
-    
+    if (messageFn != null)
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+
     buffer.write(params.join(', '));
     buffer.write(')');
   }
@@ -230,12 +251,15 @@ void _checkAndWriteEndsWithValidation(
 
     final string = endsWithAnnotation.getField('string')!.toStringValue();
     final message = endsWithAnnotation.getField('message')?.toStringValue();
-    final messageFn = endsWithAnnotation.getField('messageFn')?.toFunctionValue();
-    
+    final messageFn = endsWithAnnotation
+        .getField('messageFn')
+        ?.toFunctionValue();
+
     final params = <String>['r"$string"'];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
-    
+    if (messageFn != null)
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+
     buffer.write(params.join(', '));
     buffer.write(')');
   }
@@ -251,12 +275,15 @@ void _checkAndWriteContainsValidation(
 
     final string = containsAnnotation.getField('string')!.toStringValue();
     final message = containsAnnotation.getField('message')?.toStringValue();
-    final messageFn = containsAnnotation.getField('messageFn')?.toFunctionValue();
-    
+    final messageFn = containsAnnotation
+        .getField('messageFn')
+        ?.toFunctionValue();
+
     final params = <String>['r"$string"'];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
-    
+    if (messageFn != null)
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+
     buffer.write(params.join(', '));
     buffer.write(')');
   }
@@ -285,7 +312,88 @@ void _checkAndWriteIpValidation(
       if (ipEnum != null) params.add('version: $ipEnum');
     }
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    if (messageFn != null)
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+
+    buffer.write(params.join(', '));
+    buffer.write(')');
+  }
+}
+
+void _checkAndWriteUuidValidation(
+  StringBuffer buffer,
+  FormalParameterElement param,
+) {
+  final uuidAnnotation = getAnnotation(isUuidChecker, param);
+  if (uuidAnnotation != null) {
+    buffer.write('.uuid(');
+    final message = uuidAnnotation.getField('message')?.toStringValue();
+    final messageFn = uuidAnnotation.getField('messageFn')?.toFunctionValue();
+
+    final params = <String>[];
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null)
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+
+    buffer.write(params.join(', '));
+    buffer.write(')');
+  }
+}
+
+void _checkAndWriteCuidValidation(
+  StringBuffer buffer,
+  FormalParameterElement param,
+) {
+  final cuidAnnotation = getAnnotation(isCuidChecker, param);
+  if (cuidAnnotation != null) {
+    buffer.write('.cuid(');
+    final message = cuidAnnotation.getField('message')?.toStringValue();
+    final messageFn = cuidAnnotation.getField('messageFn')?.toFunctionValue();
+
+    final params = <String>[];
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null)
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+
+    buffer.write(params.join(', '));
+    buffer.write(')');
+  }
+}
+
+void _checkAndWriteCuid2Validation(
+  StringBuffer buffer,
+  FormalParameterElement param,
+) {
+  final cuid2Annotation = getAnnotation(isCuid2Checker, param);
+  if (cuid2Annotation != null) {
+    buffer.write('.cuid2(');
+    final message = cuid2Annotation.getField('message')?.toStringValue();
+    final messageFn = cuid2Annotation.getField('messageFn')?.toFunctionValue();
+
+    final params = <String>[];
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null)
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+
+    buffer.write(params.join(', '));
+    buffer.write(')');
+  }
+}
+
+void _checkAndWriteEmojiValidation(
+  StringBuffer buffer,
+  FormalParameterElement param,
+) {
+  final emojiAnnotation = getAnnotation(isEmojiChecker, param);
+  if (emojiAnnotation != null) {
+    buffer.write('.emoji(');
+    final message = emojiAnnotation.getField('message')?.toStringValue();
+    final messageFn = emojiAnnotation.getField('messageFn')?.toFunctionValue();
+
+    final params = <String>[];
+    if (message != null) params.add("message: '$message'");
+    if (messageFn != null)
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
 
     buffer.write(params.join(', '));
     buffer.write(')');

@@ -4,6 +4,7 @@
 - **FEAT**: Add support for `forwardRef()` function to handle self-referential validators. This prevents stack overflow errors when defining schemas that reference themselves (e.g., a `Node` class with `List<Node>? children`). The `forwardRef()` function defers validator resolution until validation time, allowing recursive schema definitions.
 - **FEAT**: Add `ValidatorReference` interface to unify `Validator` and `ForwardRef` types, enabling both to be used interchangeably in validation contexts.
 - **FEAT**: Add `@luthorForwardRef` annotation to mark a field as using a forward reference, to be used in code generation.
+- **FEAT**: Add `@IsUuid`/`@isUuid`, `@IsCuid`/`@isCuid`, `@IsCuid2`/`@isCuid2`, and `@IsEmoji`/`@isEmoji` annotations for string validation. These annotations can be used with code generation to validate UUID, CUID, CUID2, and emoji strings respectively.
 
 # 0.13.1
 

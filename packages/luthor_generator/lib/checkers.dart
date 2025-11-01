@@ -20,6 +20,10 @@ const startsWithChecker = TypeChecker.typeNamed(StartsWith);
 const endsWithChecker = TypeChecker.typeNamed(EndsWith);
 const containsChecker = TypeChecker.typeNamed(Contains);
 const isIpChecker = TypeChecker.typeNamed(IsIp);
+const isUuidChecker = TypeChecker.typeNamed(IsUuid);
+const isCuidChecker = TypeChecker.typeNamed(IsCuid);
+const isCuid2Checker = TypeChecker.typeNamed(IsCuid2);
+const isEmojiChecker = TypeChecker.typeNamed(IsEmoji);
 
 const hasMaxDoubleChecker = TypeChecker.typeNamed(HasMaxDouble);
 const hasMinDoubleChecker = TypeChecker.typeNamed(HasMinDouble);

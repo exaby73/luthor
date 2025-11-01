@@ -10,6 +10,7 @@
 
 - **FEAT**: Add `@luthorForwardRef` annotation support for explicit forward references. Use this annotation when you have cross-class circular references (e.g., `User` has `List<Comment>` and `Comment` has `User`) where automatic detection isn't possible, requiring explicit annotation on the constructor parameter.
 - **FEAT**: Add nullable type support for map key and value validators. Nullable types in `Map<K?, V?>` correctly omit `.required()` validation when appropriate.
+- **FEAT**: Add code generation support for `@IsUuid`/`@isUuid`, `@IsCuid`/`@isCuid`, `@IsCuid2`/`@isCuid2`, and `@IsEmoji`/`@isEmoji` annotations. The generator now automatically generates `.uuid()`, `.cuid()`, `.cuid2()`, and `.emoji()` validation calls respectively when these annotations are used on string fields.
 
 # 0.13.1
 

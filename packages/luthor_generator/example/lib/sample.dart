@@ -56,6 +56,10 @@ abstract class Sample with _$Sample {
       messageFn: regexErrorMessage,
     )
     required String luthorPath,
+    @isUuid required String uuid,
+    @isCuid required String cuid,
+    @isCuid2 required String cuid2,
+    @isEmoji required String emoji,
     required AnotherSample anotherSample,
     @JsonKey(name: 'jsonKeyName') required String foo,
     @WithCustomValidator(
@@ -112,6 +116,10 @@ void main() {
     "minAndMaxNumber": 5,
     "custom": 1,
     "luthorPath": "https://pub.dev/packages/not_luthor",
+    "uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "cuid": "clgtidfup000001pr8qnxasa9",
+    "cuid2": "gnu9eq6nqho8zk0cq4uev49x",
+    "emoji": "👍",
   });
   switch (result3) {
     case SchemaValidationError(errors: final errors):
@@ -121,6 +129,29 @@ void main() {
       });
     case SchemaValidationSuccess(data: final data):
       print('Success: $data');
+      data.validateSelf();
+  }
+
+  print('*' * 10);
+  final result4 = $SampleValidate({
+    "minAndMaxInt": 3,
+    "minAndMaxDouble": 3.0,
+    "minAndMaxNumber": 2.5,
+    "custom": "custom",
+    "luthorPath": "https://pub.dev/packages/luthor",
+    "uuid": "invalid-uuid",
+    "cuid": "invalid-cuid",
+    "cuid2": "InvalidCuid2",
+    "emoji": "not an emoji",
+  });
+  switch (result4) {
+    case SchemaValidationError(errors: final errors):
+      print('Error: Result 4 (invalid validations)');
+      errors.forEach((key, value) {
+        print('$key: $value');
+      });
+    case SchemaValidationSuccess(data: final data):
+      print('Unexpected success: $data');
       data.validateSelf();
   }
 }

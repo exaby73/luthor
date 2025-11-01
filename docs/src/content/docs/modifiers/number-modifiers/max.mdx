@@ -31,30 +31,32 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'number_max_schema.freezed.dart';
 part 'number_max_schema.g.dart';
 
-@freezed
 @luthor
-class NumberMaxSchema extends _$NumberMaxSchema {
+@freezed
+abstract class NumberMaxSchema with _$NumberMaxSchema {
   const factory NumberMaxSchema({
     @HasMax(42) required int intValue,
     @HasMaxDouble(42.0) required double doubleValue,
     @HasMaxNumber(42) required num numValue,
-  }) = _$NumberMaxSchema;
-
-  static SchemaValidationResult<NumberMaxSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$NumberMaxSchemaValidate(json);
+  }) = _NumberMaxSchema;
 
   factory NumberMaxSchema.fromJson(Map<String, dynamic> json) =>
       _$NumberMaxSchemaFromJson(json);
 }
 
 void main() {
-  print(NumberMaxSchema.validate({
+  final result = $NumberMaxSchemaValidate({
     'intValue': 42,
     'doubleValue': 42.0,
     'numValue': 42,
-  }));
+  });
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.intValue}, ${data.doubleValue}, ${data.numValue}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
 </div>

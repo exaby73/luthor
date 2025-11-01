@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'string_schema.freezed.dart';
 part 'string_schema.g.dart';
 
-@freezed
 @luthor
-class StringSchema extends _$StringSchema {
+@freezed
+abstract class StringSchema with _$StringSchema {
   const factory StringSchema({
     required String value,
-  }) = _$StringSchema;
-
-  static SchemaValidationResult<StringSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$StringSchemaValidate(json);
+  }) = _StringSchema;
 
   factory StringSchema.fromJson(Map<String, dynamic> json) =>
       _$StringSchemaFromJson(json);
 }
 
 void main() {
-  print(StringSchema.validate({'value': 'Hello World!'}));
+  final result = $StringSchemaValidate({'value': 'Hello World!'});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
   </div>

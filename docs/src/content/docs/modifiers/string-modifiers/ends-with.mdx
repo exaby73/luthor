@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'ends_with.freezed.dart';
 part 'ends_with.g.dart';
 
-@freezed
 @luthor
-class EndsWithSchema extends _$EndsWithSchema {
+@freezed
+abstract class EndsWithSchema with _$EndsWithSchema {
   const factory EndsWithSchema({
-    required String value,
-  }) = _$EndsWithSchema;
+    @EndsWith('World!') required String value,
+  }) = _EndsWithSchema;
 
-  static SchemaValidationResult<EndsWithSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$EndsWithSchemaValidate(json);
-  
   factory EndsWithSchema.fromJson(Map<String, dynamic> json) =>
       _$EndsWithSchemaFromJson(json);
 }
 
 void main() {
-  print(EndsWithSchema.validate({'value': 'Hello World!'}));
+  final result = $EndsWithSchemaValidate({'value': 'Hello World!'});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
 </div>

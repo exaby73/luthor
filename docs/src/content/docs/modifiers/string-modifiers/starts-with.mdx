@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'starts_with.freezed.dart';
 part 'starts_with.g.dart';
 
-@freezed
 @luthor
-class StartsWithSchema extends _$StartsWithSchema {
+@freezed
+abstract class StartsWithSchema with _$StartsWithSchema {
   const factory StartsWithSchema({
-    required String value,
-  }) = _$StartsWithSchema;
+    @StartsWith('Hello') required String value,
+  }) = _StartsWithSchema;
 
-  static SchemaValidationResult<StartsWithSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$StartsWithSchemaValidate(json);
-  
   factory StartsWithSchema.fromJson(Map<String, dynamic> json) =>
       _$StartsWithSchemaFromJson(json);
 }
 
 void main() {
-  print(StartsWithSchema.validate({'value': 'Hello World!'}));
+  final result = $StartsWithSchemaValidate({'value': 'Hello World!'});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
 </div>

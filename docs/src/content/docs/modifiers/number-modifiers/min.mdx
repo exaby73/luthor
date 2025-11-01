@@ -29,30 +29,32 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'number_min_schema.freezed.dart';
 part 'number_min_schema.g.dart';
 
-@freezed
 @luthor
-class NumberMinSchema extends _$NumberMinSchema {
+@freezed
+abstract class NumberMinSchema with _$NumberMinSchema {
   const factory NumberMinSchema({
     @HasMin(42) required int intValue,
     @HasMinDouble(42.0) required double doubleValue,
     @HasMinNumber(42) required num numValue,
-  }) = _$NumberMinSchema;
-
-  static SchemaValidationResult<NumberMinSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$NumberMinSchemaValidate(json);
+  }) = _NumberMinSchema;
 
   factory NumberMinSchema.fromJson(Map<String, dynamic> json) =>
       _$NumberMinSchemaFromJson(json);
 }
 
 void main() {
-  print(NumberMinSchema.validate({
+  final result = $NumberMinSchemaValidate({
     'intValue': 42,
     'doubleValue': 42.0,
     'numValue': 42,
-  }));
+  });
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.intValue}, ${data.doubleValue}, ${data.numValue}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
 </div>

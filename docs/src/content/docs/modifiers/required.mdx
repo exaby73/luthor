@@ -29,25 +29,27 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'required_schema.freezed.dart';
 part 'required_schema.g.dart';
 
-@freezed
 @luthor
-class RequiredSchema extends _$RequiredSchema {
+@freezed
+abstract class RequiredSchema with _$RequiredSchema {
   const factory RequiredSchema({
     // Adds the required modifier to the value
     required String value,
-  }) = _$RequiredSchema;
-
-  static SchemaValidationResult<RequiredSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$RequiredSchemaValidate(json);
+  }) = _RequiredSchema;
 
   factory RequiredSchema.fromJson(Map<String, dynamic> json) =>
       _$RequiredSchemaFromJson(json);
 }
 
 void main() {
-  print(RequiredSchema.validate({'value': 'Hello'}));
+  final result = $RequiredSchemaValidate({'value': 'Hello'});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
 </div>

@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'uuid.freezed.dart';
 part 'uuid.g.dart';
 
-@freezed
 @luthor
-class UuidSchema extends _$UuidSchema {
+@freezed
+abstract class UuidSchema with _$UuidSchema {
   const factory UuidSchema({
-    required String value,
-  }) = _$UuidSchema;
+    @isUuid /* OR @IsUuid() */ required String value,
+  }) = _UuidSchema;
 
-  static SchemaValidationResult<UuidSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$UuidSchemaValidate(json);
-  
   factory UuidSchema.fromJson(Map<String, dynamic> json) =>
       _$UuidSchemaFromJson(json);
 }
 
 void main() {
-  print(UuidSchema.validate({'value': 'f47ac10b-58cc-4372-a567-0e02b2c3d479'}));
+  final result = $UuidSchemaValidate({'value': 'f47ac10b-58cc-4372-a567-0e02b2c3d479'});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
 </div>

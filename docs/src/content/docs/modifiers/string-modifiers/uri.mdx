@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'uri.freezed.dart';
 part 'uri.g.dart';
 
-@freezed
 @luthor
-class UriSchema extends _$UriSchema {
+@freezed
+abstract class UriSchema with _$UriSchema {
   const factory UriSchema({
-    required String value,
-  }) = _$UriSchema;
+    @isUri /* OR @IsUri() */ required String value,
+  }) = _UriSchema;
 
-  static SchemaValidationResult<UriSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$UriSchemaValidate(json);
-  
   factory UriSchema.fromJson(Map<String, dynamic> json) =>
       _$UriSchemaFromJson(json);
 }
 
 void main() {
-  print(UriSchema.validate({'value': 'https://example.com'}));
+  final result = $UriSchemaValidate({'value': 'https://example.com'});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
 </div>

@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'double_schema.freezed.dart';
 part 'double_schema.g.dart';
 
-@freezed
 @luthor
-class DoubleSchema extends _$DoubleSchema {
+@freezed
+abstract class DoubleSchema with _$DoubleSchema {
   const factory DoubleSchema({
     required double value,
-  }) = _$DoubleSchema;
-
-  static SchemaValidationResult<DoubleSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$DoubleSchemaValidate(json);
+  }) = _DoubleSchema;
 
   factory DoubleSchema.fromJson(Map<String, dynamic> json) =>
       _$DoubleSchemaFromJson(json);
 }
 
 void main() {
-  print(DoubleSchema.validate({'value': 42.0}));
+  final result = $DoubleSchemaValidate({'value': 42.0});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
   </div>

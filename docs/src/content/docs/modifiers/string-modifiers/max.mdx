@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'max.freezed.dart';
 part 'max.g.dart';
 
-@freezed
 @luthor
-class MaxSchema extends _$MaxSchema {
+@freezed
+abstract class MaxSchema with _$MaxSchema {
   const factory MaxSchema({
-    required String value,
-  }) = _$MaxSchema;
+    @HasMax(5) required String value,
+  }) = _MaxSchema;
 
-  static SchemaValidationResult<MaxSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$MaxSchemaValidate(json);
-  
   factory MaxSchema.fromJson(Map<String, dynamic> json) =>
       _$MaxSchemaFromJson(json);
 }
 
 void main() {
-  print(MaxSchema.validate({'value': 'Hello World!'}));
+  final result = $MaxSchemaValidate({'value': 'Hello'});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
 </div>

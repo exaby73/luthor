@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'regex.freezed.dart';
 part 'regex.g.dart';
 
-@freezed
 @luthor
-class RegexSchema extends _$RegexSchema {
+@freezed
+abstract class RegexSchema with _$RegexSchema {
   const factory RegexSchema({
-    required String value,
-  }) = _$RegexSchema;
+    @MatchRegex(r'^[a-zA-Z0-9]+$') required String value,
+  }) = _RegexSchema;
 
-  static SchemaValidationResult<RegexSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$RegexSchemaValidate(json);
-  
   factory RegexSchema.fromJson(Map<String, dynamic> json) =>
       _$RegexSchemaFromJson(json);
 }
 
 void main() {
-  print(RegexSchema.validate({'value': 'Hello123'}));
+  final result = $RegexSchemaValidate({'value': 'Hello123'});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
 </div>

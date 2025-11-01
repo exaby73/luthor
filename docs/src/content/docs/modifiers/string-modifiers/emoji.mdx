@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'emoji.freezed.dart';
 part 'emoji.g.dart';
 
-@freezed
 @luthor
-class EmojiSchema extends _$EmojiSchema {
+@freezed
+abstract class EmojiSchema with _$EmojiSchema {
   const factory EmojiSchema({
-    required String value,
-  }) = _$EmojiSchema;
+    @isEmoji /* OR @IsEmoji() */ required String value,
+  }) = _EmojiSchema;
 
-  static SchemaValidationResult<EmojiSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$EmojiSchemaValidate(json);
-  
   factory EmojiSchema.fromJson(Map<String, dynamic> json) =>
       _$EmojiSchemaFromJson(json);
 }
 
 void main() {
-  print(EmojiSchema.validate({'value': '👍'}));
+  final result = $EmojiSchemaValidate({'value': '👍'});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
 </div>

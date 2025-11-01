@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'any_schema.freezed.dart';
 part 'any_schema.g.dart';
 
-@freezed
 @luthor
-class AnySchema extends _$AnySchema {
+@freezed
+abstract class AnySchema with _$AnySchema {
   const factory AnySchema({
     required dynamic value,
-  }) = _$AnySchema;
+  }) = _AnySchema;
 
-  static SchemaValidationResult<AnySchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$AnySchemaValidate(json);
-  
   factory AnySchema.fromJson(Map<String, dynamic> json) =>
       _$AnySchemaFromJson(json);
 }
 
 void main() {
-  print(AnySchema.validate({'value': 42}));
+  final result = $AnySchemaValidate({'value': 42});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
   </div>

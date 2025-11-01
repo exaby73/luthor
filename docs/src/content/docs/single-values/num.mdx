@@ -26,25 +26,27 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'number_schema.freezed.dart';
 part 'number_schema.g.dart';
 
-@freezed
 @luthor
-class NumberSchema extends _$NumberSchema {
+@freezed
+abstract class NumberSchema with _$NumberSchema {
   const factory NumberSchema({
     required num value,
-  }) = _$NumberSchema;
-
-  static SchemaValidationResult<NumberSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$NumberSchemaValidate(json);
+  }) = _NumberSchema;
 
   factory NumberSchema.fromJson(Map<String, dynamic> json) =>
       _$NumberSchemaFromJson(json);
 }
 
 void main() {
-  print(NumberSchema.validate({'value': 42}));
-  print(NumberSchema.validate({'value': 42.0}));
+  final result1 = $NumberSchemaValidate({'value': 42});
+  final result2 = $NumberSchemaValidate({'value': 42.0});
+
+  switch (result1) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
   </div>

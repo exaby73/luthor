@@ -35,30 +35,49 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'map_schema.freezed.dart';
 part 'map_schema.g.dart';
 
-@freezed
 @luthor
-class MapSchema extends _$MapSchema {
+@freezed
+abstract class MapSchema with _$MapSchema {
   const factory MapSchema({
     required Map<String, int> scores,
-  }) = _$MapSchema;
-
-  static SchemaValidationResult<MapSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$MapSchemaValidate(json);
+  }) = _MapSchema;
 
   factory MapSchema.fromJson(Map<String, dynamic> json) =>
       _$MapSchemaFromJson(json);
 }
 
 void main() {
-  print(MapSchema.validate({
+  // Using generated validation function
+  final result = $MapSchemaValidate({
     'scores': {
       'player1': 100,
       'player2': 200,
     }
-  }));
+  });
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.scores}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
+```
+
+The code generator automatically creates the map validator:
+
+```dart
+// Generated code
+Validator $MapSchemaSchema = l.withName('MapSchema').schema({
+  MapSchemaSchemaKeys.scores: l.map(
+    keyValidator: l.string().required(),
+    valueValidator: l.int().required(),
+  ),
+});
+
+SchemaValidationResult<MapSchema> $MapSchemaValidate(
+  Map<String, dynamic> json,
+) => $MapSchemaSchema.validateSchema(json, fromJson: MapSchema.fromJson);
 ```
   </div>
 </CodeGenContentSwitcher>

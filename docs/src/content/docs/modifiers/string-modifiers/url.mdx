@@ -30,33 +30,42 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'url_schema.freezed.dart';
 part 'url_schema.g.dart';
 
-@freezed
 @luthor
-class UrlSchema extends _$UrlSchema {
+@freezed
+abstract class UrlSchema with _$UrlSchema {
   const factory UrlSchema({
-    @IsUrl() required String url,
+    @isUrl /* OR @IsUrl() */ required String url,
     @IsUrl(allowedSchemes: ['https']) required String secureUrl,
-  }) = _$UrlSchema;
-
-  static SchemaValidationResult<UrlSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$UrlSchemaValidate(json);
+  }) = _UrlSchema;
 
   factory UrlSchema.fromJson(Map<String, dynamic> json) =>
       _$UrlSchemaFromJson(json);
 }
 
 void main() {
-  print(UrlSchema.validate({
+  final result1 = $UrlSchemaValidate({
     'url': 'https://dart.dev',
     'secureUrl': 'https://dart.dev',
-  })); // Success
+  });
 
-  print(UrlSchema.validate({
+  final result2 = $UrlSchemaValidate({
     'url': 'not a url',
     'secureUrl': 'http://dart.dev',
-  })); // Error
+  });
+
+  switch (result1) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Success: ${data.url}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Error: $errors');
+  }
+
+  switch (result2) {
+    case SchemaValidationSuccess():
+      print('Unexpected success');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Error as expected: $errors');
+  }
 }
 ```
   </div>

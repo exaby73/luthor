@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'bool_schema.freezed.dart';
 part 'bool_schema.g.dart';
 
-@freezed
 @luthor
-class BoolSchema extends _$BoolSchema {
+@freezed
+abstract class BoolSchema with _$BoolSchema {
   const factory BoolSchema({
     required bool value,
-  }) = _$BoolSchema;
-
-  static SchemaValidationResult<BoolSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$BoolSchemaValidate(json);
+  }) = _BoolSchema;
 
   factory BoolSchema.fromJson(Map<String, dynamic> json) =>
       _$BoolSchemaFromJson(json);
 }
 
 void main() {
-  print(BoolSchema.validate({'value': true}));
+  final result = $BoolSchemaValidate({'value': true});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
   </div>

@@ -27,6 +27,16 @@ For each `@luthor` annotated class, the generator creates:
 - **Schema** - The actual validation schema using SchemaKeys
 - **Validation Function** - A function to validate and optionally deserialize data
 
+### How Generated Keys Work
+
+Both SchemaKeys and ErrorKeys use the same structure: **Dart field names as record keys** and **JSON field names as record values**. This pattern allows you to:
+- Use type-safe Dart field names for code access (autocomplete, refactoring)
+- Have record values that match the JSON structure (respecting `@JsonKey` annotations)
+
+For example, with `@JsonKey(name: 'email_address') required String email`:
+- Record field name: `email` (Dart field name - for type-safe access)
+- Record value: `"email_address"` (JSON field name - for schema/error lookup)
+
 ## SchemaKeys - Type-Safe Schema Definition
 
 SchemaKeys provide compile-time safety when defining your validation schemas by generating constants that match your class fields.
@@ -48,7 +58,7 @@ abstract class User with _$User {
 ### Generated SchemaKeys
 
 ```dart
-// Generated code
+// Generated code - Dart field names as keys, JSON field names as values
 const UserSchemaKeys = (
   name: "name",
   email: "email", 
@@ -81,15 +91,17 @@ ErrorKeys provide type-safe access to validation errors with support for nested 
 
 ### Generated ErrorKeys
 
+For nested classes, ErrorKeys use nested record structures with dot notation:
+
 ```dart
-// For a simple class
+// For a simple class - same structure as SchemaKeys
 const UserErrorKeys = (
   name: "name",
   email: "email",
   age: "age",
 );
 
-// For nested classes  
+// For nested classes - uses nested records with dot notation
 const ProfileErrorKeys = (
   id: "id",
   user: (
@@ -142,19 +154,21 @@ abstract class ApiUser with _$ApiUser {
 
 ### Generated Keys with JsonKey Mapping
 
+Both SchemaKeys and ErrorKeys follow the same pattern - Dart field names as record keys, JSON field names as record values:
+
 ```dart
-// SchemaKeys use JSON field names
+// SchemaKeys - Dart field names as keys, JSON field names as values
 const ApiUserSchemaKeys = (
   name: "name",
-  email: "email_address",  // Maps to JsonKey name
-  age: "user_age",         // Maps to JsonKey name  
+  email: "email_address",  // Record key: email (Dart) -> Value: email_address (JSON)
+  age: "user_age",         // Record key: age (Dart) -> Value: user_age (JSON)
 );
 
-// ErrorKeys use Dart field names as keys, JSON names as values
+// ErrorKeys - Same structure
 const ApiUserErrorKeys = (
   name: "name",
-  email: "email_address",    // Dart field: email -> JSON: email_address
-  age: "user_age",          // Dart field: age -> JSON: user_age
+  email: "email_address",  // Record key: email (Dart) -> Value: email_address (JSON)
+  age: "user_age",         // Record key: age (Dart) -> Value: user_age (JSON)
 );
 ```
 
@@ -210,9 +224,12 @@ void main() {
   switch (result) {
     case SchemaValidationSuccess(data: final profile):
       print('✅ Valid profile: ${profile.name}');
+      // Use the extension method for validation
+      final selfValidation = profile.validateSelf();
+      print('Self-validation: $selfValidation');
       
     case SchemaValidationError(errors: final errors):
-      // Type-safe error access
+      // Type-safe error access using ErrorKeys
       final nameError = result.getError(UserProfileErrorKeys.name);
       final emailError = result.getError(UserProfileErrorKeys.email);  
       final themeError = result.getError(UserProfileErrorKeys.settings.theme);
@@ -223,6 +240,50 @@ void main() {
       if (themeError != null) print('Theme: $themeError');
   }
 }
+```
+
+### Generated Code
+
+The code generator produces the following:
+
+```dart
+// Generated SchemaKeys
+const UserProfileSchemaKeys = (
+  id: "id",
+  name: "name",
+  email: "email_addr",  // Uses JsonKey name
+  settings: "settings",
+);
+
+// Generated Schema
+Validator $UserProfileSchema = l.withName('UserProfile').schema({
+  UserProfileSchemaKeys.id: l.int().required(),
+  UserProfileSchemaKeys.name: l.string().required(),
+  UserProfileSchemaKeys.email: l.string().required(),
+  UserProfileSchemaKeys.settings: $UserSettingsSchema.required(),
+});
+
+// Generated Validation Function
+SchemaValidationResult<UserProfile> $UserProfileValidate(
+  Map<String, dynamic> json,
+) => $UserProfileSchema.validateSchema(json, fromJson: UserProfile.fromJson);
+
+// Generated Extension for self-validation
+extension UserProfileValidationExtension on UserProfile {
+  SchemaValidationResult<UserProfile> validateSelf() =>
+      $UserProfileValidate(toJson());
+}
+
+// Generated ErrorKeys with nested structure
+const UserProfileErrorKeys = (
+  id: "id",
+  name: "name",
+  email: "email_addr",
+  settings: (
+    theme: "settings.theme",
+    notifications: "settings.notifications",
+  ),
+);
 ```
 
 ## Self-Referential and Circular References
@@ -278,14 +339,41 @@ abstract class Comment with _$Comment {
   const factory Comment({
     required String id,
     required String text,
-    List<Comment>? replies,  // Auto-detected
-    Comment? parent,        // Auto-detected
-    @luthorForwardRef User? user,  // Explicit annotation needed
+    List<Comment>? replies,  // Auto-detected - uses forwardRef
+    Comment? parent,        // Auto-detected - uses forwardRef
+    Map<String, Comment>? mentions,  // Auto-detected - uses forwardRef for values
+    @luthorForwardRef User? user,  // Explicit annotation needed for cross-class reference
   }) = _Comment;
 
   factory Comment.fromJson(Map<String, dynamic> json) =>
       _$CommentFromJson(json);
 }
+```
+
+### Generated Code for Forward References
+
+```dart
+// Generated schema for User
+Validator $UserSchema = l.withName('User').schema({
+  UserSchemaKeys.id: l.string().required(),
+  UserSchemaKeys.username: l.string().required(),
+  UserSchemaKeys.comments: l.list(validators: [$CommentSchema.required()]),
+});
+
+// Generated schema for Comment
+Validator $CommentSchema = l.withName('Comment').schema({
+  CommentSchemaKeys.id: l.string().required(),
+  CommentSchemaKeys.text: l.string().required(),
+  CommentSchemaKeys.replies: l.list(
+    validators: [forwardRef(() => $CommentSchema.required())],  // Auto-detected
+  ),
+  CommentSchemaKeys.parent: forwardRef(() => $CommentSchema),  // Auto-detected
+  CommentSchemaKeys.mentions: l.map(
+    keyValidator: l.string().required(),
+    valueValidator: forwardRef(() => $CommentSchema.required()),  // Auto-detected
+  ),
+  CommentSchemaKeys.user: forwardRef(() => $UserSchema),  // Explicit annotation
+});
 ```
 
 ### When to Use `@luthorForwardRef`
@@ -313,18 +401,41 @@ abstract class GameScore with _$GameScore {
   factory GameScore.fromJson(Map<String, dynamic> json) =>
       _$GameScoreFromJson(json);
 }
+
+@luthor
+@freezed
+abstract class Comment with _$Comment {
+  const factory Comment({
+    required String id,
+    required String text,
+    Map<String, Comment>? mentions,  // Self-reference: auto-detected
+  }) = _Comment;
+
+  factory Comment.fromJson(Map<String, dynamic> json) =>
+      _$CommentFromJson(json);
+}
 ```
 
 ### Generated Map Validation
 
 ```dart
-// Generated schema
+// Generated schema for GameScore
 Validator $GameScoreSchema = l.withName('GameScore').schema({
   GameScoreSchemaKeys.scores: l.map(
     keyValidator: l.string().required(),
     valueValidator: l.int().required(),
   ),
   GameScoreSchemaKeys.mentions: l.map(
+    keyValidator: l.string().required(),
+    valueValidator: $CommentSchema.required(),
+  ),
+});
+
+// Generated schema for Comment (shows auto-detected forwardRef)
+Validator $CommentSchema = l.withName('Comment').schema({
+  CommentSchemaKeys.id: l.string().required(),
+  CommentSchemaKeys.text: l.string().required(),
+  CommentSchemaKeys.mentions: l.map(
     keyValidator: l.string().required(),
     valueValidator: forwardRef(() => $CommentSchema.required()),
   ),
@@ -333,13 +444,193 @@ Validator $GameScoreSchema = l.withName('GameScore').schema({
 
 The generator automatically:
 - Creates key validators for the map key type
-- Creates value validators for the map value type
-- Applies `forwardRef()` when the value type matches the enclosing class or is auto-detected
-- Handles nullable types correctly (omits `.required()` when appropriate)
+- Creates value validators for the map value type  
+- Applies `forwardRef()` when the value type matches the enclosing class (auto-detected)
+- Handles nullable types correctly (omits `.required()` on the map validator when the field is nullable)
+- Handles nullable value types (omits `.required()` on the value validator when `Map<K, V?>` is used)
+
+## List Validation with Code Generation
+
+The code generator automatically handles lists with various element types, including nullable elements:
+
+```dart
+@luthor
+@freezed
+abstract class ListExample with _$ListExample {
+  const factory ListExample({
+    // Non-nullable elements - inner validator gets .required()
+    required List<String> tags,
+    required List<AnotherSample> users,
+    
+    // Nullable elements - inner validator omits .required()
+    required List<String?> nullableTags,
+    required List<AnotherSample?> nullableUsers,
+    
+    // Optional list with nullable elements
+    List<String?>? optionalNullableTags,
+  }) = _ListExample;
+
+  factory ListExample.fromJson(Map<String, dynamic> json) =>
+      _$ListExampleFromJson(json);
+}
+```
+
+### Generated List Validation
+
+```dart
+Validator $ListExampleSchema = l.withName('ListExample').schema({
+  ListExampleSchemaKeys.tags: l
+      .list(validators: [l.string().required()])
+      .required(),
+  ListExampleSchemaKeys.users: l
+      .list(validators: [$AnotherSampleSchema.required()])
+      .required(),
+  ListExampleSchemaKeys.nullableTags: l
+      .list(validators: [l.string()])  // No .required() for nullable elements
+      .required(),
+  ListExampleSchemaKeys.nullableUsers: l
+      .list(validators: [$AnotherSampleSchema])  // No .required() for nullable elements
+      .required(),
+  ListExampleSchemaKeys.optionalNullableTags: l.list(
+    validators: [l.string()],  // Optional list, nullable elements
+  ),
+});
+```
+
+The generator automatically:
+- Creates list validators with appropriate element validators
+- Adds `.required()` to element validators when elements are non-nullable
+- Omits `.required()` from element validators when elements are nullable (`List<T?>`)
+- Makes the list itself optional when the field is nullable (`List<T>?`)
+
+## Auto-Generation for Classes Without @luthor
+
+The code generator can automatically generate schemas for classes that don't have the `@luthor` annotation, as long as they meet certain compatibility requirements:
+
+```dart
+// External class without @luthor but compatible for auto-generation
+@freezed
+abstract class ExternalUser with _$ExternalUser {
+  const factory ExternalUser({
+    required String name,
+    required String email,
+    int? age,
+  }) = _ExternalUser;
+
+  factory ExternalUser.fromJson(Map<String, dynamic> json) =>
+      _$ExternalUserFromJson(json);
+}
+
+// Class with @luthor that references ExternalUser
+@luthor
+@freezed
+abstract class UserProfile with _$UserProfile {
+  const factory UserProfile({
+    required int id,
+    required ExternalUser user,  // Auto-generated schema
+    ExternalUser? user2,        // Auto-generated schema
+    List<ExternalUser>? friends, // Auto-generated schema
+  }) = _UserProfile;
+
+  factory UserProfile.fromJson(Map<String, dynamic> json) =>
+      _$UserProfileFromJson(json);
+}
+```
+
+### Auto-Generated Schema
+
+When a class is referenced but doesn't have `@luthor`, the generator automatically creates a schema if the class is compatible:
+
+```dart
+// Auto-generated schema for ExternalUser
+const ExternalUserSchemaKeys = (name: "name", email: "email", age: "age");
+
+Validator $ExternalUserSchema = l.withName('ExternalUser').schema({
+  ExternalUserSchemaKeys.name: l.string().required(),
+  ExternalUserSchemaKeys.email: l.string().required(),
+  ExternalUserSchemaKeys.age: l.int(),
+});
+
+SchemaValidationResult<ExternalUser> $ExternalUserValidate(
+  Map<String, dynamic> json,
+) => $ExternalUserSchema.validateSchema(json, fromJson: ExternalUser.fromJson);
+
+extension ExternalUserValidationExtension on ExternalUser {
+  SchemaValidationResult<ExternalUser> validateSelf() =>
+      $ExternalUserValidate(toJson());
+}
+```
+
+**Compatibility Requirements:**
+- Must have a constructor with named parameters
+- Must have a `fromJson` factory constructor OR `@MappableClass` annotation (for dart_mappable)
+
+## Extension Methods
+
+The code generator automatically creates extension methods on your classes for convenient self-validation:
+
+```dart
+// Generated extension
+extension UserValidationExtension on User {
+  SchemaValidationResult<User> validateSelf() =>
+      $UserValidate(toJson());
+}
+```
+
+### Usage
+
+```dart
+final user = User(name: 'John', email: 'john@example.com', age: 30);
+
+// Validate the instance against its own schema
+final result = user.validateSelf();
+
+switch (result) {
+  case SchemaValidationSuccess(data: final validatedUser):
+    print('Valid: $validatedUser');
+  case SchemaValidationError(errors: final errors):
+    print('Errors: $errors');
+}
+```
 
 ## Cross-Field Validation
 
 Code generation also supports cross-field validation using `@WithSchemaCustomValidator`. See the [Custom Validation](/modifiers/custom) documentation for details on implementing validators that can access the entire schema data.
+
+### Example
+
+```dart
+bool passwordsMatch(Object? value, Map<String, Object?> data) {
+  return value == data['password'];
+}
+
+@luthor
+@freezed
+abstract class SignupForm with _$SignupForm {
+  const factory SignupForm({
+    @IsEmail() required String email,
+    @HasMin(8) required String password,
+    @WithSchemaCustomValidator(passwordsMatch, message: 'Passwords must match')
+    required String confirmPassword,
+  }) = _SignupForm;
+
+  factory SignupForm.fromJson(Map<String, dynamic> json) =>
+      _$SignupFormFromJson(json);
+}
+```
+
+### Generated Schema Custom Validation
+
+```dart
+Validator $SignupFormSchema = l.withName('SignupForm').schema({
+  SignupFormSchemaKeys.email: l.string().email().required(),
+  SignupFormSchemaKeys.password: l.string().min(8).required(),
+  SignupFormSchemaKeys.confirmPassword: l
+      .string()
+      .customWithSchema(passwordsMatch, message: 'Passwords must match')
+      .required(),
+});
+```
 
 ## Best Practices
 

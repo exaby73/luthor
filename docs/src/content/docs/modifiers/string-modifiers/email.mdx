@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'email.freezed.dart';
 part 'email.g.dart';
 
-@freezed
 @luthor
-class EmailSchema extends _$EmailSchema {
+@freezed
+abstract class EmailSchema with _$EmailSchema {
   const factory EmailSchema({
-    required String value,
-  }) = _$EmailSchema;
+    @isEmail /* OR @IsEmail() */ required String value,
+  }) = _EmailSchema;
 
-  static SchemaValidationResult<EmailSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$EmailSchemaValidate(json);
-  
   factory EmailSchema.fromJson(Map<String, dynamic> json) =>
       _$EmailSchemaFromJson(json);
 }
 
 void main() {
-  print(EmailSchema.validate({'value': 'user@example.com'}));
+  final result = $EmailSchemaValidate({'value': 'user@example.com'});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
 </div>

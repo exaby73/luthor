@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'contains.freezed.dart';
 part 'contains.g.dart';
 
-@freezed
 @luthor
-class ContainsSchema extends _$ContainsSchema {
+@freezed
+abstract class ContainsSchema with _$ContainsSchema {
   const factory ContainsSchema({
-    required String value,
-  }) = _$ContainsSchema;
+    @Contains('World') required String value,
+  }) = _ContainsSchema;
 
-  static SchemaValidationResult<ContainsSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$ContainsSchemaValidate(json);
-  
   factory ContainsSchema.fromJson(Map<String, dynamic> json) =>
       _$ContainsSchemaFromJson(json);
 }
 
 void main() {
-  print(ContainsSchema.validate({'value': 'Hello World!'}));
+  final result = $ContainsSchemaValidate({'value': 'Hello World!'});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
 </div>

@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'int_schema.freezed.dart';
 part 'int_schema.g.dart';
 
-@freezed
 @luthor
-class IntSchema extends _$IntSchema {
+@freezed
+abstract class IntSchema with _$IntSchema {
   const factory IntSchema({
     required int value,
-  }) = _$IntSchema;
-
-  static SchemaValidationResult<IntSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$IntSchemaValidate(json);
+  }) = _IntSchema;
 
   factory IntSchema.fromJson(Map<String, dynamic> json) =>
       _$IntSchemaFromJson(json);
 }
 
 void main() {
-  print(IntSchema.validate({'value': 42}));
+  final result = $IntSchemaValidate({'value': 42});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
     </div>

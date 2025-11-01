@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'date_time.freezed.dart';
 part 'date_time.g.dart';
 
-@freezed
 @luthor
-class DateTimeSchema extends _$DateTimeSchema {
+@freezed
+abstract class DateTimeSchema with _$DateTimeSchema {
   const factory DateTimeSchema({
-    required String value,
-  }) = _$DateTimeSchema;
+    @isDateTime /* OR @IsDateTime() */ required String value,
+  }) = _DateTimeSchema;
 
-  static SchemaValidationResult<DateTimeSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$DateTimeSchemaValidate(json);
-  
   factory DateTimeSchema.fromJson(Map<String, dynamic> json) =>
       _$DateTimeSchemaFromJson(json);
 }
 
 void main() {
-  print(DateTimeSchema.validate({'value': '2021-01-01T00:00:00Z'}));
+  final result = $DateTimeSchemaValidate({'value': '2021-01-01T00:00:00Z'});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
 </div>

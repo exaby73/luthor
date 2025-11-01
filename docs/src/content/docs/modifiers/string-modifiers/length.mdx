@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'length.freezed.dart';
 part 'length.g.dart';
 
-@freezed
 @luthor
-class LengthSchema extends _$LengthSchema {
+@freezed
+abstract class LengthSchema with _$LengthSchema {
   const factory LengthSchema({
-    required String value,
-  }) = _$LengthSchema;
+    @HasLength(5) required String value,
+  }) = _LengthSchema;
 
-  static SchemaValidationResult<LengthSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$LengthSchemaValidate(json);
-  
   factory LengthSchema.fromJson(Map<String, dynamic> json) =>
       _$LengthSchemaFromJson(json);
 }
 
 void main() {
-  print(LengthSchema.validate({'value': 'Hello'}));
+  final result = $LengthSchemaValidate({'value': 'Hello'});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
 </div>

@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'cuid.freezed.dart';
 part 'cuid.g.dart';
 
-@freezed
 @luthor
-class CuidSchema extends _$CuidSchema {
+@freezed
+abstract class CuidSchema with _$CuidSchema {
   const factory CuidSchema({
-    required String value,
-  }) = _$CuidSchema;
+    @isCuid /* OR @IsCuid() */ required String value,
+  }) = _CuidSchema;
 
-  static SchemaValidationResult<CuidSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$CuidSchemaValidate(json);
-  
   factory CuidSchema.fromJson(Map<String, dynamic> json) =>
       _$CuidSchemaFromJson(json);
 }
 
 void main() {
-  print(CuidSchema.validate({'value': 'clgtidfup000001pr8qnxasa9'}));
+  final result = $CuidSchemaValidate({'value': 'clgtidfup000001pr8qnxasa9'});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
 </div>

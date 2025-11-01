@@ -24,24 +24,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'min.freezed.dart';
 part 'min.g.dart';
 
-@freezed
 @luthor
-class MinSchema extends _$MinSchema {
+@freezed
+abstract class MinSchema with _$MinSchema {
   const factory MinSchema({
-    required String value,
-  }) = _$MinSchema;
+    @HasMin(5) required String value,
+  }) = _MinSchema;
 
-  static SchemaValidationResult<MinSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$MinSchemaValidate(json);
-  
   factory MinSchema.fromJson(Map<String, dynamic> json) =>
       _$MinSchemaFromJson(json);
 }
 
 void main() {
-  print(MinSchema.validate({'value': 'Hello World!'}));
+  final result = $MinSchemaValidate({'value': 'Hello World!'});
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.value}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
 ```
 </div>

@@ -24,25 +24,50 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'list_schema.freezed.dart';
 part 'list_schema.g.dart';
 
-@freezed
 @luthor
-class ListSchema extends _$ListSchema {
+@freezed
+abstract class ListSchema with _$ListSchema {
   const factory ListSchema({
-    required List<int> value,
-  }) = _$ListSchema;
-
-  static SchemaValidationResult<ListSchema> validate(
-    Map<String, dynamic> json,
-  ) =>
-      _$ListSchemaValidate(json);
+    required List<int> numbers,
+    List<String?>? optionalNullableStrings,
+  }) = _ListSchema;
 
   factory ListSchema.fromJson(Map<String, dynamic> json) =>
       _$ListSchemaFromJson(json);
 }
 
 void main() {
-  print(ListSchema.validate({'value': [42]}));
+  // Using generated validation function
+  final result = $ListSchemaValidate({
+    'numbers': [1, 2, 3],
+    'optionalNullableStrings': ['hello', null, 'world'],
+  });
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.numbers}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
 }
+```
+
+The code generator automatically creates list validators:
+
+```dart
+// Generated code
+Validator $ListSchemaSchema = l.withName('ListSchema').schema({
+  ListSchemaSchemaKeys.numbers: l
+      .list(validators: [l.int().required()])
+      .required(),
+  ListSchemaSchemaKeys.optionalNullableStrings: l.list(
+    validators: [l.string()],  // No .required() for nullable elements
+  ),
+});
+
+SchemaValidationResult<ListSchema> $ListSchemaValidate(
+  Map<String, dynamic> json,
+) => $ListSchemaSchema.validateSchema(json, fromJson: ListSchema.fromJson);
 ```
   </div>
 </CodeGenContentSwitcher>

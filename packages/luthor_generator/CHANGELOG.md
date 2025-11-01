@@ -1,3 +1,16 @@
+# 0.14.0
+
+- **FEAT**: Add code generation support for `Map<K, V>` types with automatic key and value validator generation. When a field is typed as `Map<String, Comment>`, the generator automatically creates validators for both the key type (`String`) and value type (`Comment`).
+- **FEAT**: Add automatic `forwardRef` detection for self-referential types. The generator now automatically wraps schema references with `forwardRef()` when:
+
+  - The field type directly matches the enclosing class (e.g., `Comment? parent`)
+  - The field type is a generic containing the enclosing class (e.g., `List<Comment>? replies`, `Map<String, Comment>? mentions`)
+
+  This prevents stack overflow errors during schema construction for recursive data structures.
+
+- **FEAT**: Add `@luthorForwardRef` annotation support for explicit forward references. Use this annotation when you have cross-class circular references (e.g., `User` has `List<Comment>` and `Comment` has `User`) where automatic detection isn't possible, requiring explicit annotation on the constructor parameter.
+- **FEAT**: Add nullable type support for map key and value validators. Nullable types in `Map<K?, V?>` correctly omit `.required()` validation when appropriate.
+
 # 0.13.1
 
 - **FEAT**: Functions passed to annotations now resolve with full qualified names.

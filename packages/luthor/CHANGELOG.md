@@ -1,3 +1,10 @@
+# 0.14.0
+
+- **FEAT**: Add support for validating map keys and values using `keyValidator` and `valueValidator` parameters in `l.map()`. Map validation errors are structured as `{'keys': {'key1': ['error', 'messages']}, 'values': {'key1': ['error', 'messages']}}`, preventing collisions when maps contain keys named `'keys'` or `'values'`.
+- **FEAT**: Add support for `forwardRef()` function to handle self-referential validators. This prevents stack overflow errors when defining schemas that reference themselves (e.g., a `Node` class with `List<Node>? children`). The `forwardRef()` function defers validator resolution until validation time, allowing recursive schema definitions.
+- **FEAT**: Add `ValidatorReference` interface to unify `Validator` and `ForwardRef` types, enabling both to be used interchangeably in validation contexts.
+- **FEAT**: Add `@luthorForwardRef` annotation to mark a field as using a forward reference, to be used in code generation.
+
 # 0.13.1
 
 - **CHORE**: Update version to match luthor_generator.

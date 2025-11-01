@@ -15,6 +15,11 @@ class Sample {
   }
 }
 
+Validator foobar = l.schema({
+  'foo': l.string().required(),
+  'bar': l.list(validators: [forwardRef(() => foobar.required())]),
+});
+
 void main() {
   late Validator schema;
   late Validator nestedSchema;
@@ -143,6 +148,59 @@ void main() {
       case SchemaValidationError(data: _, errors: _):
         fail('should not have errors');
     }
+  });
+
+  group('Self-referential schemas', () {
+    test(
+      'should handle schema with itself as a list validator without stack overflow',
+      () {
+        final data = {
+          'foo': 'test',
+          'bar': [
+            {
+              'foo': 'nested',
+              'bar': [
+                {'foo': 'deep', 'bar': []},
+              ],
+            },
+          ],
+        };
+
+        final result = foobar.validateSchema(data);
+
+        switch (result) {
+          case SchemaValidationSuccess(data: _):
+            expect(result.data, data);
+          case SchemaValidationError(data: _, errors: _):
+            fail(
+              'Should not have validation errors for valid self-referential schema',
+            );
+        }
+      },
+    );
+
+    test('should still validate self-referential schema fields correctly', () {
+      final invalidData = {
+        'foo': 'test',
+        'bar': [
+          {
+            'foo': 'nested',
+            'bar': [
+              {'foo': null, 'bar': []},
+            ],
+          },
+        ],
+      };
+
+      final result = foobar.validateSchema(invalidData);
+
+      switch (result) {
+        case SchemaValidationSuccess(data: _):
+          fail('Should have validation errors for invalid nested field');
+        case SchemaValidationError(data: _, errors: final errors):
+          expect(errors, isA<Map<String, dynamic>>());
+      }
+    });
   });
 
   group('Issues', () {

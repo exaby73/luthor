@@ -30,3 +30,4 @@ const customValidatorChecker = TypeChecker.typeNamed(WithCustomValidator);
 const schemaCustomValidatorChecker = TypeChecker.typeNamed(
   WithSchemaCustomValidator,
 );
+const luthorForwardRefChecker = TypeChecker.typeNamed(LuthorForwardRef);

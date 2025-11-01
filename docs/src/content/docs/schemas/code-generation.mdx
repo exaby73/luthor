@@ -225,6 +225,118 @@ void main() {
 }
 ```
 
+## Self-Referential and Circular References
+
+The code generator automatically handles self-referential types by detecting when a field references the same class and automatically wrapping it with `forwardRef()`.
+
+### Automatic Detection
+
+The generator automatically detects and handles:
+
+- **Direct self-references**: `Comment? parent`
+- **List self-references**: `List<Comment>? replies`
+- **Map value self-references**: `Map<String, Comment>? mentions`
+
+```dart
+@luthor
+@freezed
+abstract class Comment with _$Comment {
+  const factory Comment({
+    required String id,
+    required String text,
+    // Automatic detection - no annotation needed
+    List<Comment>? replies,
+    Comment? parent,
+    Map<String, Comment>? mentions,
+  }) = _Comment;
+
+  factory Comment.fromJson(Map<String, dynamic> json) =>
+      _$CommentFromJson(json);
+}
+```
+
+### Cross-Class Circular References
+
+For cross-class circular references (e.g., `User` has `List<Comment>` and `Comment` has `User`), use the `@luthorForwardRef` annotation:
+
+```dart
+@luthor
+@freezed
+abstract class User with _$User {
+  const factory User({
+    required String id,
+    required String username,
+    List<Comment>? comments,  // No annotation needed
+  }) = _User;
+
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+}
+
+@luthor
+@freezed
+abstract class Comment with _$Comment {
+  const factory Comment({
+    required String id,
+    required String text,
+    List<Comment>? replies,  // Auto-detected
+    Comment? parent,        // Auto-detected
+    @luthorForwardRef User? user,  // Explicit annotation needed
+  }) = _Comment;
+
+  factory Comment.fromJson(Map<String, dynamic> json) =>
+      _$CommentFromJson(json);
+}
+```
+
+### When to Use `@luthorForwardRef`
+
+Use `@luthorForwardRef` when:
+- You have cross-class circular references
+- Automatic detection doesn't apply (the generator only detects same-class references)
+- You want explicit control over forward reference handling
+
+**Note**: The annotation must be on the constructor parameter, not the field.
+
+## Map Validation with Code Generation
+
+The code generator automatically generates validators for `Map<K, V>` types, creating both key and value validators:
+
+```dart
+@luthor
+@freezed
+abstract class GameScore with _$GameScore {
+  const factory GameScore({
+    required Map<String, int> scores,  // Generates keyValidator: l.string(), valueValidator: l.int()
+    Map<String, Comment>? mentions,   // Generates validators with forwardRef for Comment values
+  }) = _GameScore;
+
+  factory GameScore.fromJson(Map<String, dynamic> json) =>
+      _$GameScoreFromJson(json);
+}
+```
+
+### Generated Map Validation
+
+```dart
+// Generated schema
+Validator $GameScoreSchema = l.withName('GameScore').schema({
+  GameScoreSchemaKeys.scores: l.map(
+    keyValidator: l.string().required(),
+    valueValidator: l.int().required(),
+  ),
+  GameScoreSchemaKeys.mentions: l.map(
+    keyValidator: l.string().required(),
+    valueValidator: forwardRef(() => $CommentSchema.required()),
+  ),
+});
+```
+
+The generator automatically:
+- Creates key validators for the map key type
+- Creates value validators for the map value type
+- Applies `forwardRef()` when the value type matches the enclosing class or is auto-detected
+- Handles nullable types correctly (omits `.required()` when appropriate)
+
 ## Cross-Field Validation
 
 Code generation also supports cross-field validation using `@WithSchemaCustomValidator`. See the [Custom Validation](/modifiers/custom) documentation for details on implementing validators that can access the entire schema data.
@@ -234,6 +346,7 @@ Code generation also supports cross-field validation using `@WithSchemaCustomVal
 1. **Use SchemaKeys** - Always use generated SchemaKeys in your schema definitions for type safety
 2. **Use ErrorKeys** - Replace string literals with ErrorKeys when accessing validation errors
 3. **Consistent Annotations** - Apply `@luthor` consistently across related classes
-4. **Run Generation** - Run `dart run build_runner build` after making changes to annotated classes
+4. **Automatic Detection** - Let the generator handle self-references automatically; only use `@luthorForwardRef` for cross-class circular references
+5. **Run Generation** - Run `dart run build_runner build` after making changes to annotated classes
 
 The code generation features make Luthor validation both more powerful and safer to use, providing compile-time guarantees and excellent IDE support for your validation logic.

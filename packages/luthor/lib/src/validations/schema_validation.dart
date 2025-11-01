@@ -2,13 +2,21 @@ import 'package:luthor/luthor.dart';
 
 class SchemaValidation extends Validation {
   Map<String, dynamic>? failedMessage;
-  final Map<String, Validator> validatorSchema;
+  final Map<String, ValidatorReference> validatorSchema;
 
   SchemaValidation(this.validatorSchema);
 
   @override
   bool call(String? fieldName, Object? value) {
     super.call(fieldName, value);
+    return validate(fieldName, value);
+  }
+
+  bool validate(
+    String? fieldName,
+    Object? value, [
+    Set<SchemaValidation>? validatingSchemas,
+  ]) {
     failedMessage = null;
 
     if (value == null) return true;
@@ -18,9 +26,13 @@ class SchemaValidation extends Validation {
       return false;
     }
 
+    // Always use a set for cycle detection, even if not provided
+    final currentSchemas = validatingSchemas ?? <SchemaValidation>{};
+
     for (final entry in validatorSchema.entries) {
       final name = entry.key;
-      final validator = entry.value;
+      // Resolve the ValidatorReference to a Validator only when needed
+      final validator = entry.value.resolve();
       final fieldValue = value[name];
 
       // Set schema data for any SchemaCustomValidation instances
@@ -37,8 +49,29 @@ class SchemaValidation extends Validation {
         continue;
       }
 
+      final sv = validator.schemaValidation;
+      bool isCycle = false;
+      if (sv != null) {
+        for (final validatingSchema in currentSchemas) {
+          // Compare the reference schemas directly for cycle detection
+          // Both are Map<String, ValidatorReference>, so we can compare them
+          if (identical(validatingSchema.validatorSchema, sv.validatorSchema)) {
+            isCycle = true;
+            break;
+          }
+        }
+      }
+
+      if (isCycle) {
+        continue;
+      }
+
       if (fieldValue is Map<String, Object?>) {
-        final result = validator.validateSchemaWithFieldName(name, fieldValue);
+        final result = validator.validateSchemaWithFieldName(
+          name,
+          fieldValue,
+          validatingSchemas: currentSchemas,
+        );
 
         if (result case SchemaValidationError(data: _, errors: final errors)) {
           failedMessage ??= {};
@@ -46,7 +79,11 @@ class SchemaValidation extends Validation {
         }
       } else {
         failedMessage ??= {};
-        final result = validator.validateValueWithFieldName(name, fieldValue);
+        final result = validator.validateValueWithFieldName(
+          name,
+          fieldValue,
+          validatingSchemas: currentSchemas,
+        );
 
         if (result case SingleValidationError(data: _, errors: final errors)) {
           failedMessage ??= {};

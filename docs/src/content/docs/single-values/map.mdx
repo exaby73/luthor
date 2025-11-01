@@ -1,0 +1,121 @@
+---
+title: Validating a Map value
+---
+
+import CodeGenContentSwitcher from '../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+  <div slot="false">
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() { 
+  // Basic map validation
+  final validator = l.map();
+  print(validator.validateValue({'key': 'value'}));
+  
+  // Map with key and value validators
+  final typedValidator = l.map(
+    keyValidator: l.string().required(),
+    valueValidator: l.int().required(),
+  );
+  print(typedValidator.validateValue({
+    'key1': 42,
+    'key2': 100,
+  }));
+}
+```
+  </div>
+
+  <div slot="true">
+```dart
+import 'package:luthor/luthor.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'map_schema.freezed.dart';
+part 'map_schema.g.dart';
+
+@freezed
+@luthor
+class MapSchema extends _$MapSchema {
+  const factory MapSchema({
+    required Map<String, int> scores,
+  }) = _$MapSchema;
+
+  static SchemaValidationResult<MapSchema> validate(
+    Map<String, dynamic> json,
+  ) =>
+      _$MapSchemaValidate(json);
+
+  factory MapSchema.fromJson(Map<String, dynamic> json) =>
+      _$MapSchemaFromJson(json);
+}
+
+void main() {
+  print(MapSchema.validate({
+    'scores': {
+      'player1': 100,
+      'player2': 200,
+    }
+  }));
+}
+```
+  </div>
+</CodeGenContentSwitcher>
+
+## Key and Value Validation
+
+You can validate both the keys and values of a map using `keyValidator` and `valueValidator` parameters:
+
+```dart
+final validator = l.map(
+  keyValidator: l.string().required(),
+  valueValidator: l.int().required(),
+);
+```
+
+This ensures that:
+- All map keys are valid strings
+- All map values are valid integers
+
+## Error Structure
+
+When key or value validation fails, errors are structured as:
+
+```dart
+{
+  'keys': {
+    'key1': ['error messages'],
+    'key2': ['error messages'],
+  },
+  'values': {
+    'key1': ['error messages'],
+    'key2': ['error messages'],
+  }
+}
+```
+
+This nested structure prevents collisions when your map contains keys named `'keys'` or `'values'`.
+
+## Example with Invalid Data
+
+```dart
+final validator = l.map(
+  keyValidator: l.int().required(),
+  valueValidator: l.string().required(),
+);
+
+final result = validator.validateSchema({
+  'invalidKey': 'invalidValue', // Both key and value are invalid
+});
+
+// Result contains:
+// {
+//   'keys': {
+//     'invalidKey': ['value must be an integer']
+//   },
+//   'values': {
+//     'invalidKey': ['value must be a string']
+//   }
+// }
+```

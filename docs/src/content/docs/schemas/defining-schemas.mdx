@@ -239,6 +239,41 @@ final personSchema = l.schema({
 });
 ```
 
+### Self-Referential Schemas with `forwardRef()`
+
+When defining schemas that reference themselves (like a `Node` class with `List<Node>? children`), use `forwardRef()` to prevent stack overflow errors during schema construction:
+
+```dart
+late Validator nodeSchema;
+nodeSchema = l.schema({
+  'value': l.string().required(),
+  'children': l.list(
+    validators: [forwardRef(() => nodeSchema.required())],
+  ),
+});
+```
+
+The `forwardRef()` function defers validator resolution until validation time, allowing recursive schema definitions without causing stack overflow during construction.
+
+**When to use `forwardRef()`:**
+- Self-referential types: `Node? parent`, `List<Node>? children`
+- Circular references within the same schema
+- Any schema that references itself during definition
+
+**Example - Tree Structure:**
+
+```dart
+late Validator treeNodeSchema;
+treeNodeSchema = l.schema({
+  'id': l.string().required(),
+  'value': l.string().required(),
+  'parent': forwardRef(() => treeNodeSchema),  // Optional parent reference
+  'children': l.list(
+    validators: [forwardRef(() => treeNodeSchema.required())],
+  ),  // List of child nodes
+});
+```
+
 ### Schema Validation with Deserialization
 
 When using code generation, you can validate and deserialize in one step:

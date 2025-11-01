@@ -59,7 +59,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
     for (final param in params) {
       final fieldName = param.name3!;
       buffer.write("  ${name}SchemaKeys.$fieldName: ");
-      buffer.write(getValidations(param));
+      buffer.write(getValidations(param, enclosingClass: element));
       buffer.write(',\n');
     }
 
@@ -257,7 +257,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
     for (final param in constructor.formalParameters) {
       final fieldName = param.name3!;
       buffer.write("  ${className}SchemaKeys.$fieldName: ");
-      buffer.write(getValidations(param));
+      buffer.write(getValidations(param, enclosingClass: element));
       buffer.write(',\n');
     }
 

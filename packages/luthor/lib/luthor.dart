@@ -55,4 +55,8 @@ export 'src/validations/strings/string_uri_validation.dart';
 export 'src/validations/strings/string_uuid_validation.dart';
 export 'src/validator.dart';
 export 'src/validator_reference.dart';
+export 'src/validators/list_validator.dart';
 export 'src/validators/string_validator.dart';
+export 'src/validations/lists/list_min_validation.dart';
+export 'src/validations/lists/list_max_validation.dart';
+export 'src/validations/lists/list_length_validation.dart';

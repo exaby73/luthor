@@ -10,6 +10,7 @@ import 'package:luthor_generator/errors/unsupported_type_error.dart';
 import 'package:luthor_generator/helpers/validations/custom_validations.dart';
 import 'package:luthor_generator/helpers/validations/double_validations.dart';
 import 'package:luthor_generator/helpers/validations/int_validations.dart';
+import 'package:luthor_generator/helpers/validations/list_validations.dart';
 import 'package:luthor_generator/helpers/validations/number_validations.dart';
 import 'package:luthor_generator/helpers/validations/string_validations.dart';
 import 'package:source_gen/source_gen.dart';
@@ -60,6 +61,7 @@ String getValidations(
 
   if (param.type.isDartCoreList) {
     _writeListValidations(buffer, param, enclosingClass: enclosingClass);
+    buffer.write(getListValidations(param));
   }
 
   if (param.type.isDartCoreMap) {

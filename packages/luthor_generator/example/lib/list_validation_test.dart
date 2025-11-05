@@ -21,6 +21,18 @@ abstract class ListValidationTest with _$ListValidationTest {
 
     // Test case 4: Optional lists with nullable elements
     List<String?>? optionalNullableStrings,
+
+    // Test case 5: List with min length validator
+    @HasMin(2) required List<String> minTwoStrings,
+
+    // Test case 6: List with max length validator
+    @HasMax(5) required List<int> maxFiveInts,
+
+    // Test case 7: List with exact length validator
+    @HasLength(3) required List<bool> exactlyThreeBools,
+
+    // Test case 8: List with both min and max validators
+    @HasMin(1) @HasMax(10) required List<double> betweenOneAndTenDoubles,
   }) = _ListValidationTest;
 
   factory ListValidationTest.fromJson(Map<String, dynamic> json) =>

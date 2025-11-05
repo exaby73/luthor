@@ -6,6 +6,9 @@ import 'package:luthor/src/validations/custom_validation.dart';
 import 'package:luthor/src/validations/double_validation.dart';
 import 'package:luthor/src/validations/int_validation.dart';
 import 'package:luthor/src/validations/list_validation.dart';
+import 'package:luthor/src/validations/lists/list_length_validation.dart';
+import 'package:luthor/src/validations/lists/list_max_validation.dart';
+import 'package:luthor/src/validations/lists/list_min_validation.dart';
 import 'package:luthor/src/validations/map_validation.dart';
 import 'package:luthor/src/validations/null_validation.dart';
 import 'package:luthor/src/validations/number_validation.dart';
@@ -16,6 +19,7 @@ import 'package:luthor/src/validations/string_validation.dart';
 import 'package:luthor/src/validator_reference.dart';
 import 'package:luthor/src/validators/double_validator.dart';
 import 'package:luthor/src/validators/int_validator.dart';
+import 'package:luthor/src/validators/list_validator.dart';
 import 'package:luthor/src/validators/number_validator.dart';
 import 'package:luthor/src/validators/string_validator.dart';
 import 'package:meta/meta.dart';
@@ -182,7 +186,7 @@ class Validator implements ValidatorReference {
   }
 
   /// Validates that the value is a list.
-  Validator list({
+  ListValidator list({
     List<ValidatorReference>? validators,
     String? message,
     String? Function()? messageFn,
@@ -195,11 +199,7 @@ class Validator implements ValidatorReference {
           messageFn: messageFn,
         ),
       );
-    final newValidator = Validator(initialValidations: newValidations);
-    if (_name != null) {
-      newValidator._name = _name;
-    }
-    return newValidator;
+    return ListValidator(initialValidations: newValidations);
   }
 
   /// Validates that the value is a map.

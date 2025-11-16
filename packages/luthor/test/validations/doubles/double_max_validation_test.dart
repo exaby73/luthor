@@ -61,7 +61,9 @@ void main() {
   });
 
   test('should use messageFn when messageFn is provided', () {
-    final result = l.double().max(3.0, messageFn: () => 'Dynamic max error').validateValue(4.0);
+    final result = l.double()
+        .max(3.0, messageFn: () => 'Dynamic max error')
+        .validateValue(4.0);
 
     switch (result) {
       case SingleValidationSuccess(data: _):
@@ -71,22 +73,30 @@ void main() {
     }
   });
 
-  test('should prioritize custom message over messageFn when both are provided', () {
-    final result = l.double().max(3.0, 
-      message: 'Static message',
-      messageFn: () => 'Dynamic message'
-    ).validateValue(4.0);
+  test(
+    'should prioritize custom message over messageFn when both are provided',
+    () {
+      final result = l.double()
+          .max(
+            3.0,
+            message: 'Static message',
+            messageFn: () => 'Dynamic message',
+          )
+          .validateValue(4.0);
 
-    switch (result) {
-      case SingleValidationSuccess(data: _):
-        fail('should not be a success');
-      case SingleValidationError(data: _, errors: final errors):
-        expect(errors, ['Static message']);
-    }
-  });
+      switch (result) {
+        case SingleValidationSuccess(data: _):
+          fail('should not be a success');
+        case SingleValidationError(data: _, errors: final errors):
+          expect(errors, ['Static message']);
+      }
+    },
+  );
 
   test('should handle null return from messageFn and fallback to default', () {
-    final result = l.double().max(3.0, messageFn: () => null).validateValue(4.0);
+    final result = l.double()
+        .max(3.0, messageFn: () => null)
+        .validateValue(4.0);
 
     switch (result) {
       case SingleValidationSuccess(data: _):

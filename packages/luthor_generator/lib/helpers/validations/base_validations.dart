@@ -189,11 +189,11 @@ DartObject? getAnnotation(TypeChecker checker, Element2 field) {
 /// Gets the qualified function name for use in generated code.
 /// Returns 'ClassName.methodName' for static methods, or just 'functionName' for top-level functions.
 String getQualifiedFunctionName(ExecutableElement function) {
-  final enclosingElement = function.enclosingElement3;
+  final enclosingElement = function.enclosingElement;
   if (enclosingElement is InterfaceElement && function.isStatic) {
     return '${enclosingElement.name}.${function.name}';
   }
-  return function.name;
+  return function.name!;
 }
 
 /// Checks if a class is compatible for auto-generation

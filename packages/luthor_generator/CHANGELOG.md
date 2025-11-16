@@ -1,3 +1,9 @@
+# 0.15.0
+
+- **FEAT**: Update `build` dependency to `^4.0.0`.
+- **FEAT**: Update `analyzer` dependency to `^8.0.0`.
+- **FEAT**: Update `source_gen` dependency to `^4.0.0`.
+
 # 0.14.0
 
 - **FEAT**: Add code generation support for `Map<K, V>` types with automatic key and value validator generation. When a field is typed as `Map<String, Comment>`, the generator automatically creates validators for both the key type (`String`) and value type (`Comment`).

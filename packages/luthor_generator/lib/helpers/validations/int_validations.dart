@@ -23,11 +23,13 @@ void _checkAndWriteMaxValidation(
     final message = maxAnnotation.getField('message')?.toStringValue();
     final messageFn = maxAnnotation.getField('messageFn')?.toFunctionValue();
     final max = maxAnnotation.getField('max')!.toIntValue()!;
-    
+
     final params = <String>[max.toString()];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
-    
+    if (messageFn != null) {
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
+
     buffer.write(params.join(', '));
     buffer.write(')');
   }
@@ -43,11 +45,13 @@ void _checkAndWriteMinValidation(
     final message = minAnnotation.getField('message')?.toStringValue();
     final messageFn = minAnnotation.getField('messageFn')?.toFunctionValue();
     final min = minAnnotation.getField('min')!.toIntValue()!;
-    
+
     final params = <String>[min.toString()];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
-    
+    if (messageFn != null) {
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
+
     buffer.write(params.join(', '));
     buffer.write(')');
   }

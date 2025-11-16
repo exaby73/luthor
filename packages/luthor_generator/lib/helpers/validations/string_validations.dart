@@ -42,8 +42,9 @@ void _checkAndWriteDateTimeValidation(
 
     final params = <String>[];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null)
+    if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -62,8 +63,9 @@ void _checkAndWriteEmailValidation(
 
     final params = <String>[];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null)
+    if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -83,8 +85,9 @@ void _checkAndWriteLengthValidation(
 
     final params = <String>[length.toString()];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null)
+    if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -104,8 +107,9 @@ void _checkAndWriteMaxValidation(
 
     final params = <String>[max.toString()];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null)
+    if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -125,8 +129,9 @@ void _checkAndWriteMinValidation(
 
     final params = <String>[min.toString()];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null)
+    if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -156,8 +161,9 @@ void _checkAndWriteUriValidation(
       );
     }
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null)
+    if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -187,8 +193,9 @@ void _checkAndWriteUrlValidation(
       );
     }
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null)
+    if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -209,8 +216,9 @@ void _checkAndWriteRegexValidation(
 
     final params = <String>['r"$pattern"'];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null)
+    if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -233,8 +241,9 @@ void _checkAndWriteStartsWithValidation(
 
     final params = <String>['r"$string"'];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null)
+    if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -257,8 +266,9 @@ void _checkAndWriteEndsWithValidation(
 
     final params = <String>['r"$string"'];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null)
+    if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -281,8 +291,9 @@ void _checkAndWriteContainsValidation(
 
     final params = <String>['r"$string"'];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null)
+    if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -312,8 +323,9 @@ void _checkAndWriteIpValidation(
       if (ipEnum != null) params.add('version: $ipEnum');
     }
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null)
+    if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -332,8 +344,9 @@ void _checkAndWriteUuidValidation(
 
     final params = <String>[];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null)
+    if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -352,8 +365,9 @@ void _checkAndWriteCuidValidation(
 
     final params = <String>[];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null)
+    if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -372,8 +386,9 @@ void _checkAndWriteCuid2Validation(
 
     final params = <String>[];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null)
+    if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -392,8 +407,9 @@ void _checkAndWriteEmojiValidation(
 
     final params = <String>[];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null)
+    if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');

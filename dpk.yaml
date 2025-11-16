@@ -1,3 +1,9 @@
+catalog:
+  dependencies:
+    analyzer: ^8.0.0
+    build: ^4.0.0
+    source_gen: ^4.0.0
+
 scripts:
   analyze:
     command: dart analyze

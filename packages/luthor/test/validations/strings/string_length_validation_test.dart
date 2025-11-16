@@ -48,7 +48,10 @@ void main() {
   );
 
   test('should use custom message when message is provided', () {
-    final result = l.string().length(3, message: 'Wrong length').validateValue('ab');
+    final result = l
+        .string()
+        .length(3, message: 'Wrong length')
+        .validateValue('ab');
 
     switch (result) {
       case SingleValidationSuccess(data: _):
@@ -59,7 +62,10 @@ void main() {
   });
 
   test('should use messageFn when messageFn is provided', () {
-    final result = l.string().length(3, messageFn: () => 'Dynamic length error').validateValue('ab');
+    final result = l
+        .string()
+        .length(3, messageFn: () => 'Dynamic length error')
+        .validateValue('ab');
 
     switch (result) {
       case SingleValidationSuccess(data: _):
@@ -69,22 +75,32 @@ void main() {
     }
   });
 
-  test('should prioritize custom message over messageFn when both are provided', () {
-    final result = l.string().length(3, 
-      message: 'Static message',
-      messageFn: () => 'Dynamic message'
-    ).validateValue('ab');
+  test(
+    'should prioritize custom message over messageFn when both are provided',
+    () {
+      final result = l
+          .string()
+          .length(
+            3,
+            message: 'Static message',
+            messageFn: () => 'Dynamic message',
+          )
+          .validateValue('ab');
 
-    switch (result) {
-      case SingleValidationSuccess(data: _):
-        fail('should not be a success');
-      case SingleValidationError(data: _, errors: final errors):
-        expect(errors, ['Static message']);
-    }
-  });
+      switch (result) {
+        case SingleValidationSuccess(data: _):
+          fail('should not be a success');
+        case SingleValidationError(data: _, errors: final errors):
+          expect(errors, ['Static message']);
+      }
+    },
+  );
 
   test('should handle null return from messageFn and fallback to default', () {
-    final result = l.string().length(3, messageFn: () => null).validateValue('ab');
+    final result = l
+        .string()
+        .length(3, messageFn: () => null)
+        .validateValue('ab');
 
     switch (result) {
       case SingleValidationSuccess(data: _):

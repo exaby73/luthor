@@ -36,7 +36,9 @@ void main() {
   });
 
   test('should use custom message when message is provided', () {
-    final result = l.boolean(message: 'Custom boolean error').validateValue('not a bool');
+    final result = l
+        .boolean(message: 'Custom boolean error')
+        .validateValue('not a bool');
 
     switch (result) {
       case SingleValidationSuccess(data: _):
@@ -47,7 +49,9 @@ void main() {
   });
 
   test('should use messageFn when messageFn is provided', () {
-    final result = l.boolean(messageFn: () => 'Dynamic boolean error').validateValue('not a bool');
+    final result = l
+        .boolean(messageFn: () => 'Dynamic boolean error')
+        .validateValue('not a bool');
 
     switch (result) {
       case SingleValidationSuccess(data: _):
@@ -57,30 +61,40 @@ void main() {
     }
   });
 
-  test('should prioritize custom message over messageFn when both are provided', () {
-    final result = l.boolean(
-      message: 'Static message', 
-      messageFn: () => 'Dynamic message'
-    ).validateValue('not a bool');
+  test(
+    'should prioritize custom message over messageFn when both are provided',
+    () {
+      final result = l
+          .boolean(
+            message: 'Static message',
+            messageFn: () => 'Dynamic message',
+          )
+          .validateValue('not a bool');
 
-    switch (result) {
-      case SingleValidationSuccess(data: _):
-        fail('should not be a success');
-      case SingleValidationError(data: _, errors: final errors):
-        expect(errors, ['Static message']);
-    }
-  });
+      switch (result) {
+        case SingleValidationSuccess(data: _):
+          fail('should not be a success');
+        case SingleValidationError(data: _, errors: final errors):
+          expect(errors, ['Static message']);
+      }
+    },
+  );
 
-  test('should use messageFn over default message when only messageFn is provided', () {
-    final result = l.boolean(messageFn: () => 'Function message').validateValue('not a bool');
+  test(
+    'should use messageFn over default message when only messageFn is provided',
+    () {
+      final result = l
+          .boolean(messageFn: () => 'Function message')
+          .validateValue('not a bool');
 
-    switch (result) {
-      case SingleValidationSuccess(data: _):
-        fail('should not be a success');
-      case SingleValidationError(data: _, errors: final errors):
-        expect(errors, ['Function message']);
-    }
-  });
+      switch (result) {
+        case SingleValidationSuccess(data: _):
+          fail('should not be a success');
+        case SingleValidationError(data: _, errors: final errors):
+          expect(errors, ['Function message']);
+      }
+    },
+  );
 
   test('should handle null return from messageFn and fallback to default', () {
     final result = l.boolean(messageFn: () => null).validateValue('not a bool');

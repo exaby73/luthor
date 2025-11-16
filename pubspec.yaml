@@ -8,3 +8,7 @@ workspace:
   - packages/luthor/example
   - packages/luthor_generator
   - packages/luthor_generator/example
+dependencies:
+  analyzer: ^8.0.0
+  build: ^4.0.0
+  source_gen: ^4.0.0

@@ -50,10 +50,7 @@ void main() {
 
   test('should use custom message when message is provided', () {
     final result = l
-        .custom(
-          (value) => false,
-          message: 'Custom validation failed',
-        )
+        .custom((value) => false, message: 'Custom validation failed')
         .validateValue('test');
 
     switch (result) {
@@ -66,10 +63,7 @@ void main() {
 
   test('should use messageFn when messageFn is provided', () {
     final result = l
-        .custom(
-          (value) => false,
-          messageFn: () => 'Dynamic validation error',
-        )
+        .custom((value) => false, messageFn: () => 'Dynamic validation error')
         .validateValue('test');
 
     switch (result) {
@@ -80,29 +74,29 @@ void main() {
     }
   });
 
-  test('should prioritize custom message over messageFn when both are provided', () {
-    final result = l
-        .custom(
-          (value) => false,
-          message: 'Static message',
-          messageFn: () => 'Dynamic message',
-        )
-        .validateValue('test');
+  test(
+    'should prioritize custom message over messageFn when both are provided',
+    () {
+      final result = l
+          .custom(
+            (value) => false,
+            message: 'Static message',
+            messageFn: () => 'Dynamic message',
+          )
+          .validateValue('test');
 
-    switch (result) {
-      case SingleValidationSuccess(data: _):
-        fail('should not be a success');
-      case SingleValidationError(data: _, errors: final errors):
-        expect(errors, ['Static message']);
-    }
-  });
+      switch (result) {
+        case SingleValidationSuccess(data: _):
+          fail('should not be a success');
+        case SingleValidationError(data: _, errors: final errors):
+          expect(errors, ['Static message']);
+      }
+    },
+  );
 
   test('should handle null return from messageFn and fallback to default', () {
     final result = l
-        .custom(
-          (value) => false,
-          messageFn: () => null,
-        )
+        .custom((value) => false, messageFn: () => null)
         .validateValue('test');
 
     switch (result) {

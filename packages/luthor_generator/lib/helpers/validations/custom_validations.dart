@@ -25,7 +25,9 @@ void _checkAndWriteCustomValidation(
 
     final params = <String>[customFunctionName];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    if (messageFn != null) {
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');
@@ -43,7 +45,9 @@ void _checkAndWriteSchemaCustomValidation(
   if (schemaCustomAnnotation != null) {
     buffer.write('.customWithSchema(');
     final message = schemaCustomAnnotation.getField('message')?.toStringValue();
-    final messageFn = schemaCustomAnnotation.getField('messageFn')?.toFunctionValue();
+    final messageFn = schemaCustomAnnotation
+        .getField('messageFn')
+        ?.toFunctionValue();
     final customFunction = schemaCustomAnnotation
         .getField('customValidator')!
         .toFunctionValue()!;
@@ -51,7 +55,9 @@ void _checkAndWriteSchemaCustomValidation(
 
     final params = <String>[customFunctionName];
     if (message != null) params.add("message: '$message'");
-    if (messageFn != null) params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    if (messageFn != null) {
+      params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
+    }
 
     buffer.write(params.join(', '));
     buffer.write(')');

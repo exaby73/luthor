@@ -1,3 +1,7 @@
+# 0.15.0
+
+- **FEAT**: Update version to match luthor_generator.
+
 # 0.14.0
 
 - **FEAT**: Add support for validating map keys and values using `keyValidator` and `valueValidator` parameters in `l.map()`. Map validation errors are structured as `{'keys': {'key1': ['error', 'messages']}, 'values': {'key1': ['error', 'messages']}}`, preventing collisions when maps contain keys named `'keys'` or `'values'`.

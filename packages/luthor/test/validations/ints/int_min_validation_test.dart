@@ -61,7 +61,9 @@ void main() {
   });
 
   test('should use messageFn when messageFn is provided', () {
-    final result = l.int().min(3, messageFn: () => 'Dynamic min error').validateValue(2);
+    final result = l.int()
+        .min(3, messageFn: () => 'Dynamic min error')
+        .validateValue(2);
 
     switch (result) {
       case SingleValidationSuccess(data: _):
@@ -71,19 +73,21 @@ void main() {
     }
   });
 
-  test('should prioritize custom message over messageFn when both are provided', () {
-    final result = l.int().min(3, 
-      message: 'Static message',
-      messageFn: () => 'Dynamic message'
-    ).validateValue(2);
+  test(
+    'should prioritize custom message over messageFn when both are provided',
+    () {
+      final result = l.int()
+          .min(3, message: 'Static message', messageFn: () => 'Dynamic message')
+          .validateValue(2);
 
-    switch (result) {
-      case SingleValidationSuccess(data: _):
-        fail('should not be a success');
-      case SingleValidationError(data: _, errors: final errors):
-        expect(errors, ['Static message']);
-    }
-  });
+      switch (result) {
+        case SingleValidationSuccess(data: _):
+          fail('should not be a success');
+        case SingleValidationError(data: _, errors: final errors):
+          expect(errors, ['Static message']);
+      }
+    },
+  );
 
   test('should handle null return from messageFn and fallback to default', () {
     final result = l.int().min(3, messageFn: () => null).validateValue(2);

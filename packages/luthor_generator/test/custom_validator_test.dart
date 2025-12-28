@@ -43,7 +43,10 @@ void main() {
           case SchemaValidationError(errors: final errors):
             expect(errors.keys, contains('customField'));
             expect(errors['customField'], isNotNull);
-            expect(errors['customField']!.first, equals('Value must be "valid"'));
+            expect(
+              errors['customField']!.first,
+              equals('Value must be "valid"'),
+            );
         }
       },
     );

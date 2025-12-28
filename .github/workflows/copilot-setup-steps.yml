@@ -22,17 +22,5 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Dart SDK
-        uses: dart-lang/setup-dart@v1
-
-      - name: Install dpk (Dartpack monorepo CLI)
-        run: |
-          dart install dpk
-          echo "$HOME/.local/state/Dart/install/bin" >> $GITHUB_PATH
-
-      - name: Install project dependencies
-        run: dpk get
-
-      - name: Generate code for luthor_generator example
-        working-directory: packages/luthor_generator/example
-        run: dart run build_runner build -d
+      - name: Setup Luthor
+        uses: ./.github/actions/setup-luthor

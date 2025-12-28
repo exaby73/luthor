@@ -11,10 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: dart-lang/setup-dart@v1
-      - name: Install dpk
-        run: |
-          dart install dpk
-          echo "$HOME/.local/state/Dart/install/bin" >> $GITHUB_PATH
-      - run: dpk get
+      - uses: ./.github/actions/setup-luthor
       - run: dpk run format

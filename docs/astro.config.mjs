@@ -5,7 +5,7 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://luthor.netlify.app',
+  site: 'https://luthor.ex3.dev',
   base: '/',
   integrations: [
     starlight({

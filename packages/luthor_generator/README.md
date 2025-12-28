@@ -23,4 +23,4 @@ For each annotated class, luthor_generator creates:
 
 See the [documentation][docs] for more information.
 
-[docs]: https://luthor.netlify.app
+[docs]: https://luthor.ex3.dev

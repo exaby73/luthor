@@ -23,10 +23,7 @@ abstract class CustomValidatorModel with _$CustomValidatorModel {
     @WithCustomValidator(customValidatorFn, messageFn: customErrorMessage)
     required String customField,
     required String matchField,
-    @WithSchemaCustomValidator(
-      schemaValidatorFn,
-      message: 'Fields must match',
-    )
+    @WithSchemaCustomValidator(schemaValidatorFn, message: 'Fields must match')
     required String confirmField,
   }) = _CustomValidatorModel;
 

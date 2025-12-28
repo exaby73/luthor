@@ -1,11 +1,11 @@
 import 'package:luthor/luthor.dart';
 import 'package:test/test.dart';
 
-import 'fixtures/simple_model.dart';
 import 'fixtures/annotated_model.dart';
-import 'fixtures/nested_model.dart';
 import 'fixtures/json_key_model.dart';
 import 'fixtures/list_model.dart';
+import 'fixtures/nested_model.dart';
+import 'fixtures/simple_model.dart';
 
 void main() {
   group('Schema Generation Tests', () {
@@ -97,12 +97,7 @@ void main() {
     });
 
     test('should allow optional field to be missing', () {
-      final data = {
-        'name': 'Test',
-        'age': 25,
-        'isActive': true,
-        'score': 85.5,
-      };
+      final data = {'name': 'Test', 'age': 25, 'isActive': true, 'score': 85.5};
 
       final result = $SimpleModelValidate(data);
 
@@ -248,7 +243,9 @@ void main() {
 
       switch (result) {
         case SchemaValidationSuccess(data: _):
-          fail('Should have validation error for string not starting with https://');
+          fail(
+            'Should have validation error for string not starting with https://',
+          );
         case SchemaValidationError(errors: final errors):
           expect(errors.keys, contains('website'));
       }

@@ -51,9 +51,9 @@ Validator $AnnotatedModelSchema = l.withName('AnnotatedModel').schema({
   AnnotatedModelSchemaKeys.password: l.string().max(100).min(8).required(),
   AnnotatedModelSchemaKeys.age: l.int().max(120).min(18).required(),
   AnnotatedModelSchemaKeys.score: l.double().max(100.0).min(0.0).required(),
-  AnnotatedModelSchemaKeys.website: l.string().startsWith(r"https://"),
-  AnnotatedModelSchemaKeys.domain: l.string().endsWith(r".com"),
-  AnnotatedModelSchemaKeys.testField: l.string().contains(r"test"),
+  AnnotatedModelSchemaKeys.website: l.string().startsWith("https://"),
+  AnnotatedModelSchemaKeys.domain: l.string().endsWith(".com"),
+  AnnotatedModelSchemaKeys.testField: l.string().contains("test"),
   AnnotatedModelSchemaKeys.uuid: l.string().uuid().required(),
 });
 

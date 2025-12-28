@@ -4,6 +4,19 @@ import 'package:analyzer/dart/element/element2.dart';
 import 'package:luthor_generator/checkers.dart';
 import 'package:luthor_generator/helpers/validations/base_validations.dart';
 
+/// Returns true if the string should be a raw string (contains backslashes)
+bool _shouldUseRawString(String value) {
+  return value.contains(r'\');
+}
+
+/// Formats a string literal, using raw string only if needed
+String _formatStringLiteral(String value) {
+  if (_shouldUseRawString(value)) {
+    return 'r"$value"';
+  }
+  return '"$value"';
+}
+
 String getStringValidations(FormalParameterElement param) {
   final buffer = StringBuffer();
 
@@ -239,7 +252,7 @@ void _checkAndWriteStartsWithValidation(
         .getField('messageFn')
         ?.toFunctionValue();
 
-    final params = <String>['r"$string"'];
+    final params = <String>[_formatStringLiteral(string!)];
     if (message != null) params.add("message: '$message'");
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
@@ -264,7 +277,7 @@ void _checkAndWriteEndsWithValidation(
         .getField('messageFn')
         ?.toFunctionValue();
 
-    final params = <String>['r"$string"'];
+    final params = <String>[_formatStringLiteral(string!)];
     if (message != null) params.add("message: '$message'");
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
@@ -289,7 +302,7 @@ void _checkAndWriteContainsValidation(
         .getField('messageFn')
         ?.toFunctionValue();
 
-    final params = <String>['r"$string"'];
+    final params = <String>[_formatStringLiteral(string!)];
     if (message != null) params.add("message: '$message'");
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");

@@ -26,26 +26,27 @@ void main() {
       }
     });
 
-    test('should validate @WithCustomValidator - invalid case with custom message', () {
-      final invalidData = {
-        'customField': 'invalid',
-        'matchField': 'test',
-        'confirmField': 'test',
-      };
+    test(
+      'should validate @WithCustomValidator - invalid case with custom message',
+      () {
+        final invalidData = {
+          'customField': 'invalid',
+          'matchField': 'test',
+          'confirmField': 'test',
+        };
 
-      final result = $CustomValidatorModelValidate(invalidData);
+        final result = $CustomValidatorModelValidate(invalidData);
 
-      switch (result) {
-        case SchemaValidationSuccess(data: _):
-          fail('Should have validation error for custom validator');
-        case SchemaValidationError(errors: final errors):
-          expect(errors.keys, contains('customField'));
-          expect(
-            errors['customField']?.first,
-            equals('Value must be "valid"'),
-          );
-      }
-    });
+        switch (result) {
+          case SchemaValidationSuccess(data: _):
+            fail('Should have validation error for custom validator');
+          case SchemaValidationError(errors: final errors):
+            expect(errors.keys, contains('customField'));
+            expect(errors['customField'], isNotNull);
+            expect(errors['customField']!.first, equals('Value must be "valid"'));
+        }
+      },
+    );
 
     test('should validate @WithSchemaCustomValidator - matching fields', () {
       final validData = {
@@ -65,25 +66,26 @@ void main() {
       }
     });
 
-    test('should validate @WithSchemaCustomValidator - non-matching fields', () {
-      final invalidData = {
-        'customField': 'valid',
-        'matchField': 'password123',
-        'confirmField': 'different',
-      };
+    test(
+      'should validate @WithSchemaCustomValidator - non-matching fields',
+      () {
+        final invalidData = {
+          'customField': 'valid',
+          'matchField': 'password123',
+          'confirmField': 'different',
+        };
 
-      final result = $CustomValidatorModelValidate(invalidData);
+        final result = $CustomValidatorModelValidate(invalidData);
 
-      switch (result) {
-        case SchemaValidationSuccess(data: _):
-          fail('Should have validation error for non-matching fields');
-        case SchemaValidationError(errors: final errors):
-          expect(errors.keys, contains('confirmField'));
-          expect(
-            errors['confirmField']?.first,
-            equals('Fields must match'),
-          );
-      }
-    });
+        switch (result) {
+          case SchemaValidationSuccess(data: _):
+            fail('Should have validation error for non-matching fields');
+          case SchemaValidationError(errors: final errors):
+            expect(errors.keys, contains('confirmField'));
+            expect(errors['confirmField'], isNotNull);
+            expect(errors['confirmField']!.first, equals('Fields must match'));
+        }
+      },
+    );
   });
 }

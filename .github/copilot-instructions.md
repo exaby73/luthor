@@ -14,9 +14,30 @@ This is a monorepo with the following packages:
 ## Development Workflow
 
 ### Setup
+
+**Prerequisites:**
+- Dart SDK 3.10+ (automatically configured when using stable Dart)
+
+**Install dpk (Dartpack - monorepo management CLI):**
 ```bash
-# Install dpk (Dart Package Kit) for workspace management
+# For Dart 3.10+
+dart install dpk
+
+# Add Dart bin to PATH
+echo "$HOME/.local/state/Dart/install/bin" >> $HOME/.bashrc
+source $HOME/.bashrc
+
+# Or manually add to PATH for the current session
+export PATH="$PATH:$HOME/.local/state/Dart/install/bin"
+```
+
+**For Dart versions before 3.10:**
+```bash
 dart pub global activate dpk
+```
+
+**Get dependencies:**
+```bash
 dpk get
 ```
 
@@ -31,6 +52,34 @@ When working with `luthor_generator/example`:
 ```bash
 cd packages/luthor_generator/example
 dart run build_runner build -d
+```
+
+### Documentation
+The documentation site is located in `./docs` and is built with Astro.
+
+**Setup (first time):**
+```bash
+cd docs
+bun install  # or npm install
+```
+
+**Development:**
+```bash
+cd docs
+bun run dev  # or npm run dev
+# Visit http://localhost:4321
+```
+
+**Build:**
+```bash
+cd docs
+bun run build  # or npm run build
+```
+
+**Preview production build:**
+```bash
+cd docs
+bun run preview  # or npm run preview
 ```
 
 ## Coding Conventions

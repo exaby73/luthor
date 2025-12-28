@@ -16,7 +16,8 @@ This is a monorepo with the following packages:
 ### Setup
 
 **Prerequisites:**
-- Dart SDK 3.10+ (automatically configured when using stable Dart)
+- Dart SDK >= 3.8.0 (project requirement)
+- Dart SDK 3.10+ recommended for using `dart install dpk` command
 
 **Install dpk (Dartpack - monorepo management CLI):**
 ```bash

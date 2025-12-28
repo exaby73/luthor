@@ -26,6 +26,7 @@ scripts:
     command: dart test
     runInPackages:
       - packages/luthor
+      - packages/luthor_generator
 
   publish:luthor:
     command: dart pub publish -f

@@ -26,7 +26,7 @@ jobs:
     # If you do not check out your code, Copilot will do this for you.
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
       - name: Set up Dart SDK
         uses: dart-lang/setup-dart@v1
@@ -38,4 +38,5 @@ jobs:
         run: dpk get
 
       - name: Generate code for luthor_generator example
-        run: cd packages/luthor_generator/example && dart run build_runner build -d
+        working-directory: packages/luthor_generator/example
+        run: dart run build_runner build -d

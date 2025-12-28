@@ -11,9 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: dart-lang/setup-dart@v1
-      - run: dart pub global activate dpk
-      - run: dpk get
-      - name: Generate code in example
-        run: (cd packages/luthor_generator/example && dart run build_runner build -d)
+      - uses: ./.github/actions/setup-luthor
       - run: dpk run analyze

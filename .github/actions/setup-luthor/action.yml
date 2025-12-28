@@ -1,0 +1,23 @@
+name: 'Setup Luthor Development Environment'
+description: 'Sets up Dart SDK, dpk, and project dependencies for Luthor monorepo'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Dart SDK
+      uses: dart-lang/setup-dart@v1
+
+    - name: Install dpk (Dartpack monorepo CLI)
+      shell: bash
+      run: |
+        dart install dpk
+        echo "$HOME/.local/state/Dart/install/bin" >> $GITHUB_PATH
+
+    - name: Install project dependencies
+      shell: bash
+      run: dpk get
+
+    - name: Generate code for luthor_generator example
+      shell: bash
+      working-directory: packages/luthor_generator/example
+      run: dart run build_runner build -d

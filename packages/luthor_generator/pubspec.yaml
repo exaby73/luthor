@@ -9,14 +9,14 @@ environment:
   sdk: '>=3.8.0 <4.0.0'
 
 dependencies:
-  analyzer: ^8.0.0
-  build: ^4.0.0
+  analyzer: ^8.0.0 # Configured via catalog
+  build: ^4.0.0 # Configured via catalog
   collection: ^1.18.0
   dart_mappable: ^4.3.0
   freezed_annotation: ^3.0.0
   json_annotation: ^4.8.1
   luthor: ^0.15.0
-  source_gen: ^4.0.0
+  source_gen: ^4.0.0 # Configured via catalog
 
 dev_dependencies:
   lint: ^2.3.0

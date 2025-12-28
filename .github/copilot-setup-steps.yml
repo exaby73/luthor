@@ -1,0 +1,161 @@
+# GitHub Copilot Agent Environment Setup Steps for Luthor
+#
+# This file defines the setup steps required for GitHub Copilot agents
+# to work effectively with the Luthor project.
+
+name: Luthor Agent Environment Setup
+
+description: |
+  Setup steps for GitHub Copilot agents working on Luthor,
+  a pure Dart validation library. This monorepo contains multiple
+  packages managed with dpk (Dartpack).
+
+prerequisites:
+  - name: Dart SDK
+    version: ">=3.8.0"
+    recommended: "3.10+"
+    description: Required for building and testing the project
+    check_command: dart --version
+  
+  - name: Flutter
+    version: "3.38.1-stable"
+    optional: true
+    description: Optional, based on .tool-versions file
+    check_command: flutter --version
+  
+  - name: Bun
+    version: "1.2.21"
+    optional: true
+    description: Optional, for documentation site development
+    check_command: bun --version
+
+setup_steps:
+  - step: 1
+    name: Install Dart SDK
+    description: Install Dart SDK if not already installed
+    commands:
+      - description: Check if Dart is installed
+        command: dart --version || echo "Dart not found, installation needed"
+      - description: Install Dart SDK (Ubuntu/Debian)
+        command: |
+          sudo apt-get update
+          sudo apt-get install -y apt-transport-https
+          wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/dart.gpg
+          echo 'deb [signed-by=/usr/share/keyrings/dart.gpg arch=amd64] https://storage.googleapis.com/download.dartlang.org/linux/debian stable main' | sudo tee /etc/apt/sources.list.d/dart_stable.list
+          sudo apt-get update
+          sudo apt-get install -y dart
+        platforms: [linux]
+        skip_if_exists: dart
+    verification:
+      command: dart --version
+      expected_output_contains: "Dart SDK version"
+
+  - step: 2
+    name: Install dpk (Dartpack)
+    description: Install dpk monorepo management CLI
+    commands:
+      - description: Install dpk for Dart 3.10+
+        command: dart install dpk
+        skip_if_version_less_than: "3.10"
+      - description: Install dpk for Dart versions before 3.10
+        command: dart pub global activate dpk
+        skip_if_version_greater_than: "3.10"
+      - description: Add Dart bin to PATH (temporary)
+        command: export PATH="$PATH:$HOME/.local/state/Dart/install/bin"
+      - description: Verify dpk installation
+        command: dpk --version || echo "dpk installed via pub global"
+    verification:
+      command: dpk --version || dart pub global run dpk --version
+      expected_output_contains: "dpk"
+
+  - step: 3
+    name: Install project dependencies
+    description: Install all dependencies for the monorepo packages
+    commands:
+      - description: Get all dependencies using dpk
+        command: dpk get
+        working_directory: /home/runner/work/luthor/luthor
+    verification:
+      command: ls -la packages/luthor/.dart_tool && ls -la packages/luthor_generator/.dart_tool
+      expected: "Dependency directories exist"
+
+  - step: 4
+    name: Generate code for examples
+    description: Run build_runner to generate code for luthor_generator example
+    commands:
+      - description: Generate code in luthor_generator example
+        command: dart run build_runner build -d
+        working_directory: /home/runner/work/luthor/luthor/packages/luthor_generator/example
+    optional: true
+    verification:
+      command: ls -la packages/luthor_generator/example/.dart_tool/build
+      expected: "Generated code exists"
+
+  - step: 5
+    name: Verify installation
+    description: Verify that the environment is properly set up
+    commands:
+      - description: Check code formatting
+        command: dpk run format --set-exit-if-changed
+        working_directory: /home/runner/work/luthor/luthor
+        continue_on_error: true
+      - description: Run static analysis
+        command: dpk run analyze
+        working_directory: /home/runner/work/luthor/luthor
+        continue_on_error: true
+      - description: Run tests
+        command: dpk run test
+        working_directory: /home/runner/work/luthor/luthor
+        continue_on_error: true
+    verification:
+      command: echo "Setup verification complete"
+      expected: "Setup verification complete"
+
+common_commands:
+  format:
+    command: dpk run format
+    description: Format all code in the monorepo
+  
+  analyze:
+    command: dpk run analyze
+    description: Run static analysis on all packages
+  
+  test:
+    command: dpk run test
+    description: Run tests for all packages
+  
+  fix:
+    command: dpk run fix
+    description: Apply automated fixes to code issues
+  
+  build_generator_example:
+    command: cd packages/luthor_generator/example && dart run build_runner build -d
+    description: Generate code for luthor_generator example
+
+troubleshooting:
+  - issue: dpk command not found
+    solution: |
+      Ensure dpk is installed and the Dart bin directory is in your PATH:
+      - For Dart 3.10+: dart install dpk && export PATH="$PATH:$HOME/.local/state/Dart/install/bin"
+      - For earlier versions: dart pub global activate dpk && export PATH="$PATH:$HOME/.pub-cache/bin"
+  
+  - issue: Dart SDK version mismatch
+    solution: |
+      The project requires Dart SDK >= 3.8.0. Install or upgrade your Dart SDK:
+      - Check current version: dart --version
+      - Update to latest: sudo apt-get update && sudo apt-get install dart
+  
+  - issue: Build runner errors
+    solution: |
+      Clean and rebuild:
+      - cd packages/luthor_generator/example
+      - dart run build_runner clean
+      - dart run build_runner build -d
+
+notes:
+  - The project uses dpk for monorepo management
+  - Core package is at packages/luthor
+  - Code generation package is at packages/luthor_generator
+  - Documentation site is at docs/ (uses Bun/npm and Astro)
+  - Follow lint rules from package:lint/strict.yaml
+  - See .github/copilot-instructions.md for detailed coding conventions

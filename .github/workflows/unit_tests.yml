@@ -12,6 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: dart-lang/setup-dart@v1
-      - run: dart pub global activate dpk
+      - name: Install dpk
+        run: |
+          dart install dpk
+          echo "$HOME/.local/state/Dart/install/bin" >> $GITHUB_PATH
       - run: dpk get
       - run: dpk run test

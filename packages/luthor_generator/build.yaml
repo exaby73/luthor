@@ -3,5 +3,5 @@ builders:
     import: "package:luthor_generator/builder.dart"
     builder_factories: ["luthorBuilder"]
     build_extensions: { ".dart": [".luthor.g.part"] }
-    auto_apply: dependents
+    auto_apply: all_packages
     build_to: cache

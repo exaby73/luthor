@@ -30,12 +30,12 @@ $SampleCopyWith<Sample> get copyWith => _$SampleCopyWithImpl<Sample>(this as Sam
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Sample&&const DeepCollectionEquality().equals(other.anyValue, anyValue)&&(identical(other.boolValue, boolValue) || other.boolValue == boolValue)&&(identical(other.doubleValue, doubleValue) || other.doubleValue == doubleValue)&&(identical(other.intValue, intValue) || other.intValue == intValue)&&const DeepCollectionEquality().equals(other.listValue, listValue)&&(identical(other.numValue, numValue) || other.numValue == numValue)&&(identical(other.stringValue, stringValue) || other.stringValue == stringValue)&&(identical(other.email, email) || other.email == email)&&(identical(other.date, date) || other.date == date)&&(identical(other.dateTime, dateTime) || other.dateTime == dateTime)&&(identical(other.exactly10Characters, exactly10Characters) || other.exactly10Characters == exactly10Characters)&&(identical(other.minAndMaxString, minAndMaxString) || other.minAndMaxString == minAndMaxString)&&(identical(other.startsWithFoo, startsWithFoo) || other.startsWithFoo == startsWithFoo)&&(identical(other.endsWithBar, endsWithBar) || other.endsWithBar == endsWithBar)&&(identical(other.containsBaz, containsBaz) || other.containsBaz == containsBaz)&&(identical(other.minAndMaxInt, minAndMaxInt) || other.minAndMaxInt == minAndMaxInt)&&(identical(other.minAndMaxDouble, minAndMaxDouble) || other.minAndMaxDouble == minAndMaxDouble)&&(identical(other.minAndMaxNumber, minAndMaxNumber) || other.minAndMaxNumber == minAndMaxNumber)&&(identical(other.httpsLink, httpsLink) || other.httpsLink == httpsLink)&&(identical(other.aUrl, aUrl) || other.aUrl == aUrl)&&(identical(other.luthorPath, luthorPath) || other.luthorPath == luthorPath)&&(identical(other.uuid, uuid) || other.uuid == uuid)&&(identical(other.cuid, cuid) || other.cuid == cuid)&&(identical(other.cuid2, cuid2) || other.cuid2 == cuid2)&&(identical(other.emoji, emoji) || other.emoji == emoji)&&(identical(other.anotherSample, anotherSample) || other.anotherSample == anotherSample)&&(identical(other.foo, foo) || other.foo == foo)&&(identical(other.custom, custom) || other.custom == custom)&&const DeepCollectionEquality().equals(other.numbers, numbers)&&(identical(other.hello, hello) || other.hello == hello));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Sample&&const DeepCollectionEquality().equals(other.anyValue, anyValue)&&(identical(other.boolValue, boolValue) || other.boolValue == boolValue)&&(identical(other.doubleValue, doubleValue) || other.doubleValue == doubleValue)&&(identical(other.intValue, intValue) || other.intValue == intValue)&&const DeepCollectionEquality().equals(other.listValue, listValue)&&(identical(other.numValue, numValue) || other.numValue == numValue)&&(identical(other.stringValue, stringValue) || other.stringValue == stringValue)&&(identical(other.email, email) || other.email == email)&&(identical(other.date, date) || other.date == date)&&(identical(other.dateTime, dateTime) || other.dateTime == dateTime)&&(identical(other.exactly10Characters, exactly10Characters) || other.exactly10Characters == exactly10Characters)&&(identical(other.minAndMaxString, minAndMaxString) || other.minAndMaxString == minAndMaxString)&&(identical(other.startsWithFoo, startsWithFoo) || other.startsWithFoo == startsWithFoo)&&(identical(other.endsWithBar, endsWithBar) || other.endsWithBar == endsWithBar)&&(identical(other.containsBaz, containsBaz) || other.containsBaz == containsBaz)&&(identical(other.minAndMaxInt, minAndMaxInt) || other.minAndMaxInt == minAndMaxInt)&&(identical(other.minAndMaxDouble, minAndMaxDouble) || other.minAndMaxDouble == minAndMaxDouble)&&(identical(other.minAndMaxNumber, minAndMaxNumber) || other.minAndMaxNumber == minAndMaxNumber)&&(identical(other.httpsLink, httpsLink) || other.httpsLink == httpsLink)&&(identical(other.aUrl, aUrl) || other.aUrl == aUrl)&&(identical(other.luthorPath, luthorPath) || other.luthorPath == luthorPath)&&(identical(other.uuid, uuid) || other.uuid == uuid)&&(identical(other.cuid, cuid) || other.cuid == cuid)&&(identical(other.cuid2, cuid2) || other.cuid2 == cuid2)&&(identical(other.emoji, emoji) || other.emoji == emoji)&&const DeepCollectionEquality().equals(other.anotherSample, anotherSample)&&(identical(other.foo, foo) || other.foo == foo)&&(identical(other.custom, custom) || other.custom == custom)&&const DeepCollectionEquality().equals(other.numbers, numbers)&&(identical(other.hello, hello) || other.hello == hello));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,const DeepCollectionEquality().hash(anyValue),boolValue,doubleValue,intValue,const DeepCollectionEquality().hash(listValue),numValue,stringValue,email,date,dateTime,exactly10Characters,minAndMaxString,startsWithFoo,endsWithBar,containsBaz,minAndMaxInt,minAndMaxDouble,minAndMaxNumber,httpsLink,aUrl,luthorPath,uuid,cuid,cuid2,emoji,anotherSample,foo,custom,const DeepCollectionEquality().hash(numbers),hello]);
+int get hashCode => Object.hashAll([runtimeType,const DeepCollectionEquality().hash(anyValue),boolValue,doubleValue,intValue,const DeepCollectionEquality().hash(listValue),numValue,stringValue,email,date,dateTime,exactly10Characters,minAndMaxString,startsWithFoo,endsWithBar,containsBaz,minAndMaxInt,minAndMaxDouble,minAndMaxNumber,httpsLink,aUrl,luthorPath,uuid,cuid,cuid2,emoji,const DeepCollectionEquality().hash(anotherSample),foo,custom,const DeepCollectionEquality().hash(numbers),hello]);
 
 @override
 String toString() {
@@ -54,7 +54,7 @@ $Res call({
 });
 
 
-$AnotherSampleCopyWith<$Res> get anotherSample;
+
 
 }
 /// @nodoc
@@ -67,7 +67,7 @@ class _$SampleCopyWithImpl<$Res>
 
 /// Create a copy of Sample
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? anyValue = freezed,Object? boolValue = null,Object? doubleValue = null,Object? intValue = null,Object? listValue = null,Object? numValue = null,Object? stringValue = null,Object? email = null,Object? date = null,Object? dateTime = null,Object? exactly10Characters = freezed,Object? minAndMaxString = null,Object? startsWithFoo = null,Object? endsWithBar = null,Object? containsBaz = null,Object? minAndMaxInt = null,Object? minAndMaxDouble = null,Object? minAndMaxNumber = null,Object? httpsLink = freezed,Object? aUrl = freezed,Object? luthorPath = null,Object? uuid = null,Object? cuid = null,Object? cuid2 = null,Object? emoji = null,Object? anotherSample = null,Object? foo = null,Object? custom = null,Object? numbers = null,Object? hello = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? anyValue = freezed,Object? boolValue = null,Object? doubleValue = null,Object? intValue = null,Object? listValue = null,Object? numValue = null,Object? stringValue = null,Object? email = null,Object? date = null,Object? dateTime = null,Object? exactly10Characters = freezed,Object? minAndMaxString = null,Object? startsWithFoo = null,Object? endsWithBar = null,Object? containsBaz = null,Object? minAndMaxInt = null,Object? minAndMaxDouble = null,Object? minAndMaxNumber = null,Object? httpsLink = freezed,Object? aUrl = freezed,Object? luthorPath = null,Object? uuid = null,Object? cuid = null,Object? cuid2 = null,Object? emoji = null,Object? anotherSample = freezed,Object? foo = null,Object? custom = null,Object? numbers = null,Object? hello = freezed,}) {
   return _then(_self.copyWith(
 anyValue: freezed == anyValue ? _self.anyValue : anyValue // ignore: cast_nullable_to_non_nullable
 as dynamic,boolValue: null == boolValue ? _self.boolValue : boolValue // ignore: cast_nullable_to_non_nullable
@@ -94,7 +94,7 @@ as String,uuid: null == uuid ? _self.uuid : uuid // ignore: cast_nullable_to_non
 as String,cuid: null == cuid ? _self.cuid : cuid // ignore: cast_nullable_to_non_nullable
 as String,cuid2: null == cuid2 ? _self.cuid2 : cuid2 // ignore: cast_nullable_to_non_nullable
 as String,emoji: null == emoji ? _self.emoji : emoji // ignore: cast_nullable_to_non_nullable
-as String,anotherSample: null == anotherSample ? _self.anotherSample : anotherSample // ignore: cast_nullable_to_non_nullable
+as String,anotherSample: freezed == anotherSample ? _self.anotherSample : anotherSample // ignore: cast_nullable_to_non_nullable
 as AnotherSample,foo: null == foo ? _self.foo : foo // ignore: cast_nullable_to_non_nullable
 as String,custom: null == custom ? _self.custom : custom // ignore: cast_nullable_to_non_nullable
 as String,numbers: null == numbers ? _self.numbers : numbers // ignore: cast_nullable_to_non_nullable
@@ -102,16 +102,7 @@ as List<int>,hello: freezed == hello ? _self.hello : hello // ignore: cast_nulla
 as String?,
   ));
 }
-/// Create a copy of Sample
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$AnotherSampleCopyWith<$Res> get anotherSample {
-  
-  return $AnotherSampleCopyWith<$Res>(_self.anotherSample, (value) {
-    return _then(_self.copyWith(anotherSample: value));
-  });
-}
+
 }
 
 
@@ -310,12 +301,12 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Sample&&const DeepCollectionEquality().equals(other.anyValue, anyValue)&&(identical(other.boolValue, boolValue) || other.boolValue == boolValue)&&(identical(other.doubleValue, doubleValue) || other.doubleValue == doubleValue)&&(identical(other.intValue, intValue) || other.intValue == intValue)&&const DeepCollectionEquality().equals(other._listValue, _listValue)&&(identical(other.numValue, numValue) || other.numValue == numValue)&&(identical(other.stringValue, stringValue) || other.stringValue == stringValue)&&(identical(other.email, email) || other.email == email)&&(identical(other.date, date) || other.date == date)&&(identical(other.dateTime, dateTime) || other.dateTime == dateTime)&&(identical(other.exactly10Characters, exactly10Characters) || other.exactly10Characters == exactly10Characters)&&(identical(other.minAndMaxString, minAndMaxString) || other.minAndMaxString == minAndMaxString)&&(identical(other.startsWithFoo, startsWithFoo) || other.startsWithFoo == startsWithFoo)&&(identical(other.endsWithBar, endsWithBar) || other.endsWithBar == endsWithBar)&&(identical(other.containsBaz, containsBaz) || other.containsBaz == containsBaz)&&(identical(other.minAndMaxInt, minAndMaxInt) || other.minAndMaxInt == minAndMaxInt)&&(identical(other.minAndMaxDouble, minAndMaxDouble) || other.minAndMaxDouble == minAndMaxDouble)&&(identical(other.minAndMaxNumber, minAndMaxNumber) || other.minAndMaxNumber == minAndMaxNumber)&&(identical(other.httpsLink, httpsLink) || other.httpsLink == httpsLink)&&(identical(other.aUrl, aUrl) || other.aUrl == aUrl)&&(identical(other.luthorPath, luthorPath) || other.luthorPath == luthorPath)&&(identical(other.uuid, uuid) || other.uuid == uuid)&&(identical(other.cuid, cuid) || other.cuid == cuid)&&(identical(other.cuid2, cuid2) || other.cuid2 == cuid2)&&(identical(other.emoji, emoji) || other.emoji == emoji)&&(identical(other.anotherSample, anotherSample) || other.anotherSample == anotherSample)&&(identical(other.foo, foo) || other.foo == foo)&&(identical(other.custom, custom) || other.custom == custom)&&const DeepCollectionEquality().equals(other._numbers, _numbers)&&(identical(other.hello, hello) || other.hello == hello));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Sample&&const DeepCollectionEquality().equals(other.anyValue, anyValue)&&(identical(other.boolValue, boolValue) || other.boolValue == boolValue)&&(identical(other.doubleValue, doubleValue) || other.doubleValue == doubleValue)&&(identical(other.intValue, intValue) || other.intValue == intValue)&&const DeepCollectionEquality().equals(other._listValue, _listValue)&&(identical(other.numValue, numValue) || other.numValue == numValue)&&(identical(other.stringValue, stringValue) || other.stringValue == stringValue)&&(identical(other.email, email) || other.email == email)&&(identical(other.date, date) || other.date == date)&&(identical(other.dateTime, dateTime) || other.dateTime == dateTime)&&(identical(other.exactly10Characters, exactly10Characters) || other.exactly10Characters == exactly10Characters)&&(identical(other.minAndMaxString, minAndMaxString) || other.minAndMaxString == minAndMaxString)&&(identical(other.startsWithFoo, startsWithFoo) || other.startsWithFoo == startsWithFoo)&&(identical(other.endsWithBar, endsWithBar) || other.endsWithBar == endsWithBar)&&(identical(other.containsBaz, containsBaz) || other.containsBaz == containsBaz)&&(identical(other.minAndMaxInt, minAndMaxInt) || other.minAndMaxInt == minAndMaxInt)&&(identical(other.minAndMaxDouble, minAndMaxDouble) || other.minAndMaxDouble == minAndMaxDouble)&&(identical(other.minAndMaxNumber, minAndMaxNumber) || other.minAndMaxNumber == minAndMaxNumber)&&(identical(other.httpsLink, httpsLink) || other.httpsLink == httpsLink)&&(identical(other.aUrl, aUrl) || other.aUrl == aUrl)&&(identical(other.luthorPath, luthorPath) || other.luthorPath == luthorPath)&&(identical(other.uuid, uuid) || other.uuid == uuid)&&(identical(other.cuid, cuid) || other.cuid == cuid)&&(identical(other.cuid2, cuid2) || other.cuid2 == cuid2)&&(identical(other.emoji, emoji) || other.emoji == emoji)&&const DeepCollectionEquality().equals(other.anotherSample, anotherSample)&&(identical(other.foo, foo) || other.foo == foo)&&(identical(other.custom, custom) || other.custom == custom)&&const DeepCollectionEquality().equals(other._numbers, _numbers)&&(identical(other.hello, hello) || other.hello == hello));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,const DeepCollectionEquality().hash(anyValue),boolValue,doubleValue,intValue,const DeepCollectionEquality().hash(_listValue),numValue,stringValue,email,date,dateTime,exactly10Characters,minAndMaxString,startsWithFoo,endsWithBar,containsBaz,minAndMaxInt,minAndMaxDouble,minAndMaxNumber,httpsLink,aUrl,luthorPath,uuid,cuid,cuid2,emoji,anotherSample,foo,custom,const DeepCollectionEquality().hash(_numbers),hello]);
+int get hashCode => Object.hashAll([runtimeType,const DeepCollectionEquality().hash(anyValue),boolValue,doubleValue,intValue,const DeepCollectionEquality().hash(_listValue),numValue,stringValue,email,date,dateTime,exactly10Characters,minAndMaxString,startsWithFoo,endsWithBar,containsBaz,minAndMaxInt,minAndMaxDouble,minAndMaxNumber,httpsLink,aUrl,luthorPath,uuid,cuid,cuid2,emoji,const DeepCollectionEquality().hash(anotherSample),foo,custom,const DeepCollectionEquality().hash(_numbers),hello]);
 
 @override
 String toString() {
@@ -334,7 +325,7 @@ $Res call({
 });
 
 
-@override $AnotherSampleCopyWith<$Res> get anotherSample;
+
 
 }
 /// @nodoc
@@ -347,7 +338,7 @@ class __$SampleCopyWithImpl<$Res>
 
 /// Create a copy of Sample
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? anyValue = freezed,Object? boolValue = null,Object? doubleValue = null,Object? intValue = null,Object? listValue = null,Object? numValue = null,Object? stringValue = null,Object? email = null,Object? date = null,Object? dateTime = null,Object? exactly10Characters = freezed,Object? minAndMaxString = null,Object? startsWithFoo = null,Object? endsWithBar = null,Object? containsBaz = null,Object? minAndMaxInt = null,Object? minAndMaxDouble = null,Object? minAndMaxNumber = null,Object? httpsLink = freezed,Object? aUrl = freezed,Object? luthorPath = null,Object? uuid = null,Object? cuid = null,Object? cuid2 = null,Object? emoji = null,Object? anotherSample = null,Object? foo = null,Object? custom = null,Object? numbers = null,Object? hello = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? anyValue = freezed,Object? boolValue = null,Object? doubleValue = null,Object? intValue = null,Object? listValue = null,Object? numValue = null,Object? stringValue = null,Object? email = null,Object? date = null,Object? dateTime = null,Object? exactly10Characters = freezed,Object? minAndMaxString = null,Object? startsWithFoo = null,Object? endsWithBar = null,Object? containsBaz = null,Object? minAndMaxInt = null,Object? minAndMaxDouble = null,Object? minAndMaxNumber = null,Object? httpsLink = freezed,Object? aUrl = freezed,Object? luthorPath = null,Object? uuid = null,Object? cuid = null,Object? cuid2 = null,Object? emoji = null,Object? anotherSample = freezed,Object? foo = null,Object? custom = null,Object? numbers = null,Object? hello = freezed,}) {
   return _then(_Sample(
 anyValue: freezed == anyValue ? _self.anyValue : anyValue // ignore: cast_nullable_to_non_nullable
 as dynamic,boolValue: null == boolValue ? _self.boolValue : boolValue // ignore: cast_nullable_to_non_nullable
@@ -374,7 +365,7 @@ as String,uuid: null == uuid ? _self.uuid : uuid // ignore: cast_nullable_to_non
 as String,cuid: null == cuid ? _self.cuid : cuid // ignore: cast_nullable_to_non_nullable
 as String,cuid2: null == cuid2 ? _self.cuid2 : cuid2 // ignore: cast_nullable_to_non_nullable
 as String,emoji: null == emoji ? _self.emoji : emoji // ignore: cast_nullable_to_non_nullable
-as String,anotherSample: null == anotherSample ? _self.anotherSample : anotherSample // ignore: cast_nullable_to_non_nullable
+as String,anotherSample: freezed == anotherSample ? _self.anotherSample : anotherSample // ignore: cast_nullable_to_non_nullable
 as AnotherSample,foo: null == foo ? _self.foo : foo // ignore: cast_nullable_to_non_nullable
 as String,custom: null == custom ? _self.custom : custom // ignore: cast_nullable_to_non_nullable
 as String,numbers: null == numbers ? _self._numbers : numbers // ignore: cast_nullable_to_non_nullable
@@ -383,16 +374,7 @@ as String?,
   ));
 }
 
-/// Create a copy of Sample
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$AnotherSampleCopyWith<$Res> get anotherSample {
-  
-  return $AnotherSampleCopyWith<$Res>(_self.anotherSample, (value) {
-    return _then(_self.copyWith(anotherSample: value));
-  });
-}
+
 }
 
 // dart format on

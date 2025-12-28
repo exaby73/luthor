@@ -31,4 +31,4 @@ Features include:
 
 See the [documentation][docs] for usage.
 
-[docs]: https://luthor.netlify.app
+[docs]: https://luthor.ex3.dev

@@ -4,7 +4,7 @@ description: |
   with support for code generation.
 version: 0.15.0
 repository: https://github.com/exaby73/luthor/tree/main/packages/luthor
-homepage: https://luthor.netlify.app
+homepage: https://luthor.ex3.dev
 resolution: workspace
 
 environment:

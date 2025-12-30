@@ -22,6 +22,11 @@ scripts:
     runInPackages:
       - packages/*
 
+  build:
+    command: dart run build_runner build --force-aot
+    runInPackages:
+      - packages/luthor_generator
+
   test:
     command: dart test
     runInPackages:

@@ -1,0 +1,5 @@
+targets:
+  $default:
+    builders:
+      luthor_generator:luthor:
+        enabled: true

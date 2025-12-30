@@ -44,7 +44,7 @@ void main() {
             expect(errors.keys, contains('customField'));
             expect(errors['customField'], isNotNull);
             expect(
-              errors['customField']!.first,
+              (errors['customField']! as List).first,
               equals('Value must be "valid"'),
             );
         }
@@ -86,7 +86,10 @@ void main() {
           case SchemaValidationError(errors: final errors):
             expect(errors.keys, contains('confirmField'));
             expect(errors['confirmField'], isNotNull);
-            expect(errors['confirmField']!.first, equals('Fields must match'));
+            expect(
+              (errors['confirmField']! as List).first,
+              equals('Fields must match'),
+            );
         }
       },
     );

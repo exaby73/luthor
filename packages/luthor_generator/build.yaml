@@ -13,3 +13,6 @@ targets:
       - lib/**
       - test/**
       - $package$
+    builders:
+      luthor_generator:luthor:
+        enabled: true

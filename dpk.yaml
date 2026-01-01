@@ -22,10 +22,16 @@ scripts:
     runInPackages:
       - packages/*
 
+  build:
+    command: dart run build_runner build --force-aot
+    runInPackages:
+      - packages/luthor_generator
+
   test:
     command: dart test
     runInPackages:
       - packages/luthor
+      - packages/luthor_generator
 
   publish:luthor:
     command: dart pub publish -f

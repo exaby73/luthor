@@ -55,6 +55,18 @@ cd packages/luthor_generator/example
 dart run build_runner build -d
 ```
 
+### Testing luthor_generator
+The `luthor_generator` package has tests that use generated code from test fixtures:
+```bash
+cd packages/luthor_generator
+# Generate code for test fixtures
+dart run build_runner build --delete-conflicting-outputs
+# Run tests
+dart test
+```
+
+Tests are automatically run in CI which includes building the test fixtures.
+
 ### Documentation
 The documentation site is located in `./docs` and is built with Astro.
 
@@ -254,7 +266,7 @@ For each annotated class, generate:
 ### Supporting Code Generation
 1. Create annotation in `lib/src/annotations/validators/`
 2. Update generator to handle the new annotation
-3. Add tests for generated code
+3. Add tests for generated code in `test/` using fixtures
 4. Update example to demonstrate usage
 
 ## Resources

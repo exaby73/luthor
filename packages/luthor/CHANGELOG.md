@@ -1,3 +1,7 @@
+# 0.16.0
+
+- **FEAT**: Update version to match luthor_generator.
+
 # 0.15.0
 
 - **FEAT**: Update version to match luthor_generator.

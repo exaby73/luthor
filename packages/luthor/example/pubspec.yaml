@@ -8,7 +8,7 @@ environment:
   sdk: '>=3.8.0 <4.0.0'
 
 dependencies:
-  luthor:
+  luthor: ^0.16.0 # Configured via catalog
 
 dev_dependencies:
   lints: ^6.0.0

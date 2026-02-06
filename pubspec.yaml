@@ -8,7 +8,8 @@ workspace:
   - packages/luthor/example
   - packages/luthor_generator
   - packages/luthor_generator/example
+
 dependencies:
-  analyzer: ^8.0.0 # Configured via catalog
+  analyzer: ^9.0.0 # Configured via catalog
   build: ^4.0.0 # Configured via catalog
   source_gen: ^4.0.0 # Configured via catalog

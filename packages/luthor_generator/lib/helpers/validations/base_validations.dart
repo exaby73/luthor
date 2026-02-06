@@ -1,8 +1,5 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/element2.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:luthor_generator/checkers.dart';
@@ -18,7 +15,7 @@ import 'package:source_gen/source_gen.dart';
 class GenerationContext {
   const GenerationContext._();
 
-  static final Set<ClassElement2> discoveredClasses = {};
+  static final Set<ClassElement> discoveredClasses = {};
   static Set<String>? typedefVisitedTypes;
 
   static void reset() {
@@ -26,14 +23,14 @@ class GenerationContext {
     typedefVisitedTypes = null;
   }
 
-  static void addDiscoveredClass(ClassElement2 element) {
+  static void addDiscoveredClass(ClassElement element) {
     discoveredClasses.add(element);
   }
 }
 
 String getValidations(
   FormalParameterElement param, {
-  ClassElement2? enclosingClass,
+  ClassElement? enclosingClass,
 }) {
   final buffer = StringBuffer();
   bool hasForwardRef = false;
@@ -107,9 +104,9 @@ String getValidations(
 bool _checkAndAddCustomSchema(
   StringBuffer buffer,
   FormalParameterElement param, {
-  ClassElement2? enclosingClass,
+  ClassElement? enclosingClass,
 }) {
-  final element = param.type.element3;
+  final element = param.type.element;
   if (element == null) {
     throw UnsupportedTypeError(
       'Cannot determine type of ${param.type.getDisplayString()}',
@@ -138,7 +135,7 @@ bool _checkAndAddCustomSchema(
       buffer.write(schemaName);
       return false;
     }
-  } else if (element is ClassElement2 &&
+  } else if (element is ClassElement &&
       isCompatibleForAutoGeneration(element)) {
     // Class is compatible for auto-generation, add to discovered classes
     GenerationContext.addDiscoveredClass(element);
@@ -159,12 +156,12 @@ bool _checkAndAddCustomSchema(
   }
 }
 
-bool _hasSelfReferenceInType(DartType type, ClassElement2? enclosingClass) {
+bool _hasSelfReferenceInType(DartType type, ClassElement? enclosingClass) {
   if (enclosingClass == null) return false;
 
   // Check direct type match
-  final element = type.element3;
-  if (element is ClassElement2 && identical(element, enclosingClass)) {
+  final element = type.element;
+  if (element is ClassElement && identical(element, enclosingClass)) {
     return true;
   }
 
@@ -182,7 +179,7 @@ bool _hasSelfReferenceInType(DartType type, ClassElement2? enclosingClass) {
   return false;
 }
 
-DartObject? getAnnotation(TypeChecker checker, Element2 field) {
+DartObject? getAnnotation(TypeChecker checker, Element field) {
   return checker.firstAnnotationOf(field);
 }
 
@@ -197,15 +194,15 @@ String getQualifiedFunctionName(ExecutableElement function) {
 }
 
 /// Checks if a class is compatible for auto-generation
-bool isCompatibleForAutoGeneration(ClassElement2 element) {
+bool isCompatibleForAutoGeneration(ClassElement element) {
   // Must have at least one constructor
-  if (element.constructors2.isEmpty) {
+  if (element.constructors.isEmpty) {
     return false;
   }
 
   // Check if has fromJson factory constructor OR is dart_mappable
-  final hasFromJson = element.constructors2.any(
-    (ctor) => ctor.isFactory && ctor.name3 == 'fromJson',
+  final hasFromJson = element.constructors.any(
+    (ctor) => ctor.isFactory && ctor.name == 'fromJson',
   );
   final isDartMappable = getAnnotation(dartMappableChecker, element) != null;
 
@@ -214,7 +211,7 @@ bool isCompatibleForAutoGeneration(ClassElement2 element) {
   }
 
   // Check if has constructor with named parameters
-  final hasNamedParameters = element.constructors2.any(
+  final hasNamedParameters = element.constructors.any(
     (ctor) => ctor.formalParameters.any((p) => p.isNamed),
   );
 
@@ -224,7 +221,7 @@ bool isCompatibleForAutoGeneration(ClassElement2 element) {
 void _writeListValidations(
   StringBuffer buffer,
   FormalParameterElement param, {
-  ClassElement2? enclosingClass,
+  ClassElement? enclosingClass,
 }) {
   buffer.write('l.list(validators: [');
 
@@ -267,7 +264,7 @@ void _writeListValidations(
 void _writeMapValidations(
   StringBuffer buffer,
   FormalParameterElement param, {
-  ClassElement2? enclosingClass,
+  ClassElement? enclosingClass,
 }) {
   buffer.write('l.map(');
 
@@ -357,7 +354,7 @@ String _getValidationForType(DartType type, [bool useForwardRef = false]) {
     buffer.write('l.string()');
   } else {
     // Handle custom types with @luthor annotation or auto-generation
-    final element = type.element3;
+    final element = type.element;
     if (element != null) {
       final hasLuthorAnnotation = getAnnotation(luthorChecker, element) != null;
 
@@ -369,7 +366,7 @@ String _getValidationForType(DartType type, [bool useForwardRef = false]) {
         } else {
           buffer.write(schemaName);
         }
-      } else if (element is ClassElement2 &&
+      } else if (element is ClassElement &&
           isCompatibleForAutoGeneration(element)) {
         // Class is compatible for auto-generation, add to discovered classes
         GenerationContext.addDiscoveredClass(element);
@@ -403,11 +400,11 @@ String _getValidationForType(DartType type, [bool useForwardRef = false]) {
 
   // Close forwardRef if it was opened
   if (useForwardRef) {
-    final element = type.element3;
+    final element = type.element;
     if (element != null) {
       final hasLuthorAnnotation = getAnnotation(luthorChecker, element) != null;
       final isAutoGenerated =
-          element is ClassElement2 && isCompatibleForAutoGeneration(element);
+          element is ClassElement && isCompatibleForAutoGeneration(element);
       if (hasLuthorAnnotation || isAutoGenerated) {
         buffer.write(')');
       }

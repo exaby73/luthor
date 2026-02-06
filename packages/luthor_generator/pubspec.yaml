@@ -1,21 +1,21 @@
 name: luthor_generator
 description: Generate luthor schemas
-version: 0.15.0
+version: 0.16.0
 repository: https://github.com/exaby73/luthor/tree/main/packages/luthor_generator
 homepage: https://luthor.ex3.dev
 resolution: workspace
 
 environment:
-  sdk: '>=3.8.0 <4.0.0'
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
-  analyzer: ^8.0.0 # Configured via catalog
+  analyzer: ^9.0.0 # Configured via catalog
   build: ^4.0.0 # Configured via catalog
   collection: ^1.18.0
   dart_mappable: ^4.3.0
   freezed_annotation: ^3.0.0
   json_annotation: ^4.8.1
-  luthor: ^0.15.0
+  luthor: ^0.16.0 # Configured via catalog
   source_gen: ^4.0.0 # Configured via catalog
 
 dev_dependencies:

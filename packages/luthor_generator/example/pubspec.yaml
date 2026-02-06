@@ -11,11 +11,10 @@ dependencies:
   dart_mappable: ^4.3.0
   freezed_annotation: ^3.0.0
   json_annotation: ^4.9.0
-  luthor: any
+  luthor: ^0.16.0 # Configured via catalog
 
 dev_dependencies:
-  luthor_generator:
-    path: ../
+  luthor_generator: ^0.16.0 # Configured via catalog
   lints: ^6.0.0
   test: ^1.25.7
   build_runner: ^2.4.11

@@ -1,8 +1,14 @@
 version: ^0.6.5
 
+workspace:
+  - packages/*
+  - packages/*/example
+
 catalog:
   dependencies:
-    analyzer: ^8.0.0
+    luthor: ^0.16.0
+
+    analyzer: ^9.0.0
     build: ^4.0.0
     source_gen: ^4.0.0
 
@@ -26,6 +32,11 @@ scripts:
     command: dart test
     runInPackages:
       - packages/luthor
+
+  build:
+    command: dart run build_runner build
+    runInPackages:
+      - packages/luthor_generator/example
 
   publish:luthor:
     command: dart pub publish -f

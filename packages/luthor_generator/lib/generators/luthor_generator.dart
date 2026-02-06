@@ -1,6 +1,4 @@
-// ignore_for_file: deprecated_member_use
-
-import 'package:analyzer/dart/element/element2.dart';
+import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:luthor/luthor.dart';
 import 'package:luthor_generator/checkers.dart';
@@ -10,33 +8,33 @@ import 'package:source_gen/source_gen.dart';
 class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
   @override
   String generateForAnnotatedElement(
-    Element2 element,
+    Element element,
     ConstantReader annotation,
     BuildStep buildStep,
   ) {
     // Reset the generation context for each annotated element
     GenerationContext.reset();
-    if (element is! ClassElement2) {
+    if (element is! ClassElement) {
       throw InvalidGenerationSourceError(
         'Luthor can only be applied to classes.',
         element: element,
       );
     }
 
-    if (element.constructors2.isEmpty) {
+    if (element.constructors.isEmpty) {
       throw InvalidGenerationSourceError(
         'Luthor can only be applied to classes with at least one constructor.',
         element: element,
       );
     }
 
-    final name = element.name3;
-    final constructor = element.constructors2.first;
+    final name = element.name;
+    final constructor = element.constructors.first;
 
     final isDartMappableClass =
         getAnnotation(dartMappableChecker, element) != null;
-    final hasFromJsonCtor = element.constructors2.any(
-      (element) => element.isFactory && element.name3 == 'fromJson',
+    final hasFromJsonCtor = element.constructors.any(
+      (element) => element.isFactory && element.name == 'fromJson',
     );
     if (!hasFromJsonCtor && !isDartMappableClass) {
       throw InvalidGenerationSourceError(
@@ -57,7 +55,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
     );
 
     for (final param in params) {
-      final fieldName = param.name3!;
+      final fieldName = param.name;
       buffer.write("  ${name}SchemaKeys.$fieldName: ");
       buffer.write(getValidations(param, enclosingClass: element));
       buffer.write(',\n');
@@ -119,7 +117,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
   void _writeSchemaKeysRecord(
     StringBuffer buffer,
     String name,
-    ConstructorElement2 constructor,
+    ConstructorElement constructor,
   ) {
     buffer.write('\n\n');
 
@@ -128,7 +126,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
     buffer.write('const ${name}SchemaKeys = (\n');
 
     for (final param in constructor.formalParameters) {
-      final fieldName = _getRecordFieldName(param.name3!);
+      final fieldName = _getRecordFieldName(param.name!);
       final jsonKeyName = _getJsonKeyName(param);
       buffer.write('  $fieldName: "$jsonKeyName",\n');
     }
@@ -139,7 +137,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
   void _writeErrorKeysRecord(
     StringBuffer buffer,
     String name,
-    ConstructorElement2 constructor,
+    ConstructorElement constructor,
   ) {
     buffer.write('\n\n');
 
@@ -165,7 +163,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
     Set<String> visitedTypes,
   ) {
     for (final param in parameters) {
-      final fieldName = _getRecordFieldName(param.name3!);
+      final fieldName = _getRecordFieldName(param.name!);
       final jsonKeyName = _getJsonKeyName(param);
       final fullKey = prefix.isEmpty ? jsonKeyName : '$prefix.$jsonKeyName';
       final isNestedSchema = _isNestedSchema(param);
@@ -173,7 +171,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
       if (isNestedSchema) {
         final nestedClass = _getNestedClassElement(param);
         if (nestedClass != null) {
-          final className = nestedClass.name3!;
+          final className = nestedClass.name!;
 
           // Check for circular reference
           if (visitedTypes.contains(className)) {
@@ -185,7 +183,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
             buffer.write('$indent$fieldName: (\n');
             _writeErrorKeysValues(
               buffer,
-              nestedClass.constructors2.first.formalParameters,
+              nestedClass.constructors.first.formalParameters,
               '$indent  ',
               fullKey,
               visitedTypes,
@@ -210,26 +208,26 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
         .firstAnnotationOf(param)
         ?.getField('name')
         ?.toStringValue();
-    return jsonKeyName ?? param.name3!;
+    return jsonKeyName ?? param.name!;
   }
 
   bool _isNestedSchema(FormalParameterElement param) {
-    final element = param.type.element3;
+    final element = param.type.element;
     if (element == null) return false;
 
     final hasLuthorAnnotation = getAnnotation(luthorChecker, element) != null;
     if (hasLuthorAnnotation) return true;
 
-    if (element is ClassElement2 && isCompatibleForAutoGeneration(element)) {
+    if (element is ClassElement && isCompatibleForAutoGeneration(element)) {
       return true;
     }
 
     return false;
   }
 
-  ClassElement2? _getNestedClassElement(FormalParameterElement param) {
-    final element = param.type.element3;
-    if (element is ClassElement2) {
+  ClassElement? _getNestedClassElement(FormalParameterElement param) {
+    final element = param.type.element;
+    if (element is ClassElement) {
       final hasLuthorAnnotation = getAnnotation(luthorChecker, element) != null;
       if (hasLuthorAnnotation || isCompatibleForAutoGeneration(element)) {
         return element;
@@ -239,8 +237,8 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
   }
 
   /// Generates schema for a compatible class
-  String _generateAutoSchema(ClassElement2 element, String className) {
-    final constructor = element.constructors2.first;
+  String _generateAutoSchema(ClassElement element, String className) {
+    final constructor = element.constructors.first;
     final isDartMappableClass =
         getAnnotation(dartMappableChecker, element) != null;
 
@@ -255,7 +253,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
     );
 
     for (final param in constructor.formalParameters) {
-      final fieldName = param.name3!;
+      final fieldName = param.name!;
       buffer.write("  ${className}SchemaKeys.$fieldName: ");
       buffer.write(getValidations(param, enclosingClass: element));
       buffer.write(',\n');
@@ -285,7 +283,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
       final currentClass = GenerationContext.discoveredClasses.first;
       GenerationContext.discoveredClasses.remove(currentClass);
 
-      final className = currentClass.name3!;
+      final className = currentClass.name!;
 
       // Skip if already processed
       if (processedClasses.contains(className)) {

@@ -1,3 +1,7 @@
+# 0.16.0
+
+- **FEAT**: Update `analyzer` dependency to `^9.0.0`.
+
 # 0.15.0
 
 - **FEAT**: Update `build` dependency to `^4.0.0`.

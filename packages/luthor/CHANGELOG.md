@@ -1,3 +1,7 @@
+# 0.17.0
+
+- **FEAT**: Add support for validating files with `l.file()` validator.
+
 # 0.16.0
 
 - **FEAT**: Update version to match luthor_generator.

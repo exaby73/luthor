@@ -503,6 +503,33 @@ The generator automatically:
 - Omits `.required()` from element validators when elements are nullable (`List<T?>`)
 - Makes the list itself optional when the field is nullable (`List<T>?`)
 
+## File Validation with Code Generation
+
+Use `@IsFile()` (or `@isFile`) when a field should be validated with `l.file()`.
+
+```dart
+@luthor
+@freezed
+abstract class FileUpload with _$FileUpload {
+  const factory FileUpload({
+    @IsFile() required Object profileImage,
+    String? description,
+  }) = _FileUpload;
+
+  factory FileUpload.fromJson(Map<String, dynamic> json) =>
+      _$FileUploadFromJson(json);
+}
+```
+
+### Generated File Validation
+
+```dart
+Validator $FileUploadSchema = l.withName('FileUpload').schema({
+  FileUploadSchemaKeys.profileImage: l.file().required(),
+  FileUploadSchemaKeys.description: l.string(),
+});
+```
+
 ## Auto-Generation for Classes Without @luthor
 
 The code generator can automatically generate schemas for classes that don't have the `@luthor` annotation, as long as they meet certain compatibility requirements:

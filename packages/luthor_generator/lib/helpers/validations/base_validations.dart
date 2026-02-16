@@ -36,46 +36,51 @@ String getValidations(
   bool hasForwardRef = false;
 
   final isNullable = param.type.nullabilitySuffix == NullabilitySuffix.question;
+  final fileAnnotation = getAnnotation(isFileChecker, param);
 
-  if (param.type is DynamicType) {
-    buffer.write('l.any()');
-  }
+  if (fileAnnotation != null) {
+    buffer.write('l.file()');
+  } else {
+    if (param.type is DynamicType) {
+      buffer.write('l.any()');
+    }
 
-  if (param.type.isDartCoreBool) {
-    buffer.write('l.boolean()');
-  }
+    if (param.type.isDartCoreBool) {
+      buffer.write('l.boolean()');
+    }
 
-  if (param.type.isDartCoreDouble) {
-    buffer.write('l.double()');
-    buffer.write(getDoubleValidations(param));
-  }
+    if (param.type.isDartCoreDouble) {
+      buffer.write('l.double()');
+      buffer.write(getDoubleValidations(param));
+    }
 
-  if (param.type.isDartCoreInt) {
-    buffer.write('l.int()');
-    buffer.write(getIntValidations(param));
-  }
+    if (param.type.isDartCoreInt) {
+      buffer.write('l.int()');
+      buffer.write(getIntValidations(param));
+    }
 
-  if (param.type.isDartCoreList) {
-    _writeListValidations(buffer, param, enclosingClass: enclosingClass);
-  }
+    if (param.type.isDartCoreList) {
+      _writeListValidations(buffer, param, enclosingClass: enclosingClass);
+    }
 
-  if (param.type.isDartCoreMap) {
-    _writeMapValidations(buffer, param, enclosingClass: enclosingClass);
-  }
+    if (param.type.isDartCoreMap) {
+      _writeMapValidations(buffer, param, enclosingClass: enclosingClass);
+    }
 
-  if (param.type.isDartCoreNull) {
-    buffer.write('l.nullValue()');
-  }
+    if (param.type.isDartCoreNull) {
+      buffer.write('l.nullValue()');
+    }
 
-  if (param.type.isDartCoreNum) {
-    buffer.write('l.number()');
-    buffer.write(getNumberValidations(param));
-  }
+    if (param.type.isDartCoreNum) {
+      buffer.write('l.number()');
+      buffer.write(getNumberValidations(param));
+    }
 
-  if (param.type.isDartCoreString ||
-      param.type.getDisplayString().replaceFirst('?', '') == 'DateTime') {
-    buffer.write('l.string()');
-    buffer.write(getStringValidations(param));
+    if (param.type.isDartCoreString ||
+        param.type.getDisplayString().replaceFirst('?', '') == 'DateTime') {
+      buffer.write('l.string()');
+      buffer.write(getStringValidations(param));
+    }
   }
 
   if (buffer.isEmpty) {
@@ -349,6 +354,8 @@ String _getValidationForType(DartType type, [bool useForwardRef = false]) {
     buffer.write('l.nullValue()');
   } else if (type.isDartCoreNum) {
     buffer.write('l.number()');
+  } else if (type.getDisplayString().replaceFirst('?', '') == 'File') {
+    buffer.write('l.file()');
   } else if (type.isDartCoreString ||
       type.getDisplayString().replaceFirst('?', '') == 'DateTime') {
     buffer.write('l.string()');

@@ -1,3 +1,7 @@
+# 0.17.0
+
+- **FEAT**: Add code generation support for `l.file()` validator using the `@IsFile` annotation.
+
 # 0.16.0
 
 - **FEAT**: Update `analyzer` dependency to `^9.0.0`.

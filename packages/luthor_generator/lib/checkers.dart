@@ -24,6 +24,7 @@ const isUuidChecker = TypeChecker.typeNamed(IsUuid);
 const isCuidChecker = TypeChecker.typeNamed(IsCuid);
 const isCuid2Checker = TypeChecker.typeNamed(IsCuid2);
 const isEmojiChecker = TypeChecker.typeNamed(IsEmoji);
+const isFileChecker = TypeChecker.typeNamed(IsFile);
 
 const hasMaxDoubleChecker = TypeChecker.typeNamed(HasMaxDouble);
 const hasMinDoubleChecker = TypeChecker.typeNamed(HasMinDouble);

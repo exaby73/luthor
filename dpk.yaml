@@ -6,7 +6,8 @@ workspace:
 
 catalog:
   dependencies:
-    luthor: ^0.16.0
+    luthor: ^0.17.0
+    luthor_generator: ^0.17.0
 
     analyzer: ^9.0.0
     build: ^4.0.0

@@ -4,6 +4,7 @@ import 'package:luthor/src/validations/any_validation.dart';
 import 'package:luthor/src/validations/bool_validation.dart';
 import 'package:luthor/src/validations/custom_validation.dart';
 import 'package:luthor/src/validations/double_validation.dart';
+import 'package:luthor/src/validations/file_validation.dart';
 import 'package:luthor/src/validations/int_validation.dart';
 import 'package:luthor/src/validations/list_validation.dart';
 import 'package:luthor/src/validations/map_validation.dart';
@@ -174,6 +175,17 @@ class Validator implements ValidatorReference {
   Validator boolean({String? message, String? Function()? messageFn}) {
     final newValidations = List<Validation>.from(validations)
       ..add(BoolValidation(message: message, messageFn: messageFn));
+    final newValidator = Validator(initialValidations: newValidations);
+    if (_name != null) {
+      newValidator._name = _name;
+    }
+    return newValidator;
+  }
+
+  /// Validates that the value is a file.
+  Validator file({String? message, String? Function()? messageFn}) {
+    final newValidations = List<Validation>.from(validations)
+      ..add(FileValidation(message: message, messageFn: messageFn));
     final newValidator = Validator(initialValidations: newValidations);
     if (_name != null) {
       newValidator._name = _name;

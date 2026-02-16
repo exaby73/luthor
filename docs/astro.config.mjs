@@ -74,6 +74,10 @@ export default defineConfig({
               link: '/single-values/string',
             },
             {
+              label: 'File',
+              link: '/single-values/file',
+            },
+            {
               label: 'Null',
               link: '/single-values/null',
             },

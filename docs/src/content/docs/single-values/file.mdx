@@ -1,0 +1,63 @@
+---
+title: Validating a File value
+---
+
+import CodeGenContentSwitcher from '../../../components/CodeGenContentSwitcher.astro'
+
+<CodeGenContentSwitcher>
+  <div slot="false">
+```dart
+import 'dart:typed_data';
+
+import 'package:luthor/luthor.dart';
+
+void main() {
+  final validator = l.file();
+  print(validator.validateValue(Uint8List.fromList([1, 2, 3]))); // Success
+  print(validator.validateValue('not-a-file')); // Error
+}
+```
+  </div>
+
+  <div slot="true">
+```dart
+import 'dart:typed_data';
+
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:luthor/luthor.dart';
+
+part 'file_schema.freezed.dart';
+part 'file_schema.g.dart';
+
+@luthor
+@freezed
+abstract class FileSchema with _$FileSchema {
+  const factory FileSchema({
+    @isFile /* OR @IsFile() */ required Object profileImage,
+    String? description,
+  }) = _FileSchema;
+
+  factory FileSchema.fromJson(Map<String, dynamic> json) =>
+      _$FileSchemaFromJson(json);
+}
+
+void main() {
+  final result = $FileSchemaValidate({
+    'profileImage': Uint8List.fromList([1, 2, 3]),
+    'description': 'Avatar upload',
+  });
+
+  switch (result) {
+    case SchemaValidationSuccess(data: final data):
+      print('✅ Valid: ${data.description}');
+    case SchemaValidationError(errors: final errors):
+      print('❌ Errors: $errors');
+  }
+}
+```
+  </div>
+</CodeGenContentSwitcher>
+
+`l.file()` validates common file-like values such as `File`, `MultipartFile`, `XFile`, `Uint8List`, and `ByteData`.
+
+When using code generation, apply `@IsFile()` (or `@isFile`) to fields that should use file validation.

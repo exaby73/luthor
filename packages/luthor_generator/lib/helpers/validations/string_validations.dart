@@ -39,7 +39,7 @@ void _checkAndWriteDateTimeValidation(
         ?.toFunctionValue();
 
     final params = <String>[];
-    if (message != null) params.add("message: '$message'");
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }
@@ -60,7 +60,7 @@ void _checkAndWriteEmailValidation(
     final messageFn = emailAnnotation.getField('messageFn')?.toFunctionValue();
 
     final params = <String>[];
-    if (message != null) params.add("message: '$message'");
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }
@@ -82,7 +82,7 @@ void _checkAndWriteLengthValidation(
     final length = lengthAnnotation.getField('length')!.toIntValue()!;
 
     final params = <String>[length.toString()];
-    if (message != null) params.add("message: '$message'");
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }
@@ -104,7 +104,7 @@ void _checkAndWriteMaxValidation(
     final max = maxAnnotation.getField('max')!.toIntValue()!;
 
     final params = <String>[max.toString()];
-    if (message != null) params.add("message: '$message'");
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }
@@ -126,7 +126,7 @@ void _checkAndWriteMinValidation(
     final min = minAnnotation.getField('min')!.toIntValue()!;
 
     final params = <String>[min.toString()];
-    if (message != null) params.add("message: '$message'");
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }
@@ -155,10 +155,10 @@ void _checkAndWriteUriValidation(
     final params = <String>[];
     if (allowedSchemas != null) {
       params.add(
-        'allowedSchemes: [${allowedSchemas.map((e) => "'$e'").join(', ')}]',
+        'allowedSchemes: [${allowedSchemas.map(dartStringLiteral).join(', ')}]',
       );
     }
-    if (message != null) params.add("message: '$message'");
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }
@@ -187,10 +187,10 @@ void _checkAndWriteUrlValidation(
     final params = <String>[];
     if (allowedSchemes != null) {
       params.add(
-        'allowedSchemes: [${allowedSchemes.map((e) => "'$e'").join(', ')}]',
+        'allowedSchemes: [${allowedSchemes.map(dartStringLiteral).join(', ')}]',
       );
     }
-    if (message != null) params.add("message: '$message'");
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }
@@ -212,8 +212,8 @@ void _checkAndWriteRegexValidation(
     final message = regexAnnotation.getField('message')?.toStringValue();
     final messageFn = regexAnnotation.getField('messageFn')?.toFunctionValue();
 
-    final params = <String>['r"$pattern"'];
-    if (message != null) params.add("message: '$message'");
+    final params = <String>[dartStringLiteral(pattern ?? '')];
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }
@@ -237,8 +237,8 @@ void _checkAndWriteStartsWithValidation(
         .getField('messageFn')
         ?.toFunctionValue();
 
-    final params = <String>['r"$string"'];
-    if (message != null) params.add("message: '$message'");
+    final params = <String>[dartStringLiteral(string ?? '')];
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }
@@ -262,8 +262,8 @@ void _checkAndWriteEndsWithValidation(
         .getField('messageFn')
         ?.toFunctionValue();
 
-    final params = <String>['r"$string"'];
-    if (message != null) params.add("message: '$message'");
+    final params = <String>[dartStringLiteral(string ?? '')];
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }
@@ -287,8 +287,8 @@ void _checkAndWriteContainsValidation(
         .getField('messageFn')
         ?.toFunctionValue();
 
-    final params = <String>['r"$string"'];
-    if (message != null) params.add("message: '$message'");
+    final params = <String>[dartStringLiteral(string ?? '')];
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }
@@ -320,7 +320,7 @@ void _checkAndWriteIpValidation(
       if (version == 'v6') ipEnum = 'IpVersion.v6';
       if (ipEnum != null) params.add('version: $ipEnum');
     }
-    if (message != null) params.add("message: '$message'");
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }
@@ -341,7 +341,7 @@ void _checkAndWriteUuidValidation(
     final messageFn = uuidAnnotation.getField('messageFn')?.toFunctionValue();
 
     final params = <String>[];
-    if (message != null) params.add("message: '$message'");
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }
@@ -362,7 +362,7 @@ void _checkAndWriteCuidValidation(
     final messageFn = cuidAnnotation.getField('messageFn')?.toFunctionValue();
 
     final params = <String>[];
-    if (message != null) params.add("message: '$message'");
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }
@@ -383,7 +383,7 @@ void _checkAndWriteCuid2Validation(
     final messageFn = cuid2Annotation.getField('messageFn')?.toFunctionValue();
 
     final params = <String>[];
-    if (message != null) params.add("message: '$message'");
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }
@@ -404,7 +404,7 @@ void _checkAndWriteEmojiValidation(
     final messageFn = emojiAnnotation.getField('messageFn')?.toFunctionValue();
 
     final params = <String>[];
-    if (message != null) params.add("message: '$message'");
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }

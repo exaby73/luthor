@@ -22,7 +22,7 @@ void _checkAndWriteCustomValidation(
     final customFunctionName = getQualifiedFunctionName(customFunction);
 
     final params = <String>[customFunctionName];
-    if (message != null) params.add("message: '$message'");
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }
@@ -52,7 +52,7 @@ void _checkAndWriteSchemaCustomValidation(
     final customFunctionName = getQualifiedFunctionName(customFunction);
 
     final params = <String>[customFunctionName];
-    if (message != null) params.add("message: '$message'");
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }

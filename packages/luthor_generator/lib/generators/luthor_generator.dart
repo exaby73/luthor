@@ -128,7 +128,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
     for (final param in constructor.formalParameters) {
       final fieldName = _getRecordFieldName(param.name!);
       final jsonKeyName = _getJsonKeyName(param);
-      buffer.write('  $fieldName: "$jsonKeyName",\n');
+      buffer.write('  $fieldName: ${dartStringLiteral(jsonKeyName)},\n');
     }
 
     buffer.write(');\n');
@@ -176,7 +176,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
           // Check for circular reference
           if (visitedTypes.contains(className)) {
             // For circular references, just provide the key as a string
-            buffer.write('$indent$fieldName: "$fullKey",\n');
+            buffer.write('$indent$fieldName: ${dartStringLiteral(fullKey)},\n');
           } else {
             // Generate the nested record inline with prefixed keys
             visitedTypes.add(className);
@@ -193,7 +193,7 @@ class LuthorGenerator extends GeneratorForAnnotation<Luthor> {
           }
         }
       } else {
-        buffer.write('$indent$fieldName: "$fullKey",\n');
+        buffer.write('$indent$fieldName: ${dartStringLiteral(fullKey)},\n');
       }
     }
   }

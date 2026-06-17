@@ -23,7 +23,7 @@ void _checkAndWriteMaxValidation(
     final max = maxAnnotation.getField('max')!.toDoubleValue()!;
 
     final params = <String>[max.toString()];
-    if (message != null) params.add("message: '$message'");
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }
@@ -45,7 +45,7 @@ void _checkAndWriteMinValidation(
     final min = minAnnotation.getField('min')!.toDoubleValue()!;
 
     final params = <String>[min.toString()];
-    if (message != null) params.add("message: '$message'");
+    if (message != null) params.add('message: ${dartStringLiteral(message)}');
     if (messageFn != null) {
       params.add("messageFn: ${getQualifiedFunctionName(messageFn)}");
     }

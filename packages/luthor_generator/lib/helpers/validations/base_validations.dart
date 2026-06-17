@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
@@ -196,6 +198,10 @@ String getQualifiedFunctionName(ExecutableElement function) {
     return '${enclosingElement.name}.${function.name}';
   }
   return function.name!;
+}
+
+String dartStringLiteral(String value) {
+  return jsonEncode(value).replaceAll(r'$', r'\$');
 }
 
 /// Checks if a class is compatible for auto-generation

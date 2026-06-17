@@ -1,3 +1,7 @@
+# 0.18.0
+
+- **FIX**: Escape generated Dart string literals for messages, regexes, JSON keys, and other annotation values so quotes, backslashes, and dollar signs produce valid generated code.
+
 # 0.17.0
 
 - **FEAT**: Add code generation support for `l.file()` validator using the `@IsFile` annotation.

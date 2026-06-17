@@ -33,7 +33,7 @@ export function processFileTree(html: string, directoryLabel: string) {
 
 /** Rehype processor to extract file tree data and turn each entry into its associated markup. */
 const fileTreeProcessor = rehype()
-	.data('settings', { fragment: true })
+	.data('settings', { fragment: true } as never)
 	.use(function fileTree() {
 		return (tree: Element, file) => {
 			const { directoryLabel } = file.data;

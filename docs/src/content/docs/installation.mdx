@@ -16,7 +16,7 @@ If you're using Flutter, you can also use the following command:
 flutter pub add luthor
 ```
 
-#### Installing Code Generation Packages
+## Installing Code Generation Packages
 
 Luthor can be used with code generation using `build_runner` optionally. To use code generation, you need to add the following dependencies as well:
 
@@ -30,4 +30,23 @@ If you're using Flutter, you can also use the following command:
 flutter pub add dev:build_runner dev:luthor_generator
 ```
 
-And you're all set! You can now start using Luthor in your project.
+Run generation after changing annotated classes:
+
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
+
+## First Validator
+
+```dart
+import 'package:luthor/luthor.dart';
+
+void main() {
+  final email = l.string().email().required();
+
+  final result = email.validateValue('dev@example.com');
+  print(result.isValid); // true
+}
+```
+
+Validators are optional by default. Add `.required()` when `null` or a missing schema field should fail validation.

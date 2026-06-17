@@ -1,16 +1,79 @@
-<label class="inline-flex justify-center items-center cursor-pointer">
+<label class="codegen-toggle">
   <input
-    class="sr-only peer"
+    class="sr-only"
     x-data
     type="checkbox"
-    :value="$store.codeGen.enabled"
-    @click="$store.codeGen.toggle()"
+    role="switch"
+    :checked="$store.codeGen.enabled"
+    @change="$store.codeGen.toggle()"
   />
-  <div
-    class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-  >
-  </div>
-  <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
-    >Code Generation</span
-  >
+  <span class="track" aria-hidden="true">
+    <span class="thumb" />
+  </span>
+  <span class="label">Code Generation</span>
 </label>
+
+<style>
+  .codegen-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 2.75rem;
+    color: var(--sl-color-gray-2);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .track {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 2.75rem;
+    height: 1.5rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 999rem;
+    background-color: var(--sl-color-gray-5);
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease;
+  }
+
+  .thumb {
+    position: absolute;
+    inset-inline-start: 0.125rem;
+    width: 1.125rem;
+    height: 1.125rem;
+    border-radius: 50%;
+    background-color: var(--sl-color-gray-1);
+    transition:
+      background-color 150ms ease,
+      transform 150ms ease;
+  }
+
+  input:checked + .track,
+  :global(:root[data-code-gen="true"]) input + .track {
+    border-color: var(--sl-color-accent);
+    background-color: var(--sl-color-accent);
+  }
+
+  input:checked + .track .thumb,
+  :global(:root[data-code-gen="true"]) input + .track .thumb {
+    background-color: var(--sl-color-white);
+    transform: translateX(1.25rem);
+  }
+
+  :global([dir="rtl"]) input:checked + .track .thumb,
+  :global([dir="rtl"][data-code-gen="true"]) input + .track .thumb {
+    transform: translateX(-1.25rem);
+  }
+
+  input:focus-visible + .track {
+    outline: 2px solid var(--sl-color-accent-high);
+    outline-offset: 3px;
+  }
+
+  .label {
+    font-size: var(--sl-text-sm);
+    line-height: 1.4;
+  }
+</style>

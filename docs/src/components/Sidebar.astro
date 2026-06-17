@@ -1,16 +1,14 @@
 ---
-import type { Props } from "@astrojs/starlight/props";
-
 // @ts-ignore
 import MobileMenuFooter from "virtual:starlight/components/MobileMenuFooter";
 import SidebarSublist from "./SidebarSublist.astro";
 
-const { sidebar } = Astro.props;
+const { sidebar = [] } = Astro.locals.starlightRoute;
 ---
 
 <SidebarSublist sublist={sidebar as any} nestedCount={0} />
 <div class="md:sl-hidden">
-  <MobileMenuFooter {...Astro.props} />
+  <MobileMenuFooter />
 </div>
 
 <style is:global>
@@ -29,7 +27,16 @@ const { sidebar } = Astro.props;
   /* Make sure links only have the width they need in the sidebar */
   .sidebar a {
     width: fit-content;
-    transition: all 0.1s ease;
+    transition:
+      color 0.1s ease,
+      background-color 0.1s ease,
+      border-color 0.1s ease;
+  }
+
+  @media (max-width: 49.999rem) {
+    .sidebar a {
+      width: 100%;
+    }
   }
 
   /* Make sure mobile links fill the entire space, not just fit the content */
@@ -37,34 +44,4 @@ const { sidebar } = Astro.props;
     width: 100%;
   }
 
-  /* 
-		This assumes that you will always have a top-level index file / file with the same name if there are subpaths, 
-		so it moves the upmost nested child to the left
-	*/
-  li.nested:first-of-type {
-    position: relative;
-    right: 1rem;
-  }
-
-  /* Hide all non-active nested children */
-  li.nested:not(:first-of-type):not(.active) {
-    display: none;
-  }
-
-  /* 
-		If a child is active, show all adjacent children (by checking if the upmost child has an adjacent active li element)
-	*/
-  li.nested:first-of-type:has(~ li.nested.active) ~ li.nested {
-    display: block;
-  }
-
-  /* Show all adjacent children if an element is active  */
-  li.nested.active ~ li.nested {
-    display: block;
-  }
-
-  /* Make sure nesting works over multiple subpaths */
-  li.nested:first-of-type:has(~ li.nested li.nested.active) ~ li.nested {
-    display: block;
-  }
 </style>

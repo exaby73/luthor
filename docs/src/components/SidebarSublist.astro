@@ -9,7 +9,7 @@ interface Props {
   nestedCount: number;
 }
 
-const { sublist, nested, nestedCount } = Astro.props;
+const { sublist = [], nested, nestedCount } = Astro.props;
 ---
 
 {
@@ -29,7 +29,6 @@ const { sublist, nested, nestedCount } = Astro.props;
         <li
           class:list={[
             {
-              // nested: nested && nestedCount > 1,
               active: entry.type === "link" && entry.isCurrent,
             },
           ]}
@@ -37,7 +36,7 @@ const { sublist, nested, nestedCount } = Astro.props;
           {entry.type === "link" ? (
             <a
               href={entry.href}
-              aria-current={entry.isCurrent && "page"}
+              aria-current={entry.isCurrent ? "page" : undefined}
               class:list={[
                 { individual: !nested },
                 entry.attrs.class,
@@ -58,9 +57,9 @@ const { sublist, nested, nestedCount } = Astro.props;
             </a>
           ) : (
             <details open>
-              <summary style="pointer-events: none;">
-                <div class={nested ? "" : "group-label"}>
-                  <span class={nested ? "" : "large"}>
+              <summary class="static-summary" tabindex="-1" aria-disabled="true">
+                <div class:list={{ "group-label": !nested }}>
+                  <span class:list={{ large: !nested }}>
                     {entry.label.trim()}
                   </span>
                   {entry.badge && (
@@ -109,13 +108,13 @@ const { sublist, nested, nestedCount } = Astro.props;
     font-size: var(--sl-text-lg);
     font-weight: 600;
     /* color: var(--sl-color-white); */
-    transition: all 0.1s ease;
+    transition: color 0.1s ease;
   }
 
   .individual {
     font-size: var(--sl-text-md);
     font-weight: 400;
-    transition: all 0.1s ease;
+    transition: color 0.1s ease;
   }
 
   ul:not(.top-level) > li > details {
@@ -147,6 +146,11 @@ const { sublist, nested, nestedCount } = Astro.props;
     margin-top: 1rem;
     border-top: 1px solid var(--sl-color-hairline-light);
     padding-top: 1rem;
+  }
+
+  .static-summary {
+    cursor: default;
+    pointer-events: none;
   }
 
   ul.top-level > li > details > summary > div > span {
@@ -183,14 +187,13 @@ const { sublist, nested, nestedCount } = Astro.props;
     border-radius: 0.25rem;
     text-decoration: none;
     color: var(--sl-color-gray-2);
-    padding: 0.3em var(--sl-sidebar-item-padding-inline);
+    padding: 0.4rem var(--sl-sidebar-item-padding-inline);
     line-height: 1.4;
   }
 
   a:hover,
   a:focus {
     color: var(--sl-color-white);
-    transition: all 0.1s ease;
   }
 
   [aria-current="page"],
@@ -231,6 +234,14 @@ const { sublist, nested, nestedCount } = Astro.props;
     }
     a {
       font-size: var(--sl-text-sm);
+    }
+  }
+
+  @media (max-width: 49.999rem) {
+    a {
+      min-height: var(--luthor-touch-target);
+      display: flex;
+      align-items: center;
     }
   }
 </style>

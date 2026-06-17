@@ -17,7 +17,7 @@ const { editUrl } = Astro.props;
         "https://example.com",
         "https://github.com/exaby73/luthor/edit/docs/docs"
       )}
-      class="flex ps-8"
+      class="edit-link"
     >
       <Icon name="pencil" size="1.2em" />
       Edit Page
@@ -27,13 +27,21 @@ const { editUrl } = Astro.props;
 
 <style>
   a {
+    display: inline-flex;
     gap: 0.5rem;
     align-items: center;
+    min-height: 2.75rem;
+    padding-inline: var(--sl-content-pad-x);
     text-decoration: none;
     color: var(--sl-color-gray-3);
   }
 
   a:hover {
     color: var(--sl-color-white);
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--sl-color-accent-high);
+    outline-offset: 3px;
   }
 </style>

@@ -2,6 +2,48 @@
 title: Basic Concepts
 ---
 
-Luthor provides a global factory getter `l` (lower case "L") to define a validator. By default, all validators are optional. You can make a validator required by calling the `required` method. This is different to [Zod][zod], the inspiration for Luthor, where all validators are required by default.
+Luthor builds validators from the global factory getter `l`.
+
+```dart
+final validator = l.string().email().required();
+```
+
+Validators are immutable: chaining returns a new validator. You can safely reuse a base validator without leaking later modifiers into other validation paths.
+
+```dart
+final text = l.string();
+final email = text.email();
+final uuid = text.uuid();
+
+text.validateValue('anything'); // valid string
+email.validateValue('anything'); // invalid email
+uuid.validateValue('anything'); // invalid UUID
+```
+
+## Optional by Default
+
+Luthor differs from [Zod][zod]: values are optional unless `.required()` is present.
+
+```dart
+l.string().validateValue(null).isValid; // true
+l.string().required().validateValue(null).isValid; // false
+```
+
+In schemas, missing optional fields are skipped. Missing required fields produce an error.
+
+```dart
+final schema = l.schema({
+  'email': l.string().email().required(),
+  'displayName': l.string().min(2),
+});
+```
+
+## Result Types
+
+Single values return `SingleValidationResult<T>`. Schemas return `SchemaValidationResult<T>`. Use pattern matching or `isValid`, and read errors from the error variants.
+
+## Server Input
+
+For API input validation, define validators once and reuse them. Avoid rebuilding schemas for every request unless request-specific rules are needed.
 
 [zod]: https://zod.dev

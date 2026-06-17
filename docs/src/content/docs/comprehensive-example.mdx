@@ -5,11 +5,13 @@ description: A complete example showcasing all Luthor features including SchemaK
 
 This comprehensive example demonstrates all the powerful features of Luthor working together:
 
-- **Type-safe SchemaKeys** for schema definition
-- **Type-safe ErrorKeys** for error handling
-- **Cross-field validation** with schema custom validators
-- **JsonKey integration** for API compatibility
-- **Nested schema validation**
+<div className="feature-summary">
+  <p><strong>Type-safe SchemaKeys</strong> for schema definition</p>
+  <p><strong>Type-safe ErrorKeys</strong> for error handling</p>
+  <p><strong>Cross-field validation</strong> with schema custom validators</p>
+  <p><strong>JsonKey integration</strong> for API compatibility</p>
+  <p><strong>Nested schema validation</strong></p>
+</div>
 
 ## Complete User Registration Example
 
@@ -26,14 +28,18 @@ bool passwordsMatch(Object? value, Map<String, Object?> data) {
 }
 
 bool endDateAfterStartDate(Object? value, Map<String, Object?> data) {
-  if (value is String && data['employmentStartDate'] is String) {
+  if (value is String && data['start_date'] is String) {
     final endDate = DateTime.tryParse(value);
-    final startDate = DateTime.tryParse(data['employmentStartDate'] as String);
+    final startDate = DateTime.tryParse(data['start_date'] as String);
     if (endDate != null && startDate != null) {
       return endDate.isAfter(startDate);
     }
   }
   return false;
+}
+
+bool acceptedTerms(Object? value) {
+  return value == true;
 }
 
 bool phoneRequiredForBusiness(Object? value, Map<String, Object?> data) {
@@ -50,7 +56,7 @@ bool phoneRequiredForBusiness(Object? value, Map<String, Object?> data) {
 abstract class Address with _$Address {
   const factory Address({
     required String street,
-    required String city,
+    @HasMin(1) required String city,
     @JsonKey(name: 'state_code') required String state,
     @JsonKey(name: 'postal_code') required String zipCode,
     required String country,
@@ -70,7 +76,7 @@ abstract class Employment with _$Employment {
     @JsonKey(name: 'end_date') 
     @WithSchemaCustomValidator(endDateAfterStartDate, message: 'End date must be after start date')
     String? employmentEndDate,
-    @HasMin(0) @HasMax(200000) required double salary,
+    @HasMinDouble(0) @HasMaxDouble(200000) required double salary,
   }) = _Employment;
 
   factory Employment.fromJson(Map<String, dynamic> json) => _$EmploymentFromJson(json);
@@ -87,7 +93,7 @@ abstract class UserRegistration with _$UserRegistration {
     @IsEmail() @JsonKey(name: 'email_address') required String email,
     
     // Password fields with confirmation
-    @HasMin(8) @RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)')
+    @HasMin(8) @MatchRegex(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)')
     required String password,
     @WithSchemaCustomValidator(passwordsMatch, message: 'Passwords must match')
     required String confirmPassword,
@@ -107,6 +113,7 @@ abstract class UserRegistration with _$UserRegistration {
     Employment? employment,
     
     // Terms acceptance
+    @WithCustomValidator(acceptedTerms, message: 'Terms must be accepted')
     required bool acceptTerms,
     
     // Marketing preferences

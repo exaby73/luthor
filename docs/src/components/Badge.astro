@@ -8,7 +8,7 @@ interface Props {
 const { variant = 'default', text } = Astro.props;
 ---
 
-<span class:list={['sl-badge', variant]} set:html={text} />
+<span class:list={['sl-badge', variant]}>{text}</span>
 
 <style>
 	.sl-badge {

@@ -1,268 +1,89 @@
 ---
-title: Validation results
+title: Validation Results
 ---
 
-### SingleValidationResult
+## Single Values
 
-When validating a value, the `validateValue` method returns a `SingleValidationResult` object. This object is an instance of a sealed class that can be either a `SingleValidationSuccess` or a `SingleValidationError`.
-
-Example:
+`validateValue` returns `SingleValidationResult<T>`.
 
 ```dart
-import 'package:luthor/luthor.dart';
+final result = l.string().email().required().validateValue('bad');
 
-void main() {
-  final validator = l.string();
-
-  final successResult = validator.validateValue('Hello, World!');
-  final errorResult = validator.validateValue(42); // This should be a string but it is a number
-
-  switch (successResult) {
-    case SingleValidationSuccess(data: final String data):
-      print(data); // Hello, World!
-    case SingleValidationError(data: final String data, errors: final List<String> errors):
-      print('Error: ${errors}'); // This will not be executed
-  }
-
-  switch (errorResult) {
-    case SingleValidationSuccess(data: final String data):
-      print(data); // This will not be executed
-    case SingleValidationError(data: final String data, errors: final List<String> errors):
-      print('Error: ${errors}'); // Error: [value is not a string]
-  }
+switch (result) {
+  case SingleValidationSuccess(data: final email):
+    print(email);
+  case SingleValidationError(errors: final errors):
+    print(errors); // [value must be a valid email address]
 }
 ```
 
-You can also use the `isValid` property to check if the validation was successful:
+`isValid` is available on both result variants:
 
 ```dart
-print(successResult.isValid); // true
-print(errorResult.isValid); // false
+if (!result.isValid) {
+  // inspect the error variant when you need messages
+}
 ```
 
-### SchemaValidationResult
+## Schemas
 
-When using the `validateSchema` method on a `Map` to validate a schema, the `validateSchema` method returns a `SchemaValidationResult` object. This object is an instance of a sealed class that can be either a `SchemaValidationSuccess` or a `SchemaValidationError`.
-
-Example:
+`validateSchema` returns `SchemaValidationResult<T>`.
 
 ```dart
-import 'package:luthor/luthor.dart';
+final userSchema = l.schema({
+  'email': l.string().email().required(),
+  'profile': l.schema({
+    'displayName': l.string().min(2).required(),
+  }).required(),
+});
 
-void main() {
-  final validator = l.schema({
-    'name': l.string(),
-    'age': l.number(),
-    'address': l.schema({
-      'street': l.string(),
-      'city': l.string(),
-    }).required(),
-  });
+final result = userSchema.validateSchema({
+  'email': 'bad',
+  'profile': {'displayName': 'x'},
+});
 
-  final successResult = validator.validateSchema({
-    'name': 'John Doe',
-    'age': 42,
-    'address': {
-      'street': '123 Main St',
-      'city': 'Anytown',
-    },
-  });
-  final errorResult = validator.validateSchema({
-    'name': 'John Doe',
-    'age': '42', // This should be a number but it is a string
-    'address': {
-      'street': '123 Main St',
-      // 'city' is missing but it is required
-    },
-  });
+switch (result) {
+  case SchemaValidationSuccess(data: final data):
+    print(data);
+  case SchemaValidationError(errors: final errors):
+    print(errors);
+    print(result.getError('email'));
+    print(result.getError('profile.displayName'));
+}
+```
 
-  switch (successResult) {
-    case SchemaValidationSuccess(data: final Map<String, dynamic> data):
-      print(data); // {name: John Doe, age: 42, address: {street: 123 Main St, city: Anytown}}
-    case SchemaValidationError(data: final Map<String, dynamic> data, errors: final Map<String, List<String>> errors):
-      print('Error: ${errors}'); // This will not be executed
-  }
+Schema errors are maps. Nested schemas stay nested, and `getError('a.b')` returns the first message at that path.
 
-  switch (errorResult) {
-    case SchemaValidationSuccess(data: final Map<String, dynamic> data):
-      print(data); // This will not be executed
-    case SchemaValidationError(data: final Map<String, dynamic> data, errors: final Map<String, List<String>> errors):
-      print('Error: ${errors}'); // Error: {age: [value is not a number], address: {city: [value is required]}}
+## Typed Data
+
+Pass `fromJson` when valid input should be converted to a model.
+
+```dart
+class User {
+  final String email;
+
+  User({required this.email});
+
+  factory User.fromJson(Map<String, Object?> json) {
+    return User(email: json['email']! as String);
   }
 }
+
+final result = l
+    .schema({'email': l.string().email().required()})
+    .validateSchema<User>(
+      {'email': 'dev@example.com'},
+      fromJson: User.fromJson,
+    );
 ```
 
-You can also use the `isValid` property to check if the validation was successful:
+When schema validation fails and `fromJson` is provided, `SchemaValidationError.data` is `null` because conversion did not run.
+
+## Generated Error Keys
+
+With code generation, `ErrorKeys` constants remove stringly typed error lookups:
 
 ```dart
-print(successResult.isValid); // true
-print(errorResult.isValid); // false
+final emailError = result.getError(UserErrorKeys.email);
+final cityError = result.getError(UserErrorKeys.address.city);
 ```
-
-When dealing with a `SchemaValidationError`, you can use the `getError()` method to get the first error message for a specific key or nested key using a dot-separated path. If there are no errors for the specified key, it will return `null`.
-
-```dart
-print(errorResult.getError('address.city')); // value is required
-```
-
-## Type-Safe Error Access with ErrorKeys
-
-When using code generation, Luthor generates `ErrorKeys` constants that provide type-safe access to validation errors. This eliminates the need for error-prone string literals and provides IDE autocomplete support.
-
-### Generated ErrorKeys
-
-For each `@luthor` annotated class, ErrorKeys are generated with proper dot notation for nested fields:
-
-```dart
-// Simple class ErrorKeys
-const UserErrorKeys = (
-  name: "name",
-  email: "email",
-  age: "age",
-);
-
-// Nested class ErrorKeys with dot notation
-const ProfileErrorKeys = (
-  id: "id",
-  user: (
-    name: "user.name",
-    email: "user.email", 
-    age: "user.age",
-  ),
-  settings: (
-    theme: "settings.theme",
-    notifications: "settings.notifications",
-  ),
-);
-```
-
-### Using ErrorKeys with getError()
-
-Instead of using string literals that can contain typos:
-
-```dart
-// ❌ Error-prone - no compile-time checking
-final emailError = result.getError('user.email');
-final themeError = result.getError('settings.theme');
-final typoError = result.getError('user.emial'); // Typo! Won't be caught until runtime
-```
-
-Use type-safe ErrorKeys with full IDE support:
-
-```dart
-// ✅ Type-safe with autocomplete and compile-time checking
-final emailError = result.getError(ProfileErrorKeys.user.email);
-final themeError = result.getError(ProfileErrorKeys.settings.theme);
-// Typos are caught at compile time!
-```
-
-### Complete Example with ErrorKeys
-
-```dart
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:luthor/luthor.dart';
-
-part 'user_profile.freezed.dart';
-part 'user_profile.g.dart';
-
-@luthor
-@freezed
-abstract class UserProfile with _$UserProfile {
-  const factory UserProfile({
-    required String name,
-    required String email,
-    required UserSettings settings,
-  }) = _UserProfile;
-
-  factory UserProfile.fromJson(Map<String, dynamic> json) => 
-      _$UserProfileFromJson(json);
-}
-
-@luthor
-@freezed
-abstract class UserSettings with _$UserSettings {
-  const factory UserSettings({
-    required String theme,
-    required bool notifications,
-  }) = _UserSettings;
-
-  factory UserSettings.fromJson(Map<String, dynamic> json) =>
-      _$UserSettingsFromJson(json);
-}
-
-void main() {
-  final result = $UserProfileValidate({
-    'name': '', // Invalid - empty string
-    'email': 'invalid-email', // Invalid - not an email
-    'settings': {
-      'theme': null, // Invalid - required field
-      'notifications': 'yes', // Invalid - should be boolean
-    },
-  });
-
-  switch (result) {
-    case SchemaValidationError():
-      print('Validation failed:');
-      
-      // Type-safe error access with ErrorKeys
-      final nameError = result.getError(UserProfileErrorKeys.name);
-      final emailError = result.getError(UserProfileErrorKeys.email);
-      final themeError = result.getError(UserProfileErrorKeys.settings.theme);
-      final notificationsError = result.getError(UserProfileErrorKeys.settings.notifications);
-      
-      if (nameError != null) print('Name: $nameError');
-      if (emailError != null) print('Email: $emailError');
-      if (themeError != null) print('Theme: $themeError');
-      if (notificationsError != null) print('Notifications: $notificationsError');
-      
-    case SchemaValidationSuccess(data: final profile):
-      print('✅ Valid profile: ${profile.name}');
-  }
-}
-```
-
-### Benefits of ErrorKeys
-
-1. **Compile-time Safety** - Typos in field names are caught during compilation
-2. **IDE Support** - Full autocomplete and go-to-definition support
-3. **Refactoring Safety** - Renaming fields automatically updates ErrorKeys
-4. **Nested Field Support** - Automatic dot-notation handling for nested objects
-5. **JsonKey Respect** - Properly maps to JSON field names when using `@JsonKey` annotations
-
-### JsonKey Integration
-
-ErrorKeys automatically handle `@JsonKey` annotations:
-
-```dart
-@luthor
-@freezed
-abstract class ApiUser with _$ApiUser {
-  const factory ApiUser({
-    required String name,
-    @JsonKey(name: 'email_address') required String email,
-  }) = _ApiUser;
-
-  factory ApiUser.fromJson(Map<String, dynamic> json) => _$ApiUserFromJson(json);
-}
-
-// Generated ErrorKeys respect JsonKey mapping
-const ApiUserErrorKeys = (
-  name: "name",
-  email: "email_address", // Uses JsonKey name
-);
-
-void main() {
-  final result = $ApiUserValidate({'email_address': 'invalid'});
-  
-  switch (result) {
-    case SchemaValidationError():
-      // Use Dart field name as key, but accesses JSON field name
-      final emailError = result.getError(ApiUserErrorKeys.email);
-      print('Email error: $emailError');
-    case SchemaValidationSuccess():
-      break;
-  }
-}
-```
-
-Using ErrorKeys makes error handling both safer and more maintainable, especially in large applications with complex nested validation schemas.

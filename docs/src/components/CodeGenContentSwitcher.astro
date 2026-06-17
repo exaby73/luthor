@@ -1,8 +1,16 @@
-<div x-data>
-  <div x-show="!$store.codeGen.enabled">
+<div class="codegen-content-switcher" x-data>
+  <div class="codegen-panel codegen-false" x-show="!$store.codeGen.enabled">
     <slot name="false" />
   </div>
-  <div x-show="$store.codeGen.enabled">
+  <div class="codegen-panel codegen-true" x-show="$store.codeGen.enabled">
     <slot name="true" />
   </div>
 </div>
+
+<style is:global>
+  :root[data-code-gen="false"] .codegen-true,
+  :root:not([data-code-gen]) .codegen-true,
+  :root[data-code-gen="true"] .codegen-false {
+    display: none !important;
+  }
+</style>

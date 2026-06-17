@@ -4,32 +4,39 @@ import Icon from './user-components/Icon.astro';
 import type { Icons } from './user-components/Icons';
 
 interface Props {
-	variant: 'primary' | 'secondary' | 'minimal';
+	variant?: 'primary' | 'secondary' | 'minimal';
 	link: string;
-	icon?: undefined | { type: 'icon'; name: keyof typeof Icons } | { type: 'raw'; html: string };
+	icon?: undefined | keyof typeof Icons | { type: 'icon'; name: keyof typeof Icons } | { type: 'raw'; html: string };
 	attrs?: Omit<HTMLAttributes<'a'>, 'href'>;
 }
 
-const { link, variant, icon } = Astro.props;
+const { link, variant = 'primary', icon } = Astro.props;
 const { class: customClass, ...attrs } = Astro.props.attrs || {};
+
+const iconName = typeof icon === 'string' ? icon : icon?.type === 'icon' ? icon.name : undefined;
 ---
 
 <a class:list={['sl-flex action', variant, customClass]} href={link} {...attrs}>
 	<slot />
-	{icon?.type === 'icon' && <Icon name={icon.name} size="1.5rem" />}
-	{icon?.type === 'raw' && <Fragment set:html={icon.html} />}
+	{iconName && <Icon name={iconName} size="1.5rem" />}
+	{typeof icon === 'object' && icon.type === 'raw' && <Fragment set:html={icon.html} />}
 </a>
 
 <style>
 	.action {
 		gap: 0.5em;
 		align-items: center;
+		justify-content: center;
 		border-radius: 999rem;
-		padding: 0.5rem 1.125rem;
+		min-height: 2.75rem;
+		padding: 0.65rem 1.125rem;
 		color: var(--sl-color-white) !important;
 		line-height: 1.1875;
 		text-decoration: none;
 		font-size: var(--sl-text-sm);
+		text-align: center;
+		white-space: normal;
+		overflow-wrap: anywhere;
 	}
 
 	.action.primary {
@@ -49,6 +56,12 @@ const { class: customClass, ...attrs } = Astro.props.attrs || {};
 		.action {
 			font-size: var(--sl-text-base);
 			padding: 1rem 1.25rem;
+		}
+	}
+
+	@media (max-width: 26rem) {
+		.action {
+			width: 100%;
 		}
 	}
 </style>

@@ -1,4 +1,3 @@
-/* Specify colors. NOTE: YOU CAN CUSTOMIZE THESE HOWEVER YOU WANT! */
 :root {
   /* Font */
   --sl-font: 'Space Grotesk', sans-serif;
@@ -19,10 +18,9 @@
 
 	--sl-color-red-low: #3c0017;
   --sl-color-red: #bd0249;
-	--sl-color-red-high: #ff78ac;
+  --sl-color-red-high: #ff78ac;
 
   --sl-color-purple-low: #33225b;
-  --sl-color-purple: #8a5cf5;
   --sl-color-purple: #9975ee;
   
   --sl-border: #262626;
@@ -30,12 +28,19 @@
   --pagefind-ui-primary: var(--sl-color-accent);
 
   --sl-icon-size: 1.25rem;
+  --luthor-content-max: 74rem;
+  --luthor-content-pad-y: 2rem;
+  --luthor-radius: 0.5rem;
+  --luthor-touch-target: 2.75rem;
+  --sl-sidebar-width: 15rem;
+  --luthor-toc-width: 18.75rem;
+  --luthor-right-rail-width: 36rem;
 }
 
 /* Change background color of sidebar & add border */
 #starlight__sidebar {
   background-color: var(--sl-color-black);
-  border-right: 1px solid var(--sl-border);
+  border-right: 1px solid var(--sl-color-gray-5);
 }
 
 /* Change background of header & add border */
@@ -72,23 +77,51 @@ header.header {
 
 /* Add border-radius to card, change padding, add transition */
 .card, .sl-link-card {
-  border-radius: 12px !important;
+  border-radius: var(--luthor-radius) !important;
   padding: 1.5rem !important;
-  transition: all 0.1s ease;
+  transition:
+    border-color 0.1s ease,
+    background-color 0.1s ease,
+    color 0.1s ease,
+    box-shadow 0.1s ease;
 }
 
-/* Change widths of content */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+main,
+.main-frame,
+.main-pane,
+.sl-markdown-content {
+  min-width: 0;
+  max-width: 100%;
+}
+
 .main-pane {
-  width: calc(100% - (var(--sl-sidebar-width))) !important;
+  flex: 1 1 auto;
 }
 
 .right-sidebar-panel {
-  width: var(--sl-sidebar-width);
+  width: var(--luthor-toc-width);
 }
 
 .sl-container {
   margin-left: 0 !important;
-  max-width: none !important;
+  max-width: min(var(--luthor-content-max), 100%) !important;
 }
 
 /* Add a border to the footer,  */
@@ -110,16 +143,16 @@ header.header {
 
 /* Add padding to meta */
 .meta {
-  padding-inline-end: var(--sl-content-pad-x);
+  padding-inline: var(--sl-content-pad-x);
 }
 
 /* Adjust padding on pages with hero component */
 .hero ~ footer .meta {
-  padding-inline-end: 2rem !important;
+  padding-inline: 2rem !important;
 }
 
 /* Add better spacing to footer */
-.page-footer div {
+.page-footer > div {
   display: flex;
   flex-direction: row;
   gap: 0.75rem;
@@ -130,15 +163,143 @@ header.header {
   padding: 0;
 }
 
+main > .content-panel:first-of-type:not(:has(.hero)) {
+  border-bottom: 1px solid var(--sl-color-gray-6);
+  padding: 0 !important;
+}
+
+main > .content-panel:first-of-type h1#_top:not([data-page-title]) {
+  max-width: var(--luthor-content-max);
+  padding: 2.25rem var(--sl-content-pad-x) 1.65rem;
+  font-size: clamp(2.25rem, 1.75rem + 2vw, 3rem);
+  line-height: 1.08;
+  font-weight: 600;
+  color: var(--sl-color-white);
+  text-wrap: balance;
+}
+
 /* ... and instead add it to the content itself to allow for proper full-width borders */
 .sl-markdown-content {
-  padding: 1.5rem var(--sl-content-pad-x);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--luthor-content-max);
+  padding: var(--luthor-content-pad-y) var(--sl-content-pad-x);
+  line-height: 1.6;
+  color: var(--sl-color-gray-2);
+}
+
+.sl-markdown-content :is(p, ul, ol, blockquote) {
+  line-height: 1.6;
+  margin-block: 0.75rem;
+  max-width: 72ch;
+  overflow-wrap: break-word;
+}
+
+.sl-markdown-content .feature-summary {
+  margin-block: 1rem 2.75rem;
+}
+
+.sl-markdown-content .feature-summary p {
+  margin-block: 0.35rem;
+}
+
+.sl-markdown-content strong {
+  color: var(--sl-color-gray-1);
+  font-weight: 600;
+}
+
+.sl-markdown-content :is(ul, ol) {
+  padding-inline-start: 1.35rem;
+}
+
+.sl-markdown-content li + li {
+  margin-block-start: 0.35rem;
+}
+
+.sl-markdown-content :is(h2, h3, h4),
+.sl-markdown-content :is(.sl-heading-wrapper.level-h2, .sl-heading-wrapper.level-h3, .sl-heading-wrapper.level-h4) {
+  line-height: var(--sl-line-height-headings);
+  font-weight: 600;
+  color: var(--sl-color-white);
+  text-wrap: balance;
+}
+
+.sl-markdown-content .sl-heading-wrapper > :is(h2, h3, h4) {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+.sl-markdown-content h2,
+.sl-markdown-content .sl-heading-wrapper.level-h2 {
+  margin-block-start: 3.5rem;
+  margin-block-end: 1rem;
+  font-size: clamp(1.6rem, 1.3rem + 1.2vw, 2.1rem);
+}
+
+.sl-markdown-content h3,
+.sl-markdown-content .sl-heading-wrapper.level-h3 {
+  margin-block-start: 2.35rem;
+  margin-block-end: 0.75rem;
+  font-size: clamp(1.35rem, 1.15rem + 0.8vw, 1.65rem);
+}
+
+.sl-markdown-content h4,
+.sl-markdown-content .sl-heading-wrapper.level-h4 {
+  margin-block-start: 1.85rem;
+  margin-block-end: 0.65rem;
+}
+
+.sl-markdown-content > :first-child {
+  margin-block-start: 0;
+}
+
+.sl-markdown-content :not(.expressive-code *) {
+  max-width: 100%;
+}
+
+.sl-markdown-content .expressive-code {
+  margin-block: 1.35rem 1.65rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+.expressive-code,
+.expressive-code .frame,
+.expressive-code pre {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.expressive-code pre {
+  overflow-x: auto;
+  padding: 1rem 1.125rem !important;
+  line-height: 1.55 !important;
+}
+
+.sl-markdown-content code:not(.expressive-code code) {
+  padding: 0.15rem 0.35rem;
+  line-height: 1.7;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.sl-markdown-content a {
+  color: var(--sl-color-accent-high);
+  text-decoration-color: color-mix(in srgb, var(--sl-color-accent-high), transparent 55%);
+  text-underline-offset: 0.2em;
+}
+
+.sl-markdown-content a:hover,
+.sl-markdown-content a:focus {
+  color: var(--sl-color-white);
+  text-decoration-color: var(--sl-color-accent-high);
 }
 
 /* Link styles */
-a:not(.sidebar a) {
+a:not(.sidebar a, starlight-toc a, .sl-markdown-content a, .pagination, .page-footer a) {
   transition: color 0.1s ease;
-  width: fit-content;
 }
 
 /* Make sure mobile links fill the entire space, not just fit the content */
@@ -151,20 +312,78 @@ nav[aria-labelledby="starlight__on-this-page--mobile"] a {
   color: var(--sl-color-gray-2);
 }
 
-a:hover, a[aria-current="true"] {
+.page-footer a:hover,
+.sidebar a:hover,
+starlight-toc a:hover {
   color: var(--sl-color-white) !important;
 }
 
-/* Adjust font fot "On this page" header */
+@media (min-width: 50rem) {
+  .right-sidebar-container {
+    border-left: 1px solid var(--sl-color-gray-5);
+  }
+
+  site-search button[data-open-modal] {
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: var(--luthor-radius);
+    width: 100%;
+    max-width: 22rem;
+    padding-inline-start: 0.75rem;
+    padding-inline-end: 0.5rem;
+    background-color: var(--sl-color-black);
+  }
+
+  site-search button[data-open-modal]:hover,
+  site-search button[data-open-modal]:focus-visible {
+    border-color: var(--sl-color-gray-2);
+  }
+
+  site-search button[data-open-modal] > :last-child {
+    margin-inline-start: auto;
+  }
+}
+
+@media (min-width: 110rem) {
+  .right-sidebar-container {
+    flex: 0 0 var(--luthor-right-rail-width);
+    width: var(--luthor-right-rail-width);
+  }
+}
+
+/* Adjust font for "On this page" header */
 #starlight__on-this-page {
   font-family: "Space Mono", monospace;
   font-weight: 400;
   font-size: var(--sl-text-md);
+  line-height: 1.3;
+  margin-block-end: 0.65rem;
 }
 
 /* Adjust padding for TOC */
 starlight-toc a {
-  padding-inline: calc(1rem * var(--depth)) var(--pad-inline) !important;
+  position: relative;
+  padding-block: 0.3rem !important;
+  padding-inline: calc(1rem * var(--depth) + var(--pad-inline)) var(--pad-inline) !important;
+  line-height: 1.35;
+}
+
+starlight-toc a[aria-current="true"],
+starlight-toc a[aria-current="page"],
+nav[aria-labelledby="starlight__on-this-page--mobile"] a[aria-current="true"],
+nav[aria-labelledby="starlight__on-this-page--mobile"] a[aria-current="page"] {
+  color: var(--sl-color-white) !important;
+  font-weight: 600;
+}
+
+starlight-toc a[aria-current="true"] span,
+starlight-toc a[aria-current="page"] span,
+nav[aria-labelledby="starlight__on-this-page--mobile"] a[aria-current="true"] span,
+nav[aria-labelledby="starlight__on-this-page--mobile"] a[aria-current="page"] span {
+  color: inherit;
+}
+
+starlight-toc ul {
+  margin-block: 0;
 }
 
 /* Change tab color */
@@ -177,7 +396,7 @@ a[role=tab][aria-selected=true] {
 /* Adjust file tree color & border radius */
 starlight-file-tree.not-content {
   background-color: var(--sl-color-black);
-  border-radius: 12px;
+  border-radius: var(--luthor-radius);
 }
 
 /* Change font & remove ligatures for all code & the file tree */
@@ -189,14 +408,14 @@ starlight-file-tree.not-content {
 /* Border radii adjustments & color changes for code blocks */
 .expressive-code pre {
   background: var(--sl-color-gray-6) !important;
-  border-bottom-left-radius: 12px !important;
-  border-bottom-right-radius: 12px !important;
+  border-bottom-left-radius: var(--luthor-radius) !important;
+  border-bottom-right-radius: var(--luthor-radius) !important;
   border-color: var(--sl-border) !important;
 }
 
 .expressive-code .header {
-  border-top-left-radius: 12px !important;
-  border-top-right-radius: 12px !important;
+  border-top-left-radius: var(--luthor-radius) !important;
+  border-top-right-radius: var(--luthor-radius) !important;
 }
 
 .expressive-code .has-title .header {
@@ -204,8 +423,8 @@ starlight-file-tree.not-content {
   border-top-left-radius: 14px !important;
 }
 
-.header:not(:has(span)) + pre {
-  border-radius: 12px !important;
+.expressive-code .header:not(:has(span)) + pre {
+  border-radius: var(--luthor-radius) !important;
 }
 
 /* Add a border to the header */
@@ -227,7 +446,7 @@ starlight-file-tree.not-content {
 
 figcaption.header span {
   border: none !important;
-  border-top-left-radius: 12px !important;
+  border-top-left-radius: var(--luthor-radius) !important;
   border-left: 1px solid var(--sl-border) !important;
   border-top: 1px solid var(--sl-border) !important;
 }
@@ -238,7 +457,9 @@ figcaption.header span::after {
 
 .expressive-code .copy button {
   background: var(--sl-color-black) !important;
-  border-radius: 8px !important;
+  border-radius: var(--luthor-radius) !important;
+  min-width: var(--luthor-touch-target);
+  min-height: var(--luthor-touch-target);
 }
 
 .expressive-code .copy button:hover {
@@ -249,11 +470,11 @@ figcaption.header span::after {
   display: none;
 }
 
-.frame.is-terminal .header {
+.expressive-code .frame.is-terminal .header {
   border-color: var(--sl-border) !important;
 }
 
-.frame.is-terminal .header::after {
+.expressive-code .frame.is-terminal .header::after {
   content: none !important;
 }
 
@@ -263,7 +484,11 @@ figcaption.header span::after {
 }
 
 .pagefind-ui__result-inner * {
-  transition: all 0.1s ease;
+  transition:
+    color 0.1s ease,
+    background-color 0.1s ease,
+    border-color 0.1s ease,
+    text-decoration-color 0.1s ease;
 }
 
 .pagefind-ui__result-title, .pagefind-ui__result-nested {
@@ -277,11 +502,6 @@ dialog {
 /* Adjust padding for markdown content to match hero section if it exists */
 .hero + .sl-markdown-content {
   padding: 2rem;
-}
-
-/* Make sure the main page takes up all space if it's page with a hero because the sidebar won't exist */
-.main-pane:has(.hero) {
-  width: 100% !important;
 }
 
 /* Any headers containing badges should be flex headers */
@@ -298,6 +518,11 @@ dialog {
   top: 1px;
 }
 
+:is(.action, a.pagination, .sidebar a, site-search button[data-open-modal]):focus-visible {
+  outline: 2px solid var(--sl-color-accent-high);
+  outline-offset: 3px;
+}
+
 /* Remove default padding on main since we have a footer */
 main:has(.page-footer) {
   padding-bottom: 0 !important;
@@ -312,7 +537,189 @@ main:has(.page-footer) {
 }
 
 @media (max-width: 72rem) {
-  .main-pane {
+  .main-frame,
+  .main-pane,
+  main,
+  .content-panel,
+  .content-panel > .sl-container {
     width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden;
+  }
+
+  .sl-markdown-content {
+    --luthor-content-pad-y: 1.5rem;
+    max-width: 100%;
+    padding-inline: 1rem;
+    overflow-x: hidden;
+  }
+
+  .sl-markdown-content :is(p, ul, ol, blockquote) {
+    width: auto !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+  }
+
+  .sl-markdown-content > :not(.expressive-code) {
+    width: auto !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  main > .content-panel:first-of-type h1#_top:not([data-page-title]) {
+    padding-inline: 1rem;
+    padding-block-start: 1.6rem;
+    padding-block-end: 1.4rem;
+    font-size: 2rem;
+  }
+
+  .hero + .sl-markdown-content {
+    padding-inline: 1rem;
+  }
+
+  .page-footer,
+  .hero ~ footer .page-footer,
+  .meta,
+  .hero ~ footer .meta {
+    padding-inline: 1rem !important;
+  }
+
+  .expressive-code {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .expressive-code pre {
+    white-space: pre;
+  }
+}
+
+@media (max-width: 50rem) {
+  header.header .title-wrapper {
+    max-width: calc(100vw - 8rem);
+  }
+
+  site-search button[data-open-modal] {
+    width: var(--luthor-touch-target);
+    height: var(--luthor-touch-target);
+    justify-content: center;
+    padding: 0;
+  }
+
+  starlight-menu-button button {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    top: calc((var(--sl-nav-height) - var(--luthor-touch-target)) / 2) !important;
+    inset-inline-end: var(--sl-nav-pad-x) !important;
+    width: var(--luthor-touch-target);
+    height: var(--luthor-touch-target);
+    padding: 0 !important;
+    background-color: transparent !important;
+    color: var(--sl-color-gray-1) !important;
+    line-height: 1;
+    box-shadow: none !important;
+  }
+
+  site-search button[data-open-modal] svg,
+  starlight-menu-button button svg {
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  starlight-menu-button:not([aria-expanded='true']) button .close-menu,
+  starlight-menu-button button[aria-expanded='false'] .close-menu,
+  starlight-menu-button[aria-expanded='true'] button .open-menu {
+    display: none !important;
+  }
+
+  starlight-menu-button:not([aria-expanded='true']) button .open-menu,
+  starlight-menu-button[aria-expanded='true'] button .close-menu {
+    display: block !important;
+  }
+
+  mobile-starlight-toc {
+    display: block;
+    width: 100%;
+  }
+
+  mobile-starlight-toc nav {
+    position: static !important;
+    background-color: var(--sl-color-black) !important;
+  }
+
+  #starlight__on-this-page--mobile {
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    list-style: none;
+    list-style-type: none;
+    background-color: var(--sl-color-black);
+  }
+
+  #starlight__on-this-page--mobile::marker,
+  #starlight__on-this-page--mobile::-webkit-details-marker {
+    content: none !important;
+    display: none;
+  }
+
+  #starlight__on-this-page--mobile .toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 0;
+    gap: 0.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    line-height: 1.2;
+  }
+
+  #starlight__on-this-page--mobile .toggle .caret {
+    display: block;
+    flex: 0 0 auto;
+    width: 1rem;
+    height: 1rem;
+    margin-block-start: 0;
+    transform-origin: center;
+  }
+
+  #starlight__on-this-page--mobile .display-current {
+    min-width: 0;
+  }
+
+  #starlight__mobile-toc[open] #starlight__on-this-page--mobile .display-current {
+    display: none;
+  }
+
+  #starlight__mobile-toc .dropdown {
+    position: static !important;
+    margin: 0 0.75rem 0.75rem;
+    border-color: var(--sl-border) !important;
+    border-radius: 0.5rem;
+    background-color: var(--sl-color-black) !important;
+    box-shadow: 0 1rem 2rem rgb(0 0 0 / 45%);
+  }
+
+  #starlight__mobile-toc .dropdown ul {
+    padding-block: 0.5rem;
+  }
+
+  .sl-markdown-content {
+    font-size: 1rem;
+  }
+
+  .sl-markdown-content h2,
+  .sl-markdown-content .sl-heading-wrapper.level-h2 {
+    margin-block-start: 2.75rem;
+    font-size: 1.65rem;
+  }
+
+  .page-footer {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }

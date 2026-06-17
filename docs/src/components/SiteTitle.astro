@@ -3,10 +3,10 @@
 import { logos } from 'virtual:starlight/user-images';
 // @ts-ignore
 import config from 'virtual:starlight/user-config';
-import type { Props } from '@astrojs/starlight/props';
 import { formatPath } from './utils/format-path';
 
 const { siteTitle } = Astro.props;
+const title = typeof siteTitle === 'string' ? siteTitle : 'Luthor';
 
 const href = formatPath(Astro.props.locale || '/');
 ---
@@ -36,7 +36,7 @@ const href = formatPath(Astro.props.locale || '/');
 		)
 	}
 	<span class:list={{ 'sr-only': config.logo?.replacesTitle }}>
-		{siteTitle.split(" ").map((titlePiece: string) => {
+		{title.split(" ").map((titlePiece: string) => {
       return <span>{titlePiece}</span>
     })}
 	</span>

@@ -10,6 +10,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Luthor',
+      disable404Route: true,
       head: [
         {
           tag: 'script',
@@ -25,9 +26,13 @@ export default defineConfig({
           },
         },
       ],
-      social: {
-        github: 'https://github.com/exaby73/luthor',
-      },
+      social: [
+        {
+          icon: 'github',
+          label: 'GitHub',
+          href: 'https://github.com/exaby73/luthor',
+        },
+      ],
       sidebar: [
         {
           label: 'Basics',

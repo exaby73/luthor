@@ -1,9 +1,11 @@
 ---
 import Icon from "./user-components/Icon.astro";
-import type { Props } from "@astrojs/starlight/props";
 
-const { dir, labels, pagination } = Astro.props;
-const { prev, next } = pagination;
+const { dir, pagination } = Astro.locals.starlightRoute;
+const { prev, next } = pagination as {
+  prev?: { href: string; label: string };
+  next?: { href: string; label: string };
+};
 const isRtl = dir === "rtl";
 ---
 
@@ -13,7 +15,7 @@ const isRtl = dir === "rtl";
       <a class="pagination" href={prev.href} rel="prev">
         <Icon name={isRtl ? "right-arrow" : "left-arrow"} size="1.5rem" />
         <span>
-          {labels["page.previousLink"]}
+          {Astro.locals.t("page.previousLink")}
           <br />
           <span class="link-title">{prev.label}</span>
         </span>
@@ -25,7 +27,7 @@ const isRtl = dir === "rtl";
       <a class="pagination" href={next.href} rel="next">
         <Icon name={isRtl ? "left-arrow" : "right-arrow"} size="1.5rem" />
         <span>
-          {labels["page.nextLink"]}
+          {Astro.locals.t("page.nextLink")}
           <br />
           <span class="link-title">{next.label}</span>
         </span>
@@ -36,12 +38,12 @@ const isRtl = dir === "rtl";
 
 <div class="page-footer">
   <div class="footer-links">
-    <span>©️ Nabeel Parkar</span>
+    <span>&copy; Nabeel Parkar</span>
     <span>—</span>
     <a href="https://ex3.dev/">Homepage</a>
   </div>
   <div class="social-footer-icons">
-    <a href="https://github.com/exaby73/luthor" aria-label="GitHub Icon"
+    <a href="https://github.com/exaby73/luthor" aria-label="GitHub"
       ><Icon name="github" size="1.25rem" /></a
     >
   </div>
@@ -52,11 +54,20 @@ const isRtl = dir === "rtl";
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
     gap: 1rem;
-    padding: 1.5rem var(--sl-content-pad-x);
+    padding: 1.5rem var(--sl-content-pad-x) 1.75rem;
   }
 
   .pagination-links:not(:has(a)) {
     padding: 0;
+  }
+
+  .page-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--sl-color-gray-6);
   }
 
   a.pagination {
@@ -69,12 +80,17 @@ const isRtl = dir === "rtl";
     flex-grow: 1;
     border: 1px solid var(--sl-color-gray-5);
     border-radius: 0.5rem;
+    min-height: 5rem;
     padding: 1rem;
     text-decoration: none;
     color: var(--sl-color-gray-2);
     box-shadow: var(--sl-shadow-md);
     overflow-wrap: anywhere;
-    transition: all 0.1s ease;
+    transition:
+      border-color 0.1s ease,
+      color 0.1s ease,
+      background-color 0.1s ease,
+      box-shadow 0.1s ease;
   }
 
   a {
@@ -86,11 +102,18 @@ const isRtl = dir === "rtl";
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .page-footer a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
   }
 
   .social-footer-icons a {
-    display: inline-block !important;
-    height: var(--sl-icon-size);
+    justify-content: center;
+    width: 2.75rem;
   }
 
   [rel="next"] {
@@ -104,11 +127,22 @@ const isRtl = dir === "rtl";
 
   .link-title {
     color: var(--sl-color-white);
-    font-size: var(--sl-text-2xl);
+    font-size: clamp(var(--sl-text-lg), 1rem + 1vw, var(--sl-text-2xl));
     line-height: var(--sl-line-height-headings);
   }
 
   svg {
     flex-shrink: 0;
+  }
+
+  @media (max-width: 50rem) {
+    .pagination-links {
+      padding-inline: 1rem;
+    }
+
+    .page-footer {
+      align-items: flex-start;
+      flex-direction: column;
+    }
   }
 </style>

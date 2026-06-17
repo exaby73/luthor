@@ -10,6 +10,6 @@ workspace:
   - packages/luthor_generator/example
 
 dependencies:
-  analyzer: ^9.0.0 # Configured via catalog
+  analyzer: ^10.0.0 # Configured via catalog
   build: ^4.0.0 # Configured via catalog
-  source_gen: ^4.0.0 # Configured via catalog
+  source_gen: ^4.2.0 # Configured via catalog

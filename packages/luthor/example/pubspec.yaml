@@ -1,6 +1,6 @@
 name: luthor_example
 description: An example package for luthor
-version: 1.0.0
+version: 0.18.0
 publish_to: none
 resolution: workspace
 
@@ -8,7 +8,7 @@ environment:
   sdk: '>=3.8.0 <4.0.0'
 
 dependencies:
-  luthor: ^0.17.0 # Configured via catalog
+  luthor: 0.18.0 # Configured via catalog
 
 dev_dependencies:
-  lints: ^6.0.0
+  lints: ^6.0.0 # Configured via catalog

@@ -2,7 +2,7 @@ name: luthor
 description: |
   A Dart validation library inspired by https://zod.dev 
   with support for code generation.
-version: 0.17.0
+version: 0.18.0
 repository: https://github.com/exaby73/luthor/tree/main/packages/luthor
 homepage: https://luthor.ex3.dev
 resolution: workspace
@@ -11,8 +11,8 @@ environment:
   sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
-  meta: any
+  meta: ^1.18.0 # Configured via catalog
 
 dev_dependencies:
-  lint: ^2.8.0
-  test: ^1.25.15
+  lint: ^2.8.0 # Configured via catalog
+  test: ^1.31.0 # Configured via catalog

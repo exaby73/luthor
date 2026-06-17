@@ -1,6 +1,6 @@
 name: luthor_generator_example
 description: A sample command-line application.
-version: 1.0.0
+version: 0.18.0
 publish_to: none
 resolution: workspace
 
@@ -8,16 +8,16 @@ environment:
   sdk: '>=3.8.0 <4.0.0'
 
 dependencies:
-  dart_mappable: ^4.3.0
-  freezed_annotation: ^3.0.0
-  json_annotation: ^4.9.0
-  luthor: ^0.17.0 # Configured via catalog
+  dart_mappable: ^4.8.0 # Configured via catalog
+  freezed_annotation: ^3.1.0 # Configured via catalog
+  json_annotation: ^4.12.0 # Configured via catalog
+  luthor: 0.18.0 # Configured via catalog
 
 dev_dependencies:
-  luthor_generator: ^0.17.0 # Configured via catalog
-  lints: ^6.0.0
-  test: ^1.25.7
-  build_runner: ^2.4.11
-  freezed: ^3.0.3
-  json_serializable: ^6.8.0
-  dart_mappable_builder: ^4.6.1
+  luthor_generator: 0.18.0 # Configured via catalog
+  lints: ^6.0.0 # Configured via catalog
+  test: ^1.31.0 # Configured via catalog
+  build_runner: ^2.15.0 # Configured via catalog
+  freezed: ^3.2.0 # Configured via catalog
+  json_serializable: ^6.14.0 # Configured via catalog
+  dart_mappable_builder: ">=4.7.0 <4.9.0" # Configured via catalog

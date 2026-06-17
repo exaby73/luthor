@@ -1,3 +1,4 @@
+import 'package:luthor/src/validation.dart';
 import 'package:luthor/src/validations/numbers/max_validation.dart';
 import 'package:luthor/src/validations/numbers/min_validation.dart';
 import 'package:luthor/src/validator.dart';
@@ -6,20 +7,29 @@ import 'package:luthor/src/validator.dart';
 class IntValidator extends Validator {
   IntValidator({super.initialValidations});
 
+  IntValidator _copyWith(Validation validation) {
+    final newValidator = IntValidator(
+      initialValidations: [...validations, validation],
+    );
+    if (name != null) {
+      newValidator.withName(name);
+    }
+    return newValidator;
+  }
+
   /// Validates that the int is greater than or equal to minValue.
   IntValidator min(
     int minValue, {
     String? message,
     String? Function()? messageFn,
   }) {
-    validations.add(
+    return _copyWith(
       NumberMinValidation(
         minValue: minValue,
         message: message,
         messageFn: messageFn,
       ),
     );
-    return this;
   }
 
   /// Validates that the int is less than or equal to minValue.
@@ -28,13 +38,12 @@ class IntValidator extends Validator {
     String? message,
     String? Function()? messageFn,
   }) {
-    validations.add(
+    return _copyWith(
       NumberMaxValidation(
         maxValue: maxValue,
         message: message,
         messageFn: messageFn,
       ),
     );
-    return this;
   }
 }

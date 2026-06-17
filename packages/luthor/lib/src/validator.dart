@@ -147,28 +147,44 @@ class Validator implements ValidatorReference {
   StringValidator string({String? message, String? Function()? messageFn}) {
     final newValidations = List<Validation>.from(validations)
       ..add(StringValidation(message: message, messageFn: messageFn));
-    return StringValidator(initialValidations: newValidations);
+    final newValidator = StringValidator(initialValidations: newValidations);
+    if (_name != null) {
+      newValidator.withName(_name);
+    }
+    return newValidator;
   }
 
   /// Validates that the value is a number (int or double).
   NumberValidator number({String? message, String? Function()? messageFn}) {
     final newValidations = List<Validation>.from(validations)
       ..add(NumberValidation(message: message, messageFn: messageFn));
-    return NumberValidator(initialValidations: newValidations);
+    final newValidator = NumberValidator(initialValidations: newValidations);
+    if (_name != null) {
+      newValidator.withName(_name);
+    }
+    return newValidator;
   }
 
   /// Validates that the value is an int.
   IntValidator int({String? message, String? Function()? messageFn}) {
     final newValidations = List<Validation>.from(validations)
       ..add(IntValidation(message: message, messageFn: messageFn));
-    return IntValidator(initialValidations: newValidations);
+    final newValidator = IntValidator(initialValidations: newValidations);
+    if (_name != null) {
+      newValidator.withName(_name);
+    }
+    return newValidator;
   }
 
   /// Validates that the value is a double.
   DoubleValidator double({String? message, String? Function()? messageFn}) {
     final newValidations = List<Validation>.from(validations)
       ..add(DoubleValidation(message: message, messageFn: messageFn));
-    return DoubleValidator(initialValidations: newValidations);
+    final newValidator = DoubleValidator(initialValidations: newValidations);
+    if (_name != null) {
+      newValidator.withName(_name);
+    }
+    return newValidator;
   }
 
   /// Validates that the value is a bool.
@@ -314,7 +330,7 @@ class Validator implements ValidatorReference {
 
   /// Validates a single value.
   SingleValidationResult<T> validateValue<T>(T value) {
-    final errorMessage = _isValid(null, value);
+    final errorMessage = _isValid(name, value);
     if (errorMessage != null) {
       // Check if errors are in Map format (from MapValidation with key/value validators)
       // If so, flatten them to a list for SingleValidationError
@@ -322,6 +338,11 @@ class Validator implements ValidatorReference {
         return SingleValidationError(
           data: value,
           errors: (errorMessage['[DEFAULT]']! as List).cast(),
+        );
+      } else if (name != null && errorMessage[name] is List) {
+        return SingleValidationError(
+          data: value,
+          errors: (errorMessage[name]! as List).cast(),
         );
       } else {
         // Structured errors from MapValidation - convert to list with key prefixes
@@ -372,10 +393,14 @@ class Validator implements ValidatorReference {
   }) {
     final errors = _isValid(fieldName, value, validatingSchemas);
     if (errors != null) {
-      return SingleValidationError(
-        data: value,
-        errors: (errors[fieldName]! as List).cast(),
-      );
+      final fieldErrors = errors[fieldName];
+      if (fieldErrors is List) {
+        return SingleValidationError(data: value, errors: fieldErrors.cast());
+      }
+
+      final errorList = <String>[];
+      _flattenErrors(errors, errorList, '');
+      return SingleValidationError(data: value, errors: errorList);
     }
     return SingleValidationSuccess(data: value);
   }

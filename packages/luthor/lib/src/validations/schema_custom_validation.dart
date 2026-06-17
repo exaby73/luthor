@@ -23,11 +23,7 @@ class SchemaCustomValidation extends Validation {
         return true;
       }
       return customValidator(value, schemaData!);
-    } catch (e, s) {
-      // ignore: avoid_print
-      print(e);
-      // ignore: avoid_print
-      print(s);
+    } catch (_) {
       return false;
     }
   }

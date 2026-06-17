@@ -29,6 +29,8 @@ class SchemaValidation extends Validation {
     // Always use a set for cycle detection, even if not provided
     final currentSchemas = validatingSchemas ?? <SchemaValidation>{};
 
+    final schemaData = value.cast<String, Object?>();
+
     for (final entry in validatorSchema.entries) {
       final name = entry.key;
       // Resolve the ValidatorReference to a Validator only when needed
@@ -36,7 +38,7 @@ class SchemaValidation extends Validation {
       final fieldValue = value[name];
 
       // Set schema data for any SchemaCustomValidation instances
-      validator.setSchemaDataForValidations(value.cast<String, Object?>());
+      validator.setSchemaDataForValidations(schemaData);
 
       // Check if the field is missing from input
       final fieldExists = value.containsKey(name);

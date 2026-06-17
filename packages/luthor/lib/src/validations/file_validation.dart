@@ -11,7 +11,7 @@ class FileValidation extends Validation {
   @override
   bool call(String? fieldName, Object? value) {
     super.call(fieldName, value);
-    if (value == null) return false;
+    if (value == null) return true;
 
     final typeName = value.runtimeType.toString().toLowerCase();
     return typeName.contains('file') ||

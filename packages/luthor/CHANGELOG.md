@@ -1,3 +1,11 @@
+# 0.18.0
+
+- **FIX**: Keep all string and number modifier chains immutable so reusable validators are not mutated by later `.email()`, `.uuid()`, `.min()`, `.max()`, and related calls.
+- **FIX**: Preserve `withName()` across typed validators and single-value validation so generated default messages use the configured field name.
+- **FIX**: Treat `l.file()` as optional for null values unless `.required()` is also present, matching other single-value validators.
+- **FIX**: Avoid printing caught custom-validator exceptions while still treating thrown validators as validation failures.
+- **FIX**: Return flattened errors for field-named map key/value validation failures instead of throwing when structured map errors are produced.
+
 # 0.17.0
 
 - **FEAT**: Add support for validating files with `l.file()` validator.
@@ -17,10 +25,6 @@
 - **FEAT**: Add `ValidatorReference` interface to unify `Validator` and `ForwardRef` types, enabling both to be used interchangeably in validation contexts.
 - **FEAT**: Add `@luthorForwardRef` annotation to mark a field as using a forward reference, to be used in code generation.
 - **FEAT**: Add `@IsUuid`/`@isUuid`, `@IsCuid`/`@isCuid`, `@IsCuid2`/`@isCuid2`, and `@IsEmoji`/`@isEmoji` annotations for string validation. These annotations can be used with code generation to validate UUID, CUID, CUID2, and emoji strings respectively.
-
-# 0.13.1
-
-- **CHORE**: Update version to match luthor_generator.
 
 # 0.13.0
 
@@ -62,7 +66,7 @@
 
 ## 0.5.2+1
 
-- **CHORE**: Export validations
+- **FEAT**: Export validations.
 
 ## 0.5.2
 
@@ -102,10 +106,6 @@
 ## 0.4.0
 
 - **FEAT**: Deprecate luthor_annoation and add annotations to luthor package.
-
-## 0.3.2+1
-
-- **CHORE**: update docs.
 
 ## 0.3.2
 

@@ -5,6 +5,16 @@ import 'package:luthor/src/validations/strings/string_url_validation.dart';
 class StringValidator extends Validator {
   StringValidator({super.initialValidations});
 
+  StringValidator _copyWith(Validation validation) {
+    final newValidator = StringValidator(
+      initialValidations: [...validations, validation],
+    );
+    if (name != null) {
+      newValidator.withName(name);
+    }
+    return newValidator;
+  }
+
   /// Validates that the string is a valid date.
   StringValidator dateTime({String? message, String? Function()? messageFn}) {
     final newValidations = List<Validation>.from(validations)
@@ -96,14 +106,13 @@ class StringValidator extends Validator {
     String? message,
     String? Function()? messageFn,
   }) {
-    validations.add(
+    return _copyWith(
       StringUriValidation(
         allowedSchemes: allowedSchemes,
         message: message,
         messageFn: messageFn,
       ),
     );
-    return this;
   }
 
   /// Validates that the string is a valid URL (must have scheme and host).
@@ -112,46 +121,41 @@ class StringValidator extends Validator {
     String? message,
     String? Function()? messageFn,
   }) {
-    validations.add(
+    return _copyWith(
       StringUrlValidation(
         allowedSchemes: allowedSchemes,
         message: message,
         messageFn: messageFn,
       ),
     );
-    return this;
   }
 
   /// Validates that the string is a valid emoji.
   StringValidator emoji({String? message, String? Function()? messageFn}) {
-    validations.add(
+    return _copyWith(
       StringEmojiValidation(message: message, messageFn: messageFn),
     );
-    return this;
   }
 
   /// Validates that the string is a valid UUID.
   StringValidator uuid({String? message, String? Function()? messageFn}) {
-    validations.add(
+    return _copyWith(
       StringUuidValidation(message: message, messageFn: messageFn),
     );
-    return this;
   }
 
   /// Validates that the string is a valid CUID.
   StringValidator cuid({String? message, String? Function()? messageFn}) {
-    validations.add(
+    return _copyWith(
       StringCuidValidation(message: message, messageFn: messageFn),
     );
-    return this;
   }
 
   /// Validates that the string is a valid CUID2.
   StringValidator cuid2({String? message, String? Function()? messageFn}) {
-    validations.add(
+    return _copyWith(
       StringCuid2Validation(message: message, messageFn: messageFn),
     );
-    return this;
   }
 
   /// Validates that the string is an ip with optional parameter for IPv4 and IPv6 as "v4" and "v6" respectively.
@@ -160,14 +164,13 @@ class StringValidator extends Validator {
     String? Function()? messageFn,
     IpVersion? version,
   }) {
-    validations.add(
+    return _copyWith(
       StringIpValidation(
         message: message,
         messageFn: messageFn,
         version: version,
       ),
     );
-    return this;
   }
 
   /// Validates that the string matches a regular expression.
@@ -176,10 +179,9 @@ class StringValidator extends Validator {
     String? message,
     String? Function()? messageFn,
   }) {
-    validations.add(
+    return _copyWith(
       StringRegexValidation(pattern, message: message, messageFn: messageFn),
     );
-    return this;
   }
 
   /// Validates that the string starts with a string.
@@ -188,14 +190,13 @@ class StringValidator extends Validator {
     String? message,
     String? Function()? messageFn,
   }) {
-    validations.add(
+    return _copyWith(
       StringStartsWithValidation(
         string,
         message: message,
         messageFn: messageFn,
       ),
     );
-    return this;
   }
 
   /// Validates that the string ends with a string.
@@ -204,10 +205,9 @@ class StringValidator extends Validator {
     String? message,
     String? Function()? messageFn,
   }) {
-    validations.add(
+    return _copyWith(
       StringEndsWithValidation(string, message: message, messageFn: messageFn),
     );
-    return this;
   }
 
   /// Validates that the string contains a string.
@@ -216,9 +216,8 @@ class StringValidator extends Validator {
     String? message,
     String? Function()? messageFn,
   }) {
-    validations.add(
+    return _copyWith(
       StringContainsValidation(string, message: message, messageFn: messageFn),
     );
-    return this;
   }
 }

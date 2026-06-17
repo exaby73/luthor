@@ -21,11 +21,7 @@ class CustomValidation extends Validation {
     super.call(fieldName, value);
     try {
       return customValidator(value);
-    } catch (e, s) {
-      // ignore: avoid_print
-      print(e);
-      // ignore: avoid_print
-      print(s);
+    } catch (_) {
       return false;
     }
   }

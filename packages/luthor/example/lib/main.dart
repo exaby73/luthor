@@ -1,67 +1,78 @@
 import 'package:luthor/luthor.dart';
 
 void main() {
-  final aString = 'Hello World';
-  final aDateTime = DateTime.now().toString();
-  final anEmail = 'user@example.com';
-  final aUri = 'https://example.com';
-  final anEmoji = '🦄';
-  final aUuid = '123e4567-e89b-12d3-a456-426614174000';
-  final aCuid = 'ckjv4ys4h0000hjzv5y6y1q1t';
-  final aIp = '192.168.1.1';
+  // Every validator starts from `l` and is optional by default.
+  print(l.string().email().validate(null));
+  print(l.string().email().required().validate(null));
 
-  final aNumber = 42;
-  final anInt = 42;
-  final aDouble = 42.0;
-  final aBoolean = true;
-  final aNullValue = null;
-  final aList = [1, 2, 3];
-  final aMap = {'key': 'value'};
+  // Modifiers chain in any order, and every chain is a new validator.
+  final username = l.string().required().min(3).max(20);
+  print(username.validate('lu'));
 
-  // All string validations
-  print(l.string().validateValue(aString));
-  print(l.string().dateTime().validateValue(aDateTime));
-  print(l.string().email().validateValue(anEmail));
-  print(l.string().min(1).validateValue(aString));
-  print(l.string().max(12).validateValue(aString));
-  print(l.string().length(11).validateValue(aString));
-  print(l.string().uri().validateValue(aUri));
-  print(l.string().emoji().validateValue(anEmoji));
-  print(l.string().uuid().validateValue(aUuid));
-  print(l.string().cuid().validateValue(aCuid));
-  print(l.string().cuid2().validateValue(aCuid));
-  print(l.string().regex(r'([A-Za-z]+)').validateValue(aString));
-  print(l.string().ip().validateValue(aIp));
+  // Required validators have typed output, without code generation.
+  switch (l.int().required().min(18).validate(42)) {
+    case ValidationSuccess(:final data):
+      print('An int: ${data + 1}');
+    case ValidationFailure(:final messages):
+      print(messages);
+  }
 
-  // Other primitive types can be validated as well
-  print(l.number().validateValue(aNumber));
-  print(l.int().validateValue(anInt));
-  print(l.double().validateValue(aDouble));
-  print(l.boolean().validateValue(aBoolean));
-  print(l.nullValue().validateValue(aNullValue));
+  // Strings support common formats.
+  print(l.string().dateTime().validate('2026-06-17T12:00:00Z'));
+  print(l.string().uri(allowedSchemes: ['https']).validate('https://x.dev'));
+  print(l.string().emoji().validate('🦄'));
+  print(l.string().uuid().validate('123e4567-e89b-12d3-a456-426614174000'));
+  print(l.string().ip(version: IpVersion.v4).validate('192.168.1.1'));
+  print(l.string().regex(RegExp(r'^[a-z]+$')).validate('luthor'));
 
-  // General validations
-  print(l.any().validateValue(aNumber));
-  print(l.required().validateValue(aNumber));
+  // Other types mirror Dart types.
+  print(l.num().validate(1.5));
+  print(l.double().finite().validate(double.nan));
+  print(l.bool().validate(true));
+  print(l.nullValue().validate(null));
+  print(l.any().required().validate('anything'));
+  print(l.oneOf(['admin', 'member']).validate('owner'));
 
-  // Lists and maps (called schemas in luthor) can be validated as well
-  print(l.list(validators: [l.number()]).validateValue(aList));
-  print(l.schema({'key': l.string()}).validateSchema(aMap));
+  // Lists take one element validator; unions accept any of their options.
+  print(l.list(l.union([l.string().email(), l.int().min(1)])).validate([0]));
 
-  // Validations can be chained
-  print(
-    // Value should be a string (.string()),
-    // have a minimum length of 1 (.min(1)),
-    // have a maximum length of 12 (.max(12))
-    // and not null (.required())
-    l.string().min(1).max(12).required().validateValue(aString),
-  );
-  print(
-    // This works since all validations are optional by default
-    l.string().email().validateValue(null),
-  );
-  print(
-    // This does not since we mark the validation as required
-    l.string().email().required().validateValue(null),
-  );
+  // Schemas report issues by path, and strip unknown keys by default.
+  final signup = l.schema({
+    'email': l.string().email().required(),
+    'password': l.string().min(8).required(),
+    'confirmPassword': l
+        .string()
+        .customWithSchema(
+          (value, data) => value == data['password'],
+          message: 'Passwords must match',
+        )
+        .required(),
+    'tags': l.list(l.string().min(2).required()),
+  });
+
+  final result = signup.validate({
+    'email': 'user@example.com',
+    'password': 'secret123',
+    'confirmPassword': 'secret',
+    'tags': ['ok', 'x'],
+  });
+  print(result.errors);
+  print(result.getError('confirmPassword'));
+  print(result.getError('tags.1'));
+
+  // validateSchema converts valid data with fromJson.
+  final user = signup.validateSchema({
+    'email': 'user@example.com',
+    'password': 'secret123',
+    'confirmPassword': 'secret123',
+  }, fromJson: (json) => json['email']! as String);
+  print(user);
+
+  // One global hook translates or rewrites every default message.
+  l.messageBuilder = (issue) => switch (issue.code) {
+    IssueCode.required => 'Please fill in ${issue.fieldName ?? 'this field'}',
+    _ => issue.message,
+  };
+  print(signup.validate(<String, Object?>{}).messages);
+  l.messageBuilder = null;
 }

@@ -1,112 +1,118 @@
-/// Validation result for any single validation.
-sealed class SingleValidationResult<Data> {
-  Data get data;
+import 'package:luthor/src/validation_issue.dart';
 
-  bool get isValid {
-    return switch (this) {
-      SingleValidationSuccess(data: _) => true,
-      SingleValidationError(data: _, errors: _) => false,
-    };
-  }
+/// The result of validating a value: a [ValidationSuccess] holding the typed
+/// output, or a [ValidationFailure] holding the issues.
+///
+/// The error views ([messages], [errors], [getError] and [getErrors]) are
+/// derived from [issues] and are empty on success, so they can be read
+/// without matching on the result first.
+///
+/// ```dart
+/// switch (l.string().email().required().validate(input)) {
+///   case ValidationSuccess(:final data):
+///     print('valid: $data');
+///   case ValidationFailure(:final messages):
+///     print('invalid: $messages');
+/// }
+/// ```
+sealed class ValidationResult<T> {
+  const ValidationResult();
 
-  @override
-  String toString() {
-    return switch (this) {
-      SingleValidationSuccess<Data>(data: final data) =>
-        'SingleValidationSuccess(data: $data)',
-      SingleValidationError<Data>(data: final data, errors: final errors) =>
-        'SingleValidationError(data: $data, errors: $errors)',
-    };
-  }
-}
+  /// Whether the value passed every validation.
+  bool get isValid;
 
-class SingleValidationSuccess<T> extends SingleValidationResult<T> {
-  @override
-  final T data;
+  /// The problems found, in the order they were found. Empty on success.
+  List<ValidationIssue> get issues;
 
-  SingleValidationSuccess({required this.data});
-}
+  /// Every error message, in issue order.
+  List<String> get messages => [for (final issue in issues) issue.message];
 
-class SingleValidationError<T> extends SingleValidationResult<T> {
-  @override
-  final T data;
-  final List<String> errors;
-
-  SingleValidationError({required this.data, required this.errors});
-}
-
-/// Validation result for a schema validation.
-sealed class SchemaValidationResult<T> {
-  T? get data;
-
-  bool get isValid {
-    return switch (this) {
-      SchemaValidationSuccess(data: _) => true,
-      SchemaValidationError(data: _, errors: _) => false,
-    };
-  }
-
-  @override
-  String toString() {
-    return switch (this) {
-      SchemaValidationSuccess<T>(data: final data) =>
-        'SchemaValidationSuccess(data: $data)',
-      SchemaValidationError<T>(data: final data, errors: final errors) =>
-        'SchemaValidationError(data: $data, errors: $errors)',
-    };
-  }
-}
-
-class SchemaValidationSuccess<T> extends SchemaValidationResult<T> {
-  @override
-  final T data;
-
-  SchemaValidationSuccess({required this.data});
-}
-
-class SchemaValidationError<T> extends SchemaValidationResult<T> {
-  @override
-  final T? data;
-  final Map<String, dynamic> errors;
-
-  SchemaValidationError({this.data, required this.errors});
-
-  /// Get the error message for a specific key.
-  /// Supports nested keys via dot notation.
+  /// The error map: error messages grouped by error path.
   ///
-  /// Example:
+  /// Keys are dot-joined paths such as `'address.city'` or `'items.1.id'`.
+  /// Errors about the validated value itself, including object-level errors
+  /// from `.custom()` on a schema, are under the empty path `''`.
+  Map<String, List<String>> get errors {
+    final errors = <String, List<String>>{};
+    for (final issue in issues) {
+      (errors[issue.errorPath] ??= []).add(issue.message);
+    }
+    return errors;
+  }
+
+  /// Returns the first error message at exactly [path], or `null` if there is
+  /// none.
+  ///
+  /// [path] is an error path such as `'address.city'`. Use `''` for errors
+  /// about the validated value itself.
+  ///
   /// ```dart
-  /// final data = {
-  ///  'value': null,
-  ///  'nested': {'value2': null},
-  /// };
+  /// final result = l.schema({
+  ///   'name': l.string().required(),
+  ///   'address': l.schema({'city': l.string().required()}).required(),
+  /// }).validate({'address': <String, Object?>{}});
   ///
-  /// final schema = l.schema({
-  ///  'value': l.string().required(),
-  ///  'nested': l.schema({
-  ///    'value2': l.string().required(),
-  ///  }).required(),
-  /// });
-  ///
-  /// final result = schema.validateSchema(data);
-  ///
-  /// print(result.getError('value')); // value is required
-  /// print(result.getError('nested.value')); // value2 is required
+  /// result.getError('name'); // name is required
+  /// result.getError('address.city'); // city is required
+  /// result.getError('address'); // null
   /// ```
-  String? getError(String key) {
-    final nestedKeys = key.split('.');
-
-    dynamic error = errors;
-    for (final nestedKey in nestedKeys) {
-      if (error is Map) {
-        error = error[nestedKey];
-      }
+  String? getError(String path) {
+    for (final issue in issues) {
+      if (issue.errorPath == path) return issue.message;
     }
-
-    if (error is! List?) {
-      throw StateError('Invalid key: $key');
-    }
-
-    return error?.firstOrNull as String?;
+    return null;
   }
+
+  /// Returns every error message at exactly [path], in issue order.
+  List<String> getErrors(String path) {
+    return [
+      for (final issue in issues)
+        if (issue.errorPath == path) issue.message,
+    ];
+  }
+}
+
+/// A validation result for a value that passed every validation.
+final class ValidationSuccess<T> extends ValidationResult<T> {
+  /// Creates a successful result holding [data].
+  const ValidationSuccess(this.data);
+
+  /// The validated output.
+  final T data;
+
+  @override
+  bool get isValid => true;
+
+  @override
+  List<ValidationIssue> get issues => const [];
+
+  @override
+  String toString() => 'ValidationSuccess(data: $data)';
+}
+
+/// A validation result for a value that failed at least one validation.
+final class ValidationFailure<T> extends ValidationResult<T> {
+  /// Creates a failed result for [input] with at least one issue.
+  ///
+  /// Throws an [ArgumentError] if [issues] is empty.
+  ValidationFailure({
+    required this.input,
+    required List<ValidationIssue> issues,
+  }) : issues = List.unmodifiable(issues) {
+    if (issues.isEmpty) {
+      throw ArgumentError.value(issues, 'issues', 'must not be empty');
+    }
+  }
+
+  /// The raw value that was validated.
+  final Object? input;
+
+  @override
+  final List<ValidationIssue> issues;
+
+  @override
+  bool get isValid => false;
+
+  @override
+  String toString() => 'ValidationFailure(errors: $errors)';
 }

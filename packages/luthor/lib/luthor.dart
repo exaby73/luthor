@@ -1,3 +1,25 @@
+/// A Dart validation library inspired by Zod, with typed output and
+/// structured issues.
+///
+/// Start every validator from [l]:
+///
+/// ```dart
+/// import 'package:luthor/luthor.dart';
+///
+/// final user = l.schema({
+///   'email': l.string().email().required(),
+///   'age': l.int().min(18),
+/// });
+///
+/// switch (user.validate({'email': 'dev@example.com'})) {
+///   case ValidationSuccess(:final data):
+///     print(data);
+///   case ValidationFailure(:final errors):
+///     print(errors);
+/// }
+/// ```
+library;
+
 export 'src/annotations/luthor.dart';
 export 'src/annotations/validators/contains.dart';
 export 'src/annotations/validators/cuid.dart';
@@ -19,42 +41,7 @@ export 'src/annotations/validators/starts_with.dart';
 export 'src/annotations/validators/uri.dart';
 export 'src/annotations/validators/url.dart';
 export 'src/annotations/validators/uuid.dart';
-export 'src/forward_ref.dart';
-export 'src/l.dart';
 export 'src/types/ip.dart';
-export 'src/validation.dart';
+export 'src/validation_issue.dart';
 export 'src/validation_result.dart';
-export 'src/validations/any_validation.dart';
-export 'src/validations/bool_validation.dart';
-export 'src/validations/custom_validation.dart';
-export 'src/validations/double_validation.dart';
-export 'src/validations/file_validation.dart';
-export 'src/validations/int_validation.dart';
-export 'src/validations/list_validation.dart';
-export 'src/validations/map_validation.dart';
-export 'src/validations/null_validation.dart';
-export 'src/validations/number_validation.dart';
-export 'src/validations/numbers/max_validation.dart';
-export 'src/validations/numbers/min_validation.dart';
-export 'src/validations/required_validation.dart';
-export 'src/validations/schema_custom_validation.dart';
-export 'src/validations/schema_validation.dart';
-export 'src/validations/string_validation.dart';
-export 'src/validations/strings/string_contains_validation.dart';
-export 'src/validations/strings/string_cuid_2_validation.dart';
-export 'src/validations/strings/string_cuid_validation.dart';
-export 'src/validations/strings/string_date_time_validation.dart';
-export 'src/validations/strings/string_email_validation.dart';
-export 'src/validations/strings/string_emoji_validation.dart';
-export 'src/validations/strings/string_ends_with_validation.dart';
-export 'src/validations/strings/string_ip_validation.dart';
-export 'src/validations/strings/string_length_validation.dart';
-export 'src/validations/strings/string_max_validation.dart';
-export 'src/validations/strings/string_min_validation.dart';
-export 'src/validations/strings/string_regex_validation.dart';
-export 'src/validations/strings/string_starts_with_validation.dart';
-export 'src/validations/strings/string_uri_validation.dart';
-export 'src/validations/strings/string_uuid_validation.dart';
 export 'src/validator.dart';
-export 'src/validator_reference.dart';
-export 'src/validators/string_validator.dart';

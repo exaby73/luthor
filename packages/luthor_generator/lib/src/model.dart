@@ -45,10 +45,6 @@ final class ModelField {
   String get name => parameter.name!;
 
   DartType get type => parameter.type;
-
-  DartObject? annotationOf(TypeChecker checker) {
-    return firstAnnotation(annotations, checker);
-  }
 }
 
 DartObject? firstAnnotation(

@@ -2,6 +2,7 @@ import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
+import 'package:luthor/luthor.dart';
 import 'package:luthor_generator/src/annotation_rules.dart';
 import 'package:luthor_generator/src/checkers.dart';
 import 'package:luthor_generator/src/dart_source.dart';
@@ -23,7 +24,7 @@ final class FieldValidators {
         if (_ruleFor(annotation) case final rule?) (rule, annotation),
     ];
     final explicitDateTime = applied.any(
-      (entry) => entry.$1.method == 'dateTime',
+      (entry) => entry.$1.annotation == IsDateTime,
     );
     var (expr, kind) = field.usesConverter
         ? (const ValidatorExpr(TypeEntry(runtime.EntryType.any)), FieldKind.any)
@@ -39,20 +40,16 @@ final class FieldValidators {
       if (!rule.appliesTo.contains(kind)) {
         throw _misplaced(rule, field, owner, kind);
       }
-      final call = _call(rule, annotation, field);
+      final arguments = _arguments(rule, annotation, field);
       switch (rule.effect) {
         case RuleEffect.entry:
-          expr = ValidatorExpr(
-            TypeEntry(
-              runtime.EntryType.file,
-              _arguments(rule, annotation, field),
-            ),
-          );
-          kind = FieldKind.file;
+          final entryType = runtime.EntryType.values.byName(rule.method);
+          expr = ValidatorExpr(TypeEntry(entryType, arguments));
+          kind = FieldKind.values.byName(rule.method);
         case RuleEffect.modifier:
-          modifiers.add(call);
+          modifiers.add(runtime.modifier(rule.method, arguments));
         case RuleEffect.refinement:
-          refinements.add(call);
+          refinements.add(runtime.modifier(rule.method, arguments));
       }
     }
 
@@ -242,24 +239,23 @@ final class FieldValidators {
     DartType type,
     _FieldContext context,
   ) {
-    const asAny =
-        'Give the field a JsonConverter or @JsonKey(fromJson:) so luthor '
-        'validates its raw JSON value as any.';
-    final name = type.element?.name;
+    const converter =
+        'a JsonConverter or @JsonKey(fromJson:) so luthor validates its raw '
+        'JSON value as any';
     final explanation = switch (type) {
       RecordType() => 'is a record. Records are not supported.',
       FunctionType() => 'is a function, which cannot come from JSON.',
       TypeParameterType() =>
-        'is a type parameter. Generic models are not '
-            'supported yet.',
+        'is a type parameter. Generic models are not supported yet.',
       InterfaceType(typeArguments: [_, ...]) =>
-        'is generic. Generic models are not supported yet. $asAny',
+        'is generic. Generic models are not supported yet. Give the field '
+            '$converter.',
       InterfaceType(:final element) when element.library.isInSdk =>
-        'has no luthor validator. $asAny',
+        'has no luthor validator. Give the field $converter.',
       _ =>
-        'is not a luthor model. Annotate `$name` with @luthor, give it a '
-            'fromJson factory or @MappableClass, or ${asAny[0].toLowerCase()}'
-            '${asAny.substring(1)}',
+        'is not a luthor model. Annotate `${type.element?.name}` with '
+            '@luthor, give it a fromJson factory or @MappableClass, or give '
+            'the field $converter.',
     };
     return InvalidGenerationSourceError(
       'Luthor cannot validate field `${context.field.name}` of '
@@ -282,10 +278,6 @@ final class FieldValidators {
       if (rule.checker.isExactlyType(type)) return rule;
     }
     return null;
-  }
-
-  String _call(AnnotationRule rule, DartObject annotation, ModelField field) {
-    return runtime.modifier(rule.method, _arguments(rule, annotation, field));
   }
 
   List<String> _arguments(

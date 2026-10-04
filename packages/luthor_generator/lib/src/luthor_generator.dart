@@ -29,8 +29,8 @@ final class LuthorGenerator extends Generator {
     }
     if (!ModelReader.isSerializable(element)) {
       throw InvalidGenerationSourceError(
-        'Luthor can only be applied to classes with a factory fromJson '
-        'constructor or a @MappableClass annotation.',
+        'Luthor can only be applied to classes with a fromJson constructor '
+        'or static method, or a @MappableClass annotation.',
         element: element,
       );
     }

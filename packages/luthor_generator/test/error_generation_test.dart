@@ -30,11 +30,12 @@ void main() {
         result = await runBuilder(noFromJsonSource);
       });
 
-      test('Then generation reports the missing factory error', () {
+      test('Then generation reports the missing fromJson error', () {
         expect(
           result.errors.join('\n'),
           contains(
-            'Luthor can only be applied to classes with a factory fromJson constructor',
+            'Luthor can only be applied to classes with a fromJson constructor '
+            'or static method, or a @MappableClass annotation.',
           ),
         );
       });

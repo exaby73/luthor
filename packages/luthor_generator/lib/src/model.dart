@@ -74,7 +74,8 @@ final class ModelReader {
   }
 
   static bool hasFromJson(ClassElement element) {
-    return element.constructors.any(_isFromJson);
+    return element.constructors.any(_isFromJson) ||
+        (element.getMethod('fromJson')?.isStatic ?? false);
   }
 
   Model read(ClassElement element) => _models[element] ??= _read(element);

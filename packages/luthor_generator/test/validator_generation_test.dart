@@ -75,6 +75,34 @@ void main() {
     });
   });
 
+  group('Given a file field with a custom message', () {
+    test(
+      'When the builder generates the schema then the message is kept',
+      () async {
+        final generation = await generateSharedPart(_fileMessageSource);
+
+        expectOutputContains(
+          generation.output,
+          'AttachmentSchemaKeys.file: l.file(message: "need a file").required(),',
+        );
+      },
+    );
+  });
+
+  group('Given a model with a static fromJson method', () {
+    test(
+      'When the builder generates the validate function then it uses the method',
+      () async {
+        final generation = await generateSharedPart(_staticFromJsonSource);
+
+        expectOutputContains(
+          generation.output,
+          r'''$StaticFactorySchema.validateSchema(json, fromJson: StaticFactory.fromJson);''',
+        );
+      },
+    );
+  });
+
   group('Given an annotation bound that is infinite', () {
     test('When generated code is analyzed then it compiles', () async {
       await expectGeneratedCodeCompiles(_infiniteBoundSource);
@@ -103,6 +131,44 @@ void main() {
     });
   });
 }
+
+const _fileMessageSource = '''
+import 'dart:io';
+
+import 'package:luthor/luthor.dart';
+
+part 'profile.g.dart';
+
+@luthor
+class Attachment {
+  final File file;
+
+  const Attachment({@IsFile(message: 'need a file') required this.file});
+
+  factory Attachment.fromJson(Map<String, dynamic> json) =>
+      Attachment(file: json['file'] as File);
+
+  Map<String, dynamic> toJson() => {'file': file};
+}
+''';
+
+const _staticFromJsonSource = '''
+import 'package:luthor/luthor.dart';
+
+part 'profile.g.dart';
+
+@luthor
+class StaticFactory {
+  final String name;
+
+  const StaticFactory({required this.name});
+
+  static StaticFactory fromJson(Map<String, dynamic> json) =>
+      StaticFactory(name: json['name'] as String);
+
+  Map<String, dynamic> toJson() => {'name': name};
+}
+''';
 
 const _infiniteBoundSource = '''
 import 'package:luthor/luthor.dart';

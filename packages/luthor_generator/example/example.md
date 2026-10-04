@@ -1,15 +1,16 @@
 # luthor_generator example
 
-Add `luthor` as a dependency, and `luthor_generator`, `build_runner` and
-`json_serializable` as dev dependencies:
+Add `luthor` as a dependency, and `luthor_generator` and `build_runner` as dev
+dependencies. This example also uses `json_serializable`, which is optional:
+a hand-written `fromJson` works too.
 
 ```sh
 dart pub add luthor json_annotation dev:luthor_generator dev:build_runner dev:json_serializable
 ```
 
 Annotate a model with `@luthor`. Put validation annotations on the constructor
-parameters. The class needs a `fromJson` factory, and a `toJson` method if you
-want `validateSelf()`:
+parameters or on the fields. The class needs a `fromJson` factory, and
+`validateSelf()` is generated only when it also has a `toJson` method:
 
 ```dart
 // lib/user.dart

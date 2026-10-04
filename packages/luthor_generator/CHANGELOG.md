@@ -3,6 +3,32 @@
 - **BREAKING**: Require Dart 3.11 or later (Flutter 3.41 or later).
 - **FEAT**: Support `analyzer` 10 to 14 (`>=10.0.0 <15.0.0`), so every Flutter release from 3.41 to current is supported. Flutter 3.41 pins `meta` 1.17.0, which resolves analyzer 10.0.x; newer SDKs resolve analyzer 13 or 14.
 - **FEAT**: Require `source_gen` `^4.2.0` and `build` `^4.0.4`. Both ranges resolve with every analyzer from 10 to 14.
+- **BREAKING**: Generated `$XSchema` variables are `final`.
+- **BREAKING**: Auto-generated schemas, for classes that a model uses but that have no `@luthor`, are now private (`_$XSchema`) and emitted once per library. They no longer get public `SchemaKeys`, `ErrorKeys`, `$XValidate` or `validateSelf()`. Two libraries that nest the same class no longer clash when imported together. Annotate a class with `@luthor` to get its public API.
+- **BREAKING**: Generation fails with a clear error for `freezed` unions (more than one redirecting factory; union dispatch is not supported yet), for generic models and fields of generic types, and for annotations placed on a field type they don't apply to, such as `@IsEmail` on an `int` or `@HasLength` on a `List`. These used to generate code that silently skipped validation or did not compile.
+- **BREAKING**: Unsupported field types fail with an `InvalidGenerationSourceError` that names the class, the field and the type, with advice for the kind of type, instead of an `UnsupportedError` without a location.
+- **BREAKING**: `validateSelf()` is generated only for models with a `toJson` method (including the one `freezed` generates) or a `dart_mappable` `toMap`. `@JsonSerializable(createToJson: false)` and `@Freezed(toJson: false)` are respected.
+- **BREAKING**: Fields with a `JsonConverter` or a `@JsonKey(fromJson: ...)` function are validated as `l.any()`.
+- **BREAKING**: Nested schema references are always wrapped in `forwardRef`. `@luthorForwardRef` is still accepted but has no effect.
+- **BREAKING**: Validation annotations are emitted in the order they are written, so `@HasMin(8) @HasMax(200)` generates `.min(8).max(200)`.
+- **BREAKING**: The generator's internal libraries moved under `lib/src`. Only `package:luthor_generator/builder.dart` is public.
+- **BREAKING**: `luthor_generator` no longer depends on `json_annotation`, `freezed_annotation`, `dart_mappable` or `collection`. Serializer annotations are matched by name and package.
+- **FIX**: Apply `source_gen:combining_builder`, so projects without `json_serializable` get a `.g.dart` file.
+- **FIX**: Build the schema from the constructor the serializer uses: the one named in `@JsonSerializable(constructor: ...)`, the `@MappableConstructor`, the unnamed constructor, or the first public constructor with parameters. A private or `fromJson` constructor declared first no longer produces an empty or wrong schema.
+- **FIX**: Read annotations from fields, including fields reached through `super.` parameters, as well as constructor parameters.
+- **FIX**: Apply `@JsonSerializable(fieldRename: ...)` on the class or the `freezed` factory (#49), `@JsonKey(name: ...)` on fields, `@MappableField(key: ...)` and `@MappableClass(caseStyle: ...)` to schema keys and error keys.
+- **FIX**: Treat fields with a constructor default or `@JsonKey(defaultValue: ...)` as optional, and leave fields with `@JsonKey(includeFromJson: false)` out of the schema.
+- **FIX**: Validate enums against their serialized values (names, `@JsonValue`, `@JsonEnum(fieldRename:, valueField:)`, `@MappableEnum`, `@MappableValue`), including in lists and as map keys.
+- **FIX**: Support `Set` and `Iterable` like `List`, `Uri` as a string, and `Object`/`Object?` as `l.any()`.
+- **FIX**: Add `.dateTime()` to nullable `DateTime` fields and to `DateTime` values inside collections, and give nested maps their key and value validators, so invalid input is a validation error instead of an exception from `fromJson`.
+- **FIX**: Validate `Map` keys of type `int`, `double`, `num` and `BigInt` as strings that parse to that type, since JSON object keys are always strings.
+- **FIX**: Keep import prefixes on nested schemas and custom validator functions, and qualify static methods declared in extensions. A nested `@luthor` schema hidden by a `show`/`hide` combinator gets a private schema instead.
+- **FIX**: Recursion through nested collections (`List<List<Node>>`, `Map<String, List<Node>>`) and mutual recursion between models no longer overflow the stack.
+- **FIX**: `validateSelf()` converts nested objects with their `toJson()` before validating, so it works when `json_serializable`'s `explicitToJson` is `false`.
+- **FIX**: Nested model fields in `ErrorKeys` get a `$key` entry for the field's own error.
+- **FIX**: Accept `fromJson` generative constructors and static methods, not only factories.
+- **FIX**: Keep the `message` and `messageFn` of `@IsFile`, emit `double.infinity`, `double.negativeInfinity` and `double.nan` in annotation values, escape `$` in class names passed to `withName`, and stop marking `Null` fields as required.
+- **FIX**: Detect `DateTime`, `Uri`, `File` and serializer annotations by library instead of by display name, so same-named types from other packages are not mistaken for them.
 
 # 0.18.0
 

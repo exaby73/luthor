@@ -1,8 +1,41 @@
 version: 2
+
 updates:
-  - package-ecosystem: "pub"
+  # Dependabot runs pub updates from the workspace root, which covers every
+  # workspace member. The runnable example sits outside the workspace.
+  # dpk.yaml's catalog owns the shared constraints: when a pub PR changes a
+  # pubspec constraint, mirror it in the catalog or `dpk get --check` fails.
+  - package-ecosystem: pub
     directories:
-      - "/packages/luthor"
-      - "/packages/luthor_generator"
+      - /
+      - /examples/luthor_generator
     schedule:
-      interval: "weekly"
+      interval: weekly
+    groups:
+      pub-minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: npm
+    directory: /website
+    schedule:
+      interval: weekly
+    groups:
+      npm-minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  # "/" covers .github/workflows. Composite actions need their own directories.
+  - package-ecosystem: github-actions
+    directories:
+      - /
+      - /.github/actions/*
+    schedule:
+      interval: weekly
+    groups:
+      actions-minor-and-patch:
+        update-types:
+          - minor
+          - patch

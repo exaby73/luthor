@@ -1,0 +1,196 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+# A new push to a pull request cancels its older runs. Runs on main always finish.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      # Pushes to main run every job. Pull requests skip the Dart or website
+      # jobs when nothing they depend on changed.
+      dart: ${{ github.event_name != 'pull_request' || steps.filter.outputs.dart == 'true' }}
+      website: ${{ github.event_name != 'pull_request' || steps.filter.outputs.website == 'true' }}
+    steps:
+      - name: Filter changed paths
+        id: filter
+        if: github.event_name == 'pull_request'
+        uses: dorny/paths-filter@v4
+        with:
+          filters: |
+            dart:
+              - 'packages/**'
+              - 'examples/**'
+              - 'pubspec.yaml'
+              - 'pubspec.lock'
+              - 'dpk.yaml'
+              - 'analysis_options.yaml'
+              - '.tool-versions'
+              - '.github/workflows/ci.yml'
+              - '.github/actions/**'
+              - '.github/fixtures/**'
+            website:
+              - 'website/**'
+              - '.tool-versions'
+              - '.github/workflows/ci.yml'
+
+  analyze:
+    name: analyze
+    needs: changes
+    if: needs.changes.outputs.dart == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup-luthor
+      - name: Pubspecs match the dpk catalog
+        run: dpk get --check
+      - run: dpk run analyze
+
+  format:
+    name: format
+    needs: changes
+    if: needs.changes.outputs.dart == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup-luthor
+      - run: dpk run format
+
+  test-luthor:
+    name: test-luthor
+    needs: changes
+    if: needs.changes.outputs.dart == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup-luthor
+      - run: dpk run --filter luthor test
+
+  test-generator:
+    name: test-generator (analyzer ${{ matrix.analyzer }}, Dart ${{ matrix.sdk }})
+    needs: changes
+    if: needs.changes.outputs.dart == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Flutter 3.41 pins meta 1.17.0, which caps analyzer at 10.0.x.
+          - analyzer: 10.0.0
+            constraint: "10.0.0"
+            expect: "10.0.0"
+            sdk: "3.11.5"
+          - analyzer: 13.0.0
+            constraint: "13.0.0"
+            expect: "13.0.0"
+            sdk: "3.11.5"
+          - analyzer: latest 14.x
+            constraint: "^14.0.0"
+            expect: "14.*"
+            sdk: "3.13.4"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup-luthor
+        with:
+          sdk: ${{ matrix.sdk }}
+
+      # A dependency_overrides pin keeps build and dart_style on releases that
+      # need a newer analyzer. Changing the root constraint re-resolves them.
+      # Running dpk get afterwards would restore the catalog constraint.
+      - name: Pin analyzer ${{ matrix.analyzer }}
+        env:
+          ANALYZER_CONSTRAINT: ${{ matrix.constraint }}
+        run: dart pub add "analyzer:$ANALYZER_CONSTRAINT"
+
+      - name: Check the resolved analyzer version
+        env:
+          EXPECTED: ${{ matrix.expect }}
+        run: |
+          resolved="$(dart pub deps --style=compact | sed -n 's/^- analyzer \([^ ]*\).*/\1/p' | head -n 1)"
+          echo "Resolved analyzer $resolved, expected $EXPECTED"
+          # shellcheck disable=SC2254 # EXPECTED is a glob on purpose.
+          case "$resolved" in
+            $EXPECTED) ;;
+            *)
+              echo "::error::Resolved analyzer $resolved does not match $EXPECTED"
+              exit 1
+              ;;
+          esac
+
+      - run: dpk run --filter luthor_generator analyze
+      - run: dpk run --filter luthor_generator test
+
+  example:
+    name: example
+    needs: changes
+    if: needs.changes.outputs.dart == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: examples/luthor_generator
+    steps:
+      - uses: actions/checkout@v7
+      # freezed 4 needs a newer SDK than the workspace floor.
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: "3.13.4"
+      - run: dart pub get
+      - run: dart run build_runner build
+      - name: Generated files are up to date
+        run: |
+          changes="$(git status --porcelain --untracked-files=all -- '*.g.dart' '*.freezed.dart' '*.mapper.dart')"
+          if [ -n "$changes" ]; then
+            echo "::error::Generated files in examples/luthor_generator are out of date. Run dart run build_runner build there and commit the result."
+            echo "$changes"
+            git diff -- .
+            exit 1
+          fi
+      - run: dart analyze
+
+  flutter-smoke:
+    name: flutter-3.41-smoke
+    needs: changes
+    if: needs.changes.outputs.dart == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.41.9
+      - name: Generate and analyze a Flutter 3.41 app
+        run: bash .github/fixtures/flutter_smoke/run.sh
+
+  website:
+    name: website
+    needs: changes
+    if: needs.changes.outputs.website == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .tool-versions
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - run: npm ci
+      # The build script runs astro check before astro build.
+      - run: npm run build

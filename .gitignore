@@ -10,3 +10,4 @@ pubspec.lock
 .nvim.lua
 .asdf
 .claude/settings.local.json
+.claude/worktrees/

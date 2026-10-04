@@ -59,7 +59,7 @@
 - **FIX**: Make error shapes independent of a map's runtime type arguments, so `Map<dynamic, dynamic>` input behaves like `Map<String, Object?>`.
 - **FIX**: Stop `customWithSchema()` from reusing data from an earlier validation.
 - **FIX**: Use the field name in the "must be a map" message of nested schemas.
-- **FIX**: Distinguish map key errors from value errors, and keep entry errors when another validation also fails.
+- **FIX**: Distinguish map key errors from value errors, and keep entry errors instead of replacing them with a `.custom()` error. Custom checks on schemas, lists, maps and unions now run only when every child passed.
 - **FIX**: Honour the message builder in `ip()`.
 - **FIX**: Anchor the `cuid()` pattern at the start of the string.
 - **FIX**: Reject impossible dates and times in `dateTime()`, such as `2023-02-30` and `25:00`, and strings outside the ISO 8601 extended format.

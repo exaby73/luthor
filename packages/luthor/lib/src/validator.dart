@@ -176,6 +176,9 @@ base mixin _Modifiers<T extends Object, O, Self extends Validator<O>>
   /// Returns a copy of this validator that also runs [validator] on values
   /// that passed the type check.
   ///
+  /// On schemas, lists, maps and unions, [validator] runs only when every
+  /// child passed too, so it receives well-typed data.
+  ///
   /// A [validator] that returns `false` or throws reports an
   /// [IssueCode.custom] issue.
   Self custom(
@@ -199,8 +202,10 @@ base mixin _Modifiers<T extends Object, O, Self extends Validator<O>>
   /// Returns a copy of this validator that also runs [validator] with the
   /// data of the schema that contains the value.
   ///
-  /// Outside a schema, [validator] receives empty [SchemaData]. A [validator]
-  /// that returns `false` or throws reports an [IssueCode.custom] issue.
+  /// Inside a list or map, [validator] receives the data of the schema that
+  /// holds it. Outside a schema, it receives empty [SchemaData]. A
+  /// [validator] that returns `false` or throws reports an [IssueCode.custom]
+  /// issue.
   Self customWithSchema(
     SchemaCustomValidator<T> validator, {
     String? message,

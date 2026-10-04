@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'nested_forward_ref_example.dart';
@@ -9,18 +9,14 @@ part of 'nested_forward_ref_example.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$User {
 
- String get id; String get username;// Automatic detection: List<Comment> contains Comment which matches... wait, no!
-// User.comments is List<Comment>, but we're in User class, so Comment doesn't match User.
-// This is NOT auto-detected because Comment ≠ User.
-// But if Comment has User? user field, that also won't be auto-detected from Comment's perspective.
-// So explicit annotation is needed for cross-class circular references.
- List<Comment>? get comments;
+ String get id; String get username; List<Comment>? get comments;
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -33,16 +29,21 @@ $UserCopyWith<User> get copyWith => _$UserCopyWithImpl<User>(this as User, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is User&&(identical(other.id, id) || other.id == id)&&(identical(other.username, username) || other.username == username)&&const DeepCollectionEquality().equals(other.comments, comments));
+  final _this = this as User;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is User&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.username, _this.username) || other.username == _this.username)&&const DeepCollectionEquality().equals(other.comments, _this.comments));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,username,const DeepCollectionEquality().hash(comments));
+int get hashCode {
+  final _this = this as User;
+  return Object.hash(runtimeType,_this.id,_this.username,const DeepCollectionEquality().hash(_this.comments));
+}
 
 @override
 String toString() {
-  return 'User(id: $id, username: $username, comments: $comments)';
+  final _this = this as User;
+  return 'User(id: ${_this.id}, username: ${_this.username}, comments: ${_this.comments})';
 }
 
 
@@ -71,7 +72,7 @@ class _$UserCopyWithImpl<$Res>
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? username = null,Object? comments = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(User(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
 as String,comments: freezed == comments ? _self.comments : comments // ignore: cast_nullable_to_non_nullable
@@ -216,22 +217,12 @@ return $default(_that.id,_that.username,_that.comments);case _:
 @JsonSerializable()
 
 class _User implements User {
-  const _User({required this.id, required this.username, final  List<Comment>? comments}): _comments = comments;
+  const _User({required this.id, required this.username,  List<Comment>? comments}): _comments = comments;
   factory _User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
 @override final  String id;
 @override final  String username;
-// Automatic detection: List<Comment> contains Comment which matches... wait, no!
-// User.comments is List<Comment>, but we're in User class, so Comment doesn't match User.
-// This is NOT auto-detected because Comment ≠ User.
-// But if Comment has User? user field, that also won't be auto-detected from Comment's perspective.
-// So explicit annotation is needed for cross-class circular references.
  final  List<Comment>? _comments;
-// Automatic detection: List<Comment> contains Comment which matches... wait, no!
-// User.comments is List<Comment>, but we're in User class, so Comment doesn't match User.
-// This is NOT auto-detected because Comment ≠ User.
-// But if Comment has User? user field, that also won't be auto-detected from Comment's perspective.
-// So explicit annotation is needed for cross-class circular references.
 @override List<Comment>? get comments {
   final value = _comments;
   if (value == null) return null;
@@ -254,16 +245,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _User&&(identical(other.id, id) || other.id == id)&&(identical(other.username, username) || other.username == username)&&const DeepCollectionEquality().equals(other._comments, _comments));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _User&&(identical(other.id, id) || other.id == id)&&(identical(other.username, username) || other.username == username)&&const DeepCollectionEquality().equals(other.comments, _comments));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,username,const DeepCollectionEquality().hash(_comments));
+int get hashCode {
+    return Object.hash(runtimeType,id,username,const DeepCollectionEquality().hash(_comments));
+}
 
 @override
 String toString() {
-  return 'User(id: $id, username: $username, comments: $comments)';
+    return 'User(id: $id, username: $username, comments: $comments)';
 }
 
 
@@ -307,14 +300,7 @@ as List<Comment>?,
 /// @nodoc
 mixin _$Comment {
 
- String get id; String get text;// Automatic detection: List<Comment> is automatically detected as self-reference
- List<Comment>? get replies;// Direct self-reference: Comment? parent is also automatically detected
- Comment? get parent;// Nested self-reference: Map<String, Comment> is auto-detected because
-// Comment (the value type) matches the enclosing class
- Map<String, Comment>? get mentions;// Cross-class circular reference: User.comments contains List<Comment>,
-// but from Comment's perspective, we only see User (not Comment), so auto-detection fails.
-// Explicit annotation is required.
-@luthorForwardRef User? get user;
+ String get id; String get text; List<Comment>? get replies; Comment? get parent; Map<String, Comment>? get mentions;@luthorForwardRef User? get user;
 /// Create a copy of Comment
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -327,16 +313,21 @@ $CommentCopyWith<Comment> get copyWith => _$CommentCopyWithImpl<Comment>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Comment&&(identical(other.id, id) || other.id == id)&&(identical(other.text, text) || other.text == text)&&const DeepCollectionEquality().equals(other.replies, replies)&&(identical(other.parent, parent) || other.parent == parent)&&const DeepCollectionEquality().equals(other.mentions, mentions)&&(identical(other.user, user) || other.user == user));
+  final _this = this as Comment;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Comment&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.text, _this.text) || other.text == _this.text)&&const DeepCollectionEquality().equals(other.replies, _this.replies)&&(identical(other.parent, _this.parent) || other.parent == _this.parent)&&const DeepCollectionEquality().equals(other.mentions, _this.mentions)&&(identical(other.user, _this.user) || other.user == _this.user));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,text,const DeepCollectionEquality().hash(replies),parent,const DeepCollectionEquality().hash(mentions),user);
+int get hashCode {
+  final _this = this as Comment;
+  return Object.hash(runtimeType,_this.id,_this.text,const DeepCollectionEquality().hash(_this.replies),_this.parent,const DeepCollectionEquality().hash(_this.mentions),_this.user);
+}
 
 @override
 String toString() {
-  return 'Comment(id: $id, text: $text, replies: $replies, parent: $parent, mentions: $mentions, user: $user)';
+  final _this = this as Comment;
+  return 'Comment(id: ${_this.id}, text: ${_this.text}, replies: ${_this.replies}, parent: ${_this.parent}, mentions: ${_this.mentions}, user: ${_this.user})';
 }
 
 
@@ -365,7 +356,7 @@ class _$CommentCopyWithImpl<$Res>
 /// Create a copy of Comment
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? text = null,Object? replies = freezed,Object? parent = freezed,Object? mentions = freezed,Object? user = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(Comment(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,text: null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
 as String,replies: freezed == replies ? _self.replies : replies // ignore: cast_nullable_to_non_nullable
@@ -537,14 +528,12 @@ return $default(_that.id,_that.text,_that.replies,_that.parent,_that.mentions,_t
 @JsonSerializable()
 
 class _Comment implements Comment {
-  const _Comment({required this.id, required this.text, final  List<Comment>? replies, this.parent, final  Map<String, Comment>? mentions, @luthorForwardRef this.user}): _replies = replies,_mentions = mentions;
+  const _Comment({required this.id, required this.text,  List<Comment>? replies, this.parent,  Map<String, Comment>? mentions, @luthorForwardRef this.user}): _replies = replies,_mentions = mentions;
   factory _Comment.fromJson(Map<String, dynamic> json) => _$CommentFromJson(json);
 
 @override final  String id;
 @override final  String text;
-// Automatic detection: List<Comment> is automatically detected as self-reference
  final  List<Comment>? _replies;
-// Automatic detection: List<Comment> is automatically detected as self-reference
 @override List<Comment>? get replies {
   final value = _replies;
   if (value == null) return null;
@@ -553,13 +542,8 @@ class _Comment implements Comment {
   return EqualUnmodifiableListView(value);
 }
 
-// Direct self-reference: Comment? parent is also automatically detected
 @override final  Comment? parent;
-// Nested self-reference: Map<String, Comment> is auto-detected because
-// Comment (the value type) matches the enclosing class
  final  Map<String, Comment>? _mentions;
-// Nested self-reference: Map<String, Comment> is auto-detected because
-// Comment (the value type) matches the enclosing class
 @override Map<String, Comment>? get mentions {
   final value = _mentions;
   if (value == null) return null;
@@ -568,9 +552,6 @@ class _Comment implements Comment {
   return EqualUnmodifiableMapView(value);
 }
 
-// Cross-class circular reference: User.comments contains List<Comment>,
-// but from Comment's perspective, we only see User (not Comment), so auto-detection fails.
-// Explicit annotation is required.
 @override@luthorForwardRef final  User? user;
 
 /// Create a copy of Comment
@@ -586,16 +567,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Comment&&(identical(other.id, id) || other.id == id)&&(identical(other.text, text) || other.text == text)&&const DeepCollectionEquality().equals(other._replies, _replies)&&(identical(other.parent, parent) || other.parent == parent)&&const DeepCollectionEquality().equals(other._mentions, _mentions)&&(identical(other.user, user) || other.user == user));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Comment&&(identical(other.id, id) || other.id == id)&&(identical(other.text, text) || other.text == text)&&const DeepCollectionEquality().equals(other.replies, _replies)&&(identical(other.parent, parent) || other.parent == parent)&&const DeepCollectionEquality().equals(other.mentions, _mentions)&&(identical(other.user, user) || other.user == user));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,text,const DeepCollectionEquality().hash(_replies),parent,const DeepCollectionEquality().hash(_mentions),user);
+int get hashCode {
+    return Object.hash(runtimeType,id,text,const DeepCollectionEquality().hash(_replies),parent,const DeepCollectionEquality().hash(_mentions),user);
+}
 
 @override
 String toString() {
-  return 'Comment(id: $id, text: $text, replies: $replies, parent: $parent, mentions: $mentions, user: $user)';
+    return 'Comment(id: $id, text: $text, replies: $replies, parent: $parent, mentions: $mentions, user: $user)';
 }
 
 

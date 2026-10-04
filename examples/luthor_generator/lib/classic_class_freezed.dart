@@ -10,9 +10,7 @@ part 'classic_class_freezed.g.dart';
 class ClassicClassFreezed with _$ClassicClassFreezed {
   ClassicClassFreezed({@HasMin(3) required this.name, required this.age});
 
-  @override
   final String name;
-  @override
   final int age;
 
   factory ClassicClassFreezed.fromJson(Map<String, dynamic> json) =>

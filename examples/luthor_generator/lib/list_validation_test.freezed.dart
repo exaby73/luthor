@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'list_validation_test.dart';
@@ -9,17 +9,14 @@ part of 'list_validation_test.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$ListValidationTest {
 
-// Test case 1: List with nullable primitive types
- List<String?> get nullableStrings; List<int?> get nullableInts;// Test case 2: List with custom objects
- List<AnotherSample> get customObjects;// Test case 3: List with nullable custom objects
- List<AnotherSample?> get nullableCustomObjects;// Test case 4: Optional lists with nullable elements
- List<String?>? get optionalNullableStrings;
+ List<String?> get nullableStrings; List<int?> get nullableInts; List<AnotherSample> get customObjects; List<AnotherSample?> get nullableCustomObjects; List<String?>? get optionalNullableStrings;
 /// Create a copy of ListValidationTest
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -32,16 +29,21 @@ $ListValidationTestCopyWith<ListValidationTest> get copyWith => _$ListValidation
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListValidationTest&&const DeepCollectionEquality().equals(other.nullableStrings, nullableStrings)&&const DeepCollectionEquality().equals(other.nullableInts, nullableInts)&&const DeepCollectionEquality().equals(other.customObjects, customObjects)&&const DeepCollectionEquality().equals(other.nullableCustomObjects, nullableCustomObjects)&&const DeepCollectionEquality().equals(other.optionalNullableStrings, optionalNullableStrings));
+  final _this = this as ListValidationTest;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListValidationTest&&const DeepCollectionEquality().equals(other.nullableStrings, _this.nullableStrings)&&const DeepCollectionEquality().equals(other.nullableInts, _this.nullableInts)&&const DeepCollectionEquality().equals(other.customObjects, _this.customObjects)&&const DeepCollectionEquality().equals(other.nullableCustomObjects, _this.nullableCustomObjects)&&const DeepCollectionEquality().equals(other.optionalNullableStrings, _this.optionalNullableStrings));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(nullableStrings),const DeepCollectionEquality().hash(nullableInts),const DeepCollectionEquality().hash(customObjects),const DeepCollectionEquality().hash(nullableCustomObjects),const DeepCollectionEquality().hash(optionalNullableStrings));
+int get hashCode {
+  final _this = this as ListValidationTest;
+  return Object.hash(runtimeType,const DeepCollectionEquality().hash(_this.nullableStrings),const DeepCollectionEquality().hash(_this.nullableInts),const DeepCollectionEquality().hash(_this.customObjects),const DeepCollectionEquality().hash(_this.nullableCustomObjects),const DeepCollectionEquality().hash(_this.optionalNullableStrings));
+}
 
 @override
 String toString() {
-  return 'ListValidationTest(nullableStrings: $nullableStrings, nullableInts: $nullableInts, customObjects: $customObjects, nullableCustomObjects: $nullableCustomObjects, optionalNullableStrings: $optionalNullableStrings)';
+  final _this = this as ListValidationTest;
+  return 'ListValidationTest(nullableStrings: ${_this.nullableStrings}, nullableInts: ${_this.nullableInts}, customObjects: ${_this.customObjects}, nullableCustomObjects: ${_this.nullableCustomObjects}, optionalNullableStrings: ${_this.optionalNullableStrings})';
 }
 
 
@@ -70,7 +72,7 @@ class _$ListValidationTestCopyWithImpl<$Res>
 /// Create a copy of ListValidationTest
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? nullableStrings = null,Object? nullableInts = null,Object? customObjects = null,Object? nullableCustomObjects = null,Object? optionalNullableStrings = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(ListValidationTest(
 nullableStrings: null == nullableStrings ? _self.nullableStrings : nullableStrings // ignore: cast_nullable_to_non_nullable
 as List<String?>,nullableInts: null == nullableInts ? _self.nullableInts : nullableInts // ignore: cast_nullable_to_non_nullable
 as List<int?>,customObjects: null == customObjects ? _self.customObjects : customObjects // ignore: cast_nullable_to_non_nullable
@@ -217,12 +219,10 @@ return $default(_that.nullableStrings,_that.nullableInts,_that.customObjects,_th
 @JsonSerializable()
 
 class _ListValidationTest implements ListValidationTest {
-  const _ListValidationTest({required final  List<String?> nullableStrings, required final  List<int?> nullableInts, required final  List<AnotherSample> customObjects, required final  List<AnotherSample?> nullableCustomObjects, final  List<String?>? optionalNullableStrings}): _nullableStrings = nullableStrings,_nullableInts = nullableInts,_customObjects = customObjects,_nullableCustomObjects = nullableCustomObjects,_optionalNullableStrings = optionalNullableStrings;
+  const _ListValidationTest({required  List<String?> nullableStrings, required  List<int?> nullableInts, required  List<AnotherSample> customObjects, required  List<AnotherSample?> nullableCustomObjects,  List<String?>? optionalNullableStrings}): _nullableStrings = nullableStrings,_nullableInts = nullableInts,_customObjects = customObjects,_nullableCustomObjects = nullableCustomObjects,_optionalNullableStrings = optionalNullableStrings;
   factory _ListValidationTest.fromJson(Map<String, dynamic> json) => _$ListValidationTestFromJson(json);
 
-// Test case 1: List with nullable primitive types
  final  List<String?> _nullableStrings;
-// Test case 1: List with nullable primitive types
 @override List<String?> get nullableStrings {
   if (_nullableStrings is EqualUnmodifiableListView) return _nullableStrings;
   // ignore: implicit_dynamic_type
@@ -236,27 +236,21 @@ class _ListValidationTest implements ListValidationTest {
   return EqualUnmodifiableListView(_nullableInts);
 }
 
-// Test case 2: List with custom objects
  final  List<AnotherSample> _customObjects;
-// Test case 2: List with custom objects
 @override List<AnotherSample> get customObjects {
   if (_customObjects is EqualUnmodifiableListView) return _customObjects;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_customObjects);
 }
 
-// Test case 3: List with nullable custom objects
  final  List<AnotherSample?> _nullableCustomObjects;
-// Test case 3: List with nullable custom objects
 @override List<AnotherSample?> get nullableCustomObjects {
   if (_nullableCustomObjects is EqualUnmodifiableListView) return _nullableCustomObjects;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_nullableCustomObjects);
 }
 
-// Test case 4: Optional lists with nullable elements
  final  List<String?>? _optionalNullableStrings;
-// Test case 4: Optional lists with nullable elements
 @override List<String?>? get optionalNullableStrings {
   final value = _optionalNullableStrings;
   if (value == null) return null;
@@ -279,16 +273,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ListValidationTest&&const DeepCollectionEquality().equals(other._nullableStrings, _nullableStrings)&&const DeepCollectionEquality().equals(other._nullableInts, _nullableInts)&&const DeepCollectionEquality().equals(other._customObjects, _customObjects)&&const DeepCollectionEquality().equals(other._nullableCustomObjects, _nullableCustomObjects)&&const DeepCollectionEquality().equals(other._optionalNullableStrings, _optionalNullableStrings));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ListValidationTest&&const DeepCollectionEquality().equals(other.nullableStrings, _nullableStrings)&&const DeepCollectionEquality().equals(other.nullableInts, _nullableInts)&&const DeepCollectionEquality().equals(other.customObjects, _customObjects)&&const DeepCollectionEquality().equals(other.nullableCustomObjects, _nullableCustomObjects)&&const DeepCollectionEquality().equals(other.optionalNullableStrings, _optionalNullableStrings));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_nullableStrings),const DeepCollectionEquality().hash(_nullableInts),const DeepCollectionEquality().hash(_customObjects),const DeepCollectionEquality().hash(_nullableCustomObjects),const DeepCollectionEquality().hash(_optionalNullableStrings));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_nullableStrings),const DeepCollectionEquality().hash(_nullableInts),const DeepCollectionEquality().hash(_customObjects),const DeepCollectionEquality().hash(_nullableCustomObjects),const DeepCollectionEquality().hash(_optionalNullableStrings));
+}
 
 @override
 String toString() {
-  return 'ListValidationTest(nullableStrings: $nullableStrings, nullableInts: $nullableInts, customObjects: $customObjects, nullableCustomObjects: $nullableCustomObjects, optionalNullableStrings: $optionalNullableStrings)';
+    return 'ListValidationTest(nullableStrings: $nullableStrings, nullableInts: $nullableInts, customObjects: $customObjects, nullableCustomObjects: $nullableCustomObjects, optionalNullableStrings: $optionalNullableStrings)';
 }
 
 

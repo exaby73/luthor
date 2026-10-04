@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'auto_generation_test.dart';
@@ -9,6 +9,7 @@ part of 'auto_generation_test.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $ExternalUserCopyWith<ExternalUser> get copyWith => _$ExternalUserCopyWithImpl<E
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ExternalUser&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.age, age) || other.age == age));
+  final _this = this as ExternalUser;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ExternalUser&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.email, _this.email) || other.email == _this.email)&&(identical(other.age, _this.age) || other.age == _this.age));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,email,age);
+int get hashCode {
+  final _this = this as ExternalUser;
+  return Object.hash(runtimeType,_this.name,_this.email,_this.age);
+}
 
 @override
 String toString() {
-  return 'ExternalUser(name: $name, email: $email, age: $age)';
+  final _this = this as ExternalUser;
+  return 'ExternalUser(name: ${_this.name}, email: ${_this.email}, age: ${_this.age})';
 }
 
 
@@ -66,7 +72,7 @@ class _$ExternalUserCopyWithImpl<$Res>
 /// Create a copy of ExternalUser
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? email = null,Object? age = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(ExternalUser(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,age: freezed == age ? _self.age : age // ignore: cast_nullable_to_non_nullable
@@ -231,16 +237,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExternalUser&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.age, age) || other.age == age));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExternalUser&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.age, age) || other.age == age));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,email,age);
+int get hashCode {
+    return Object.hash(runtimeType,name,email,age);
+}
 
 @override
 String toString() {
-  return 'ExternalUser(name: $name, email: $email, age: $age)';
+    return 'ExternalUser(name: $name, email: $email, age: $age)';
 }
 
 
@@ -297,16 +305,21 @@ $UserProfileCopyWith<UserProfile> get copyWith => _$UserProfileCopyWithImpl<User
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.user, user) || other.user == user)&&(identical(other.user2, user2) || other.user2 == user2)&&const DeepCollectionEquality().equals(other.friends, friends)&&const DeepCollectionEquality().equals(other.tags, tags)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  final _this = this as UserProfile;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserProfile&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.user, _this.user) || other.user == _this.user)&&(identical(other.user2, _this.user2) || other.user2 == _this.user2)&&const DeepCollectionEquality().equals(other.friends, _this.friends)&&const DeepCollectionEquality().equals(other.tags, _this.tags)&&(identical(other.createdAt, _this.createdAt) || other.createdAt == _this.createdAt)&&(identical(other.updatedAt, _this.updatedAt) || other.updatedAt == _this.updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,user,user2,const DeepCollectionEquality().hash(friends),const DeepCollectionEquality().hash(tags),createdAt,updatedAt);
+int get hashCode {
+  final _this = this as UserProfile;
+  return Object.hash(runtimeType,_this.id,_this.user,_this.user2,const DeepCollectionEquality().hash(_this.friends),const DeepCollectionEquality().hash(_this.tags),_this.createdAt,_this.updatedAt);
+}
 
 @override
 String toString() {
-  return 'UserProfile(id: $id, user: $user, user2: $user2, friends: $friends, tags: $tags, createdAt: $createdAt, updatedAt: $updatedAt)';
+  final _this = this as UserProfile;
+  return 'UserProfile(id: ${_this.id}, user: ${_this.user}, user2: ${_this.user2}, friends: ${_this.friends}, tags: ${_this.tags}, createdAt: ${_this.createdAt}, updatedAt: ${_this.updatedAt})';
 }
 
 
@@ -335,7 +348,7 @@ class _$UserProfileCopyWithImpl<$Res>
 /// Create a copy of UserProfile
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? user = null,Object? user2 = freezed,Object? friends = freezed,Object? tags = null,Object? createdAt = null,Object? updatedAt = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(UserProfile(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as ExternalUser,user2: freezed == user2 ? _self.user2 : user2 // ignore: cast_nullable_to_non_nullable
@@ -505,7 +518,7 @@ return $default(_that.id,_that.user,_that.user2,_that.friends,_that.tags,_that.c
 @JsonSerializable()
 
 class _UserProfile implements UserProfile {
-  const _UserProfile({required this.id, required this.user, this.user2, final  List<ExternalUser>? friends, required final  List<String> tags, required this.createdAt, this.updatedAt}): _friends = friends,_tags = tags;
+  const _UserProfile({required this.id, required this.user, this.user2,  List<ExternalUser>? friends, required  List<String> tags, required this.createdAt, this.updatedAt}): _friends = friends,_tags = tags;
   factory _UserProfile.fromJson(Map<String, dynamic> json) => _$UserProfileFromJson(json);
 
 @override final  int id;
@@ -543,16 +556,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.user, user) || other.user == user)&&(identical(other.user2, user2) || other.user2 == user2)&&const DeepCollectionEquality().equals(other._friends, _friends)&&const DeepCollectionEquality().equals(other._tags, _tags)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.user, user) || other.user == user)&&(identical(other.user2, user2) || other.user2 == user2)&&const DeepCollectionEquality().equals(other.friends, _friends)&&const DeepCollectionEquality().equals(other.tags, _tags)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,user,user2,const DeepCollectionEquality().hash(_friends),const DeepCollectionEquality().hash(_tags),createdAt,updatedAt);
+int get hashCode {
+    return Object.hash(runtimeType,id,user,user2,const DeepCollectionEquality().hash(_friends),const DeepCollectionEquality().hash(_tags),createdAt,updatedAt);
+}
 
 @override
 String toString() {
-  return 'UserProfile(id: $id, user: $user, user2: $user2, friends: $friends, tags: $tags, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'UserProfile(id: $id, user: $user, user2: $user2, friends: $friends, tags: $tags, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 

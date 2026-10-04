@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'forward_ref_example.dart';
@@ -9,6 +9,7 @@ part of 'forward_ref_example.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $NodeCopyWith<Node> get copyWith => _$NodeCopyWithImpl<Node>(this as Node, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Node&&(identical(other.value, value) || other.value == value)&&const DeepCollectionEquality().equals(other.children, children));
+  final _this = this as Node;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Node&&(identical(other.value, _this.value) || other.value == _this.value)&&const DeepCollectionEquality().equals(other.children, _this.children));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,value,const DeepCollectionEquality().hash(children));
+int get hashCode {
+  final _this = this as Node;
+  return Object.hash(runtimeType,_this.value,const DeepCollectionEquality().hash(_this.children));
+}
 
 @override
 String toString() {
-  return 'Node(value: $value, children: $children)';
+  final _this = this as Node;
+  return 'Node(value: ${_this.value}, children: ${_this.children})';
 }
 
 
@@ -66,7 +72,7 @@ class _$NodeCopyWithImpl<$Res>
 /// Create a copy of Node
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? value = null,Object? children = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(Node(
 value: null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
 as String,children: freezed == children ? _self.children : children // ignore: cast_nullable_to_non_nullable
 as List<Node>?,
@@ -210,7 +216,7 @@ return $default(_that.value,_that.children);case _:
 @JsonSerializable()
 
 class _Node implements Node {
-  const _Node({required this.value, final  List<Node>? children}): _children = children;
+  const _Node({required this.value,  List<Node>? children}): _children = children;
   factory _Node.fromJson(Map<String, dynamic> json) => _$NodeFromJson(json);
 
 @override final  String value;
@@ -237,16 +243,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Node&&(identical(other.value, value) || other.value == value)&&const DeepCollectionEquality().equals(other._children, _children));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Node&&(identical(other.value, value) || other.value == value)&&const DeepCollectionEquality().equals(other.children, _children));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,value,const DeepCollectionEquality().hash(_children));
+int get hashCode {
+    return Object.hash(runtimeType,value,const DeepCollectionEquality().hash(_children));
+}
 
 @override
 String toString() {
-  return 'Node(value: $value, children: $children)';
+    return 'Node(value: $value, children: $children)';
 }
 
 

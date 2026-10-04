@@ -23,12 +23,12 @@ Map<String, dynamic> _$ClassicClassFreezedToJson(
 // ignore: constant_identifier_names
 const ClassicClassFreezedSchemaKeys = (name: "name", age: "age");
 
-Validator $ClassicClassFreezedSchema = l
-    .withName('ClassicClassFreezed')
-    .schema({
-      ClassicClassFreezedSchemaKeys.name: l.string().min(3).required(),
-      ClassicClassFreezedSchemaKeys.age: l.int().required(),
-    });
+Validator $ClassicClassFreezedSchema = l.withName('ClassicClassFreezed').schema(
+  {
+    ClassicClassFreezedSchemaKeys.name: l.string().min(3).required(),
+    ClassicClassFreezedSchemaKeys.age: l.int().required(),
+  },
+);
 
 SchemaValidationResult<ClassicClassFreezed> $ClassicClassFreezedValidate(
   Map<String, dynamic> json,

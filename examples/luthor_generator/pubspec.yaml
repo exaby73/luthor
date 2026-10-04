@@ -1,0 +1,28 @@
+name: luthor_generator_example
+description: A sample command-line application.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ^3.13.0
+
+dependencies:
+  dart_mappable: ^4.10.0
+  freezed_annotation: ^3.1.0
+  json_annotation: ^4.12.0
+  luthor:
+    path: ../../packages/luthor
+
+dev_dependencies:
+  build_runner: ^2.16.1
+  dart_mappable_builder: ^4.10.0
+  freezed: ^4.0.2
+  json_serializable: ^6.14.1
+  lints: ^6.1.0
+  luthor_generator:
+    path: ../../packages/luthor_generator
+  test: ^1.32.0
+
+dependency_overrides:
+  luthor:
+    path: ../../packages/luthor

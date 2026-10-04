@@ -41,13 +41,13 @@ Validator $SignupFormSchema = l.withName('SignupForm').schema({
   SignupFormSchemaKeys.password: l.string().min(8).required(),
   SignupFormSchemaKeys.confirmPassword: l
       .string()
-      .customWithSchema(passwordsMatch, message: 'Passwords must match')
+      .customWithSchema(passwordsMatch, message: "Passwords must match")
       .required(),
   SignupFormSchemaKeys.minAge: l.int().required(),
   SignupFormSchemaKeys.maxAge: l.int()
       .customWithSchema(
         isGreaterThanMinAge,
-        message: 'Max age must be greater than min age',
+        message: "Max age must be greater than min age",
       )
       .required(),
 });

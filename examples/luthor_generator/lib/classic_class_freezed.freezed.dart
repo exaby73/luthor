@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'classic_class_freezed.dart';
@@ -9,13 +9,14 @@ part of 'classic_class_freezed.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$ClassicClassFreezed {
 
- String get name; int get age;
+
 /// Create a copy of ClassicClassFreezed
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +27,21 @@ $ClassicClassFreezedCopyWith<ClassicClassFreezed> get copyWith => _$ClassicClass
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ClassicClassFreezed&&(identical(other.name, name) || other.name == name)&&(identical(other.age, age) || other.age == age));
+  final _this = this as ClassicClassFreezed;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ClassicClassFreezed&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.age, _this.age) || other.age == _this.age));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,age);
+int get hashCode {
+  final _this = this as ClassicClassFreezed;
+  return Object.hash(runtimeType,_this.name,_this.age);
+}
 
 @override
 String toString() {
-  return 'ClassicClassFreezed(name: $name, age: $age)';
+  final _this = this as ClassicClassFreezed;
+  return 'ClassicClassFreezed(name: ${_this.name}, age: ${_this.age})';
 }
 
 

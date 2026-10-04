@@ -48,13 +48,13 @@ Validator $AnotherSampleSchema = l.withName('AnotherSample').schema({
   AnotherSampleSchemaKeys.name: l.string(),
   AnotherSampleSchemaKeys.email: l
       .string()
-      .email(message: 'Invalid email')
+      .email(message: "Invalid email")
       .required(),
   AnotherSampleSchemaKeys.ip: l.string().ip(version: IpVersion.v4),
   AnotherSampleSchemaKeys.password: l.string().min(8).required(),
   AnotherSampleSchemaKeys.type: l.string(),
   AnotherSampleSchemaKeys.url: l.string().url(
-    allowedSchemes: ['http', 'https'],
+    allowedSchemes: ["http", "https"],
   ),
 });
 

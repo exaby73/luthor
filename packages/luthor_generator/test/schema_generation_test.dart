@@ -62,6 +62,30 @@ void main() {
     test('When generated code is analyzed then it compiles', () async {
       await expectGeneratedCodeCompiles(validProfileSource);
     });
+
+    group('When the validate function runs', () {
+      late Map<String, Object?> results;
+
+      setUpAll(() async {
+        results = await evaluateGenerated(validProfileSource, {
+          'valid':
+              r'''$ProfileValidate({'email_address': 'a@b.co', 'age': 20, 'display"name': 'Al'})''',
+          'invalid':
+              r'''$ProfileValidate({'email_address': 'nope', 'age': 3, 'display"name': 'Al'})''',
+        });
+      });
+
+      test('Then a valid payload succeeds', () {
+        expect(results['valid'], 'success');
+      });
+
+      test('Then an invalid payload reports each failing field', () {
+        expect(results['invalid'], {
+          'email_address': ['email_address must be a valid email address'],
+          'age': ['age must be greater than or equal to 18'],
+        });
+      });
+    });
   });
 
   group('Given a dart_mappable class annotated with @luthor', () {

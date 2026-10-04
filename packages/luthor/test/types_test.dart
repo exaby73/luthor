@@ -68,6 +68,24 @@ void main() {
     });
   });
 
+  group('Given the exported validator types', () {
+    test(
+      'When annotating variables with them then the factory results fit',
+      () {
+        final IntValidator<int?> age = l.int();
+        final DoubleValidator<double> price = l.double().required();
+        final NumValidator<num?> score = l.num();
+        final StringValidator name = l.string();
+        final SchemaValidator user = l.schema({'age': age, 'name': name});
+        final ListValidator<num?, List<num?>?> scores = l.list(score);
+
+        expect(price.validate(1.5), isValidWith(1.5));
+        expect(user.validate({'age': 1}).isValid, isTrue);
+        expect(scores.validate([1, 2.5]).isValid, isTrue);
+      },
+    );
+  });
+
   group('Given required validators', () {
     test('When validating null then the required message is returned', () {
       expect(

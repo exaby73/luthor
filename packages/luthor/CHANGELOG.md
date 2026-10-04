@@ -3,6 +3,102 @@
 - **BREAKING**: Require Dart 3.11 or later (Flutter 3.41 or later).
 - **FEAT**: Allow `meta` `^1.17.0` so `luthor` resolves alongside the `meta` version pinned by Flutter 3.41.
 
+## Validators
+
+- **BREAKING**: `l` is now a `ValidatorFactory`, and type methods exist only on `l`, so `l.string().int()` no longer compiles. `l.custom()`, `l.customWithSchema()`, `l.required()` and `l.withName()` are removed from the factory: start from a type, such as `l.any().custom(...)`.
+- **BREAKING**: Rename `l.number()` to `l.num()` and `l.boolean()` to `l.bool()`.
+- **BREAKING**: Validators are generic over their output type. `l.string()` validates to `String?`, and `.required()` narrows it to `String`, so success data is typed without code generation. The typed classes are `StringValidator`, `NumberValidator` (with the `IntValidator`, `DoubleValidator` and `NumValidator` typedefs), `BoolValidator`, `AnyValidator`, `NullValidator`, `FileValidator`, `ListValidator`, `MapValidator`, `SchemaValidator`, `UnionValidator` and `OneOfValidator`. The public `Validator(initialValidations:)` constructor is removed.
+- **BREAKING**: Every modifier returns the validator's own type, so modifiers chain in any order: `l.string().required().min(3)` compiles.
+- **BREAKING**: `withName()` returns a new validator instead of renaming the receiver.
+- **BREAKING**: `custom()` and `customWithSchema()` functions receive the typed value, such as a `String`, and are not called for `null`. Their typedefs are `CustomValidator<T>` and `SchemaCustomValidator<T>`.
+- **BREAKING**: `customWithSchema()` functions receive `SchemaData`, a read-only map of the sibling fields with a `root` getter for the outermost schema. Inside a list, they receive the data of the schema that holds the list. Outside a schema, they receive empty data instead of passing automatically.
+- **BREAKING**: `l.list(validators: [...])` becomes `l.list(element)`, with a single element validator. Use `l.list(l.any())` for any elements and `l.list(l.union([...]))` for elements that may match one of several validators.
+- **BREAKING**: `regex()` takes a `RegExp` instead of a `String`, so flags such as `caseSensitive` apply and an invalid pattern fails when the validator is built.
+- **BREAKING**: Schemas strip unknown keys from success data by default. `.passthrough()` keeps them and `.strict()` reports an `unrecognizedKey` issue for each one.
+- **BREAKING**: Validation stops after a failed type check, so `l.int().min(1).validate('5')` reports one error instead of three.
+- **BREAKING**: `l.nullValue()` has no `.required()`, since a required value can never be `null`.
+- **BREAKING**: Stop exporting the `Validation` class, the concrete `*Validation` classes and internal members (`validations`, `schemaValidation`, `hasRequiredValidation`, `setSchemaDataForValidations`, `validateValueWithFieldName`, `validateSchemaWithFieldName` and the `validatingSchemas` parameters). `forwardRef()` returns a public `ValidatorReference<O>`.
+- **FEAT**: Add `l.union([...])`, which accepts a value that passes any of its options (closes #24, #25 and #26).
+- **FEAT**: Add `l.oneOf([...])`, which accepts only a fixed list of values, such as the serialized values of an enum.
+- **FEAT**: Add `.finite()` to number validators. `NaN` and infinity are doubles, so they pass `l.double()` and `l.num()` unless `.finite()` is present.
+- **FEAT**: Add an `accept:` predicate to `l.file()` for package types such as `XFile`.
+- **FEAT**: Add `message` and `messageBuilder` to `l.schema()` for the "must be a map" error.
+- **FEAT**: Add `l.maxDepth` (default 512). Input nested deeper fails with a `tooDeep` issue.
+
+## Results and messages
+
+- **BREAKING**: Replace `SingleValidationResult` and `SchemaValidationResult`, and their `Success` and `Error` variants, with one sealed `ValidationResult<T>`: `ValidationSuccess<T>(data)` or `ValidationFailure<T>(input, issues)`.
+- **BREAKING**: Rename `validateValue(value)` to `validate(input)`. It accepts any input and never throws.
+- **BREAKING**: `validateSchema(input, fromJson:)` requires `fromJson` and accepts any input. Without `fromJson`, use `validate`, whose data is typed as `Map<String, Object?>`. A `fromJson` that throws now produces a `fromJsonFailed` issue instead of an exception, and `null` input produces a `required` issue.
+- **BREAKING**: Errors are `ValidationIssue`s, each with an `IssueCode` code, a path, a message, params and a field name. The error map (`errors`) is derived from them and is flat, keyed by error path such as `'address.city'` or `'items.1.id'`. The `[DEFAULT]`, `keys` and `values` keys and the `"a.b: msg"` strings are gone.
+- **BREAKING**: Errors from `.custom()` on a schema are object-level errors at the schema's own path (`''` at the root), so they no longer collide with field errors.
+- **BREAKING**: List element errors are reported at the element's index. Map value errors are reported at the key's path, and map key errors are `invalidKey` issues at the map's path.
+- **BREAKING**: `getError(path)` returns the first error at exactly that path, and `null` when there is none. It never throws.
+- **BREAKING**: Replace `messageFn: String? Function()` with `messageBuilder: String Function(ValidationIssue issue)` on every method. The issue carries the default message, code, path, field name and params. `message:` stays as a plain-string shorthand.
+- **BREAKING**: Default messages change in a few places: "must be a Map" is now "must be a map", the regex message names the pattern, and the list message no longer says "or does not match the validations".
+- **FEAT**: Add `l.messageBuilder`, one global hook that builds every message without a per-validation `message` or `messageBuilder`, for example for i18n.
+- **FEAT**: Add `messages`, `errors`, `getError()` and `getErrors()` to every result, so they can be read without matching on the result first.
+
+## Annotations
+
+- **BREAKING**: Merge `HasMinDouble`, `HasMinNumber`, `HasMaxDouble` and `HasMaxNumber` into `HasMin` and `HasMax`, which take a `num`. On a `String` field the value is the length; on a number field it is the value.
+- **BREAKING**: Replace the `messageFn` parameter of every annotation with `messageBuilder`. It must be a top-level or static function, since annotation arguments are constants.
+- **BREAKING**: `WithCustomValidator` takes a `bool Function(Never value)` and `WithSchemaCustomValidator` a `bool Function(Never value, SchemaData data)`, so typed functions such as `bool isEven(int value)` can be used.
+- **BREAKING**: Annotation classes are `final`.
+- **FEAT**: Add the `isIp` constant.
+- **FEAT**: Add `caseSensitive`, `multiLine`, `unicode` and `dotAll` to `MatchRegex`, and `accept` to `IsFile`.
+
+## Fixes
+
+- **FIX**: Validate every level of recursive schemas built with `forwardRef()` or mutual references, instead of skipping nested levels.
+- **FIX**: Keep a parent's errors when a schema recurses through a list; validations no longer store state between calls.
+- **FIX**: Return a `tooDeep` issue for deeply nested input instead of throwing a `StackOverflowError`.
+- **FIX**: Report errors for each list element instead of one generic message, and use the field name in list messages.
+- **FIX**: Stop object-level schema errors from colliding with field errors or throwing a cast error.
+- **FIX**: Match IP addresses against the whole string, and accept `::1` and `::`.
+- **FIX**: Make error shapes independent of a map's runtime type arguments, so `Map<dynamic, dynamic>` input behaves like `Map<String, Object?>`.
+- **FIX**: Stop `customWithSchema()` from reusing data from an earlier validation.
+- **FIX**: Use the field name in the "must be a map" message of nested schemas.
+- **FIX**: Distinguish map key errors from value errors, and keep entry errors when another validation also fails.
+- **FIX**: Honour the message builder in `ip()`.
+- **FIX**: Anchor the `cuid()` pattern at the start of the string.
+- **FIX**: Reject impossible dates and times in `dateTime()`, such as `2023-02-30` and `25:00`, and strings outside the ISO 8601 extended format.
+- **FIX**: Require a scheme in `uri()`, and compare allowed schemes case-insensitively.
+- **FIX**: Detect emoji with Unicode properties, so punctuation, currency and arrows fail and `❤️` and `1️⃣` pass.
+- **FIX**: Detect files structurally in `l.file()`, so files pass in minified web builds and classes named like `UserProfile` fail.
+- **FIX**: Throw an `ArgumentError` for negative lengths in `min()`, `max()` and `length()`, also in release builds.
+- **FIX**: Compile the built-in patterns once instead of on every validation.
+- **FIX**: Correct wrong documentation comments.
+
+## Migrating from 0.x
+
+| 0.x | 1.0 |
+| --- | --- |
+| `l.number()` | `l.num()` |
+| `l.boolean()` | `l.bool()` |
+| `v.validateValue(x)` | `v.validate(x)` |
+| `schema.validateSchema(map)` | `schema.validate(map)` |
+| `schema.validateSchema<User>(map, fromJson: User.fromJson)` | `schema.validateSchema(map, fromJson: User.fromJson)` |
+| `SingleValidationResult<T>`, `SchemaValidationResult<T>` | `ValidationResult<T>` |
+| `SingleValidationSuccess(data:)`, `SchemaValidationSuccess(data:)` | `ValidationSuccess(data)` |
+| `SingleValidationError(errors:)` | `ValidationFailure(messages:)` |
+| `SchemaValidationError(errors:)` | `ValidationFailure(errors:)` |
+| `(result as SchemaValidationError).getError('a.b')` | `result.getError('a.b')` |
+| `errors['[DEFAULT]']` | `result.getErrors('')` |
+| `l.list(validators: [v])` | `l.list(v)` |
+| `l.list(validators: [a, b])` | `l.list(l.union([a, b]))` |
+| `l.list()` | `l.list(l.any())` |
+| `l.custom(f)`, `l.required()` | `l.any().custom(f)`, `l.any().required()` |
+| `l.withName('x').string()` | `l.string().withName('x')` |
+| `l.string().regex(r'^\d+$')` | `l.string().regex(RegExp(r'^\d+$'))` |
+| `messageFn: () => 'text'` | `messageBuilder: (issue) => 'text'` |
+| `custom((Object? value) => ...)` | `custom((value) => ...)`, where `value` has the validator's type |
+| `Validator v = l.string()` | `StringValidator v = l.string()` |
+| `@HasMinDouble(1.5)`, `@HasMinNumber(1)` | `@HasMin(1.5)`, `@HasMin(1)` |
+| `@HasMaxDouble(1.5)`, `@HasMaxNumber(1)` | `@HasMax(1.5)`, `@HasMax(1)` |
+| `@IsEmail(messageFn: f)` | `@IsEmail(messageBuilder: f)`, where `f` takes a `ValidationIssue` |
+| `@MatchRegex(r'...')` | unchanged; the generator builds the `RegExp` |
+
 # 0.18.0
 
 - **FIX**: Keep all string and number modifier chains immutable so reusable validators are not mutated by later `.email()`, `.uuid()`, `.min()`, `.max()`, and related calls.

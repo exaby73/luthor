@@ -143,7 +143,7 @@ final class FieldValidators {
       );
     }
     if (type is InterfaceType && type.isDartCoreMap) {
-      final (key, _) = _forType(type.typeArguments[0], context);
+      final key = _forKey(type.typeArguments[0], context);
       final (value, _) = _forType(type.typeArguments[1], context);
       return (
         ValidatorExpr(MapOf(key, value), required: required),
@@ -165,6 +165,51 @@ final class FieldValidators {
       );
     }
     throw _unsupported(type, context);
+  }
+
+  ValidatorExpr _forKey(DartType type, _FieldContext context) {
+    ValidatorExpr string([List<String> modifiers = const []]) {
+      return ValidatorExpr(
+        const TypeEntry(runtime.EntryType.string),
+        modifiers: modifiers,
+        required: true,
+      );
+    }
+
+    if (type is DynamicType ||
+        type.isDartCoreString ||
+        type.isDartCoreObject ||
+        uriChecker.isExactlyType(type)) {
+      return string();
+    }
+    if (type.isDartCoreInt) {
+      return string([runtime.parsableKey('int', 'an integer')]);
+    }
+    if (bigIntChecker.isExactlyType(type)) {
+      return string([runtime.parsableKey('BigInt', 'an integer')]);
+    }
+    if (type.isDartCoreDouble || type.isDartCoreNum) {
+      return string([runtime.parsableKey('num', 'a number')]);
+    }
+    if (dateTimeChecker.isExactlyType(type)) {
+      return string([runtime.dateTime()]);
+    }
+    if (type.element case final EnumElement enumElement) {
+      final values = serializedEnumValues(enumElement);
+      return string([
+        runtime.allowedValues([
+          for (final value in values) dartStringLiteral('$value'),
+        ]),
+      ]);
+    }
+    throw InvalidGenerationSourceError(
+      'Luthor cannot validate field `${context.field.name}` of '
+      '`${context.owner.name}`: its map key type '
+      '`${type.getDisplayString()}` is not supported. JSON object keys are '
+      'strings, so luthor supports String, int, double, num, BigInt, '
+      'DateTime, Uri and enum keys.',
+      element: context.field.parameter,
+    );
   }
 
   InvalidGenerationSourceError _unsupported(

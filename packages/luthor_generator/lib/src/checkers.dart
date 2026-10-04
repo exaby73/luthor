@@ -59,6 +59,11 @@ const dateTimeChecker = TypeChecker.typeNamedLiterally(
   inPackage: 'core',
   inSdk: true,
 );
+const bigIntChecker = TypeChecker.typeNamedLiterally(
+  'BigInt',
+  inPackage: 'core',
+  inSdk: true,
+);
 const uriChecker = TypeChecker.typeNamedLiterally(
   'Uri',
   inPackage: 'core',

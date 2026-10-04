@@ -1,23 +1,24 @@
-class HasMax {
-  final String? message;
-  final String? Function()? messageFn;
-  final int max;
+import 'package:luthor/src/validation_issue.dart';
 
-  const HasMax(this.max, {this.message, this.messageFn});
-}
+/// Sets a maximum bound that depends on the annotated field's type.
+///
+/// On a `String` field, [max] is the maximum length, so it must be an
+/// `int`. On an `int`, `double` or `num` field, [max] is the inclusive
+/// maximum value. The generator emits `.max(max)` for the annotated
+/// field.
+final class HasMax {
+  /// Creates the annotation.
+  const HasMax(this.max, {this.message, this.messageBuilder});
 
-class HasMaxDouble {
-  final String? message;
-  final String? Function()? messageFn;
-  final double max;
-
-  const HasMaxDouble(this.max, {this.message, this.messageFn});
-}
-
-class HasMaxNumber {
-  final String? message;
-  final String? Function()? messageFn;
+  /// The maximum length of a string, or the maximum value of a number.
   final num max;
 
-  const HasMaxNumber(this.max, {this.message, this.messageFn});
+  /// The error message, replacing the default message.
+  final String? message;
+
+  /// Builds the error message from the issue.
+  ///
+  /// Annotation arguments are constants, so this must be a top-level or
+  /// static function, not a closure.
+  final MessageBuilder? messageBuilder;
 }

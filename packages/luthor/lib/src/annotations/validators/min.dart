@@ -1,23 +1,24 @@
-class HasMin {
-  final String? message;
-  final String? Function()? messageFn;
-  final int min;
+import 'package:luthor/src/validation_issue.dart';
 
-  const HasMin(this.min, {this.message, this.messageFn});
-}
+/// Sets a minimum bound that depends on the annotated field's type.
+///
+/// On a `String` field, [min] is the minimum length, so it must be an
+/// `int`. On an `int`, `double` or `num` field, [min] is the inclusive
+/// minimum value. The generator emits `.min(min)` for the annotated
+/// field.
+final class HasMin {
+  /// Creates the annotation.
+  const HasMin(this.min, {this.message, this.messageBuilder});
 
-class HasMinDouble {
-  final String? message;
-  final String? Function()? messageFn;
-  final double min;
-
-  const HasMinDouble(this.min, {this.message, this.messageFn});
-}
-
-class HasMinNumber {
-  final String? message;
-  final String? Function()? messageFn;
+  /// The minimum length of a string, or the minimum value of a number.
   final num min;
 
-  const HasMinNumber(this.min, {this.message, this.messageFn});
+  /// The error message, replacing the default message.
+  final String? message;
+
+  /// Builds the error message from the issue.
+  ///
+  /// Annotation arguments are constants, so this must be a top-level or
+  /// static function, not a closure.
+  final MessageBuilder? messageBuilder;
 }

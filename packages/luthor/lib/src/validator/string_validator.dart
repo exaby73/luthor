@@ -123,7 +123,12 @@ final class StringValidator<O extends String?> extends Validator<O>
     );
   }
 
-  /// Requires a string that [DateTime.tryParse] accepts.
+  /// Requires an ISO 8601 date or date-time in extended format, such as
+  /// `2026-06-17`, `2026-06-17 12:00` or `2026-06-17T12:00:00.000Z`.
+  ///
+  /// Impossible dates and times, such as `2023-02-30` or `25:00`, fail. The
+  /// basic format without separators (`20260617`) fails. Every accepted
+  /// string is also accepted by [DateTime.parse].
   StringValidator<O> dateTime({
     String? message,
     MessageBuilder? messageBuilder,
@@ -137,8 +142,11 @@ final class StringValidator<O extends String?> extends Validator<O>
     );
   }
 
-  /// Requires a string that parses as a URI, with a scheme in
-  /// [allowedSchemes] when given.
+  /// Requires an absolute URI: one with a scheme, such as `https://x.dev` or
+  /// `mailto:dev@x.dev`, and no whitespace.
+  ///
+  /// When [allowedSchemes] is given, the scheme must be one of them, compared
+  /// case-insensitively.
   StringValidator<O> uri({
     List<String>? allowedSchemes,
     String? message,
@@ -155,7 +163,7 @@ final class StringValidator<O extends String?> extends Validator<O>
   }
 
   /// Requires a URL with a scheme and a host, with a scheme in
-  /// [allowedSchemes] when given.
+  /// [allowedSchemes] when given, compared case-insensitively.
   ///
   /// The host and port are not checked further, so `http://exa_mple.com` and
   /// port `99999` pass.
@@ -174,7 +182,11 @@ final class StringValidator<O extends String?> extends Validator<O>
     );
   }
 
-  /// Requires a string made only of emoji.
+  /// Requires a string made only of emoji, including skin tones, keycaps,
+  /// flags and joined sequences such as `👨‍👩‍👧`.
+  ///
+  /// Symbols that only have a text presentation, such as `★` or `→`, fail
+  /// unless followed by the emoji variation selector `U+FE0F`.
   StringValidator<O> emoji({String? message, MessageBuilder? messageBuilder}) {
     return _with(
       IssueCode.invalidEmoji,
@@ -228,6 +240,10 @@ final class StringValidator<O extends String?> extends Validator<O>
 
   /// Requires an IP address of [version], or of either version when
   /// [version] is `null`.
+  ///
+  /// The whole string must be the address. IPv4 octets must not have leading
+  /// zeros. IPv6 accepts `::` compression, such as `::1` and `::`, and an
+  /// embedded IPv4 address, but not a zone such as `%eth0`.
   StringValidator<O> ip({
     IpVersion? version,
     String? message,

@@ -185,4 +185,221 @@ void main() {
       );
     });
   });
+
+  group('Given the ip modifier', () {
+    test('When the address is surrounded by other text then it fails', () {
+      final ip = l.string().ip();
+
+      for (final value in [
+        'abc 1.1.1.1 def',
+        '1.1.1.1.1',
+        '1.2.3.4/24',
+        '-1.2.3.4',
+        '2001:db8::1 junk',
+        'gggg::1',
+        '1:2:3:4:5:6:7:8:9',
+        'fe80::1%eth0',
+        '256.1.1.1',
+        '1.2.3',
+        '',
+      ]) {
+        expect(ip.validate(value).isValid, isFalse, reason: value);
+      }
+    });
+
+    test('When v4 is required then extra octets and leading zeros fail', () {
+      final ipv4 = l.string().ip(version: IpVersion.v4);
+
+      for (final value in [
+        '1.1.1.1.1',
+        'x 1.2.3.4 y',
+        '999.1.2.3.4',
+        '01.2.3.4',
+      ]) {
+        expect(ipv4.validate(value).isValid, isFalse, reason: value);
+      }
+      expect(ipv4.validate('::1').isValid, isFalse);
+    });
+
+    test('When the address is a loopback or unspecified IPv6 address then it '
+        'passes', () {
+      for (final version in [null, IpVersion.v6]) {
+        final ip = l.string().ip(version: version);
+
+        for (final value in ['::1', '::', '1::', '2001:db8::1', 'fe80::1']) {
+          expect(ip.validate(value).isValid, isTrue, reason: '$version $value');
+        }
+      }
+    });
+
+    test('When IPv6 embeds an IPv4 address then it passes', () {
+      expect(l.string().ip().validate('::ffff:192.168.1.1').isValid, isTrue);
+      expect(
+        l
+            .string()
+            .ip(version: IpVersion.v6)
+            .validate('1:2:3:4:5:6:7:8')
+            .isValid,
+        isTrue,
+      );
+    });
+  });
+
+  group('Given the cuid modifier', () {
+    test('When the cuid is not at the start then it fails', () {
+      final cuid = l.string().cuid();
+
+      for (final value in [
+        'hello cabcdefgh',
+        'xyzcabcdefgh',
+        '!!!!c12345678',
+      ]) {
+        expect(cuid.validate(value).isValid, isFalse, reason: value);
+      }
+    });
+
+    test('When the cuid starts with c in either case then it passes', () {
+      expect(
+        l.string().cuid().validate('cjld2cjxh0000qzrmn831i7rn').isValid,
+        isTrue,
+      );
+      expect(
+        l.string().cuid().validate('Cjld2cjxh0000qzrmn831i7rn').isValid,
+        isTrue,
+      );
+    });
+  });
+
+  group('Given the dateTime modifier', () {
+    test('When the date or time is impossible then it fails', () {
+      final dateTime = l.string().dateTime();
+
+      for (final value in [
+        '2023-02-30',
+        '2023-13-01',
+        '2023-00-10',
+        '2023-02-29',
+        '2023-01-01T25:00:00',
+        '2023-01-01T10:60:00',
+        '2023-01-01T10:00:60',
+        '2023-01-01T10:00:00+25:00',
+      ]) {
+        expect(dateTime.validate(value).isValid, isFalse, reason: value);
+      }
+    });
+
+    test(
+      'When the string is not in ISO 8601 extended format then it fails',
+      () {
+        final dateTime = l.string().dateTime();
+
+        for (final value in [
+          '20230101',
+          '2023',
+          '1',
+          '+002023-01-01',
+          '2023-1-1',
+          '2023-01-01T10',
+          ' 2023-01-01',
+          'abc',
+        ]) {
+          expect(dateTime.validate(value).isValid, isFalse, reason: value);
+        }
+      },
+    );
+
+    test('When the string is a valid ISO 8601 date or date-time then it '
+        'passes', () {
+      final dateTime = l.string().dateTime();
+
+      for (final value in [
+        '2023-01-01',
+        '2024-02-29',
+        '2023-01-01 10:00',
+        '2023-01-01T10:00:00Z',
+        '2023-01-01T10:00:00.123456+05:30',
+        '2023-01-01T23:59:59-0800',
+        '2023-01-01T00:00:00.000',
+      ]) {
+        expect(dateTime.validate(value).isValid, isTrue, reason: value);
+      }
+    });
+  });
+
+  group('Given the uri modifier', () {
+    test('When the string has no scheme then it fails', () {
+      final uri = l.string().uri();
+
+      for (final value in [
+        'not a uri',
+        '',
+        'hello world',
+        '%zz',
+        '::::',
+        '/path',
+      ]) {
+        expect(uri.validate(value).isValid, isFalse, reason: value);
+      }
+    });
+
+    test('When the string has a scheme then it passes', () {
+      final uri = l.string().uri();
+
+      for (final value in [
+        'mailto:a@b.com',
+        'urn:isbn:0451450523',
+        'https://x.dev',
+      ]) {
+        expect(uri.validate(value).isValid, isTrue, reason: value);
+      }
+    });
+
+    test('When allowed schemes differ in case then they still match', () {
+      final uri = l.string().uri(allowedSchemes: ['HTTP']);
+
+      expect(uri.validate('HTTP://x.com').isValid, isTrue);
+      expect(uri.validate('http://x.com').isValid, isTrue);
+      expect(uri.validate('ftp://x.com').isValid, isFalse);
+    });
+  });
+
+  group('Given the emoji modifier', () {
+    test('When the string is made of emoji then it passes', () {
+      final emoji = l.string().emoji();
+
+      for (final value in [
+        '😀',
+        '❤️',
+        '1️⃣',
+        '👍🏽',
+        '👨‍👩‍👧',
+        '🇺🇸',
+        '🔥🔥',
+        '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+      ]) {
+        expect(emoji.validate(value).isValid, isTrue, reason: value);
+      }
+    });
+
+    test('When the string has punctuation, symbols or text then it fails', () {
+      final emoji = l.string().emoji();
+
+      for (final value in [
+        '—',
+        '…',
+        '€',
+        '→',
+        '。',
+        '∑',
+        '★',
+        'a',
+        '1',
+        '#',
+        '',
+        '😀a',
+      ]) {
+        expect(emoji.validate(value).isValid, isFalse, reason: value);
+      }
+    });
+  });
 }

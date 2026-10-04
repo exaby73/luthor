@@ -126,7 +126,9 @@ final class FieldValidators {
       );
     }
     final element = type.element;
-    if (element is ClassElement &&
+    if (type is InterfaceType &&
+        type.typeArguments.isEmpty &&
+        element is ClassElement &&
         (luthorChecker.hasAnnotationOf(element) ||
             ModelReader.isSerializable(element))) {
       return (
@@ -137,10 +139,36 @@ final class FieldValidators {
         FieldKind.schema,
       );
     }
-    throw InvalidGenerationSourceError(
-      'Type ${type.getDisplayString()} does not have @luthor annotation and is '
-      'not compatible for auto-generation. To make it compatible, ensure it '
-      'has A fromJson factory constructor OR @MappableClass annotation.',
+    throw _unsupported(type, context);
+  }
+
+  InvalidGenerationSourceError _unsupported(
+    DartType type,
+    _FieldContext context,
+  ) {
+    const asAny =
+        'Give the field a JsonConverter or @JsonKey(fromJson:) so luthor '
+        'validates its raw JSON value as any.';
+    final name = type.element?.name;
+    final explanation = switch (type) {
+      RecordType() => 'is a record. Records are not supported.',
+      FunctionType() => 'is a function, which cannot come from JSON.',
+      TypeParameterType() =>
+        'is a type parameter. Generic models are not '
+            'supported yet.',
+      InterfaceType(typeArguments: [_, ...]) =>
+        'is generic. Generic models are not supported yet. $asAny',
+      InterfaceType(:final element) when element.library.isInSdk =>
+        'has no luthor validator. $asAny',
+      _ =>
+        'is not a luthor model. Annotate `$name` with @luthor, give it a '
+            'fromJson factory or @MappableClass, or ${asAny[0].toLowerCase()}'
+            '${asAny.substring(1)}',
+    };
+    return InvalidGenerationSourceError(
+      'Luthor cannot validate field `${context.field.name}` of '
+      '`${context.owner.name}`: its type `${type.getDisplayString()}` '
+      '$explanation',
       element: context.field.parameter,
     );
   }

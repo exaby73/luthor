@@ -1,3 +1,5 @@
+import 'package:analyzer/dart/analysis/results.dart';
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
@@ -73,6 +75,22 @@ final class ModelReader {
   Model read(ClassElement element) => _models[element] ??= _read(element);
 
   Model _read(ClassElement element) {
+    if (element.typeParameters.isNotEmpty) {
+      throw InvalidGenerationSourceError(
+        '`${element.name}` is generic. Generic models are not supported yet.',
+        element: element,
+      );
+    }
+    final variants = element.constructors.where(_isUnionVariant).toList();
+    if (variants.length > 1) {
+      throw InvalidGenerationSourceError(
+        '`${element.name}` is a union of '
+        '${variants.map((variant) => variant.displayName).join(', ')}. '
+        'Luthor validates one constructor per model, and union dispatch is '
+        'not supported yet.',
+        element: element,
+      );
+    }
     final constructor = _selectConstructor(element);
     return Model(
       element: element,
@@ -148,5 +166,22 @@ final class ModelReader {
 
   static bool _isFromJson(ConstructorElement constructor) {
     return constructor.name == 'fromJson';
+  }
+
+  static bool _isUnionVariant(ConstructorElement constructor) {
+    return constructor.isFactory &&
+        constructor.isPublic &&
+        !_isFromJson(constructor) &&
+        _isRedirecting(constructor);
+  }
+
+  static bool _isRedirecting(ConstructorElement constructor) {
+    if (constructor.redirectedConstructor != null) return true;
+    final parsed = constructor.session?.getParsedLibraryByElement(
+      constructor.library,
+    );
+    if (parsed is! ParsedLibraryResult) return false;
+    final node = parsed.getFragmentDeclaration(constructor.firstFragment)?.node;
+    return node is ConstructorDeclaration && node.redirectedConstructor != null;
   }
 }

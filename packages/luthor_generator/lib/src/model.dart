@@ -111,13 +111,13 @@ final class ModelReader {
       constructor: constructor,
       fields: [
         for (final parameter in constructor.formalParameters)
-          _field(parameter, element, naming, mappable: mappable),
+          ?_field(parameter, element, naming, mappable: mappable),
       ],
       serializer: mappable ? ModelSerializer.mappable : ModelSerializer.json,
     );
   }
 
-  ModelField _field(
+  ModelField? _field(
     FormalParameterElement parameter,
     InterfaceElement owner,
     KeyNaming naming, {
@@ -128,19 +128,39 @@ final class ModelReader {
         for (final annotation in source.metadata.annotations)
           ?annotation.computeConstantValue(),
     ];
+    final jsonKey = ConstantReader(
+      firstAnnotation(annotations, jsonKeyChecker),
+    );
+    if (!mappable &&
+        (jsonKey.peek('includeFromJson')?.boolValue == false ||
+            jsonKey.peek('ignore')?.boolValue == true)) {
+      return null;
+    }
     final explicitKey = mappable
         ? ConstantReader(
             firstAnnotation(annotations, mappableFieldChecker),
           ).peek('key')?.stringValue
-        : ConstantReader(
-            firstAnnotation(annotations, jsonKeyChecker),
-          ).peek('name')?.stringValue;
+        : jsonKey.peek('name')?.stringValue;
     return ModelField(
       parameter: parameter,
       key: explicitKey ?? naming(parameter.name!),
       annotations: annotations,
-      hasDefault: firstAnnotation(annotations, defaultChecker) != null,
+      hasDefault:
+          _hasDefaultValue(parameter) ||
+          firstAnnotation(annotations, defaultChecker) != null ||
+          jsonKey.peek('defaultValue') != null,
     );
+  }
+
+  bool _hasDefaultValue(FormalParameterElement parameter) {
+    if (parameter.hasDefaultValue) return true;
+    return switch (parameter) {
+      SuperFormalParameterElement(
+        superConstructorParameter: final inherited?,
+      ) =>
+        _hasDefaultValue(inherited),
+      _ => false,
+    };
   }
 
   Iterable<Element> _annotationSources(

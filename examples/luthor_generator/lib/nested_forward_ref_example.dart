@@ -4,42 +4,32 @@ import 'package:luthor/luthor.dart';
 part 'nested_forward_ref_example.freezed.dart';
 part 'nested_forward_ref_example.g.dart';
 
-/// Example showing nested self-references and when @luthorForwardRef is needed
+/// Nested schema references are always lazy, so models that refer to each
+/// other need no annotation.
 @luthor
 @freezed
 abstract class User with _$User {
   const factory User({
     required String id,
     required String username,
-    // Automatic detection: List<Comment> contains Comment which matches... wait, no!
-    // User.comments is List<Comment>, but we're in User class, so Comment doesn't match User.
-    // This is NOT auto-detected because Comment ≠ User.
-    // But if Comment has User? user field, that also won't be auto-detected from Comment's perspective.
-    // So explicit annotation is needed for cross-class circular references.
     List<Comment>? comments,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }
 
-/// Example showing nested self-references and when @luthorForwardRef is needed
+/// Self-references through lists, maps and nullable fields validate every
+/// level.
 @luthor
 @freezed
 abstract class Comment with _$Comment {
   const factory Comment({
     required String id,
     required String text,
-    // Automatic detection: List<Comment> is automatically detected as self-reference
     List<Comment>? replies,
-    // Direct self-reference: Comment? parent is also automatically detected
     Comment? parent,
-    // Nested self-reference: Map<String, Comment> is auto-detected because
-    // Comment (the value type) matches the enclosing class
     Map<String, Comment>? mentions,
-    // Cross-class circular reference: User.comments contains List<Comment>,
-    // but from Comment's perspective, we only see User (not Comment), so auto-detection fails.
-    // Explicit annotation is required.
-    @luthorForwardRef User? user,
+    User? user,
   }) = _Comment;
 
   factory Comment.fromJson(Map<String, dynamic> json) =>
@@ -107,12 +97,12 @@ void main() {
 
   final result = $CommentValidate(data);
   switch (result) {
-    case SchemaValidationError(errors: final errors):
+    case ValidationFailure(:final errors):
       print('Validation failed:');
       errors.forEach((key, value) {
         print('$key: $value');
       });
-    case SchemaValidationSuccess(data: final data):
+    case ValidationSuccess(:final data):
       print('Validation succeeded!');
       print('Comment ID: ${data.id}');
       print('Comment text: ${data.text}');
@@ -124,4 +114,20 @@ void main() {
         print('User comments count: ${data.user!.comments?.length ?? 0}');
       }
   }
+
+  // Errors in nested levels are reported at their full path.
+  final invalid = $CommentValidate({
+    'id': '1',
+    'text': 'Root comment',
+    'replies': [
+      {
+        'id': '2',
+        'text': 'Reply',
+        'replies': [
+          {'id': '3', 'text': 42},
+        ],
+      },
+    ],
+  });
+  print(invalid.errors);
 }

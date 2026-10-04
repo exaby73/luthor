@@ -52,34 +52,32 @@ const ListValidationTestSchemaKeys = (
   optionalNullableStrings: "optionalNullableStrings",
 );
 
-Validator $ListValidationTestSchema = l.withName('ListValidationTest').schema({
-  ListValidationTestSchemaKeys.nullableStrings: l
-      .list(validators: [l.string()])
-      .required(),
-  ListValidationTestSchemaKeys.nullableInts: l
-      .list(validators: [l.int()])
-      .required(),
-  ListValidationTestSchemaKeys.customObjects: l
-      .list(validators: [$AnotherSampleSchema.required()])
-      .required(),
-  ListValidationTestSchemaKeys.nullableCustomObjects: l
-      .list(validators: [$AnotherSampleSchema])
-      .required(),
-  ListValidationTestSchemaKeys.optionalNullableStrings: l.list(
-    validators: [l.string()],
-  ),
-});
+final SchemaValidator $ListValidationTestSchema = l
+    .schema({
+      ListValidationTestSchemaKeys.nullableStrings: l
+          .list(l.string())
+          .required(),
+      ListValidationTestSchemaKeys.nullableInts: l.list(l.int()).required(),
+      ListValidationTestSchemaKeys.customObjects: l
+          .list(forwardRef(() => $AnotherSampleSchema.required()))
+          .required(),
+      ListValidationTestSchemaKeys.nullableCustomObjects: l
+          .list(forwardRef(() => $AnotherSampleSchema))
+          .required(),
+      ListValidationTestSchemaKeys.optionalNullableStrings: l.list(l.string()),
+    })
+    .withName("ListValidationTest");
 
-SchemaValidationResult<ListValidationTest> $ListValidationTestValidate(
-  Map<String, dynamic> json,
+ValidationResult<ListValidationTest> $ListValidationTestValidate(
+  Object? json,
 ) => $ListValidationTestSchema.validateSchema(
   json,
   fromJson: ListValidationTest.fromJson,
 );
 
 extension ListValidationTestValidationExtension on ListValidationTest {
-  SchemaValidationResult<ListValidationTest> validateSelf() =>
-      $ListValidationTestValidate(toJson());
+  ValidationResult<ListValidationTest> validateSelf() =>
+      $ListValidationTestValidate(_$luthorJsonMap(toJson()));
 }
 
 // ignore: constant_identifier_names
@@ -90,3 +88,25 @@ const ListValidationTestErrorKeys = (
   nullableCustomObjects: "nullableCustomObjects",
   optionalNullableStrings: "optionalNullableStrings",
 );
+
+Map<String, Object?> _$luthorJsonMap(Map<Object?, Object?> map) => {
+  for (final entry in map.entries)
+    entry.key.toString(): _$luthorJsonValue(entry.value),
+};
+
+Object? _$luthorJsonValue(Object? value) {
+  if (value == null || value is String || value is num || value is bool) {
+    return value;
+  }
+  if (value is Map) return _$luthorJsonMap(value);
+  if (value is Iterable) {
+    return [for (final item in value) _$luthorJsonValue(item)];
+  }
+  try {
+    // ignore: avoid_dynamic_calls
+    return _$luthorJsonValue((value as dynamic).toJson());
+    // ignore: avoid_catching_errors
+  } on NoSuchMethodError {
+    return value;
+  }
+}

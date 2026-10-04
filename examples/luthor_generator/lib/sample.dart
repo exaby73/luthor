@@ -8,21 +8,27 @@ part 'sample.freezed.dart';
 
 part 'sample.g.dart';
 
-bool customValidatorFn(Object? value) {
+bool customValidatorFn(String value) {
   return value == 'custom';
 }
 
-// Message function examples
-String emailErrorMessage() {
+// Message builders receive the issue, with its default message and params.
+String emailErrorMessage(ValidationIssue issue) {
   return 'Please provide a valid email address';
 }
 
-String lengthErrorMessage() {
-  return 'Length must be exactly 10 characters';
+String lengthErrorMessage(ValidationIssue issue) {
+  return '${issue.fieldName} must be exactly 10 characters';
 }
 
-String regexErrorMessage() {
+String regexErrorMessage(ValidationIssue issue) {
   return 'Path must be a valid Luthor package URL on pub.dev';
+}
+
+enum Size {
+  small,
+  @JsonValue('L')
+  large,
 }
 
 @luthor
@@ -38,22 +44,23 @@ abstract class Sample with _$Sample {
     // Null? nullValue,
     required num numValue,
     required String stringValue,
-    @IsEmail(messageFn: emailErrorMessage) required String email,
+    @IsEmail(messageBuilder: emailErrorMessage) required String email,
     @isDateTime required String date,
     required DateTime dateTime,
-    @HasLength(10, messageFn: lengthErrorMessage) String? exactly10Characters,
+    @HasLength(10, messageBuilder: lengthErrorMessage) String? exactly10Characters,
     @HasMin(8) @HasMax(200) required String minAndMaxString,
     @StartsWith('foo') required String startsWithFoo,
     @EndsWith('bar') required String endsWithBar,
     @Contains('baz') required String containsBaz,
     @HasMin(2) @HasMax(4) required int minAndMaxInt,
-    @HasMinDouble(2.0) @HasMaxDouble(4.0) required double minAndMaxDouble,
-    @HasMinNumber(2) @HasMaxNumber(3.0) required num minAndMaxNumber,
+    @HasMin(2.0) @HasMax(4.0) required double minAndMaxDouble,
+    @HasMin(2) @HasMax(3.0) required num minAndMaxNumber,
     @IsUri(allowedSchemes: ['https']) String? httpsLink,
     @IsUrl() String? aUrl,
     @MatchRegex(
       r'^https:\/\/pub\.dev\/packages\/luthor',
-      messageFn: regexErrorMessage,
+      caseSensitive: false,
+      messageBuilder: regexErrorMessage,
     )
     required String luthorPath,
     @isUuid required String uuid,
@@ -64,14 +71,15 @@ abstract class Sample with _$Sample {
     @JsonKey(name: 'jsonKeyName') required String foo,
     @WithCustomValidator(
       customValidatorFn,
-      messageFn: Sample.customValidatorMessage,
+      messageBuilder: Sample.customValidatorMessage,
     )
     required String custom,
     required List<int> numbers,
     String? hello,
+    @Default(Size.small) Size size,
   }) = _Sample;
 
-  static String customValidatorMessage() {
+  static String customValidatorMessage(ValidationIssue issue) {
     return 'Custom validation failed - value must equal "custom"';
   }
 
@@ -81,12 +89,12 @@ abstract class Sample with _$Sample {
 void main() {
   final result = $SampleValidate({});
   switch (result) {
-    case SchemaValidationError(errors: final errors):
+    case ValidationFailure(:final errors):
       print('Error: ');
       errors.forEach((key, value) {
         print('$key: $value');
       });
-    case SchemaValidationSuccess(data: final data):
+    case ValidationSuccess(:final data):
       print('Success: $data');
       data.validateSelf();
   }
@@ -99,12 +107,12 @@ void main() {
     "custom": 'custom',
   });
   switch (result2) {
-    case SchemaValidationError(errors: final errors):
+    case ValidationFailure(:final errors):
       print('Error: Result 2');
       errors.forEach((key, value) {
         print('$key: $value');
       });
-    case SchemaValidationSuccess(data: final data):
+    case ValidationSuccess(:final data):
       print('Success: $data');
       data.validateSelf();
   }
@@ -122,12 +130,12 @@ void main() {
     "emoji": "👍",
   });
   switch (result3) {
-    case SchemaValidationError(errors: final errors):
+    case ValidationFailure(:final errors):
       print('Error: Result 3');
       errors.forEach((key, value) {
         print('$key: $value');
       });
-    case SchemaValidationSuccess(data: final data):
+    case ValidationSuccess(:final data):
       print('Success: $data');
       data.validateSelf();
   }
@@ -138,6 +146,7 @@ void main() {
     "minAndMaxDouble": 3.0,
     "minAndMaxNumber": 2.5,
     "custom": "custom",
+    "size": "medium",
     "luthorPath": "https://pub.dev/packages/luthor",
     "uuid": "invalid-uuid",
     "cuid": "invalid-cuid",
@@ -145,12 +154,12 @@ void main() {
     "emoji": "not an emoji",
   });
   switch (result4) {
-    case SchemaValidationError(errors: final errors):
+    case ValidationFailure(:final errors):
       print('Error: Result 4 (invalid validations)');
       errors.forEach((key, value) {
         print('$key: $value');
       });
-    case SchemaValidationSuccess(data: final data):
+    case ValidationSuccess(:final data):
       print('Unexpected success: $data');
       data.validateSelf();
   }

@@ -25,19 +25,42 @@ Map<String, dynamic> _$NodeToJson(_Node instance) => <String, dynamic>{
 // ignore: constant_identifier_names
 const NodeSchemaKeys = (value: "value", children: "children");
 
-Validator $NodeSchema = l.withName('Node').schema({
-  NodeSchemaKeys.value: l.string().required(),
-  NodeSchemaKeys.children: l.list(
-    validators: [forwardRef(() => $NodeSchema.required())],
-  ),
-});
+final SchemaValidator $NodeSchema = l
+    .schema({
+      NodeSchemaKeys.value: l.string().required(),
+      NodeSchemaKeys.children: l.list(forwardRef(() => $NodeSchema.required())),
+    })
+    .withName("Node");
 
-SchemaValidationResult<Node> $NodeValidate(Map<String, dynamic> json) =>
+ValidationResult<Node> $NodeValidate(Object? json) =>
     $NodeSchema.validateSchema(json, fromJson: Node.fromJson);
 
 extension NodeValidationExtension on Node {
-  SchemaValidationResult<Node> validateSelf() => $NodeValidate(toJson());
+  ValidationResult<Node> validateSelf() =>
+      $NodeValidate(_$luthorJsonMap(toJson()));
 }
 
 // ignore: constant_identifier_names
 const NodeErrorKeys = (value: "value", children: "children");
+
+Map<String, Object?> _$luthorJsonMap(Map<Object?, Object?> map) => {
+  for (final entry in map.entries)
+    entry.key.toString(): _$luthorJsonValue(entry.value),
+};
+
+Object? _$luthorJsonValue(Object? value) {
+  if (value == null || value is String || value is num || value is bool) {
+    return value;
+  }
+  if (value is Map) return _$luthorJsonMap(value);
+  if (value is Iterable) {
+    return [for (final item in value) _$luthorJsonValue(item)];
+  }
+  try {
+    // ignore: avoid_dynamic_calls
+    return _$luthorJsonValue((value as dynamic).toJson());
+    // ignore: avoid_catching_errors
+  } on NoSuchMethodError {
+    return value;
+  }
+}

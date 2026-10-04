@@ -29,12 +29,12 @@ void main() {
 
   final result = $NodeValidate(data);
   switch (result) {
-    case SchemaValidationError(errors: final errors):
+    case ValidationFailure(:final errors):
       print('Validation failed:');
       errors.forEach((key, value) {
         print('$key: $value');
       });
-    case SchemaValidationSuccess(data: final data):
+    case ValidationSuccess(:final data):
       print('Validation succeeded!');
       print('Node value: ${data.value}');
       print('Children count: ${data.children?.length ?? 0}');

@@ -43,6 +43,7 @@ _Sample _$SampleFromJson(Map<String, dynamic> json) => _Sample(
       .map((e) => (e as num).toInt())
       .toList(),
   hello: json['hello'] as String?,
+  size: $enumDecodeNullable(_$SizeEnumMap, json['size']) ?? Size.small,
 );
 
 Map<String, dynamic> _$SampleToJson(_Sample instance) => <String, dynamic>{
@@ -76,7 +77,10 @@ Map<String, dynamic> _$SampleToJson(_Sample instance) => <String, dynamic>{
   'custom': instance.custom,
   'numbers': instance.numbers,
   'hello': instance.hello,
+  'size': _$SizeEnumMap[instance.size]!,
 };
+
+const _$SizeEnumMap = {Size.small: 'small', Size.large: 'L'};
 
 // **************************************************************************
 // LuthorGenerator
@@ -114,63 +118,74 @@ const SampleSchemaKeys = (
   custom: "custom",
   numbers: "numbers",
   hello: "hello",
+  size: "size",
 );
 
-Validator $SampleSchema = l.withName('Sample').schema({
-  SampleSchemaKeys.anyValue: l.any(),
-  SampleSchemaKeys.boolValue: l.boolean().required(),
-  SampleSchemaKeys.doubleValue: l.double().required(),
-  SampleSchemaKeys.intValue: l.int().required(),
-  SampleSchemaKeys.listValue: l
-      .list(validators: [l.string().required()])
-      .required(),
-  SampleSchemaKeys.numValue: l.number().required(),
-  SampleSchemaKeys.stringValue: l.string().required(),
-  SampleSchemaKeys.email: l
-      .string()
-      .email(messageFn: emailErrorMessage)
-      .required(),
-  SampleSchemaKeys.date: l.string().dateTime().required(),
-  SampleSchemaKeys.dateTime: l.string().dateTime().required(),
-  SampleSchemaKeys.exactly10Characters: l.string().length(
-    10,
-    messageFn: lengthErrorMessage,
-  ),
-  SampleSchemaKeys.minAndMaxString: l.string().max(200).min(8).required(),
-  SampleSchemaKeys.startsWithFoo: l.string().startsWith("foo").required(),
-  SampleSchemaKeys.endsWithBar: l.string().endsWith("bar").required(),
-  SampleSchemaKeys.containsBaz: l.string().contains("baz").required(),
-  SampleSchemaKeys.minAndMaxInt: l.int().max(4).min(2).required(),
-  SampleSchemaKeys.minAndMaxDouble: l.double().max(4.0).min(2.0).required(),
-  SampleSchemaKeys.minAndMaxNumber: l.number().max(3.0).min(2).required(),
-  SampleSchemaKeys.httpsLink: l.string().uri(allowedSchemes: ["https"]),
-  SampleSchemaKeys.aUrl: l.string().url(),
-  SampleSchemaKeys.luthorPath: l
-      .string()
-      .regex(
-        "^https:\\/\\/pub\\.dev\\/packages\\/luthor",
-        messageFn: regexErrorMessage,
-      )
-      .required(),
-  SampleSchemaKeys.uuid: l.string().uuid().required(),
-  SampleSchemaKeys.cuid: l.string().cuid().required(),
-  SampleSchemaKeys.cuid2: l.string().cuid2().required(),
-  SampleSchemaKeys.emoji: l.string().emoji().required(),
-  SampleSchemaKeys.anotherSample: $AnotherSampleSchema.required(),
-  SampleSchemaKeys.foo: l.string().required(),
-  SampleSchemaKeys.custom: l
-      .string()
-      .custom(customValidatorFn, messageFn: Sample.customValidatorMessage)
-      .required(),
-  SampleSchemaKeys.numbers: l.list(validators: [l.int().required()]).required(),
-  SampleSchemaKeys.hello: l.string(),
-});
+final SchemaValidator $SampleSchema = l
+    .schema({
+      SampleSchemaKeys.anyValue: l.any(),
+      SampleSchemaKeys.boolValue: l.bool().required(),
+      SampleSchemaKeys.doubleValue: l.double().required(),
+      SampleSchemaKeys.intValue: l.int().required(),
+      SampleSchemaKeys.listValue: l.list(l.string().required()).required(),
+      SampleSchemaKeys.numValue: l.num().required(),
+      SampleSchemaKeys.stringValue: l.string().required(),
+      SampleSchemaKeys.email: l
+          .string()
+          .email(messageBuilder: emailErrorMessage)
+          .required(),
+      SampleSchemaKeys.date: l.string().dateTime().required(),
+      SampleSchemaKeys.dateTime: l.string().dateTime().required(),
+      SampleSchemaKeys.exactly10Characters: l.string().length(
+        10,
+        messageBuilder: lengthErrorMessage,
+      ),
+      SampleSchemaKeys.minAndMaxString: l.string().min(8).max(200).required(),
+      SampleSchemaKeys.startsWithFoo: l.string().startsWith("foo").required(),
+      SampleSchemaKeys.endsWithBar: l.string().endsWith("bar").required(),
+      SampleSchemaKeys.containsBaz: l.string().contains("baz").required(),
+      SampleSchemaKeys.minAndMaxInt: l.int().min(2).max(4).required(),
+      SampleSchemaKeys.minAndMaxDouble: l.double().min(2.0).max(4.0).required(),
+      SampleSchemaKeys.minAndMaxNumber: l.num().min(2).max(3.0).required(),
+      SampleSchemaKeys.httpsLink: l.string().uri(allowedSchemes: ["https"]),
+      SampleSchemaKeys.aUrl: l.string().url(),
+      SampleSchemaKeys.luthorPath: l
+          .string()
+          .regex(
+            RegExp(
+              r'^https:\/\/pub\.dev\/packages\/luthor',
+              caseSensitive: false,
+            ),
+            messageBuilder: regexErrorMessage,
+          )
+          .required(),
+      SampleSchemaKeys.uuid: l.string().uuid().required(),
+      SampleSchemaKeys.cuid: l.string().cuid().required(),
+      SampleSchemaKeys.cuid2: l.string().cuid2().required(),
+      SampleSchemaKeys.emoji: l.string().emoji().required(),
+      SampleSchemaKeys.anotherSample: forwardRef(
+        () => $AnotherSampleSchema.required(),
+      ),
+      SampleSchemaKeys.foo: l.string().required(),
+      SampleSchemaKeys.custom: l
+          .string()
+          .custom(
+            customValidatorFn,
+            messageBuilder: Sample.customValidatorMessage,
+          )
+          .required(),
+      SampleSchemaKeys.numbers: l.list(l.int().required()).required(),
+      SampleSchemaKeys.hello: l.string(),
+      SampleSchemaKeys.size: l.oneOf(["small", "L"]),
+    })
+    .withName("Sample");
 
-SchemaValidationResult<Sample> $SampleValidate(Map<String, dynamic> json) =>
+ValidationResult<Sample> $SampleValidate(Object? json) =>
     $SampleSchema.validateSchema(json, fromJson: Sample.fromJson);
 
 extension SampleValidationExtension on Sample {
-  SchemaValidationResult<Sample> validateSelf() => $SampleValidate(toJson());
+  ValidationResult<Sample> validateSelf() =>
+      $SampleValidate(_$luthorJsonMap(toJson()));
 }
 
 // ignore: constant_identifier_names
@@ -201,6 +216,7 @@ const SampleErrorKeys = (
   cuid2: "cuid2",
   emoji: "emoji",
   anotherSample: (
+    $key: "anotherSample",
     id: "anotherSample.id",
     name: "anotherSample.full_name",
     email: "anotherSample.email",
@@ -208,9 +224,33 @@ const SampleErrorKeys = (
     password: "anotherSample.password",
     type: "anotherSample.type",
     url: "anotherSample.url",
+    roles: "anotherSample.roles",
   ),
   foo: "jsonKeyName",
   custom: "custom",
   numbers: "numbers",
   hello: "hello",
+  size: "size",
 );
+
+Map<String, Object?> _$luthorJsonMap(Map<Object?, Object?> map) => {
+  for (final entry in map.entries)
+    entry.key.toString(): _$luthorJsonValue(entry.value),
+};
+
+Object? _$luthorJsonValue(Object? value) {
+  if (value == null || value is String || value is num || value is bool) {
+    return value;
+  }
+  if (value is Map) return _$luthorJsonMap(value);
+  if (value is Iterable) {
+    return [for (final item in value) _$luthorJsonValue(item)];
+  }
+  try {
+    // ignore: avoid_dynamic_calls
+    return _$luthorJsonValue((value as dynamic).toJson());
+    // ignore: avoid_catching_errors
+  } on NoSuchMethodError {
+    return value;
+  }
+}

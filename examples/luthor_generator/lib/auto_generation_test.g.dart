@@ -62,59 +62,72 @@ const UserProfileSchemaKeys = (
   updatedAt: "updatedAt",
 );
 
-Validator $UserProfileSchema = l.withName('UserProfile').schema({
-  UserProfileSchemaKeys.id: l.int().required(),
-  UserProfileSchemaKeys.user: $ExternalUserSchema.required(),
-  UserProfileSchemaKeys.user2: $ExternalUserSchema,
-  UserProfileSchemaKeys.friends: l.list(
-    validators: [$ExternalUserSchema.required()],
-  ),
-  UserProfileSchemaKeys.tags: l
-      .list(validators: [l.string().required()])
-      .required(),
-  UserProfileSchemaKeys.createdAt: l.string().dateTime().required(),
-  UserProfileSchemaKeys.updatedAt: l.string(),
-});
+final SchemaValidator $UserProfileSchema = l
+    .schema({
+      UserProfileSchemaKeys.id: l.int().required(),
+      UserProfileSchemaKeys.user: forwardRef(
+        () => _$ExternalUserSchema.required(),
+      ),
+      UserProfileSchemaKeys.user2: forwardRef(() => _$ExternalUserSchema),
+      UserProfileSchemaKeys.friends: l.list(
+        forwardRef(() => _$ExternalUserSchema.required()),
+      ),
+      UserProfileSchemaKeys.tags: l.list(l.string().required()).required(),
+      UserProfileSchemaKeys.createdAt: l.string().dateTime().required(),
+      UserProfileSchemaKeys.updatedAt: l.string().dateTime(),
+    })
+    .withName("UserProfile");
 
-SchemaValidationResult<UserProfile> $UserProfileValidate(
-  Map<String, dynamic> json,
-) => $UserProfileSchema.validateSchema(json, fromJson: UserProfile.fromJson);
+ValidationResult<UserProfile> $UserProfileValidate(Object? json) =>
+    $UserProfileSchema.validateSchema(json, fromJson: UserProfile.fromJson);
 
 extension UserProfileValidationExtension on UserProfile {
-  SchemaValidationResult<UserProfile> validateSelf() =>
-      $UserProfileValidate(toJson());
+  ValidationResult<UserProfile> validateSelf() =>
+      $UserProfileValidate(_$luthorJsonMap(toJson()));
 }
 
 // ignore: constant_identifier_names
 const UserProfileErrorKeys = (
   id: "id",
-  user: (name: "user.name", email: "user.email", age: "user.age"),
-  user2: (name: "user2.name", email: "user2.email", age: "user2.age"),
+  user: ($key: "user", name: "user.name", email: "user.email", age: "user.age"),
+  user2: (
+    $key: "user2",
+    name: "user2.name",
+    email: "user2.email",
+    age: "user2.age",
+  ),
   friends: "friends",
   tags: "tags",
   createdAt: "createdAt",
   updatedAt: "updatedAt",
 );
 
-// Auto-generated schemas for discovered classes
+final SchemaValidator _$ExternalUserSchema = l
+    .schema({
+      "name": l.string().required(),
+      "email": l.string().required(),
+      "age": l.int(),
+    })
+    .withName("ExternalUser");
 
-// ignore: constant_identifier_names
-const ExternalUserSchemaKeys = (name: "name", email: "email", age: "age");
+Map<String, Object?> _$luthorJsonMap(Map<Object?, Object?> map) => {
+  for (final entry in map.entries)
+    entry.key.toString(): _$luthorJsonValue(entry.value),
+};
 
-Validator $ExternalUserSchema = l.withName('ExternalUser').schema({
-  ExternalUserSchemaKeys.name: l.string().required(),
-  ExternalUserSchemaKeys.email: l.string().required(),
-  ExternalUserSchemaKeys.age: l.int(),
-});
-
-SchemaValidationResult<ExternalUser> $ExternalUserValidate(
-  Map<String, dynamic> json,
-) => $ExternalUserSchema.validateSchema(json, fromJson: ExternalUser.fromJson);
-
-extension ExternalUserValidationExtension on ExternalUser {
-  SchemaValidationResult<ExternalUser> validateSelf() =>
-      $ExternalUserValidate(toJson());
+Object? _$luthorJsonValue(Object? value) {
+  if (value == null || value is String || value is num || value is bool) {
+    return value;
+  }
+  if (value is Map) return _$luthorJsonMap(value);
+  if (value is Iterable) {
+    return [for (final item in value) _$luthorJsonValue(item)];
+  }
+  try {
+    // ignore: avoid_dynamic_calls
+    return _$luthorJsonValue((value as dynamic).toJson());
+    // ignore: avoid_catching_errors
+  } on NoSuchMethodError {
+    return value;
+  }
 }
-
-// ignore: constant_identifier_names
-const ExternalUserErrorKeys = (name: "name", email: "email", age: "age");

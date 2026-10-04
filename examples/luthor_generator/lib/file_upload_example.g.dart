@@ -28,21 +28,22 @@ const FileUploadExampleSchemaKeys = (
   description: "description",
 );
 
-Validator $FileUploadExampleSchema = l.withName('FileUploadExample').schema({
-  FileUploadExampleSchemaKeys.profileImage: l.file().required(),
-  FileUploadExampleSchemaKeys.description: l.string(),
-});
+final SchemaValidator $FileUploadExampleSchema = l
+    .schema({
+      FileUploadExampleSchemaKeys.profileImage: l.file().required(),
+      FileUploadExampleSchemaKeys.description: l.string(),
+    })
+    .withName("FileUploadExample");
 
-SchemaValidationResult<FileUploadExample> $FileUploadExampleValidate(
-  Map<String, dynamic> json,
-) => $FileUploadExampleSchema.validateSchema(
-  json,
-  fromJson: FileUploadExample.fromJson,
-);
+ValidationResult<FileUploadExample> $FileUploadExampleValidate(Object? json) =>
+    $FileUploadExampleSchema.validateSchema(
+      json,
+      fromJson: FileUploadExample.fromJson,
+    );
 
 extension FileUploadExampleValidationExtension on FileUploadExample {
-  SchemaValidationResult<FileUploadExample> validateSelf() =>
-      $FileUploadExampleValidate(toJson());
+  ValidationResult<FileUploadExample> validateSelf() =>
+      $FileUploadExampleValidate(_$luthorJsonMap(toJson()));
 }
 
 // ignore: constant_identifier_names
@@ -50,3 +51,25 @@ const FileUploadExampleErrorKeys = (
   profileImage: "profileImage",
   description: "description",
 );
+
+Map<String, Object?> _$luthorJsonMap(Map<Object?, Object?> map) => {
+  for (final entry in map.entries)
+    entry.key.toString(): _$luthorJsonValue(entry.value),
+};
+
+Object? _$luthorJsonValue(Object? value) {
+  if (value == null || value is String || value is num || value is bool) {
+    return value;
+  }
+  if (value is Map) return _$luthorJsonMap(value);
+  if (value is Iterable) {
+    return [for (final item in value) _$luthorJsonValue(item)];
+  }
+  try {
+    // ignore: avoid_dynamic_calls
+    return _$luthorJsonValue((value as dynamic).toJson());
+    // ignore: avoid_catching_errors
+  } on NoSuchMethodError {
+    return value;
+  }
+}

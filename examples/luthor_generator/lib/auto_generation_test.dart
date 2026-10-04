@@ -50,9 +50,9 @@ void main() {
 
   final result = $UserProfileValidate(json);
   switch (result) {
-    case SchemaValidationSuccess(data: final data):
+    case ValidationSuccess(:final data):
       print('Success: $data');
-    case SchemaValidationError(errors: final errors):
+    case ValidationFailure(:final errors):
       print('Validation errors:');
       errors.forEach((key, value) {
         print('$key: $value');

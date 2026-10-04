@@ -4,17 +4,14 @@ import 'package:luthor/luthor.dart';
 part 'signup_form.freezed.dart';
 part 'signup_form.g.dart';
 
-// Schema custom validation function for password confirmation
-bool passwordsMatch(Object? value, Map<String, Object?> data) {
+// Schema custom validators receive the typed value and the sibling fields.
+bool passwordsMatch(String value, SchemaData data) {
   return value == data['password'];
 }
 
-// Another example for numeric comparison
-bool isGreaterThanMinAge(Object? value, Map<String, Object?> data) {
-  if (value is int && data['minAge'] is int) {
-    return value > (data['minAge'] as int);
-  }
-  return false;
+bool isGreaterThanMinAge(int value, SchemaData data) {
+  final minAge = data['minAge'];
+  return minAge is int && value > minAge;
 }
 
 @luthor
@@ -50,9 +47,9 @@ void main() {
   print('=== Valid Data Test ===');
   final validResult = $SignupFormValidate(validData);
   switch (validResult) {
-    case SchemaValidationSuccess(data: final data):
+    case ValidationSuccess(:final data):
       print('✅ Validation passed: $data');
-    case SchemaValidationError(errors: final errors):
+    case ValidationFailure(:final errors):
       print('❌ Unexpected validation failure: $errors');
   }
 
@@ -68,13 +65,12 @@ void main() {
   print('\n=== Invalid Password Test ===');
   final invalidPasswordResult = $SignupFormValidate(invalidPasswordData);
   switch (invalidPasswordResult) {
-    case SchemaValidationSuccess(data: final data):
+    case ValidationSuccess(:final data):
       print('❌ Unexpected validation pass: $data');
-    case SchemaValidationError(errors: final errors):
+    case ValidationFailure(:final errors):
       print('✅ Validation failed as expected: $errors');
-      final errorResult = invalidPasswordResult as SchemaValidationError;
       print(
-        'Password confirmation error: ${errorResult.getError(SignupFormErrorKeys.confirmPassword)}',
+        'Password confirmation error: ${invalidPasswordResult.getError(SignupFormErrorKeys.confirmPassword)}',
       );
   }
 
@@ -90,13 +86,12 @@ void main() {
   print('\n=== Invalid Age Test ===');
   final invalidAgeResult = $SignupFormValidate(invalidAgeData);
   switch (invalidAgeResult) {
-    case SchemaValidationSuccess(data: final data):
+    case ValidationSuccess(:final data):
       print('❌ Unexpected validation pass: $data');
-    case SchemaValidationError(errors: final errors):
+    case ValidationFailure(:final errors):
       print('✅ Validation failed as expected: $errors');
-      final errorResult = invalidAgeResult as SchemaValidationError;
       print(
-        'Max age error: ${errorResult.getError(SignupFormErrorKeys.maxAge)}',
+        'Max age error: ${invalidAgeResult.getError(SignupFormErrorKeys.maxAge)}',
       );
   }
 

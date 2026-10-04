@@ -300,7 +300,7 @@ as List<Comment>?,
 /// @nodoc
 mixin _$Comment {
 
- String get id; String get text; List<Comment>? get replies; Comment? get parent; Map<String, Comment>? get mentions;@luthorForwardRef User? get user;
+ String get id; String get text; List<Comment>? get replies; Comment? get parent; Map<String, Comment>? get mentions; User? get user;
 /// Create a copy of Comment
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -338,7 +338,7 @@ abstract mixin class $CommentCopyWith<$Res>  {
   factory $CommentCopyWith(Comment value, $Res Function(Comment) _then) = _$CommentCopyWithImpl;
 @useResult
 $Res call({
- String id, String text, List<Comment>? replies, Comment? parent, Map<String, Comment>? mentions,@luthorForwardRef User? user
+ String id, String text, List<Comment>? replies, Comment? parent, Map<String, Comment>? mentions, User? user
 });
 
 
@@ -472,7 +472,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String text,  List<Comment>? replies,  Comment? parent,  Map<String, Comment>? mentions, @luthorForwardRef  User? user)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String text,  List<Comment>? replies,  Comment? parent,  Map<String, Comment>? mentions,  User? user)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Comment() when $default != null:
 return $default(_that.id,_that.text,_that.replies,_that.parent,_that.mentions,_that.user);case _:
@@ -493,7 +493,7 @@ return $default(_that.id,_that.text,_that.replies,_that.parent,_that.mentions,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String text,  List<Comment>? replies,  Comment? parent,  Map<String, Comment>? mentions, @luthorForwardRef  User? user)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String text,  List<Comment>? replies,  Comment? parent,  Map<String, Comment>? mentions,  User? user)  $default,) {final _that = this;
 switch (_that) {
 case _Comment():
 return $default(_that.id,_that.text,_that.replies,_that.parent,_that.mentions,_that.user);case _:
@@ -513,7 +513,7 @@ return $default(_that.id,_that.text,_that.replies,_that.parent,_that.mentions,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String text,  List<Comment>? replies,  Comment? parent,  Map<String, Comment>? mentions, @luthorForwardRef  User? user)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String text,  List<Comment>? replies,  Comment? parent,  Map<String, Comment>? mentions,  User? user)?  $default,) {final _that = this;
 switch (_that) {
 case _Comment() when $default != null:
 return $default(_that.id,_that.text,_that.replies,_that.parent,_that.mentions,_that.user);case _:
@@ -528,7 +528,7 @@ return $default(_that.id,_that.text,_that.replies,_that.parent,_that.mentions,_t
 @JsonSerializable()
 
 class _Comment implements Comment {
-  const _Comment({required this.id, required this.text,  List<Comment>? replies, this.parent,  Map<String, Comment>? mentions, @luthorForwardRef this.user}): _replies = replies,_mentions = mentions;
+  const _Comment({required this.id, required this.text,  List<Comment>? replies, this.parent,  Map<String, Comment>? mentions, this.user}): _replies = replies,_mentions = mentions;
   factory _Comment.fromJson(Map<String, dynamic> json) => _$CommentFromJson(json);
 
 @override final  String id;
@@ -552,7 +552,7 @@ class _Comment implements Comment {
   return EqualUnmodifiableMapView(value);
 }
 
-@override@luthorForwardRef final  User? user;
+@override final  User? user;
 
 /// Create a copy of Comment
 /// with the given fields replaced by the non-null parameter values.
@@ -589,7 +589,7 @@ abstract mixin class _$CommentCopyWith<$Res> implements $CommentCopyWith<$Res> {
   factory _$CommentCopyWith(_Comment value, $Res Function(_Comment) _then) = __$CommentCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String text, List<Comment>? replies, Comment? parent, Map<String, Comment>? mentions,@luthorForwardRef User? user
+ String id, String text, List<Comment>? replies, Comment? parent, Map<String, Comment>? mentions, User? user
 });
 
 

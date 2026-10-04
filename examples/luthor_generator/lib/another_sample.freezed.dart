@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AnotherSample {
 
- int get id;@JsonKey(name: 'full_name') String? get name;@IsEmail(message: "Invalid email") String get email;@IsIp(version: IpVersion.v4) String? get ip;@HasMin(8) String get password; String get type;@IsUrl(allowedSchemes: ['http', 'https']) String? get url;
+ int get id;@JsonKey(name: 'full_name') String? get name;@IsEmail(message: "Invalid email") String get email;@IsIp(version: IpVersion.v4) String? get ip;@HasMin(8) String get password; String get type;@IsUrl(allowedSchemes: ['http', 'https']) String? get url; List<Role> get roles;
 /// Create a copy of AnotherSample
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -30,20 +30,20 @@ $AnotherSampleCopyWith<AnotherSample> get copyWith => _$AnotherSampleCopyWithImp
 @override
 bool operator ==(Object other) {
   final _this = this as AnotherSample;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AnotherSample&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.email, _this.email) || other.email == _this.email)&&(identical(other.ip, _this.ip) || other.ip == _this.ip)&&(identical(other.password, _this.password) || other.password == _this.password)&&(identical(other.type, _this.type) || other.type == _this.type)&&(identical(other.url, _this.url) || other.url == _this.url));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AnotherSample&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.email, _this.email) || other.email == _this.email)&&(identical(other.ip, _this.ip) || other.ip == _this.ip)&&(identical(other.password, _this.password) || other.password == _this.password)&&(identical(other.type, _this.type) || other.type == _this.type)&&(identical(other.url, _this.url) || other.url == _this.url)&&const DeepCollectionEquality().equals(other.roles, _this.roles));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as AnotherSample;
-  return Object.hash(runtimeType,_this.id,_this.name,_this.email,_this.ip,_this.password,_this.type,_this.url);
+  return Object.hash(runtimeType,_this.id,_this.name,_this.email,_this.ip,_this.password,_this.type,_this.url,const DeepCollectionEquality().hash(_this.roles));
 }
 
 @override
 String toString() {
   final _this = this as AnotherSample;
-  return 'AnotherSample(id: ${_this.id}, name: ${_this.name}, email: ${_this.email}, ip: ${_this.ip}, password: ${_this.password}, type: ${_this.type}, url: ${_this.url})';
+  return 'AnotherSample(id: ${_this.id}, name: ${_this.name}, email: ${_this.email}, ip: ${_this.ip}, password: ${_this.password}, type: ${_this.type}, url: ${_this.url}, roles: ${_this.roles})';
 }
 
 
@@ -54,7 +54,7 @@ abstract mixin class $AnotherSampleCopyWith<$Res>  {
   factory $AnotherSampleCopyWith(AnotherSample value, $Res Function(AnotherSample) _then) = _$AnotherSampleCopyWithImpl;
 @useResult
 $Res call({
- int id,@JsonKey(name: 'full_name') String? name,@IsEmail(message: "Invalid email") String email,@IsIp(version: IpVersion.v4) String? ip,@HasMin(8) String password, String type,@IsUrl(allowedSchemes: ['http', 'https']) String? url
+ int id,@JsonKey(name: 'full_name') String? name,@IsEmail(message: "Invalid email") String email,@IsIp(version: IpVersion.v4) String? ip,@HasMin(8) String password, String type,@IsUrl(allowedSchemes: ['http', 'https']) String? url, List<Role> roles
 });
 
 
@@ -71,7 +71,7 @@ class _$AnotherSampleCopyWithImpl<$Res>
 
 /// Create a copy of AnotherSample
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = freezed,Object? email = null,Object? ip = freezed,Object? password = null,Object? type = null,Object? url = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = freezed,Object? email = null,Object? ip = freezed,Object? password = null,Object? type = null,Object? url = freezed,Object? roles = null,}) {
   return _then(AnotherSample(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -80,7 +80,8 @@ as String,ip: freezed == ip ? _self.ip : ip // ignore: cast_nullable_to_non_null
 as String?,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,url: freezed == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,roles: null == roles ? _self.roles : roles // ignore: cast_nullable_to_non_nullable
+as List<Role>,
   ));
 }
 
@@ -165,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'full_name')  String? name, @IsEmail(message: "Invalid email")  String email, @IsIp(version: IpVersion.v4)  String? ip, @HasMin(8)  String password,  String type, @IsUrl(allowedSchemes: ['http', 'https'])  String? url)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'full_name')  String? name, @IsEmail(message: "Invalid email")  String email, @IsIp(version: IpVersion.v4)  String? ip, @HasMin(8)  String password,  String type, @IsUrl(allowedSchemes: ['http', 'https'])  String? url,  List<Role> roles)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AnotherSample() when $default != null:
-return $default(_that.id,_that.name,_that.email,_that.ip,_that.password,_that.type,_that.url);case _:
+return $default(_that.id,_that.name,_that.email,_that.ip,_that.password,_that.type,_that.url,_that.roles);case _:
   return orElse();
 
 }
@@ -186,10 +187,10 @@ return $default(_that.id,_that.name,_that.email,_that.ip,_that.password,_that.ty
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'full_name')  String? name, @IsEmail(message: "Invalid email")  String email, @IsIp(version: IpVersion.v4)  String? ip, @HasMin(8)  String password,  String type, @IsUrl(allowedSchemes: ['http', 'https'])  String? url)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'full_name')  String? name, @IsEmail(message: "Invalid email")  String email, @IsIp(version: IpVersion.v4)  String? ip, @HasMin(8)  String password,  String type, @IsUrl(allowedSchemes: ['http', 'https'])  String? url,  List<Role> roles)  $default,) {final _that = this;
 switch (_that) {
 case _AnotherSample():
-return $default(_that.id,_that.name,_that.email,_that.ip,_that.password,_that.type,_that.url);case _:
+return $default(_that.id,_that.name,_that.email,_that.ip,_that.password,_that.type,_that.url,_that.roles);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -206,10 +207,10 @@ return $default(_that.id,_that.name,_that.email,_that.ip,_that.password,_that.ty
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'full_name')  String? name, @IsEmail(message: "Invalid email")  String email, @IsIp(version: IpVersion.v4)  String? ip, @HasMin(8)  String password,  String type, @IsUrl(allowedSchemes: ['http', 'https'])  String? url)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'full_name')  String? name, @IsEmail(message: "Invalid email")  String email, @IsIp(version: IpVersion.v4)  String? ip, @HasMin(8)  String password,  String type, @IsUrl(allowedSchemes: ['http', 'https'])  String? url,  List<Role> roles)?  $default,) {final _that = this;
 switch (_that) {
 case _AnotherSample() when $default != null:
-return $default(_that.id,_that.name,_that.email,_that.ip,_that.password,_that.type,_that.url);case _:
+return $default(_that.id,_that.name,_that.email,_that.ip,_that.password,_that.type,_that.url,_that.roles);case _:
   return null;
 
 }
@@ -221,7 +222,7 @@ return $default(_that.id,_that.name,_that.email,_that.ip,_that.password,_that.ty
 @JsonSerializable()
 
 class _AnotherSample implements AnotherSample {
-  const _AnotherSample({required this.id, @JsonKey(name: 'full_name') this.name, @IsEmail(message: "Invalid email") required this.email, @IsIp(version: IpVersion.v4) this.ip, @HasMin(8) required this.password, this.type = 'user', @IsUrl(allowedSchemes: ['http', 'https']) this.url});
+  const _AnotherSample({required this.id, @JsonKey(name: 'full_name') this.name, @IsEmail(message: "Invalid email") required this.email, @IsIp(version: IpVersion.v4) this.ip, @HasMin(8) required this.password, this.type = 'user', @IsUrl(allowedSchemes: ['http', 'https']) this.url,  List<Role> roles = const [Role.member]}): _roles = roles;
   factory _AnotherSample.fromJson(Map<String, dynamic> json) => _$AnotherSampleFromJson(json);
 
 @override final  int id;
@@ -231,6 +232,13 @@ class _AnotherSample implements AnotherSample {
 @override@HasMin(8) final  String password;
 @override@JsonKey() final  String type;
 @override@IsUrl(allowedSchemes: ['http', 'https']) final  String? url;
+ final  List<Role> _roles;
+@override@JsonKey() List<Role> get roles {
+  if (_roles is EqualUnmodifiableListView) return _roles;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_roles);
+}
+
 
 /// Create a copy of AnotherSample
 /// with the given fields replaced by the non-null parameter values.
@@ -245,18 +253,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _AnotherSample&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.ip, ip) || other.ip == ip)&&(identical(other.password, password) || other.password == password)&&(identical(other.type, type) || other.type == type)&&(identical(other.url, url) || other.url == url));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _AnotherSample&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.ip, ip) || other.ip == ip)&&(identical(other.password, password) || other.password == password)&&(identical(other.type, type) || other.type == type)&&(identical(other.url, url) || other.url == url)&&const DeepCollectionEquality().equals(other.roles, _roles));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,id,name,email,ip,password,type,url);
+    return Object.hash(runtimeType,id,name,email,ip,password,type,url,const DeepCollectionEquality().hash(_roles));
 }
 
 @override
 String toString() {
-    return 'AnotherSample(id: $id, name: $name, email: $email, ip: $ip, password: $password, type: $type, url: $url)';
+    return 'AnotherSample(id: $id, name: $name, email: $email, ip: $ip, password: $password, type: $type, url: $url, roles: $roles)';
 }
 
 
@@ -267,7 +275,7 @@ abstract mixin class _$AnotherSampleCopyWith<$Res> implements $AnotherSampleCopy
   factory _$AnotherSampleCopyWith(_AnotherSample value, $Res Function(_AnotherSample) _then) = __$AnotherSampleCopyWithImpl;
 @override @useResult
 $Res call({
- int id,@JsonKey(name: 'full_name') String? name,@IsEmail(message: "Invalid email") String email,@IsIp(version: IpVersion.v4) String? ip,@HasMin(8) String password, String type,@IsUrl(allowedSchemes: ['http', 'https']) String? url
+ int id,@JsonKey(name: 'full_name') String? name,@IsEmail(message: "Invalid email") String email,@IsIp(version: IpVersion.v4) String? ip,@HasMin(8) String password, String type,@IsUrl(allowedSchemes: ['http', 'https']) String? url, List<Role> roles
 });
 
 
@@ -284,7 +292,7 @@ class __$AnotherSampleCopyWithImpl<$Res>
 
 /// Create a copy of AnotherSample
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = freezed,Object? email = null,Object? ip = freezed,Object? password = null,Object? type = null,Object? url = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = freezed,Object? email = null,Object? ip = freezed,Object? password = null,Object? type = null,Object? url = freezed,Object? roles = null,}) {
   return _then(_AnotherSample(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -293,7 +301,8 @@ as String,ip: freezed == ip ? _self.ip : ip // ignore: cast_nullable_to_non_null
 as String?,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,url: freezed == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,roles: null == roles ? _self._roles : roles // ignore: cast_nullable_to_non_nullable
+as List<Role>,
   ));
 }
 

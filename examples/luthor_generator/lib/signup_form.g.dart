@@ -36,29 +36,30 @@ const SignupFormSchemaKeys = (
   maxAge: "maxAge",
 );
 
-Validator $SignupFormSchema = l.withName('SignupForm').schema({
-  SignupFormSchemaKeys.email: l.string().email().required(),
-  SignupFormSchemaKeys.password: l.string().min(8).required(),
-  SignupFormSchemaKeys.confirmPassword: l
-      .string()
-      .customWithSchema(passwordsMatch, message: "Passwords must match")
-      .required(),
-  SignupFormSchemaKeys.minAge: l.int().required(),
-  SignupFormSchemaKeys.maxAge: l.int()
-      .customWithSchema(
-        isGreaterThanMinAge,
-        message: "Max age must be greater than min age",
-      )
-      .required(),
-});
+final SchemaValidator $SignupFormSchema = l
+    .schema({
+      SignupFormSchemaKeys.email: l.string().email().required(),
+      SignupFormSchemaKeys.password: l.string().min(8).required(),
+      SignupFormSchemaKeys.confirmPassword: l
+          .string()
+          .customWithSchema(passwordsMatch, message: "Passwords must match")
+          .required(),
+      SignupFormSchemaKeys.minAge: l.int().required(),
+      SignupFormSchemaKeys.maxAge: l.int()
+          .customWithSchema(
+            isGreaterThanMinAge,
+            message: "Max age must be greater than min age",
+          )
+          .required(),
+    })
+    .withName("SignupForm");
 
-SchemaValidationResult<SignupForm> $SignupFormValidate(
-  Map<String, dynamic> json,
-) => $SignupFormSchema.validateSchema(json, fromJson: SignupForm.fromJson);
+ValidationResult<SignupForm> $SignupFormValidate(Object? json) =>
+    $SignupFormSchema.validateSchema(json, fromJson: SignupForm.fromJson);
 
 extension SignupFormValidationExtension on SignupForm {
-  SchemaValidationResult<SignupForm> validateSelf() =>
-      $SignupFormValidate(toJson());
+  ValidationResult<SignupForm> validateSelf() =>
+      $SignupFormValidate(_$luthorJsonMap(toJson()));
 }
 
 // ignore: constant_identifier_names
@@ -69,3 +70,25 @@ const SignupFormErrorKeys = (
   minAge: "minAge",
   maxAge: "maxAge",
 );
+
+Map<String, Object?> _$luthorJsonMap(Map<Object?, Object?> map) => {
+  for (final entry in map.entries)
+    entry.key.toString(): _$luthorJsonValue(entry.value),
+};
+
+Object? _$luthorJsonValue(Object? value) {
+  if (value == null || value is String || value is num || value is bool) {
+    return value;
+  }
+  if (value is Map) return _$luthorJsonMap(value);
+  if (value is Iterable) {
+    return [for (final item in value) _$luthorJsonValue(item)];
+  }
+  try {
+    // ignore: avoid_dynamic_calls
+    return _$luthorJsonValue((value as dynamic).toJson());
+    // ignore: avoid_catching_errors
+  } on NoSuchMethodError {
+    return value;
+  }
+}

@@ -53,17 +53,22 @@ Map<String, dynamic> _$CommentToJson(_Comment instance) => <String, dynamic>{
 // ignore: constant_identifier_names
 const UserSchemaKeys = (id: "id", username: "username", comments: "comments");
 
-Validator $UserSchema = l.withName('User').schema({
-  UserSchemaKeys.id: l.string().required(),
-  UserSchemaKeys.username: l.string().required(),
-  UserSchemaKeys.comments: l.list(validators: [$CommentSchema.required()]),
-});
+final SchemaValidator $UserSchema = l
+    .schema({
+      UserSchemaKeys.id: l.string().required(),
+      UserSchemaKeys.username: l.string().required(),
+      UserSchemaKeys.comments: l.list(
+        forwardRef(() => $CommentSchema.required()),
+      ),
+    })
+    .withName("User");
 
-SchemaValidationResult<User> $UserValidate(Map<String, dynamic> json) =>
+ValidationResult<User> $UserValidate(Object? json) =>
     $UserSchema.validateSchema(json, fromJson: User.fromJson);
 
 extension UserValidationExtension on User {
-  SchemaValidationResult<User> validateSelf() => $UserValidate(toJson());
+  ValidationResult<User> validateSelf() =>
+      $UserValidate(_$luthorJsonMap(toJson()));
 }
 
 // ignore: constant_identifier_names
@@ -79,25 +84,28 @@ const CommentSchemaKeys = (
   user: "user",
 );
 
-Validator $CommentSchema = l.withName('Comment').schema({
-  CommentSchemaKeys.id: l.string().required(),
-  CommentSchemaKeys.text: l.string().required(),
-  CommentSchemaKeys.replies: l.list(
-    validators: [forwardRef(() => $CommentSchema.required())],
-  ),
-  CommentSchemaKeys.parent: forwardRef(() => $CommentSchema),
-  CommentSchemaKeys.mentions: l.map(
-    keyValidator: l.string().required(),
-    valueValidator: forwardRef(() => $CommentSchema.required()),
-  ),
-  CommentSchemaKeys.user: forwardRef(() => $UserSchema),
-});
+final SchemaValidator $CommentSchema = l
+    .schema({
+      CommentSchemaKeys.id: l.string().required(),
+      CommentSchemaKeys.text: l.string().required(),
+      CommentSchemaKeys.replies: l.list(
+        forwardRef(() => $CommentSchema.required()),
+      ),
+      CommentSchemaKeys.parent: forwardRef(() => $CommentSchema),
+      CommentSchemaKeys.mentions: l.map(
+        keyValidator: l.string().required(),
+        valueValidator: forwardRef(() => $CommentSchema.required()),
+      ),
+      CommentSchemaKeys.user: forwardRef(() => $UserSchema),
+    })
+    .withName("Comment");
 
-SchemaValidationResult<Comment> $CommentValidate(Map<String, dynamic> json) =>
+ValidationResult<Comment> $CommentValidate(Object? json) =>
     $CommentSchema.validateSchema(json, fromJson: Comment.fromJson);
 
 extension CommentValidationExtension on Comment {
-  SchemaValidationResult<Comment> validateSelf() => $CommentValidate(toJson());
+  ValidationResult<Comment> validateSelf() =>
+      $CommentValidate(_$luthorJsonMap(toJson()));
 }
 
 // ignore: constant_identifier_names
@@ -105,18 +113,34 @@ const CommentErrorKeys = (
   id: "id",
   text: "text",
   replies: "replies",
-  parent: (
-    id: "parent.id",
-    text: "parent.text",
-    replies: "parent.replies",
-    parent: "parent.parent",
-    mentions: "parent.mentions",
-    user: (
-      id: "parent.user.id",
-      username: "parent.user.username",
-      comments: "parent.user.comments",
-    ),
-  ),
+  parent: "parent",
   mentions: "mentions",
-  user: (id: "user.id", username: "user.username", comments: "user.comments"),
+  user: (
+    $key: "user",
+    id: "user.id",
+    username: "user.username",
+    comments: "user.comments",
+  ),
 );
+
+Map<String, Object?> _$luthorJsonMap(Map<Object?, Object?> map) => {
+  for (final entry in map.entries)
+    entry.key.toString(): _$luthorJsonValue(entry.value),
+};
+
+Object? _$luthorJsonValue(Object? value) {
+  if (value == null || value is String || value is num || value is bool) {
+    return value;
+  }
+  if (value is Map) return _$luthorJsonMap(value);
+  if (value is Iterable) {
+    return [for (final item in value) _$luthorJsonValue(item)];
+  }
+  try {
+    // ignore: avoid_dynamic_calls
+    return _$luthorJsonValue((value as dynamic).toJson());
+    // ignore: avoid_catching_errors
+  } on NoSuchMethodError {
+    return value;
+  }
+}

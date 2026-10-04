@@ -4,6 +4,8 @@ import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:luthor_generator/src/annotation_rules.dart';
 import 'package:luthor_generator/src/checkers.dart';
+import 'package:luthor_generator/src/dart_source.dart';
+import 'package:luthor_generator/src/enum_values.dart';
 import 'package:luthor_generator/src/library_plan.dart';
 import 'package:luthor_generator/src/model.dart';
 import 'package:luthor_generator/src/runtime_api.dart' as runtime;
@@ -76,6 +78,11 @@ final class FieldValidators {
 
     final scalar = switch (type) {
       DynamicType() => (runtime.EntryType.any, FieldKind.any),
+      _ when type.isDartCoreObject => (runtime.EntryType.any, FieldKind.any),
+      _ when uriChecker.isExactlyType(type) => (
+        runtime.EntryType.string,
+        FieldKind.string,
+      ),
       _ when type.isDartCoreBool => (
         runtime.EntryType.boolean,
         FieldKind.boolean,
@@ -110,11 +117,29 @@ final class FieldValidators {
     if (fileChecker.isExactlyType(type)) {
       return (entry(runtime.EntryType.file), FieldKind.file);
     }
-    if (type is InterfaceType && type.isDartCoreList) {
+    if (type is InterfaceType &&
+        (type.isDartCoreList ||
+            type.isDartCoreSet ||
+            type.isDartCoreIterable)) {
       final (element, _) = _forType(type.typeArguments.single, context);
       return (
         ValidatorExpr(ListOf(element), required: required),
         FieldKind.list,
+      );
+    }
+    if (type.element case final EnumElement enumElement) {
+      final values = serializedEnumValues(enumElement);
+      final entryType = switch (values) {
+        _ when values.every((value) => value is String) =>
+          runtime.EntryType.string,
+        _ when values.every((value) => value is int) => runtime.EntryType.int,
+        _ => runtime.EntryType.any,
+      };
+      return (
+        entry(entryType, [
+          runtime.allowedValues(values.map(jsonLiteral).toList()),
+        ]),
+        FieldKind.enumeration,
       );
     }
     if (type is InterfaceType && type.isDartCoreMap) {

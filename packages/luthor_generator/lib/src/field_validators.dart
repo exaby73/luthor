@@ -34,7 +34,9 @@ final class FieldValidators {
     final modifiers = <String>[];
     final refinements = <String>[];
     for (final (rule, annotation) in applied) {
-      if (!rule.appliesTo.contains(kind)) continue;
+      if (!rule.appliesTo.contains(kind)) {
+        throw _misplaced(rule, field, owner, kind);
+      }
       final call = _call(rule, annotation, field);
       switch (rule.effect) {
         case RuleEffect.entry:
@@ -165,6 +167,28 @@ final class FieldValidators {
       );
     }
     throw _unsupported(type, context);
+  }
+
+  InvalidGenerationSourceError _misplaced(
+    AnnotationRule rule,
+    ModelField field,
+    Model owner,
+    FieldKind kind,
+  ) {
+    final kinds = rule.appliesTo.map((kind) => kind.description).toList();
+    final accepted = kinds.length == 1
+        ? kinds.single
+        : '${kinds.take(kinds.length - 1).join(', ')} or ${kinds.last}';
+    final hint = kind == FieldKind.list
+        ? ' Validators for list elements are not supported yet '
+              '(https://github.com/exaby73/luthor/issues/71).'
+        : '';
+    return InvalidGenerationSourceError(
+      '@${rule.annotationName} cannot be used on field `${field.name}` of '
+      '`${owner.name}`: it applies to $accepted fields, but `${field.name}` '
+      'is ${field.type.getDisplayString()}.$hint',
+      element: field.parameter,
+    );
   }
 
   ValidatorExpr _forKey(DartType type, _FieldContext context) {

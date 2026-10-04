@@ -83,7 +83,7 @@ A list of models gets one `ErrorKeys` entry for the list. Build element paths fr
 
 A class without `@luthor` that a model's field uses, such as `Address` above, gets a private schema (`_$AddressSchema`) in the model's library, with no public keys or validate function. Annotate it with `@luthor` to get them.
 
-Recursive and mutually recursive models work as they are: nested schemas are always wrapped in `forwardRef`. `@luthorForwardRef` is accepted and has no effect.
+Recursive and mutually recursive models work as they are: nested schemas are always wrapped in `forwardRef`. `@luthorForwardRef` is deprecated: it is accepted and has no effect.
 
 ## Fields
 

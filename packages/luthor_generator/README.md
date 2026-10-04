@@ -39,8 +39,8 @@ constructor with parameters.
 Classes used by a model's fields but not annotated with `@luthor` get a
 private schema (`_$ClassNameSchema`) in the library that uses them. Nested
 schemas are always referenced lazily, so recursive and mutually recursive
-models work without `@luthorForwardRef`, which is still accepted but has no
-effect.
+models work without `@luthorForwardRef`, which is deprecated, still accepted,
+and has no effect.
 
 No `build.yaml` is needed. The builder applies `source_gen`'s combining
 builder itself, so you only need a `part 'file.g.dart';` directive, even when

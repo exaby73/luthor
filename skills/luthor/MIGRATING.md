@@ -62,4 +62,4 @@ Generated code changes too:
 - `validateSelf()` exists only for classes with a `toJson` or a `dart_mappable` mapper.
 - A nested model field's record in `ErrorKeys` gains `$key`, the field's own error path, such as `UserErrorKeys.address.$key`.
 - `freezed` unions, generic models, unsupported field types, and annotations on the wrong field type now fail generation with an error naming the class and field (see [CODEGEN.md](CODEGEN.md#generation-errors)).
-- `@luthorForwardRef` has no effect and can be removed.
+- `@luthorForwardRef` is deprecated, has no effect and can be removed.

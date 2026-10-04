@@ -15,7 +15,7 @@
 - **BREAKING**: Unsupported field types fail with an `InvalidGenerationSourceError` that names the class, the field and the type, with advice for the kind of type, instead of an `UnsupportedError` without a location.
 - **BREAKING**: `validateSelf()` is generated only for models with a `toJson` method (including the one `freezed` generates) or a `dart_mappable` `toMap`. `@JsonSerializable(createToJson: false)` and `@Freezed(toJson: false)` are respected.
 - **BREAKING**: Fields with a `JsonConverter` or a `@JsonKey(fromJson: ...)` function are validated as `l.any()`.
-- **BREAKING**: Nested schema references are always wrapped in `forwardRef`. `@luthorForwardRef` is still accepted but has no effect.
+- **BREAKING**: Nested schema references are always wrapped in `forwardRef`. `@luthorForwardRef` is still accepted but has no effect, and is deprecated.
 - **BREAKING**: Validation annotations are emitted in the order they are written, so `@HasMin(8) @HasMax(200)` generates `.min(8).max(200)`.
 - **BREAKING**: The generator's internal libraries moved under `lib/src`. Only `package:luthor_generator/builder.dart` and `package:luthor_generator/luthor_generator.dart`, which exports it, are public.
 - **BREAKING**: `luthor_generator` no longer depends on `json_annotation`, `freezed_annotation`, `dart_mappable` or `collection`. Serializer annotations are matched by name and package.

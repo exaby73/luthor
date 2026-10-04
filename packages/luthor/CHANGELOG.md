@@ -47,6 +47,7 @@
 - **BREAKING**: Annotation classes are `final`.
 - **FEAT**: Add the `isIp` constant.
 - **FEAT**: Add `caseSensitive`, `multiLine`, `unicode` and `dotAll` to `MatchRegex`, and `accept` to `IsFile`.
+- **DEPRECATE**: Deprecate `LuthorForwardRef` and `@luthorForwardRef`. `luthor_generator` wraps every nested schema reference in `forwardRef()`, so the annotation has no effect. Remove it.
 
 ## Fixes
 

@@ -136,7 +136,7 @@ Auto-generated schemas are private and emitted once per library. Two libraries t
 
 ### Every nested schema goes through `forwardRef`
 
-`SchemaRef` always renders as `forwardRef(() => $AddressSchema.required())`. Generated schemas are top-level `final` variables, which Dart initializes lazily on first read. A schema whose initializer reads itself, directly or through another schema, overflows the stack the first time it is read. The generator could detect cycles instead, but a cycle can run through models in other libraries. Wrapping every reference costs one closure call per nested value and removes the question, so `@luthorForwardRef` is still accepted but has no effect.
+`SchemaRef` always renders as `forwardRef(() => $AddressSchema.required())`. Generated schemas are top-level `final` variables, which Dart initializes lazily on first read. A schema whose initializer reads itself, directly or through another schema, overflows the stack the first time it is read. The generator could detect cycles instead, but a cycle can run through models in other libraries. Wrapping every reference costs one closure call per nested value and removes the question, so `@luthorForwardRef` is still accepted but has no effect, and is deprecated.
 
 The closure is also why each schema is declared as `final SchemaValidator $XSchema`. Inferring the type would go through the closure, back to the variable itself.
 

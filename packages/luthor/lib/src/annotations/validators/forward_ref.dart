@@ -1,25 +1,21 @@
-/// Marks a field whose schema must be referenced with `forwardRef()`.
+const _deprecation =
+    'Has no effect: luthor_generator wraps every nested schema reference in '
+    'forwardRef(). Remove the annotation.';
+
+/// Formerly marked a field whose schema must be referenced with
+/// `forwardRef()`.
 ///
-/// `luthor_generator` wraps the schema reference of the annotated field in
-/// `forwardRef()`, for self-referential or circular models. The generator
-/// also detects direct self-references without it.
-///
-/// ```dart
-/// @luthor
-/// class Node {
-///   final String value;
-///   @luthorForwardRef
-///   final List<Node>? children;
-///
-///   Node({required this.value, this.children});
-///
-///   factory Node.fromJson(Map<String, dynamic> json) => _$NodeFromJson(json);
-/// }
-/// ```
+/// `luthor_generator` now wraps every nested schema reference in
+/// `forwardRef()`, so recursive and mutually recursive models work without
+/// this annotation. The generator still accepts it for compatibility, but it
+/// has no effect, and the generated code is the same with or without it.
+@Deprecated(_deprecation)
 final class LuthorForwardRef {
   /// Creates the annotation.
+  @Deprecated(_deprecation)
   const LuthorForwardRef();
 }
 
-/// A [LuthorForwardRef] annotation.
+/// A [LuthorForwardRef] annotation, which has no effect.
+@Deprecated(_deprecation)
 const luthorForwardRef = LuthorForwardRef();

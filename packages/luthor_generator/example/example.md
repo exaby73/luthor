@@ -19,6 +19,8 @@ import 'package:luthor/luthor.dart';
 
 part 'user.g.dart';
 
+enum Role { admin, member }
+
 @luthor
 @JsonSerializable()
 class User {
@@ -26,11 +28,13 @@ class User {
     @HasMin(2) required this.name,
     @IsEmail() required this.email,
     @HasMin(0) this.age,
+    this.role = Role.member,
   });
 
   final String name;
   final String email;
   final int? age;
+  final Role role;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
@@ -45,8 +49,22 @@ dart run build_runner build
 ```
 
 This adds `$UserSchema`, `$UserValidate`, `UserSchemaKeys`, `UserErrorKeys`
-and a `validateSelf()` extension to `user.g.dart`. Validate JSON with
-`$UserValidate`, and an existing instance with `validateSelf()`:
+and a `validateSelf()` extension to `user.g.dart`:
+
+```dart
+final SchemaValidator $UserSchema = l.schema({
+  UserSchemaKeys.name: l.string().min(2).required(),
+  UserSchemaKeys.email: l.string().email().required(),
+  UserSchemaKeys.age: l.int().min(0),
+  UserSchemaKeys.role: l.oneOf(["admin", "member"]),
+}).withName("User");
+
+ValidationResult<User> $UserValidate(Object? json) =>
+    $UserSchema.validateSchema(json, fromJson: User.fromJson);
+```
+
+Validate JSON with `$UserValidate`, and an existing instance with
+`validateSelf()`:
 
 ```dart
 import 'package:luthor/luthor.dart';
@@ -57,9 +75,9 @@ void main() {
   final result = $UserValidate({'name': 'A', 'email': 'not-an-email'});
 
   switch (result) {
-    case SchemaValidationSuccess(data: final user):
+    case ValidationSuccess(data: final user):
       print('Valid: ${user.name}');
-    case SchemaValidationError(errors: final errors):
+    case ValidationFailure(:final errors):
       print(errors);
       print(result.getError(UserErrorKeys.email));
   }

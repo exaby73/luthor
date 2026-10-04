@@ -3,6 +3,12 @@
 - **BREAKING**: Require Dart 3.11 or later (Flutter 3.41 or later).
 - **FEAT**: Support `analyzer` 10 to 14 (`>=10.0.0 <15.0.0`), so every Flutter release from 3.41 to current is supported. Flutter 3.41 pins `meta` 1.17.0, which resolves analyzer 10.0.x; newer SDKs resolve analyzer 13 or 14.
 - **FEAT**: Require `source_gen` `^4.2.0` and `build` `^4.0.4`. Both ranges resolve with every analyzer from 10 to 14.
+- **BREAKING**: Generate code for the `luthor` 1.0 API. Schemas are declared as `final SchemaValidator $XSchema = l.schema({...}).withName('X');`, with the explicit type because `forwardRef` makes inference circular. Lists use `l.list(element)`, `num` and `bool` fields use `l.num()` and `l.bool()`, and `$XValidate` and `validateSelf()` return `ValidationResult<X>`. `$XValidate` accepts any input (`Object?`), such as decoded JSON.
+- **BREAKING**: Enum fields generate `l.oneOf([...])` with their serialized values, and enum map keys `l.oneOf()` with the values as strings. Map keys of type `int`, `double`, `num` and `BigInt` generate `l.string().custom((key) => int.tryParse(key) != null)` (or the matching parser), and a key that fails is an invalid key of the map.
+- **BREAKING**: `@MatchRegex` generates `.regex(RegExp(r'...'))` with its `caseSensitive`, `multiLine`, `unicode` and `dotAll` flags when they are not the default. `@IsFile(accept: ...)` generates `l.file(accept: ...)`. Annotations pass `messageBuilder:` instead of `messageFn:`.
+- **BREAKING**: `@HasMin` and `@HasMax` replace the `Double` and `Number` variants. A fractional value on an `int` or `String` field fails generation.
+- **BREAKING**: Generated schemas strip unknown keys before `fromJson` runs, like every `luthor` 1.0 schema. Public settable fields that `json_serializable` assigns after the constructor are now schema fields, so their keys survive. Models whose serializer may read keys that are not fields (a `@JsonKey(readValue: ...)` field, a private field with `@JsonKey(includeFromJson: true)`, or a `@MappableClass(hook: ...)`) get `.passthrough()`, and a `readValue` field is validated as an optional `l.any()`.
+- **BREAKING**: `@WithCustomValidator` and `@WithSchemaCustomValidator` on a `Null` field fail generation, since `l.nullValue()` has no `custom()`.
 - **BREAKING**: Generated `$XSchema` variables are `final`.
 - **BREAKING**: Auto-generated schemas, for classes that a model uses but that have no `@luthor`, are now private (`_$XSchema`) and emitted once per library. They no longer get public `SchemaKeys`, `ErrorKeys`, `$XValidate` or `validateSelf()`. Two libraries that nest the same class no longer clash when imported together. Annotate a class with `@luthor` to get its public API.
 - **BREAKING**: Generation fails with a clear error for `freezed` unions (more than one redirecting factory; union dispatch is not supported yet), for generic models and fields of generic types, and for annotations placed on a field type they don't apply to, such as `@IsEmail` on an `int` or `@HasLength` on a `List`. These used to generate code that silently skipped validation or did not compile.
@@ -25,9 +31,9 @@
 - **FIX**: Keep import prefixes on nested schemas and custom validator functions, and qualify static methods declared in extensions. A nested `@luthor` schema hidden by a `show`/`hide` combinator gets a private schema instead.
 - **FIX**: Recursion through nested collections (`List<List<Node>>`, `Map<String, List<Node>>`) and mutual recursion between models no longer overflow the stack.
 - **FIX**: `validateSelf()` converts nested objects with their `toJson()` before validating, so it works when `json_serializable`'s `explicitToJson` is `false`.
-- **FIX**: Nested model fields in `ErrorKeys` get a `$key` entry for the field's own error.
+- **FIX**: Nested model fields in `ErrorKeys` get a `$key` entry for the field's own error. Every `ErrorKeys` entry is the flat error path that `getError` looks up, such as `home.street`.
 - **FIX**: Accept `fromJson` generative constructors and static methods, not only factories.
-- **FIX**: Keep the `message` and `messageFn` of `@IsFile`, emit `double.infinity`, `double.negativeInfinity` and `double.nan` in annotation values, escape `$` in class names passed to `withName`, and stop marking `Null` fields as required.
+- **FIX**: Keep the `message` and `messageBuilder` of `@IsFile`, emit `double.infinity`, `double.negativeInfinity` and `double.nan` in annotation values, escape `$` in class names passed to `withName`, and stop marking `Null` fields as required.
 - **FIX**: Detect `DateTime`, `Uri`, `File` and serializer annotations by library instead of by display name, so same-named types from other packages are not mistaken for them.
 
 # 0.18.0

@@ -11,3 +11,7 @@ pubspec.lock
 .asdf
 .claude/settings.local.json
 .claude/worktrees/
+
+# luthor skill is reinstalled by post:get from skills/luthor
+.agents/skills/luthor
+.claude/skills/luthor

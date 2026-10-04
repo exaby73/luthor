@@ -73,6 +73,11 @@
       "skillPath": "skills/engineering/improve-codebase-architecture/SKILL.md",
       "computedHash": "ac2c94885f34ff8492dc12aa4543182f661f32ea1722b8d6b6c2c7045af33ae3"
     },
+    "luthor": {
+      "source": "./skills/luthor",
+      "sourceType": "local",
+      "computedHash": "d2e5a8551c2efa073e33583c05f2db46bfdb15cbf85d10929ef91534a84878f4"
+    },
     "no-comments": {
       "source": "cursor/plugins",
       "sourceType": "github",

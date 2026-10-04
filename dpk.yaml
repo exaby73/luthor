@@ -56,3 +56,10 @@ scripts:
 
   release:publish:
     command: dpk release publish
+
+  post:get:
+    description: Install the bundled luthor skill for local agents
+    command: >-
+      cd "$DPK_ROOT" &&
+      npx -y skills@1.7.0 add ./skills/luthor -y -a claude-code codex &&
+      dart run tool/normalize_skills_lock.dart

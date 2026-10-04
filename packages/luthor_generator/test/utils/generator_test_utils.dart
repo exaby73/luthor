@@ -139,9 +139,8 @@ void expectOutputLacks(String output, String unexpected) {
   expect(_compact(output), isNot(matches(_snippetPattern(unexpected))));
 }
 
-String _compact(String value) => value
-    .replaceAll(RegExp(r'\s+'), '')
-    .replaceAll(RegExp(r',(?=[)\]}])'), '');
+String _compact(String value) =>
+    value.replaceAll(RegExp(r'\s+'), '').replaceAll(RegExp(r',(?=[)\]}])'), '');
 
 RegExp _snippetPattern(String snippet) {
   final compact = _compact(snippet);

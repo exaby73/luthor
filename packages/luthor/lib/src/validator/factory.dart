@@ -148,6 +148,11 @@ final class ValidatorFactory {
 
   /// Starts a validator for file-like values.
   ///
+  /// The check is structural, so it behaves the same in minified web builds:
+  /// a `dart:io` `File` (where `dart:io` exists), `TypedData` such as
+  /// `Uint8List`, a `ByteBuffer`, a `List<int>`, or a `Stream<List<int>>`.
+  /// A list decoded from JSON is a `List<dynamic>`, not a `List<int>`.
+  ///
   /// [accept] accepts further values as files, such as package types like
   /// `XFile` or `MultipartFile`: `l.file(accept: (value) => value is XFile)`.
   /// An [accept] that throws rejects the value.

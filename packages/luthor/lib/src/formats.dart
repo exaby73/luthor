@@ -1,3 +1,7 @@
+import 'dart:typed_data';
+
+import 'package:luthor/src/io_file_stub.dart'
+    if (dart.library.io) 'package:luthor/src/io_file.dart';
 import 'package:luthor/src/types/ip.dart';
 
 final _email = RegExp(
@@ -108,11 +112,9 @@ bool _isAllowedScheme(String scheme, List<String>? allowedSchemes) {
 }
 
 bool isFile(Object value) {
-  final typeName = value.runtimeType.toString().toLowerCase();
-  return typeName.contains('file') ||
-      typeName.contains('multipart') ||
-      typeName.contains('stream') ||
-      typeName.contains('bytes') ||
-      typeName.contains('uint8list') ||
-      typeName.contains('bytedata');
+  return value is TypedData ||
+      value is ByteBuffer ||
+      value is List<int> ||
+      value is Stream<List<int>> ||
+      isIoFile(value);
 }

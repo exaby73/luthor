@@ -15,12 +15,14 @@ final class Model {
     required this.constructor,
     required this.fields,
     required this.serializer,
+    required this.hasToJson,
   });
 
   final ClassElement element;
   final ConstructorElement constructor;
   final List<ModelField> fields;
   final ModelSerializer serializer;
+  final bool hasToJson;
 
   String get name => element.name!;
 }
@@ -106,7 +108,21 @@ final class ModelReader {
       serializer: context.mappable
           ? ModelSerializer.mappable
           : ModelSerializer.json,
+      hasToJson: context.mappable || _hasToJson(element, context),
     );
+  }
+
+  bool _hasToJson(ClassElement element, _ClassContext context) {
+    final declaresToJson = [
+      element,
+      ...element.allSupertypes.map((supertype) => supertype.element),
+    ].any((type) => type.getMethod('toJson') != null);
+    if (declaresToJson) return true;
+    final freezed = freezedChecker.firstAnnotationOf(element);
+    return freezed != null &&
+        hasFromJson(element) &&
+        ConstantReader(freezed).peek('toJson')?.boolValue != false &&
+        context.createsToJson;
   }
 
   ModelField? _field(FormalParameterElement parameter, _ClassContext context) {
@@ -259,6 +275,9 @@ final class _ClassContext {
   final ClassElement element;
   final bool mappable;
   final ConstantReader _jsonSerializable;
+
+  bool get createsToJson =>
+      _jsonSerializable.peek('createToJson')?.boolValue != false;
 
   late final KeyNaming naming = mappable
       ? mappableNaming(

@@ -50,11 +50,9 @@ void main() {
             r'''$ProfileSchema.validateSchema(json, fromJson: Profile.fromJson)''',
           ),
         );
-        expect(
+        expectOutputContains(
           generation.output,
-          contains(
-            r'''SchemaValidationResult<Profile> validateSelf() => $ProfileValidate(toJson());''',
-          ),
+          r'''SchemaValidationResult<Profile> validateSelf() => $ProfileValidate(_$luthorJsonMap(toJson()));''',
         );
       });
     });

@@ -12,16 +12,15 @@ void main() {
         generation = await generateSharedPart(nestedSource);
       });
 
-      test('Then referenced compatible classes get schemas', () {
-        expect(generation.output, contains(r'''Validator $AuthorSchema ='''));
-        expect(generation.output, contains(r'''Validator $CommentSchema ='''));
+      test('Then referenced compatible classes get private schemas', () {
+        expect(generation.output, contains(r'''Validator _$AuthorSchema ='''));
+        expect(generation.output, contains(r'''Validator _$CommentSchema ='''));
       });
 
-      test('Then list item schemas are referenced', () {
-        expect(generation.output, contains('ArticleSchemaKeys.comments: l'));
-        expect(
+      test('Then list item schemas are referenced lazily', () {
+        expectOutputContains(
           generation.output,
-          contains(r'''validators: [$CommentSchema.required()]'''),
+          r'''ArticleSchemaKeys.comments: l.list(validators: [forwardRef(() => _$CommentSchema.required())]).required(),''',
         );
       });
     });

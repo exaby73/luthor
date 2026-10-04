@@ -50,6 +50,10 @@ void main() {
         );
         expectOutputContains(
           generation.output,
+          'FieldsSchemaKeys.nothing: l.nullValue(),',
+        );
+        expectOutputContains(
+          generation.output,
           'FieldsSchemaKeys.scores: l.map(keyValidator: l.string().required(), valueValidator: l.int().required(),).required(),',
         );
       });
@@ -70,4 +74,83 @@ void main() {
       await expectGeneratedCodeCompiles(allValidatorsSource);
     });
   });
+
+  group('Given an annotation bound that is infinite', () {
+    test('When generated code is analyzed then it compiles', () async {
+      await expectGeneratedCodeCompiles(_infiniteBoundSource);
+    });
+  });
+
+  group('Given annotations from another package with serializer names', () {
+    late String output;
+
+    setUp(() async {
+      output = (await generateSharedPart(_imposterSource)).output;
+    });
+
+    test('Then a foreign JsonKey does not rename the key', () {
+      expectOutputContains(
+        output,
+        'const ImposterSchemaKeys = (value: "value",);',
+      );
+    });
+
+    test('Then a foreign Default does not make the field optional', () {
+      expectOutputContains(
+        output,
+        'ImposterSchemaKeys.value: l.string().required(),',
+      );
+    });
+  });
 }
+
+const _infiniteBoundSource = '''
+import 'package:luthor/luthor.dart';
+
+part 'profile.g.dart';
+
+@luthor
+class Bounds {
+  final double ratio;
+
+  const Bounds({
+    @HasMaxDouble(double.infinity) @HasMinDouble(double.negativeInfinity)
+    required this.ratio,
+  });
+
+  factory Bounds.fromJson(Map<String, dynamic> json) =>
+      Bounds(ratio: json['ratio'] as double);
+
+  Map<String, dynamic> toJson() => {'ratio': ratio};
+}
+''';
+
+const _imposterSource = '''
+import 'package:luthor/luthor.dart';
+
+part 'profile.g.dart';
+
+class JsonKey {
+  const JsonKey({this.name});
+
+  final String? name;
+}
+
+class Default {
+  const Default(this.value);
+
+  final Object? value;
+}
+
+@luthor
+class Imposter {
+  final String value;
+
+  const Imposter({@JsonKey(name: 'other') @Default('x') required this.value});
+
+  factory Imposter.fromJson(Map<String, dynamic> json) =>
+      Imposter(value: json['value'] as String);
+
+  Map<String, dynamic> toJson() => {'value': value};
+}
+''';

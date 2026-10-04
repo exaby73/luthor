@@ -139,7 +139,9 @@ void expectOutputLacks(String output, String unexpected) {
   expect(_compact(output), isNot(contains(_compact(unexpected))));
 }
 
-String _compact(String value) => value.replaceAll(RegExp(r'\s+'), '');
+String _compact(String value) => value
+    .replaceAll(RegExp(r'\s+'), '')
+    .replaceAll(RegExp(r',(?=[)\]}]|$)'), '');
 
 AssetId _partAsset(String library) {
   final stem = library.substring(0, library.length - '.dart'.length);

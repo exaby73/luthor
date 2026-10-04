@@ -1,3 +1,8 @@
+# 1.0.0 (WIP)
+
+- **BREAKING**: Require Dart 3.11 or later (Flutter 3.41 or later).
+- **FEAT**: Allow `meta` `^1.17.0` so `luthor` resolves alongside the `meta` version pinned by Flutter 3.41.
+
 # 0.18.0
 
 - **FIX**: Keep all string and number modifier chains immutable so reusable validators are not mutated by later `.email()`, `.uuid()`, `.min()`, `.max()`, and related calls.

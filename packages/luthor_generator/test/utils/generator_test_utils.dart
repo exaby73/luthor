@@ -30,19 +30,16 @@ Future<void> expectGeneratedCodeCompiles(String source) async {
   final generation = await generateSharedPart(source);
   final compileSource = source.replaceFirst(
     "part 'profile.g.dart';",
-    "part 'profile.luthor.g.part';",
+    "part 'profile.luthor.g.dart';",
   );
   final library = await resolveSources(
     {
       'luthor_generator|lib/profile.dart': compileSource,
-      'luthor_generator|lib/profile.luthor.g.part':
+      'luthor_generator|lib/profile.luthor.g.dart':
           "part of 'profile.dart';\n${generation.output}",
     },
-    (resolver) => resolver.libraries.firstWhere(
-      (library) => library.firstFragment.source.fullName.endsWith(
-        '/luthor_generator/lib/profile.dart',
-      ),
-    ),
+    (resolver) =>
+        resolver.libraryFor(AssetId('luthor_generator', 'lib/profile.dart')),
     readAllSourcesFromFilesystem: true,
   );
 

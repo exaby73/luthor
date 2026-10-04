@@ -1,3 +1,9 @@
+# 1.0.0 (WIP)
+
+- **BREAKING**: Require Dart 3.11 or later (Flutter 3.41 or later).
+- **FEAT**: Support `analyzer` 10 to 14 (`>=10.0.0 <15.0.0`), so every Flutter release from 3.41 to current is supported. Flutter 3.41 pins `meta` 1.17.0, which resolves analyzer 10.0.x; newer SDKs resolve analyzer 13 or 14.
+- **FEAT**: Require `source_gen` `^4.2.0` and `build` `^4.0.4`. Both ranges resolve with every analyzer from 10 to 14.
+
 # 0.18.0
 
 - **FIX**: Escape generated Dart string literals for messages, regexes, JSON keys, and other annotation values so quotes, backslashes, and dollar signs produce valid generated code.

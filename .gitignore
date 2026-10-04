@@ -9,5 +9,4 @@ pubspec.lock
 
 .nvim.lua
 .asdf
-.claude
-CLAUDE.md
+.claude/settings.local.json

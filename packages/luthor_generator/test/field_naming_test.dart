@@ -61,7 +61,10 @@ void main() {
     });
 
     test('Then nested error keys use the nested class rename', () {
-      expectOutputContains(output, 'owner: (firstName: "owner.first_name")');
+      expectOutputContains(
+        output,
+        r'''owner: ($key: "owner", firstName: "owner.first_name")''',
+      );
     });
   });
 

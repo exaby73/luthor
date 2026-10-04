@@ -8,6 +8,7 @@ import 'package:luthor_generator/src/runtime_api.dart' as runtime;
 
 const _jsonMapHelper = r'_$luthorJsonMap';
 const _jsonValueHelper = r'_$luthorJsonValue';
+const _ownKey = r'$key';
 
 final class LibraryEmitter {
   LibraryEmitter(this.plan) : _validators = FieldValidators(plan);
@@ -118,6 +119,7 @@ final class LibraryEmitter {
       }
       buffer
         ..writeln('$indent${field.name}: (')
+        ..writeln('$indent  $_ownKey: ${dartStringLiteral(path)},')
         ..write(
           _errorKeys(nested, path, {...visiting, nested.element}, '$indent  '),
         )

@@ -4,6 +4,7 @@ import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:luthor_generator/src/checkers.dart';
+import 'package:luthor_generator/src/field_naming.dart';
 import 'package:source_gen/source_gen.dart';
 
 enum ModelSerializer { json, mappable }
@@ -92,32 +93,82 @@ final class ModelReader {
       );
     }
     final constructor = _selectConstructor(element);
+    final mappable = isMappable(element);
+    final naming = mappable
+        ? mappableNaming(
+            ConstantReader(
+              mappableClassChecker.firstAnnotationOf(element),
+            ).peek('caseStyle')?.objectValue,
+          )
+        : jsonSerializableNaming(
+            ConstantReader(
+              jsonSerializableChecker.firstAnnotationOf(constructor) ??
+                  jsonSerializableChecker.firstAnnotationOf(element),
+            ).peek('fieldRename')?.objectValue,
+          );
     return Model(
       element: element,
       constructor: constructor,
       fields: [
-        for (final parameter in constructor.formalParameters) _field(parameter),
+        for (final parameter in constructor.formalParameters)
+          _field(parameter, element, naming, mappable: mappable),
       ],
-      serializer: isMappable(element)
-          ? ModelSerializer.mappable
-          : ModelSerializer.json,
+      serializer: mappable ? ModelSerializer.mappable : ModelSerializer.json,
     );
   }
 
-  ModelField _field(FormalParameterElement parameter) {
+  ModelField _field(
+    FormalParameterElement parameter,
+    InterfaceElement owner,
+    KeyNaming naming, {
+    required bool mappable,
+  }) {
     final annotations = [
-      for (final annotation in parameter.metadata.annotations)
-        ?annotation.computeConstantValue(),
+      for (final source in _annotationSources(parameter, owner))
+        for (final annotation in source.metadata.annotations)
+          ?annotation.computeConstantValue(),
     ];
-    final jsonKey = ConstantReader(
-      firstAnnotation(annotations, jsonKeyChecker),
-    );
+    final explicitKey = mappable
+        ? ConstantReader(
+            firstAnnotation(annotations, mappableFieldChecker),
+          ).peek('key')?.stringValue
+        : ConstantReader(
+            firstAnnotation(annotations, jsonKeyChecker),
+          ).peek('name')?.stringValue;
     return ModelField(
       parameter: parameter,
-      key: jsonKey.peek('name')?.stringValue ?? parameter.name!,
+      key: explicitKey ?? naming(parameter.name!),
       annotations: annotations,
       hasDefault: firstAnnotation(annotations, defaultChecker) != null,
     );
+  }
+
+  Iterable<Element> _annotationSources(
+    FormalParameterElement parameter,
+    InterfaceElement owner,
+  ) sync* {
+    yield parameter;
+    if (parameter case SuperFormalParameterElement(
+      superConstructorParameter: final inherited?,
+    )) {
+      if (inherited.enclosingElement?.enclosingElement
+          case final InterfaceElement superclass) {
+        yield* _annotationSources(inherited, superclass);
+      }
+      return;
+    }
+    final field = parameter is FieldFormalParameterElement
+        ? parameter.field
+        : _lookUpField(owner, parameter.name!);
+    if (field != null) yield field;
+  }
+
+  FieldElement? _lookUpField(InterfaceElement owner, String name) {
+    return owner.getField(name) ??
+        owner.allSupertypes
+            .map((supertype) => supertype.element.getField(name))
+            .nonNulls
+            .firstOrNull;
   }
 
   ConstructorElement _selectConstructor(ClassElement element) {

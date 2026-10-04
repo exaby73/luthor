@@ -1,0 +1,60 @@
+---
+title: '.uri()'
+description: Requires the string to parse as a URI, optionally with one of a set of schemes.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when `Uri.tryParse(value)` returns a value and, if `allowedSchemes` is given, the scheme is in that list. `Uri.tryParse` is lenient and accepts most strings, including `'not a uri at all'`. When you expect a web address, use [`.url()`](/reference/string/url), which also requires a host.
+
+## Signature
+
+```dart wrap
+StringValidator uri({List<String>? allowedSchemes, String? message, String? Function()? messageFn})
+```
+
+Available on `l.string()`.
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `allowedSchemes` | `List<String>?` | Schemes to accept, such as `['https']`. Compared exactly, so list lowercase schemes. |
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value must be a valid uri`. With `allowedSchemes`, the message continues with `. Allowed scheme is https` or `. Allowed schemes are http, https`. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+`@IsUri(allowedSchemes: [...])`, or the constant `@isUri` with no scheme restriction. Put the annotation on the constructor parameter.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final link = l.string().uri(allowedSchemes: ['https']);
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+@IsUri(allowedSchemes: ['https']) required String homepage, // l.string().uri(allowedSchemes: ["https"]).required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="link.validateValue(input)"
+  cases={[
+    { input: "'https://example.com'", pass: true },
+    { input: "'mailto:dev@example.com'", pass: false, message: "value must be a valid uri. Allowed scheme is https" },
+  ]}
+/>

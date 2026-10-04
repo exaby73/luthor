@@ -1,0 +1,49 @@
+---
+title: 'Results'
+description: The members of SingleValidationResult and SchemaValidationResult.
+---
+
+Both result types are sealed classes with one success case and one error case. [Results and errors](/concepts/results) explains how to use them; this page lists the members.
+
+## SingleValidationResult
+
+Returned by `validateValue<T>(T value)`.
+
+| Member | On `SingleValidationSuccess<T>` | On `SingleValidationError<T>` |
+|---|---|---|
+| `isValid` | `true` | `false` |
+| `data` | `T`, the input | `T`, the input |
+| `errors` | not present | `List<String>` of messages |
+| `toString()` | `SingleValidationSuccess(data: ...)` | `SingleValidationError(data: ..., errors: [...])` |
+
+```dart
+switch (l.string().email().validateValue(input)) {
+  case SingleValidationSuccess(data: final email):
+  case SingleValidationError(errors: final errors):
+}
+```
+
+## SchemaValidationResult
+
+Returned by `validateSchema<T>(Map<String, Object?> value, {FromJson<T>? fromJson})`, where `FromJson<T>` is `T Function(Map<String, Object?> json)`.
+
+| Member | On `SchemaValidationSuccess<T>` | On `SchemaValidationError<T>` |
+|---|---|---|
+| `isValid` | `true` | `false` |
+| `data` | `T`: the converted model when `fromJson` was given, otherwise the input map | `T?`: the input map, or `null` when `fromJson` was given |
+| `errors` | not present | `Map<String, dynamic>`, the error map |
+| `getError(String path)` | not present | first message at the error path, or `null` |
+| `toString()` | `SchemaValidationSuccess(data: ...)` | `SchemaValidationError(data: ..., errors: {...})` |
+
+`getError` splits the path on `.` and walks the error map. It returns `null` when the field passed. It throws a `StateError` when the path stops at a nested map instead of a list of messages. [Error messages](/reference/errors) describes the map.
+
+```dart
+switch (user.validateSchema<User>(json, fromJson: User.fromJson)) {
+  case SchemaValidationSuccess(data: final user):
+  case SchemaValidationError(errors: final errors):
+}
+```
+
+## Generated validate function
+
+For a model `User`, `luthor_generator` emits `SchemaValidationResult<User> $UserValidate(Map<String, dynamic> json)`, which calls `validateSchema` with the model's `fromJson`. [What gets generated](/generator/output) lists the rest.

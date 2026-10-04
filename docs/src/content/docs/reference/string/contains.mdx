@@ -1,0 +1,60 @@
+---
+title: '.contains()'
+description: Requires the string to contain a given substring.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when `value.contains(string)` is true. The comparison is case-sensitive.
+
+## Signature
+
+```dart wrap
+StringValidator contains(String string, {String? message, String? Function()? messageFn})
+```
+
+Available on `l.string()`.
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `string` | `String` | The substring that has to appear. |
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value does not contain "@"`, with the substring quoted. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+`@Contains(s)`. Put the annotation on the constructor parameter.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final handle = l.string().contains('@');
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+@Contains('@') required String handle, // l.string().contains("@").required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="handle.validateValue(input)"
+  cases={[
+    { input: "'dev@example.com'", pass: true },
+    { input: "'a'", pass: false, message: "value does not contain \"@\"" },
+  ]}
+/>

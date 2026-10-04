@@ -1,167 +1,207 @@
 ---
-import { Image } from 'astro:assets';
-import CallToAction from './CallToAction.astro';
-
-const PAGE_TITLE_ID = '_top';
+/**
+ * Landing-page first viewport. Starlight renders this instead of the page
+ * title whenever a page has `hero` frontmatter. Only the landing page does.
+ */
+import { Code } from '@astrojs/starlight/components';
+import Verdict from './Verdict.astro';
 
 const { data } = Astro.locals.starlightRoute.entry;
-const shouldRender = Boolean(data?.title || data?.hero);
-const { title = data?.title ?? '', tagline, image, actions = [] } = data?.hero || {};
+const tagline = data.hero?.tagline ?? '';
 
-const imageAttrs = {
-	loading: 'eager' as const,
-	decoding: 'async' as const,
-	width: 400,
-	height: 400,
-	alt: image?.alt || '',
-};
+const schema = `final user = l.schema({
+  'email': l.string().email().required(),
+  'age': l.int().min(18),
+  'profile': l.schema({
+    'displayName': l.string().min(2).required(),
+  }).required(),
+});`;
 
-let darkImage: ImageMetadata | undefined;
-let lightImage: ImageMetadata | undefined;
-let rawHtml: string | undefined;
-if (image) {
-	if ('file' in image) {
-		darkImage = image.file;
-	} else if ('dark' in image) {
-		darkImage = image.dark;
-		lightImage = image.light;
-	} else {
-		rawHtml = image.html;
-	}
-}
-
-const titleParts = title.split(/\s+/).filter(Boolean);
+const cases = [
+  {
+    input: "{'email': 'dev@example.com', 'profile': {'displayName': 'Ada'}}",
+    pass: true,
+  },
+  {
+    input: "{'email': 'dev@example.com', 'age': 42, 'profile': {'displayName': 'Ada'}}",
+    pass: true,
+  },
+  {
+    input: "{'email': 'bad', 'age': 12, 'profile': {'displayName': 'x'}}",
+    pass: false,
+    message: [
+      'email must be a valid email address',
+      'age must be greater than or equal to 18',
+      'profile.displayName: displayName must be at least 2 characters long',
+    ],
+  },
+];
 ---
 
-{shouldRender && <div class="hero">
-  <div class="sl-flex copy">
-    <h1 id={PAGE_TITLE_ID} data-page-title>
-			{titleParts.map((titlePart) => <span>{titlePart}</span>)}
-		</h1>
-    {tagline && <div class="tagline" set:html={tagline} />}
-		{actions.length > 0 && (
-			<div class="sl-flex actions">
-				{actions.map(({ text, ...attrs }: any) => (
-					<CallToAction {...attrs}>{text}</CallToAction>
-				))}
-			</div>
-		)}
+<section class="lu-hero not-content">
+  <div class="lu-hero__copy">
+    <h1 id="_top" data-page-title>
+      Validation for Dart that returns a result instead of throwing.
+    </h1>
+    <p class="lu-hero__lead" set:html={tagline} />
+    <div class="lu-hero__install">
+      <Code code="dart pub add luthor" lang="sh" frame="none" />
+    </div>
+    <p class="lu-hero__links">
+      <a class="lu-hero__primary" href="/installation">Start with installation</a>
+      <a href="/reference/types/string">Browse the API reference</a>
+    </p>
+    <dl class="lu-hero__facts">
+      <div>
+        <dt>Release</dt>
+        <dd>1.0.0</dd>
+      </div>
+      <div>
+        <dt>Requires</dt>
+        <dd>Dart 3.11 or Flutter 3.41</dd>
+      </div>
+      <div>
+        <dt>Dependencies</dt>
+        <dd><code>meta</code> only</dd>
+      </div>
+    </dl>
   </div>
-	{darkImage && (
-		<Image
-			src={darkImage}
-			{...imageAttrs}
-			class:list={{ 'light:sl-hidden': Boolean(lightImage) }}
-		/>
-	)}
-	{lightImage && <Image src={lightImage} {...imageAttrs} class="dark:sl-hidden" />}
-	{rawHtml && <div class="hero-html sl-flex" set:html={rawHtml} />}
-</div>}
+
+  <div class="lu-hero__demo">
+    <Code code={schema} lang="dart" title="user.dart" />
+    <Verdict title="user.validateSchema(input)" cases={cases} animate />
+  </div>
+</section>
 
 <style>
-	.hero {
-		display: flex;
-    flex-direction: row;
-		align-items: center;
-		gap: clamp(1rem, 3vw, 2.5rem);
-    border-bottom: 1px solid var(--sl-color-gray-6);
-    padding: 1.5rem 1rem 2rem;
-	}
+  .lu-hero {
+    display: grid;
+    gap: 2.5rem 4rem;
+    align-items: start;
+    padding-block: 1.5rem 2.5rem;
+  }
 
-	.hero > img,
-	.hero > .hero-html {
-		object-fit: contain;
-		width: min(70%, 20rem);
-		height: auto;
-		margin-inline: auto;
-	}
+  @media (min-width: 64rem) {
+    .lu-hero {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      padding-block: 3rem 3.5rem;
+    }
+  }
 
-	.stack {
-		flex-direction: column;
-		gap: clamp(1.5rem, calc(1.5rem + 1vw), 2rem);
-		text-align: center;
-	}
-
-	.copy {
-		flex-direction: column;
-		gap: 0.85rem;
-		align-items: center;
-	}
-
-	.copy > * {
-    width: 100%;
-	}
-
-	h1 {
-		font-size: clamp(var(--sl-text-3xl), calc(0.25rem + 5vw), var(--sl-text-5xl));
-		line-height: var(--sl-line-height-headings);
-		font-weight: 600;
-		color: var(--sl-color-white);
+  .lu-hero__copy {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 34rem;
+  }
+
+  h1 {
+    font-size: clamp(2.125rem, 1.4rem + 2.6vw, 3.25rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    color: var(--sl-color-white);
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  .lu-hero__lead {
+    margin: 0;
+    font-size: 1.125rem;
+    line-height: 1.55;
+    color: var(--sl-color-gray-2);
+    text-wrap: pretty;
+  }
+
+  .lu-hero__lead :global(code) {
+    font-family: var(--__sl-font-mono);
+    font-size: 0.9em;
+    color: var(--sl-color-white);
+    background: var(--sl-color-bg-inline-code);
+    border-radius: var(--lu-radius);
+    padding: 0.1em 0.35em;
+  }
+
+  .lu-hero__install {
+    max-width: 24rem;
+  }
+
+  .lu-hero__install :global(.expressive-code) {
+    margin: 0;
+  }
+
+  .lu-hero__links {
+    display: flex;
     flex-wrap: wrap;
-	}
+    gap: 0.75rem 1.5rem;
+    margin: 0;
+    font-size: var(--sl-text-base);
+  }
 
-	.tagline {
-		font-size: clamp(var(--sl-text-base), calc(0.0625rem + 2vw), var(--sl-text-lg));
-		line-height: 1.65;
-		color: var(--sl-color-gray-2);
-	}
+  .lu-hero__links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    color: var(--sl-color-white);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--sl-color-accent);
+    text-underline-offset: 0.3em;
+    font-weight: 600;
+    transition: color 120ms ease;
+  }
 
-	.actions {
-		gap: 0.75rem 1rem;
-		flex-wrap: wrap;
-		justify-content: center;
-		margin-top: 1rem;
-	}
+  .lu-hero__links a:hover,
+  .lu-hero__links a:focus-visible {
+    color: var(--sl-color-accent);
+  }
 
-	@media screen and (max-width: 1250px) {
-		.hero {
-			flex-direction: column-reverse;
-			text-align: center;
-		}
+  .lu-hero__links a:not(.lu-hero__primary) {
+    font-weight: 500;
+    text-decoration-color: var(--sl-color-gray-4);
+  }
 
-		h1 {
-			gap: 0.75rem;
-			text-align: center;
-			justify-content: center;
-		}
+  .lu-hero__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    margin: 0.25rem 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--sl-color-hairline);
+    font-size: var(--sl-text-sm);
+  }
 
-		.hero > img,
-		.hero > .hero-html {
-			order: 2;
-			width: min(100%, 25rem);
-		}
-	}
+  .lu-hero__facts div {
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+  }
 
-	@media (min-width: 50rem) {
-		.hero {
-			padding: 2.75rem 2rem;
-		}
+  .lu-hero__facts dt {
+    color: var(--sl-color-gray-3);
+  }
 
-		.hero > img,
-		.hero > .hero-html {
-			order: 2;
-			width: min(100%, 25rem);
-		}
+  .lu-hero__facts dd {
+    margin: 0;
+    color: var(--sl-color-white);
+    font-weight: 600;
+  }
 
-		.stack {
-			text-align: start;
-		}
+  .lu-hero__facts code {
+    font-family: var(--__sl-font-mono);
+    font-weight: 500;
+    font-size: 0.9em;
+  }
 
-		.copy {
-			align-items: flex-start;
-		}
+  .lu-hero__demo {
+    min-width: 0;
+  }
 
-		h1 {
-			justify-content: flex-start;
-			text-align: start;
-		}
+  .lu-hero__demo :global(.expressive-code) {
+    margin: 0;
+  }
 
-		.actions {
-			justify-content: flex-start;
-		}
-	}
+  .lu-hero__demo :global(.lu-report) {
+    margin-top: 1rem;
+  }
 </style>

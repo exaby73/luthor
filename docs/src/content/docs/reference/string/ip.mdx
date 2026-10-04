@@ -1,0 +1,61 @@
+---
+title: '.ip()'
+description: Requires the string to be an IPv4 or IPv6 address.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when the string matches the IPv4 pattern, the IPv6 pattern, or, when `version` is given, only that version. `IpVersion` is an enum with `v4` and `v6`.
+
+## Signature
+
+```dart wrap
+StringValidator ip({IpVersion? version, String? message, String? Function()? messageFn})
+```
+
+Available on `l.string()`.
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `version` | `IpVersion?` | `IpVersion.v4` or `IpVersion.v6`. Omit to accept either. |
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value must be a valid IP address`, `value must be a valid IPv4 address`, or `value must be a valid IPv6 address`, depending on `version`. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+`@IsIp(version: IpVersion.v4)`. There is no constant shorthand for this annotation. Put the annotation on the constructor parameter.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final v4 = l.string().ip(version: IpVersion.v4);
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+@IsIp(version: IpVersion.v4) required String host, // l.string().ip(version: IpVersion.v4).required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="v4.validateValue(input)"
+  cases={[
+    { input: "'192.168.0.1'", pass: true },
+    { input: "'::1'", pass: false, message: "value must be a valid IPv4 address" },
+    { input: "'999.1.1.1'", pass: false, message: "value must be a valid IPv4 address" },
+  ]}
+/>

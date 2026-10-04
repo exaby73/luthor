@@ -1,27 +1,24 @@
 {
-  "name": "docs",
+  "name": "luthor-docs",
   "type": "module",
   "version": "0.0.1",
+  "private": true,
+  "engines": {
+    "node": ">=24.16.0"
+  },
   "scripts": {
     "dev": "astro dev",
-    "start": "node ./dist/server/entry.mjs",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.0",
-    "@astrojs/starlight": "^0.40.0",
-    "@astrojs/tailwind": "^6.0.0",
-    "@fontsource-variable/space-grotesk": "^5.2.0",
-    "@fontsource/space-mono": "^5.2.0",
-    "astro": "^6.4.0",
-    "sharp": "^0.35.0",
-    "tailwindcss": "^3.4.0",
-    "typescript": "^6.0.0"
-  },
-  "devDependencies": {
-    "@types/alpinejs": "^3.13.0",
-    "alpinejs": "^3.15.0"
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/starlight": "^0.42.5",
+    "@fontsource-variable/atkinson-hyperlegible-mono": "^5.3.0",
+    "@fontsource-variable/atkinson-hyperlegible-next": "^5.3.0",
+    "astro": "^7.3.5",
+    "sharp": "^0.35.5",
+    "typescript": "^6.0.3"
   }
 }

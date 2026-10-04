@@ -1,0 +1,89 @@
+---
+import EditLink from '@astrojs/starlight/components/EditLink.astro';
+import LastUpdated from '@astrojs/starlight/components/LastUpdated.astro';
+import Pagination from '@astrojs/starlight/components/Pagination.astro';
+
+const { entry } = Astro.locals.starlightRoute;
+const isSplash = entry.data.template === 'splash';
+---
+
+<footer class="lu-footer">
+  {
+    !isSplash && (
+      <div class="meta">
+        <EditLink />
+        <LastUpdated />
+      </div>
+    )
+  }
+  <Pagination />
+  <ul class="colophon">
+    <li>Luthor is MIT licensed.</li>
+    <li><a href="https://github.com/exaby73/luthor">Source on GitHub</a></li>
+    <li><a href="https://pub.dev/packages/luthor">luthor on pub.dev</a></li>
+    <li><a href="https://pub.dev/packages/luthor_generator">luthor_generator on pub.dev</a></li>
+    <li><a href="https://ex3.dev/">Nabeel Parkar</a></li>
+  </ul>
+</footer>
+
+<style>
+  .lu-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--sl-color-hairline);
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-3);
+  }
+
+  .meta > :global(p:only-child) {
+    margin-inline-start: auto;
+  }
+
+  .colophon {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0;
+    margin: 0;
+    padding: 1rem 0 0;
+    border-top: 1px solid var(--sl-color-hairline);
+    list-style: none;
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+  }
+
+  .colophon li {
+    white-space: nowrap;
+    margin: 0;
+  }
+
+  .colophon li + li::before {
+    content: '/';
+    margin-inline: 0.6rem;
+    color: var(--sl-color-gray-4);
+  }
+
+  .colophon a {
+    color: var(--sl-color-gray-2);
+    text-decoration: none;
+    padding-block: 0.5rem;
+  }
+
+  .colophon a:hover,
+  .colophon a:focus-visible {
+    color: var(--sl-color-white);
+    text-decoration: underline;
+    text-decoration-color: var(--sl-color-accent);
+    text-underline-offset: 0.2em;
+  }
+</style>

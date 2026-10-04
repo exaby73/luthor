@@ -1,0 +1,59 @@
+---
+title: '.emoji()'
+description: Requires the string to be an emoji.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when the string matches Luthor's emoji pattern. The pattern covers the emoji blocks and also the general symbol range from U+2000 to U+3300, so arrows and typographic symbols such as `→` pass.
+
+## Signature
+
+```dart wrap
+StringValidator emoji({String? message, String? Function()? messageFn})
+```
+
+Available on `l.string()`.
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value must be a valid emoji`. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+`@IsEmoji()`, or the constant `@isEmoji`. Put the annotation on the constructor parameter.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final reaction = l.string().emoji();
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+@IsEmoji() required String reaction, // l.string().emoji().required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="reaction.validateValue(input)"
+  cases={[
+    { input: "'\ud83c\udf89'", pass: true },
+    { input: "'a'", pass: false, message: "value must be a valid emoji" },
+  ]}
+/>

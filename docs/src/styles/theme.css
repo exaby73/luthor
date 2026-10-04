@@ -1,725 +1,913 @@
+/*
+ * Luthor docs theme.
+ *
+ * The visual idea is a test report: paper or graphite ground, iron or bone
+ * ink, hairlines at exactly 1px, and colour rationed by role. Green marks a
+ * passed verdict and every interactive thing. Red marks a failed verdict and
+ * nothing else. Amber is for caution. Everything else is a neutral.
+ *
+ * Starlight's own styles live in cascade layers. This file is unlayered, so
+ * its rules win without `!important`.
+ */
+
+/* ------------------------------------------------------------------ */
+/* Tokens                                                              */
+/* ------------------------------------------------------------------ */
+
 :root {
-  /* Font */
-  --sl-font: 'Space Grotesk', sans-serif;
-  --sl-font-system-mono: "Space Mono", monospace;
+  --sl-font: 'Atkinson Hyperlegible Next Variable';
+  --sl-font-mono: 'Atkinson Hyperlegible Mono Variable';
 
-  /* Dark mode colors */
-	--sl-color-accent-low: #3c0017;
-	--sl-color-accent: #bd0249;
-	--sl-color-accent-high: #ff78ac;
-	--sl-color-white: #ffffff;
-	--sl-color-gray-1: #c2c2c2;
-	--sl-color-gray-2: #a3a3a3;
-	--sl-color-gray-3: #838383;
-	--sl-color-gray-4: #3f3f3f;
-	--sl-color-gray-5: #262626;
-	--sl-color-gray-6: #121212;
-	--sl-color-black: #070707;
+  /* Dark: a graphite panel with a blue cast, not black. */
+  --sl-color-white: #eef0f3;
+  --sl-color-gray-1: #dde0e6;
+  --sl-color-gray-2: #b9bfca;
+  --sl-color-gray-3: #8a92a1;
+  --sl-color-gray-4: #5d6574;
+  --sl-color-gray-5: #2b303a;
+  --sl-color-gray-6: #1a1e25;
+  --sl-color-gray-7: #171a20;
+  --sl-color-black: #13161c;
 
-	--sl-color-red-low: #3c0017;
-  --sl-color-red: #bd0249;
-  --sl-color-red-high: #ff78ac;
+  --sl-color-accent-low: #173426;
+  --sl-color-accent: #5ccf97;
+  --sl-color-accent-high: #8fe0b8;
 
-  --sl-color-purple-low: #33225b;
-  --sl-color-purple: #9975ee;
-  
-  --sl-border: #262626;
-  --pagefind-ui-border: #262626;
-  --pagefind-ui-primary: var(--sl-color-accent);
+  --sl-color-green-low: var(--sl-color-accent-low);
+  --sl-color-green: var(--sl-color-accent);
+  --sl-color-green-high: var(--sl-color-accent-high);
 
-  --sl-icon-size: 1.25rem;
-  --luthor-content-max: 74rem;
-  --luthor-content-pad-y: 2rem;
-  --luthor-radius: 0.5rem;
-  --luthor-touch-target: 2.75rem;
-  --sl-sidebar-width: 15rem;
-  --luthor-toc-width: 18.75rem;
-  --luthor-right-rail-width: 36rem;
+  --sl-color-red-low: #3a1f1e;
+  --sl-color-red: #f08279;
+  --sl-color-red-high: #f7b1ab;
+
+  --sl-color-orange-low: #3a2e14;
+  --sl-color-orange: #e2b04f;
+  --sl-color-orange-high: #f0cf8a;
+
+  --sl-color-blue-low: #1b2740;
+  --sl-color-blue: #86a9f5;
+  --sl-color-blue-high: #b4c8f8;
+
+  --sl-color-purple-low: #2a2140;
+  --sl-color-purple: #c2a7f5;
+  --sl-color-purple-high: #dacbf9;
+
+  --sl-color-text: var(--sl-color-gray-2);
+  --sl-color-text-accent: var(--sl-color-accent);
+  --sl-color-text-invert: #0f1b15;
+  --sl-color-bg: var(--sl-color-black);
+  --sl-color-bg-nav: var(--sl-color-black);
+  --sl-color-bg-sidebar: var(--sl-color-black);
+  --sl-color-bg-inline-code: #1e232b;
+  --sl-color-bg-accent: var(--sl-color-accent);
+  --sl-color-hairline-light: #2b303a;
+  --sl-color-hairline: #262b34;
+  --sl-color-hairline-shade: #262b34;
+  --sl-color-backdrop-overlay: rgba(10, 12, 16, 0.7);
+
+  --lu-code-bg: #0e1015;
+  --lu-code-chrome: #171a21;
+  --lu-selection: rgba(92, 207, 151, 0.28);
+  --lu-mark-bg: rgba(92, 207, 151, 0.1);
+  --lu-ins-bg: rgba(92, 207, 151, 0.1);
+  --lu-del-bg: rgba(240, 130, 121, 0.12);
+
+  --sl-shadow-sm: none;
+  --sl-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --sl-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.45);
+
+  /* Layout and type */
+  --sl-content-width: 46rem;
+  --sl-sidebar-width: 17rem;
+  --sl-line-height: 1.65;
+  --sl-line-height-headings: 1.15;
+  --sl-text-code: 0.875rem;
+  --sl-text-code-sm: 0.8125rem;
+  --lu-radius: 0.125rem;
 }
 
-/* Change background color of sidebar & add border */
-#starlight__sidebar {
-  background-color: var(--sl-color-black);
-  border-right: 1px solid var(--sl-color-gray-5);
+:root[data-theme='light'] {
+  /* Light: a cool sheet of report paper, not cream. */
+  --sl-color-white: #15181e;
+  --sl-color-gray-1: #262a33;
+  --sl-color-gray-2: #3b414d;
+  --sl-color-gray-3: #5f6673;
+  --sl-color-gray-4: #8a919e;
+  --sl-color-gray-5: #cfd3db;
+  --sl-color-gray-6: #e6e9ee;
+  --sl-color-gray-7: #eef0f4;
+  --sl-color-black: #f7f8fa;
+
+  --sl-color-accent-low: #d8f0e2;
+  --sl-color-accent: #0d7a47;
+  --sl-color-accent-high: #0a5e37;
+
+  --sl-color-red-low: #fbe3e1;
+  --sl-color-red: #b3261e;
+  --sl-color-red-high: #8c1a14;
+
+  --sl-color-orange-low: #f8ebcf;
+  --sl-color-orange: #8a5600;
+  --sl-color-orange-high: #6b4300;
+
+  --sl-color-blue-low: #dfe7fb;
+  --sl-color-blue: #2457c5;
+  --sl-color-blue-high: #1b4299;
+
+  --sl-color-purple-low: #ebe3fb;
+  --sl-color-purple: #6b43c4;
+  --sl-color-purple-high: #51319a;
+
+  --sl-color-text-accent: var(--sl-color-accent);
+  --sl-color-text-invert: #ffffff;
+  --sl-color-bg-nav: var(--sl-color-black);
+  --sl-color-bg-sidebar: var(--sl-color-black);
+  --sl-color-bg-inline-code: #e6e9ee;
+  --sl-color-hairline-light: #d6dae2;
+  --sl-color-hairline: #dcdfe6;
+  --sl-color-hairline-shade: #dcdfe6;
+  --sl-color-backdrop-overlay: rgba(40, 46, 58, 0.5);
+
+  --lu-code-bg: #ffffff;
+  --lu-code-chrome: #f0f2f5;
+  --lu-selection: rgba(13, 122, 71, 0.2);
+  --lu-mark-bg: rgba(13, 122, 71, 0.08);
+  --lu-ins-bg: rgba(13, 122, 71, 0.08);
+  --lu-del-bg: rgba(179, 38, 30, 0.08);
+
+  --sl-shadow-md: 0 8px 24px rgba(20, 24, 32, 0.12);
+  --sl-shadow-lg: 0 16px 40px rgba(20, 24, 32, 0.16);
 }
 
-/* Change background of header & add border */
-header.header {
-  background-color: var(--sl-color-black);
-  border-bottom: 1px solid var(--sl-border);
+/* ------------------------------------------------------------------ */
+/* Browser surfaces                                                    */
+/* ------------------------------------------------------------------ */
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sl-color-gray-5) transparent;
+  accent-color: var(--sl-color-accent);
+  caret-color: var(--sl-color-accent);
 }
 
-/* Remove the border for the theme selector since it is disabled */
-.social-icons::after {
-  border: none;
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sl-color-gray-5) transparent;
 }
 
-/* Add a gap to the now split + flex site title */
-.site-title {
-  gap: 1rem;
-}
-
-/* Reduce the image size of the site title */
-.site-title img {
-  height: calc((var(--sl-nav-height) - 2 * var(--sl-nav-pad-y)) - 6px);
-}
-
-.site-title > span {
-  display: flex;
-  gap: 0.5rem;
-  color: var(--sl-color-white);
-}
-
-/* Change link color for icons from accent-light to white */
-.social-icons a {
-  color: var(--sl-color-white);
-}
-
-/* Add border-radius to card, change padding, add transition */
-.card, .sl-link-card {
-  border-radius: var(--luthor-radius) !important;
-  padding: 1.5rem !important;
-  transition:
-    border-color 0.1s ease,
-    background-color 0.1s ease,
-    color 0.1s ease,
-    box-shadow 0.1s ease;
-}
-
-html,
-body {
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-main,
-.main-frame,
-.main-pane,
-.sl-markdown-content {
-  min-width: 0;
-  max-width: 100%;
-}
-
-.main-pane {
-  flex: 1 1 auto;
-}
-
-.right-sidebar-panel {
-  width: var(--luthor-toc-width);
-}
-
-.sl-container {
-  margin-left: 0 !important;
-  max-width: min(var(--luthor-content-max), 100%) !important;
-}
-
-/* Add a border to the footer,  */
-.page-footer {
-  border-top: 1px solid var(--sl-color-gray-6);
-  padding: 1.5rem var(--sl-content-pad-x);
-  font-size: var(--sl-text-sm);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-}
-
-/* Adjust padding on pages with hero component */
-.hero ~ footer .page-footer {
-  padding: 2rem !important;
-}
-
-/* Add padding to meta */
-.meta {
-  padding-inline: var(--sl-content-pad-x);
-}
-
-/* Adjust padding on pages with hero component */
-.hero ~ footer .meta {
-  padding-inline: 2rem !important;
-}
-
-/* Add better spacing to footer */
-.page-footer > div {
-  display: flex;
-  flex-direction: row;
-  gap: 0.75rem;
-}
-
-/* Remove default padding... */
-.content-panel:has(footer) {
-  padding: 0;
-}
-
-main > .content-panel:first-of-type:not(:has(.hero)) {
-  border-bottom: 1px solid var(--sl-color-gray-6);
-  padding: 0 !important;
-}
-
-main > .content-panel:first-of-type h1#_top:not([data-page-title]) {
-  max-width: var(--luthor-content-max);
-  padding: 2.25rem var(--sl-content-pad-x) 1.65rem;
-  font-size: clamp(2.25rem, 1.75rem + 2vw, 3rem);
-  line-height: 1.08;
-  font-weight: 600;
-  color: var(--sl-color-white);
-  text-wrap: balance;
-}
-
-/* ... and instead add it to the content itself to allow for proper full-width borders */
-.sl-markdown-content {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: var(--luthor-content-max);
-  padding: var(--luthor-content-pad-y) var(--sl-content-pad-x);
-  line-height: 1.6;
-  color: var(--sl-color-gray-2);
-}
-
-.sl-markdown-content :is(p, ul, ol, blockquote) {
-  line-height: 1.6;
-  margin-block: 0.75rem;
-  max-width: 72ch;
-  overflow-wrap: break-word;
-}
-
-.sl-markdown-content .feature-summary {
-  margin-block: 1rem 2.75rem;
-}
-
-.sl-markdown-content .feature-summary p {
-  margin-block: 0.35rem;
-}
-
-.sl-markdown-content strong {
-  color: var(--sl-color-gray-1);
-  font-weight: 600;
-}
-
-.sl-markdown-content :is(ul, ol) {
-  padding-inline-start: 1.35rem;
-}
-
-.sl-markdown-content li + li {
-  margin-block-start: 0.35rem;
-}
-
-.sl-markdown-content :is(h2, h3, h4),
-.sl-markdown-content :is(.sl-heading-wrapper.level-h2, .sl-heading-wrapper.level-h3, .sl-heading-wrapper.level-h4) {
-  line-height: var(--sl-line-height-headings);
-  font-weight: 600;
-  color: var(--sl-color-white);
-  text-wrap: balance;
-}
-
-.sl-markdown-content .sl-heading-wrapper > :is(h2, h3, h4) {
-  margin: 0;
-  font-size: inherit;
-  line-height: inherit;
+::selection {
+  background: var(--lu-selection);
   color: inherit;
 }
 
-.sl-markdown-content h2,
-.sl-markdown-content .sl-heading-wrapper.level-h2 {
-  margin-block-start: 3.5rem;
-  margin-block-end: 1rem;
-  font-size: clamp(1.6rem, 1.3rem + 1.2vw, 2.1rem);
+/* Focus is a printed bracket: two vertical rules either side of the element. */
+:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow:
+    -5px 0 0 -1px var(--sl-color-accent),
+    5px 0 0 -1px var(--sl-color-accent);
 }
 
-.sl-markdown-content h3,
-.sl-markdown-content .sl-heading-wrapper.level-h3 {
-  margin-block-start: 2.35rem;
-  margin-block-end: 0.75rem;
-  font-size: clamp(1.35rem, 1.15rem + 0.8vw, 1.65rem);
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  box-shadow:
+    -4px 0 0 0 var(--sl-color-accent),
+    4px 0 0 0 var(--sl-color-accent);
 }
 
-.sl-markdown-content h4,
-.sl-markdown-content .sl-heading-wrapper.level-h4 {
-  margin-block-start: 1.85rem;
-  margin-block-end: 0.65rem;
+body {
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
 }
 
-.sl-markdown-content > :first-child {
-  margin-block-start: 0;
+code,
+kbd,
+pre,
+samp {
+  font-variant-ligatures: none;
 }
 
-.sl-markdown-content :not(.expressive-code *) {
-  max-width: 100%;
+/* ------------------------------------------------------------------ */
+/* Header                                                              */
+/* ------------------------------------------------------------------ */
+
+header.header {
+  border-bottom: 1px solid var(--sl-color-hairline);
 }
 
-.sl-markdown-content .expressive-code {
-  margin-block: 1.35rem 1.65rem;
-  width: 100%;
-  max-width: 100%;
+site-search button[data-open-modal] {
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: var(--lu-radius);
+  background: var(--lu-code-bg);
+  color: var(--sl-color-gray-3);
+  font-size: var(--sl-text-sm);
+  height: 2.25rem;
+  gap: 0.5rem;
+  padding-inline: 0.625rem 0.5rem;
+  transition: border-color 120ms ease, color 120ms ease;
 }
 
-.expressive-code,
-.expressive-code .frame,
-.expressive-code pre {
-  box-sizing: border-box;
-  max-width: 100%;
-}
-
-.expressive-code pre {
-  overflow-x: auto;
-  padding: 1rem 1.125rem !important;
-  line-height: 1.55 !important;
-}
-
-.sl-markdown-content code:not(.expressive-code code) {
-  padding: 0.15rem 0.35rem;
-  line-height: 1.7;
-  white-space: normal;
-  overflow-wrap: anywhere;
-}
-
-.sl-markdown-content a {
-  color: var(--sl-color-accent-high);
-  text-decoration-color: color-mix(in srgb, var(--sl-color-accent-high), transparent 55%);
-  text-underline-offset: 0.2em;
-}
-
-.sl-markdown-content a:hover,
-.sl-markdown-content a:focus {
+site-search button[data-open-modal]:hover,
+site-search button[data-open-modal]:focus-visible {
+  border-color: var(--sl-color-gray-4);
   color: var(--sl-color-white);
-  text-decoration-color: var(--sl-color-accent-high);
 }
 
-/* Link styles */
-a:not(.sidebar a, starlight-toc a, .sl-markdown-content a, .pagination, .page-footer a) {
-  transition: color 0.1s ease;
+site-search button[data-open-modal] > kbd {
+  background: transparent;
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: var(--lu-radius);
+  font-family: var(--__sl-font-mono);
+  font-size: var(--sl-text-2xs);
+  color: var(--sl-color-gray-3);
+  padding: 0.1rem 0.35rem;
 }
 
-/* Make sure mobile links fill the entire space, not just fit the content */
-nav[aria-labelledby="starlight__on-this-page--mobile"] a {
-  width: 100% !important;
-}
-
-/* Adjust link color on footer */
-.page-footer a {
-  color: var(--sl-color-gray-2);
-}
-
-.page-footer a:hover,
-.sidebar a:hover,
-starlight-toc a:hover {
-  color: var(--sl-color-white) !important;
+site-search button[data-open-modal] > kbd kbd {
+  font: inherit;
 }
 
 @media (min-width: 50rem) {
-  .right-sidebar-container {
-    border-left: 1px solid var(--sl-color-gray-5);
-  }
-
   site-search button[data-open-modal] {
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: var(--luthor-radius);
     width: 100%;
     max-width: 22rem;
-    padding-inline-start: 0.75rem;
-    padding-inline-end: 0.5rem;
-    background-color: var(--sl-color-black);
   }
-
-  site-search button[data-open-modal]:hover,
-  site-search button[data-open-modal]:focus-visible {
-    border-color: var(--sl-color-gray-2);
-  }
-
   site-search button[data-open-modal] > :last-child {
     margin-inline-start: auto;
   }
 }
 
-@media (min-width: 110rem) {
-  .right-sidebar-container {
-    flex: 0 0 var(--luthor-right-rail-width);
-    width: var(--luthor-right-rail-width);
+@media (max-width: 49.99rem) {
+  site-search button[data-open-modal] {
+    width: 2.25rem;
+    justify-content: center;
+    padding: 0;
   }
 }
 
-/* Adjust font for "On this page" header */
-#starlight__on-this-page {
-  font-family: "Space Mono", monospace;
-  font-weight: 400;
-  font-size: var(--sl-text-md);
-  line-height: 1.3;
-  margin-block-end: 0.65rem;
+.social-icons a {
+  color: var(--sl-color-gray-2);
 }
 
-/* Adjust padding for TOC */
-starlight-toc a {
+.social-icons::after {
+  border-color: var(--sl-color-hairline);
+}
+
+starlight-theme-select label {
+  color: var(--sl-color-gray-2);
+  font-size: var(--sl-text-sm);
+}
+
+starlight-theme-select select {
+  border-radius: var(--lu-radius);
+}
+
+/* Mobile menu button. Starlight ships a round, shadowed, inverted button. */
+button.sl-menu-button {
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: var(--lu-radius);
+  background: var(--lu-code-bg);
+  color: var(--sl-color-white);
+  box-shadow: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0.375rem;
+  top: calc((var(--sl-nav-height) - 2.25rem) / 2);
+}
+
+button.sl-menu-button:has(~ :popover-open) {
+  background: var(--sl-color-gray-6);
+  border-color: var(--sl-color-gray-4);
+}
+
+:root[data-theme='light'] button.sl-menu-button {
+  background: var(--lu-code-bg);
+  color: var(--sl-color-white);
+}
+
+:root[data-theme='light'] button.sl-menu-button:has(~ :popover-open) {
+  background: var(--sl-color-gray-6);
+}
+
+/* ------------------------------------------------------------------ */
+/* Sidebar                                                             */
+/* ------------------------------------------------------------------ */
+
+.sidebar-pane {
+  border-inline-end-color: var(--sl-color-hairline);
+}
+
+.sidebar-content {
+  padding-top: 1.5rem;
+  gap: 1.5rem;
+}
+
+.sidebar ul.top-level > li + li {
+  margin-top: 1.5rem;
+}
+
+/* Groups read as headings. They still collapse, with a quiet caret. */
+.sidebar summary {
+  padding: 0 0 0.4rem;
+  margin: 0;
+  gap: 0.5rem;
+}
+
+.sidebar summary .caret {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: var(--sl-color-gray-4);
+}
+
+.sidebar summary:hover .caret {
+  color: var(--sl-color-white);
+}
+
+.sidebar summary:focus-visible {
+  outline: none;
+  box-shadow:
+    -5px 0 0 -1px var(--sl-color-accent),
+    5px 0 0 -1px var(--sl-color-accent);
+}
+
+.sidebar .group-label .large {
+  font-size: 0.8125rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  color: var(--sl-color-white);
+}
+
+.sidebar ul ul li {
+  margin-inline-start: 0;
+  padding-inline-start: 0;
+  border-inline-start: 1px solid var(--sl-color-hairline-light);
+}
+
+.sidebar ul ul li > details > summary {
+  padding: 0.5rem 0 0.25rem 0.875rem;
+}
+
+.sidebar ul ul li > details > summary .large {
+  font-size: 0.75rem;
+  font-weight: 650;
+  color: var(--sl-color-gray-3);
+}
+
+.sidebar ul ul ul li {
+  border-inline-start: 0;
+  padding-inline-start: 0.875rem;
+}
+
+.sidebar a {
   position: relative;
-  padding-block: 0.3rem !important;
-  padding-inline: calc(1rem * var(--depth) + var(--pad-inline)) var(--pad-inline) !important;
-  line-height: 1.35;
+  border-radius: 0;
+  padding: 0.3rem 0.5rem 0.3rem 0.875rem;
+  line-height: 1.4;
+  color: var(--sl-color-gray-2);
+  transition: color 120ms ease;
 }
 
-starlight-toc a[aria-current="true"],
-starlight-toc a[aria-current="page"],
-nav[aria-labelledby="starlight__on-this-page--mobile"] a[aria-current="true"],
-nav[aria-labelledby="starlight__on-this-page--mobile"] a[aria-current="page"] {
-  color: var(--sl-color-white) !important;
+.sidebar ul.top-level > li > a {
+  padding-inline-start: 0;
+}
+
+.sidebar a:hover,
+.sidebar a:focus-visible {
+  color: var(--sl-color-white);
+}
+
+.sidebar a[aria-current='page'],
+.sidebar a[aria-current='page']:hover,
+.sidebar a[aria-current='page']:focus-visible {
+  background: none;
+  color: var(--sl-color-white);
   font-weight: 600;
 }
 
-starlight-toc a[aria-current="true"] span,
-starlight-toc a[aria-current="page"] span,
-nav[aria-labelledby="starlight__on-this-page--mobile"] a[aria-current="true"] span,
-nav[aria-labelledby="starlight__on-this-page--mobile"] a[aria-current="page"] span {
+/* The current page is a 2px rule laid over the group's 1px hairline. */
+.sidebar ul ul a[aria-current='page']::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: -1px;
+  top: 0.3rem;
+  bottom: 0.3rem;
+  width: 2px;
+  background: var(--sl-color-accent);
+}
+
+.sidebar ul ul ul a[aria-current='page']::before {
+  inset-inline-start: calc(-0.875rem - 1px);
+}
+
+/* Focus in the sidebar is the same bracket, drawn inside the link so it
+   never sits on the group axis where the current-page rule lives. */
+.sidebar a:focus-visible {
+  outline: none;
+  box-shadow:
+    inset 2px 0 0 0 var(--sl-color-accent),
+    inset -2px 0 0 0 var(--sl-color-accent);
+  padding-inline-start: 1.25rem;
+}
+
+.sidebar ul.top-level > li > a:focus-visible {
+  padding-inline-start: 0.5rem;
+}
+
+@media (max-width: 49.99rem) {
+  .sidebar a {
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+    font-size: var(--sl-text-base);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Right rail: table of contents                                       */
+/* ------------------------------------------------------------------ */
+
+.right-sidebar {
+  border-inline-start-color: var(--sl-color-hairline);
+}
+
+.right-sidebar-panel h2 {
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  color: var(--sl-color-gray-3);
+  margin-bottom: 0.75rem;
+}
+
+starlight-toc > nav > ul {
+  border-inline-start: 1px solid var(--sl-color-hairline-light);
+}
+
+starlight-toc a {
+  position: relative;
+  --pad-inline: 0.875rem;
+  padding-block: 0.3rem;
+  line-height: 1.4;
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-3);
+  transition: color 120ms ease;
+}
+
+starlight-toc a:hover {
+  color: var(--sl-color-white);
+}
+
+starlight-toc a[aria-current='true'] {
+  color: var(--sl-color-white);
+  font-weight: 600;
+}
+
+starlight-toc a[aria-current='true']::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: -1px;
+  top: 0.3rem;
+  bottom: 0.3rem;
+  width: 2px;
+  background: var(--sl-color-accent);
+}
+
+/* Mobile table of contents bar */
+mobile-starlight-toc nav {
+  border-top-color: var(--sl-color-hairline);
+}
+
+mobile-starlight-toc summary {
+  border-bottom-color: var(--sl-color-hairline);
+}
+
+mobile-starlight-toc .toggle {
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: var(--lu-radius);
+  background: var(--lu-code-bg);
+  color: var(--sl-color-gray-2);
+}
+
+mobile-starlight-toc details[open] .toggle {
+  border-color: var(--sl-color-accent);
+}
+
+mobile-starlight-toc .dropdown {
+  border-color: var(--sl-color-hairline);
+  background: var(--sl-color-bg);
+}
+
+mobile-starlight-toc .dropdown a {
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+}
+
+mobile-starlight-toc a[aria-current='true'] {
+  color: var(--sl-color-white);
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------ */
+/* Page title and content typography                                   */
+/* ------------------------------------------------------------------ */
+
+h1#_top {
+  margin-top: 0.5rem;
+  font-size: clamp(2rem, 1.45rem + 1.8vw, 2.625rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--sl-color-white);
+  text-wrap: balance;
+}
+
+.content-panel + .content-panel {
+  border-top-color: var(--sl-color-hairline);
+}
+
+.sl-markdown-content {
+  font-size: var(--sl-text-base);
+  line-height: var(--sl-line-height);
+  color: var(--sl-color-text);
+}
+
+.sl-markdown-content :is(h2, h3, h4, h5) {
+  color: var(--sl-color-white);
+  text-wrap: balance;
+}
+
+/* Each h2 opens a ruled section. */
+.sl-markdown-content h2:not(:where(.not-content *)) {
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--sl-color-hairline);
+  font-size: 1.5rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+.sl-markdown-content h3:not(:where(.not-content *)) {
+  margin-top: 2rem;
+  font-size: 1.1875rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.sl-markdown-content h4:not(:where(.not-content *)) {
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  font-weight: 650;
+}
+
+.sl-markdown-content :is(h2, h3, h4) + :is(p, ul, ol, .expressive-code) {
+  margin-top: 0.75rem;
+}
+
+.sl-markdown-content :is(p, li) {
+  overflow-wrap: break-word;
+}
+
+.sl-markdown-content strong {
+  color: var(--sl-color-white);
+  font-weight: 650;
+}
+
+.sl-markdown-content a:not(:where(.not-content *)) {
+  color: var(--sl-color-text-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in srgb, var(--sl-color-accent), transparent 55%);
+  text-underline-offset: 0.2em;
+  transition: text-decoration-color 120ms ease, color 120ms ease;
+}
+
+.sl-markdown-content a:not(:where(.not-content *)):hover {
+  color: var(--sl-color-accent-high);
+  text-decoration-color: currentColor;
+}
+
+:root[data-theme='light'] .sl-markdown-content a:not(:where(.not-content *)):hover {
+  color: var(--sl-color-accent-high);
+}
+
+.sl-markdown-content code:not(:where(.expressive-code *, .not-content *)) {
+  background: var(--sl-color-bg-inline-code);
+  border-radius: var(--lu-radius);
+  padding: 0.1em 0.35em;
+  font-size: 0.875em;
+  color: var(--sl-color-white);
+}
+
+.sl-markdown-content a code:not(:where(.expressive-code *)) {
   color: inherit;
 }
 
-starlight-toc ul {
-  margin-block: 0;
+.sl-markdown-content hr {
+  border: 0;
+  border-top: 1px solid var(--sl-color-hairline);
+  margin: 2.5rem 0;
 }
 
-/* Change tab color */
-a[role=tab][aria-selected=true] {
-  border-color: var(--sl-color-accent) !important;
-  font-weight: 400 !important;
-  color: var(--sl-color-accent) !important;
+.sl-markdown-content blockquote {
+  border-inline-start: 1px solid var(--sl-color-gray-4);
+  padding-inline-start: 1rem;
+  color: var(--sl-color-gray-3);
 }
 
-/* Adjust file tree color & border radius */
-starlight-file-tree.not-content {
-  background-color: var(--sl-color-black);
-  border-radius: var(--luthor-radius);
+/* Ruled tables, no stripes. */
+.sl-markdown-content table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--sl-text-sm);
+  line-height: 1.5;
 }
 
-/* Change font & remove ligatures for all code & the file tree */
-.expressive-code, pre, .expressive-code pre > code, code, starlight-file-tree {
-  font-family: 'Space Mono', monospace !important;
-  font-variant-ligatures: none !important;
+.sl-markdown-content :is(th, td) {
+  border: 0;
+  border-bottom: 1px solid var(--sl-color-hairline);
+  padding: 0.55rem 0.75rem;
+  text-align: start;
+  vertical-align: top;
 }
 
-/* Border radii adjustments & color changes for code blocks */
-.expressive-code pre {
-  background: var(--sl-color-gray-6) !important;
-  border-bottom-left-radius: var(--luthor-radius) !important;
-  border-bottom-right-radius: var(--luthor-radius) !important;
-  border-color: var(--sl-border) !important;
+.sl-markdown-content :is(th, td):first-child {
+  padding-inline-start: 0;
 }
 
-.expressive-code .header {
-  border-top-left-radius: var(--luthor-radius) !important;
-  border-top-right-radius: var(--luthor-radius) !important;
+.sl-markdown-content :is(th, td):last-child {
+  padding-inline-end: 0;
 }
 
-.expressive-code .has-title .header {
-  /* Override so border looks correct when displaying top left title for code */
-  border-top-left-radius: 14px !important;
+.sl-markdown-content th {
+  font-size: var(--sl-text-xs);
+  font-weight: 650;
+  color: var(--sl-color-gray-3);
+  border-bottom-color: var(--sl-color-gray-5);
 }
 
-.expressive-code .header:not(:has(span)) + pre {
-  border-radius: var(--luthor-radius) !important;
+.sl-markdown-content tr:nth-child(2n) {
+  background: transparent;
 }
 
-/* Add a border to the header */
-.expressive-code .header::before {
-  border-color: var(--sl-border) !important;
+.sl-markdown-content td code,
+.sl-markdown-content th code {
+  white-space: nowrap;
 }
 
-.expressive-code .frame.has-title:not(.is-terminal) .header {
-  background: var(--sl-color-gray-5) !important;
+/* Narrow screens: keep identifiers whole and let the table scroll sideways. */
+@media (max-width: 40rem) {
+  .sl-markdown-content table {
+    display: block;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
 
-  span.title {
-    background: var(--sl-color-gray-6) !important;
+  .sl-markdown-content :is(th, td) {
+    padding-inline: 0.5rem;
+  }
+
+  .sl-markdown-content :is(th, td):last-child {
+    min-width: 16rem;
   }
 }
 
+/* Definition-style parameter lists */
+.sl-markdown-content dl {
+  margin: 1rem 0;
+}
+
+.sl-markdown-content dt {
+  font-weight: 650;
+  color: var(--sl-color-white);
+}
+
+.sl-markdown-content dd {
+  margin: 0.25rem 0 0.75rem;
+  padding-inline-start: 1rem;
+  border-inline-start: 1px solid var(--sl-color-hairline);
+}
+
+/* ------------------------------------------------------------------ */
+/* Code blocks                                                         */
+/* ------------------------------------------------------------------ */
+
+.sl-markdown-content .expressive-code {
+  margin: 1.25rem 0 1.5rem;
+}
+
+.expressive-code .frame.has-title:not(.is-terminal) .title {
+  font-size: var(--sl-text-xs);
+  padding-block: 0.45rem;
+}
+
 .expressive-code .frame.is-terminal .header {
-  background: var(--sl-color-gray-5) !important;
-}
-
-figcaption.header span {
-  border: none !important;
-  border-top-left-radius: var(--luthor-radius) !important;
-  border-left: 1px solid var(--sl-border) !important;
-  border-top: 1px solid var(--sl-border) !important;
-}
-
-figcaption.header span::after {
-  content: none !important;
+  min-height: 2rem;
 }
 
 .expressive-code .copy button {
-  background: var(--sl-color-black) !important;
-  border-radius: var(--luthor-radius) !important;
-  min-width: var(--luthor-touch-target);
-  min-height: var(--luthor-touch-target);
+  border-radius: var(--lu-radius);
 }
 
-.expressive-code .copy button:hover {
-  background: var(--sl-color-gray-5) !important;
+/* ------------------------------------------------------------------ */
+/* Starlight components: tabs, asides, steps, cards                    */
+/* ------------------------------------------------------------------ */
+
+starlight-tabs .tablist-wrapper {
+  border-bottom: 1px solid var(--sl-color-hairline);
+  overflow-x: auto;
 }
 
-.expressive-code .copy button div {
-  display: none;
+starlight-tabs [role='tablist'] {
+  border-bottom: 0;
+  gap: 0.25rem;
 }
 
-.expressive-code .frame.is-terminal .header {
-  border-color: var(--sl-border) !important;
+starlight-tabs .tab > [role='tab'] {
+  padding: 0.45rem 0.75rem;
+  margin-bottom: -1px;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-3);
+  border-bottom: 2px solid transparent;
+  transition: color 120ms ease, border-color 120ms ease;
 }
 
-.expressive-code .frame.is-terminal .header::after {
-  content: none !important;
+starlight-tabs .tab > [role='tab']:hover {
+  color: var(--sl-color-white);
+  border-color: var(--sl-color-gray-4);
 }
 
-/* Adjust styles for search */
-.pagefind-ui__search-clear::before {
-  background-color: var(--sl-color-accent) !important;
+starlight-tabs .tab > [role='tab'][aria-selected='true'] {
+  color: var(--sl-color-white);
+  font-weight: 600;
+  border-color: var(--sl-color-accent);
 }
 
-.pagefind-ui__result-inner * {
-  transition:
-    color 0.1s ease,
-    background-color 0.1s ease,
-    border-color 0.1s ease,
-    text-decoration-color 0.1s ease;
+starlight-tabs [role='tabpanel'] > :first-child {
+  margin-top: 1rem;
 }
 
-.pagefind-ui__result-title, .pagefind-ui__result-nested {
-  outline-color: var(--sl-color-accent) !important;
+.starlight-aside {
+  border: 1px solid var(--sl-color-asides-border);
+  border-inline-start-width: 1px;
+  border-radius: var(--lu-radius);
+  background-color: color-mix(in srgb, var(--sl-color-asides-border), transparent 92%);
+  padding: 0.875rem 1rem;
+  color: var(--sl-color-gray-1);
 }
 
-dialog {
-  background-color: var(--sl-color-black) !important;
+.starlight-aside--note {
+  --sl-color-asides-text-accent: var(--sl-color-blue);
+  --sl-color-asides-border: var(--sl-color-blue);
 }
 
-/* Adjust padding for markdown content to match hero section if it exists */
-.hero + .sl-markdown-content {
-  padding: 2rem;
+.starlight-aside--tip {
+  --sl-color-asides-text-accent: var(--sl-color-accent);
+  --sl-color-asides-border: var(--sl-color-accent);
 }
 
-/* Any headers containing badges should be flex headers */
-:is(h1, h2, h3):has(.sl-badge-lg) {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 1.25rem;
+.starlight-aside--caution {
+  --sl-color-asides-text-accent: var(--sl-color-orange);
+  --sl-color-asides-border: var(--sl-color-orange);
 }
 
-/* Fix small misalignment in navbar links */
-.flex-link svg + span {
-  position: relative;
-  top: 1px;
+.starlight-aside--danger {
+  --sl-color-asides-text-accent: var(--sl-color-red);
+  --sl-color-asides-border: var(--sl-color-red);
 }
 
-:is(.action, a.pagination, .sidebar a, site-search button[data-open-modal]):focus-visible {
-  outline: 2px solid var(--sl-color-accent-high);
-  outline-offset: 3px;
+.starlight-aside__title {
+  font-size: var(--sl-text-xs);
+  font-weight: 650;
+  letter-spacing: 0.01em;
 }
 
-/* Remove default padding on main since we have a footer */
-main:has(.page-footer) {
-  padding-bottom: 0 !important;
+.starlight-aside__icon {
+  font-size: 1.1em;
 }
 
-@media screen and (max-width: 1250px) {
-  .card-grid {
-    display: grid;
-    grid-template-columns: 1fr !important;
-    --stagger-height: 0rem !important;
-  }
+.starlight-aside__content {
+  font-size: var(--sl-text-sm);
 }
 
-@media (max-width: 72rem) {
-  .main-frame,
-  .main-pane,
-  main,
-  .content-panel,
-  .content-panel > .sl-container {
-    width: 100% !important;
-    max-width: 100% !important;
-    overflow-x: hidden;
-  }
-
-  .sl-markdown-content {
-    --luthor-content-pad-y: 1.5rem;
-    max-width: 100%;
-    padding-inline: 1rem;
-    overflow-x: hidden;
-  }
-
-  .sl-markdown-content :is(p, ul, ol, blockquote) {
-    width: auto !important;
-    max-width: 100% !important;
-    white-space: normal !important;
-  }
-
-  .sl-markdown-content > :not(.expressive-code) {
-    width: auto !important;
-    max-width: 100% !important;
-    box-sizing: border-box;
-  }
-
-  main > .content-panel:first-of-type h1#_top:not([data-page-title]) {
-    padding-inline: 1rem;
-    padding-block-start: 1.6rem;
-    padding-block-end: 1.4rem;
-    font-size: 2rem;
-  }
-
-  .hero + .sl-markdown-content {
-    padding-inline: 1rem;
-  }
-
-  .page-footer,
-  .hero ~ footer .page-footer,
-  .meta,
-  .hero ~ footer .meta {
-    padding-inline: 1rem !important;
-  }
-
-  .expressive-code {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  .expressive-code pre {
-    white-space: pre;
-  }
+.starlight-aside__content a {
+  color: var(--sl-color-asides-text-accent);
 }
 
-@media (max-width: 50rem) {
-  header.header .title-wrapper {
-    max-width: calc(100vw - 8rem);
-  }
+.sl-steps > li::before {
+  border-radius: 0;
+  background: var(--sl-color-bg);
+  box-shadow: none;
+  color: var(--sl-color-white);
+  font-family: var(--__sl-font-mono);
+  font-weight: 700;
+  font-size: var(--sl-text-sm);
+}
 
-  site-search button[data-open-modal] {
-    width: var(--luthor-touch-target);
-    height: var(--luthor-touch-target);
-    justify-content: center;
-    padding: 0;
-  }
+.sl-steps > li::after {
+  background: var(--sl-color-hairline-light);
+}
 
-  starlight-menu-button button {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    top: calc((var(--sl-nav-height) - var(--luthor-touch-target)) / 2) !important;
-    inset-inline-end: var(--sl-nav-pad-x) !important;
-    width: var(--luthor-touch-target);
-    height: var(--luthor-touch-target);
-    padding: 0 !important;
-    background-color: transparent !important;
-    color: var(--sl-color-gray-1) !important;
-    line-height: 1;
-    box-shadow: none !important;
-  }
+.sl-steps > li > :first-child {
+  color: var(--sl-color-white);
+}
 
-  site-search button[data-open-modal] svg,
-  starlight-menu-button button svg {
-    display: block;
-    width: 1.25rem;
-    height: 1.25rem;
-  }
+/* ------------------------------------------------------------------ */
+/* Footer and pagination                                               */
+/* ------------------------------------------------------------------ */
 
-  starlight-menu-button:not([aria-expanded='true']) button .close-menu,
-  starlight-menu-button button[aria-expanded='false'] .close-menu,
-  starlight-menu-button[aria-expanded='true'] button .open-menu {
-    display: none !important;
-  }
+.pagination-links a {
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: var(--lu-radius);
+  box-shadow: none;
+  padding: 0.875rem 1rem;
+  color: var(--sl-color-gray-3);
+  font-size: var(--sl-text-xs);
+  transition: border-color 120ms ease;
+}
 
-  starlight-menu-button:not([aria-expanded='true']) button .open-menu,
-  starlight-menu-button[aria-expanded='true'] button .close-menu {
-    display: block !important;
-  }
+.pagination-links a:hover {
+  border-color: var(--sl-color-accent);
+}
 
-  mobile-starlight-toc {
-    display: block;
-    width: 100%;
-  }
+.pagination-links .link-title {
+  color: var(--sl-color-white);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
 
-  mobile-starlight-toc nav {
-    position: static !important;
-    background-color: var(--sl-color-black) !important;
-  }
+.pagination-links svg {
+  color: var(--sl-color-accent);
+}
 
-  #starlight__on-this-page--mobile {
-    display: flex;
-    align-items: center;
-    position: relative;
-    z-index: 1;
-    list-style: none;
-    list-style-type: none;
-    background-color: var(--sl-color-black);
-  }
+/* ------------------------------------------------------------------ */
+/* Search dialog                                                       */
+/* ------------------------------------------------------------------ */
 
-  #starlight__on-this-page--mobile::marker,
-  #starlight__on-this-page--mobile::-webkit-details-marker {
-    content: none !important;
-    display: none;
-  }
+:root {
+  --pagefind-ui-primary: var(--sl-color-accent);
+  --pagefind-ui-text: var(--sl-color-gray-1);
+  --pagefind-ui-background: var(--sl-color-bg);
+  --pagefind-ui-border: var(--sl-color-hairline);
+  --pagefind-ui-border-width: 1px;
+  --pagefind-ui-border-radius: var(--lu-radius);
+  --pagefind-ui-tag: var(--sl-color-gray-6);
+  --pagefind-ui-font: var(--__sl-font);
+}
 
-  #starlight__on-this-page--mobile .toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-start;
-    min-width: 0;
-    gap: 0.5rem;
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-    background-color: transparent;
-    line-height: 1.2;
-  }
+site-search dialog {
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: var(--lu-radius);
+  background: var(--sl-color-bg);
+  box-shadow: var(--sl-shadow-lg);
+}
 
-  #starlight__on-this-page--mobile .toggle .caret {
-    display: block;
-    flex: 0 0 auto;
-    width: 1rem;
-    height: 1rem;
-    margin-block-start: 0;
-    transform-origin: center;
-  }
+site-search dialog::backdrop {
+  background: var(--sl-color-backdrop-overlay);
+  backdrop-filter: none;
+}
 
-  #starlight__on-this-page--mobile .display-current {
-    min-width: 0;
-  }
+.pagefind-ui__search-input {
+  font-weight: 500;
+}
 
-  #starlight__mobile-toc[open] #starlight__on-this-page--mobile .display-current {
-    display: none;
-  }
+.pagefind-ui__result-title mark,
+.pagefind-ui__result-excerpt mark {
+  background: var(--lu-mark-bg);
+  color: var(--sl-color-accent-high);
+  border-bottom: 1px solid var(--sl-color-accent);
+}
 
-  #starlight__mobile-toc .dropdown {
-    position: static !important;
-    margin: 0 0.75rem 0.75rem;
-    border-color: var(--sl-border) !important;
-    border-radius: 0.5rem;
-    background-color: var(--sl-color-black) !important;
-    box-shadow: 0 1rem 2rem rgb(0 0 0 / 45%);
-  }
+/* ------------------------------------------------------------------ */
+/* Landing page                                                        */
+/* ------------------------------------------------------------------ */
 
-  #starlight__mobile-toc .dropdown ul {
-    padding-block: 0.5rem;
-  }
+:root[data-has-hero] .main-pane .sl-container {
+  max-width: 72rem;
+}
 
-  .sl-markdown-content {
-    font-size: 1rem;
-  }
+:root[data-has-hero] .sl-markdown-content > :is(p, ul, ol, h2, h3, blockquote) {
+  max-width: 46rem;
+}
 
-  .sl-markdown-content h2,
-  .sl-markdown-content .sl-heading-wrapper.level-h2 {
-    margin-block-start: 2.75rem;
-    font-size: 1.65rem;
-  }
+:root[data-has-hero] .sl-markdown-content h2:not(:where(.not-content *)) {
+  margin-top: 3.5rem;
+}
 
-  .page-footer {
-    align-items: flex-start;
-    flex-direction: column;
+:root[data-has-hero] .content-panel:first-of-type {
+  padding-bottom: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Motion                                                              */
+/* ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }

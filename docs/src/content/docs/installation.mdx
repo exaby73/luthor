@@ -1,52 +1,114 @@
 ---
-title: Get Started
+title: Installation
+description: Add luthor to a Dart or Flutter project, and luthor_generator if you want generated schemas.
 ---
 
-## Installation
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-Luthor can be installed into any Dart project using the following command:
+## Requirements
 
-```bash
+| | Minimum |
+|---|---|
+| Dart SDK | 3.11 |
+| Flutter | 3.41 |
+| `analyzer` (for `luthor_generator`) | 10, up to and including 14 |
+
+`luthor` itself depends only on `package:meta`. `luthor_generator` works with `freezed`, `json_serializable`, and `dart_mappable`, and with plain classes that have a `fromJson` factory. Those packages are optional companions, not requirements. On Dart 3.11, use `freezed` 3.2.x; `freezed` 4 needs Dart 3.13 or later.
+
+## Add luthor
+
+<Tabs syncKey="sdk">
+  <TabItem label="Dart">
+
+```sh
 dart pub add luthor
 ```
 
-If you're using Flutter, you can also use the following command:
+  </TabItem>
+  <TabItem label="Flutter">
 
-```bash
+```sh
 flutter pub add luthor
 ```
 
-## Installing Code Generation Packages
+  </TabItem>
+</Tabs>
 
-Luthor can be used with code generation using `build_runner` optionally. To use code generation, you need to add the following dependencies as well:
+Either command adds the dependency to `pubspec.yaml`:
 
-```bash
+```yaml title="pubspec.yaml"
+dependencies:
+  luthor: ^1.0.0
+```
+
+Import it where you build validators:
+
+```dart
+import 'package:luthor/luthor.dart';
+```
+
+## Add luthor_generator
+
+Skip this section if you will write every schema by hand. The generator reads classes annotated with `@luthor` and writes a schema, a validate function, and typed keys for each one. It runs through `build_runner`.
+
+<Tabs syncKey="sdk">
+  <TabItem label="Dart">
+
+```sh
 dart pub add dev:build_runner dev:luthor_generator
 ```
 
-If you're using Flutter, you can also use the following command:
+  </TabItem>
+  <TabItem label="Flutter">
 
-```bash
+```sh
 flutter pub add dev:build_runner dev:luthor_generator
 ```
 
-Run generation after changing annotated classes:
+  </TabItem>
+</Tabs>
 
-```bash
-dart run build_runner build --delete-conflicting-outputs
+```yaml title="pubspec.yaml"
+dev_dependencies:
+  build_runner: ^2.16.0
+  luthor_generator: ^1.0.0
 ```
 
-## First Validator
+Add the companion for your models alongside it. With `freezed`:
 
-```dart
+```sh
+dart pub add freezed_annotation json_annotation
+dart pub add dev:freezed dev:json_serializable
+```
+
+With `dart_mappable`:
+
+```sh
+dart pub add dart_mappable
+dart pub add dev:dart_mappable_builder
+```
+
+[Models without freezed](/generator/models) covers plain classes and `dart_mappable` in detail.
+
+Run the generator after you change an annotated class:
+
+```sh
+dart run build_runner build
+```
+
+Use `watch` instead of `build` to regenerate on save.
+
+## Check the install
+
+Run this file. It prints `SingleValidationSuccess(data: dev@example.com)`.
+
+```dart title="bin/check.dart"
 import 'package:luthor/luthor.dart';
 
 void main() {
   final email = l.string().email().required();
-
-  final result = email.validateValue('dev@example.com');
-  print(result.isValid); // true
+  print(email.validateValue('dev@example.com'));
 }
 ```
 
-Validators are optional by default. Add `.required()` when `null` or a missing schema field should fail validation.
+Next: [Your first validator](/start/first-validator).

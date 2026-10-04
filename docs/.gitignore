@@ -21,3 +21,5 @@ pnpm-debug.log*
 
 # VS Code
 .vscode
+# impeccable review captures
+.impeccable/review/

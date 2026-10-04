@@ -1,0 +1,60 @@
+---
+title: '.regex()'
+description: Requires the string to match a regular expression.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when `RegExp(pattern).hasMatch(value)` is true. The pattern is not anchored for you: `r'[0-9]'` accepts `'abc1def'`. Add `^` and `$` when the whole string has to match.
+
+## Signature
+
+```dart wrap
+StringValidator regex(String pattern, {String? message, String? Function()? messageFn})
+```
+
+Available on `l.string()`.
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `pattern` | `String` | The pattern, passed to `RegExp`. Use a raw string so backslashes survive. |
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value must match regex`. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+`@MatchRegex(pattern)`. Put the annotation on the constructor parameter.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final slug = l.string().regex(r'^[a-z0-9-]+$');
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+@MatchRegex(r'^[a-z0-9-]+$') required String slug, // l.string().regex("^[a-z0-9-]+\$").required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="slug.validateValue(input)"
+  cases={[
+    { input: "'hello-world'", pass: true },
+    { input: "'Hello World'", pass: false, message: "value must match regex" },
+  ]}
+/>

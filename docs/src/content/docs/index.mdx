@@ -1,27 +1,104 @@
 ---
 title: Luthor
-description: A pure Dart validation library inspired by Zod.
-tableOfContents: false
+description: Luthor validates Dart values against schemas built with a chainable API. luthor_generator builds those schemas from annotated models.
+template: splash
 hero:
-  tagline: A pure Dart validation library inspired by Zod.
-  actions:
-    - text: Documentation
-      link: /installation
-      icon: right-arrow
-      variant: primary
-    - text: pub.dev
-      link: https://pub.dev/packages/luthor
-      icon: external
+  tagline: Build a validator by chaining <code>l.string().email().required()</code>. Validate a value or a map and get a sealed result back, with every error message keyed by field. Point <code>luthor_generator</code> at a <code>freezed</code> or <code>dart_mappable</code> model and it writes the schema for you.
 ---
 
-## Start here
+import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+import ApiIndex from '../../components/ApiIndex.astro';
+import Verdict from '../../components/Verdict.astro';
 
-Luthor validates runtime input with small, composable validators. Use it for API payloads, forms, files, and nested data where you want typed results instead of thrown exceptions.
+## From install to a generated schema in four steps
 
-- [Install Luthor](/installation) and run your first validator.
-- [Define schemas](/schemas/defining-schemas) for structured objects and nested data.
-- [Generate schemas](/schemas/code-generation) from annotated Dart models.
+<Steps>
 
-## Common validators
+1. [Install `luthor`](/installation), and `luthor_generator` if you want generated schemas. Luthor needs Dart 3.11 or Flutter 3.41.
 
-Start with the scalar validators when you only need one value: [`string`](/single-values/string), [`int`](/single-values/int), [`double`](/single-values/double), [`bool`](/single-values/bool), [`list`](/single-values/list), and [`map`](/single-values/map).
+2. [Write your first validator](/start/first-validator). Chain a type and some modifiers, call `validateValue`, and read the result.
+
+3. [Write your first schema](/start/first-schema). Name the fields of a map, validate it, and look up errors by path.
+
+4. [Generate a schema from a model](/start/code-generation). Annotate a class with `@luthor`, run `build_runner`, and use the generated keys instead of strings.
+
+</Steps>
+
+## A result, not an exception
+
+`validateValue` returns a `SingleValidationResult`. `validateSchema` returns a `SchemaValidationResult`. Both are sealed, so a `switch` over them is exhaustive and the compiler tells you when you forgot the error case.
+
+```dart
+final result = l.string().email().required().validateValue(input);
+
+switch (result) {
+  case SingleValidationSuccess(data: final email):
+    sendTo(email);
+  case SingleValidationError(errors: final errors):
+    print(errors.first);
+}
+```
+
+<Verdict
+  title="l.string().email().required().validateValue(input)"
+  cases={[
+    { input: "'dev@example.com'", pass: true },
+    { input: "'bad'", pass: false, message: 'value must be a valid email address' },
+    { input: 'null', pass: false, message: 'value is required' },
+  ]}
+/>
+
+Values are optional until you say otherwise. Drop `.required()` from the validator above and `null` passes. [Optional by default](/concepts/optional-by-default) explains why.
+
+## The same schema, written or generated
+
+A schema is a map of field names to validators. You can write it by hand, or annotate a model and let `luthor_generator` write it, along with typed keys for the fields and for the error paths. The two tabs below stay in sync across the whole site, so pick the one you use.
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+import 'package:luthor/luthor.dart';
+
+final userSchema = l.withName('User').schema({
+  'name': l.string().min(2).required(),
+  'email': l.string().email().required(),
+  'age': l.int().min(18),
+});
+
+final result = userSchema.validateSchema(json, fromJson: User.fromJson);
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:luthor/luthor.dart';
+
+part 'user.freezed.dart';
+part 'user.g.dart';
+
+@luthor
+@freezed
+abstract class User with _$User {
+  const factory User({
+    @HasMin(2) required String name,
+    @IsEmail() required String email,
+    @HasMin(18) int? age,
+  }) = _User;
+
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+}
+
+final result = $UserValidate(json);
+```
+
+  </TabItem>
+</Tabs>
+
+## Everything in the API
+
+Each entry links to a reference page with the signature, the parameters, the default error message, and the matching generator annotation.
+
+<ApiIndex />

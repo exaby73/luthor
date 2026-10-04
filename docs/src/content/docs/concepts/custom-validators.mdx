@@ -1,0 +1,119 @@
+---
+title: Custom validators
+description: Check a value with your own function, alone or with access to the other fields of its schema.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../components/Verdict.astro';
+
+Two modifiers accept a function of your own. `.custom()` sees one value. `.customWithSchema()` sees one value and the map it came from. Both return `true` to pass and `false` to fail, and both treat a thrown exception as a failure.
+
+## Custom validator
+
+A custom validator is a `bool Function(Object? value)`. Attach it with `.custom()`. It runs after the validations before it in the chain, on the value as given.
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+bool isEven(Object? value) => value is int && value.isEven;
+
+final evenNumber = l.int().custom(isEven, message: 'must be even');
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart
+bool isEven(Object? value) => value is int && value.isEven;
+
+@luthor
+@freezed
+abstract class Ticket with _$Ticket {
+  const factory Ticket({
+    @WithCustomValidator(isEven, message: 'must be even') required int seat,
+  }) = _Ticket;
+
+  factory Ticket.fromJson(Map<String, dynamic> json) => _$TicketFromJson(json);
+}
+```
+
+The function has to be a top-level function or a static method. Generated code refers to it by name, so a closure cannot be used.
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="evenNumber.validateValue(input)"
+  cases={[
+    { input: '4', pass: true },
+    { input: '3', pass: false, message: 'must be even' },
+    { input: 'null', pass: false, message: 'must be even' },
+  ]}
+/>
+
+The function receives `null` like any other value, so decide what `null` means for your check. Type validations such as `l.int()` accept `null`; a custom validator that only returns `true` for an `int` does not. Without `message`, the default is `value does not pass custom validation`, with the field name in place of `value`.
+
+## Schema custom validator
+
+A schema custom validator is a `bool Function(Object? value, Map<String, Object?> data)`. Attach it with `.customWithSchema()`. When the validator is a field of a schema, `data` is the whole input map, so the function can compare the field with its siblings. The usual case is a confirmation field.
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+bool matchesPassword(Object? value, Map<String, Object?> data) =>
+    value == data['password'];
+
+final signUp = l.schema({
+  'password': l.string().min(8).required(),
+  'confirm': l
+      .string()
+      .customWithSchema(matchesPassword, message: 'Passwords must match')
+      .required(),
+});
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart
+bool matchesPassword(Object? value, Map<String, Object?> data) =>
+    value == data['password'];
+
+@luthor
+@freezed
+abstract class SignUp with _$SignUp {
+  const factory SignUp({
+    @HasMin(8) required String password,
+    @WithSchemaCustomValidator(matchesPassword, message: 'Passwords must match')
+    required String confirm,
+  }) = _SignUp;
+
+  factory SignUp.fromJson(Map<String, dynamic> json) => _$SignUpFromJson(json);
+}
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="signUp.validateSchema(input)"
+  cases={[
+    { input: "{'password': 'hunter2hunter2', 'confirm': 'hunter2hunter2'}", pass: true },
+    {
+      input: "{'password': 'hunter2hunter2', 'confirm': 'nope'}",
+      pass: false,
+      message: 'Passwords must match',
+    },
+  ]}
+/>
+
+`data` is the map the field belongs to, as received and before any conversion, so compare raw values. For a nested schema that is the nested map, not the root. Outside a schema there are no sibling fields; use `.custom()` for a single value.
+
+## Rules that apply to both
+
+- A missing optional field skips its custom validators along with everything else, so a rule such as "phone is required for business accounts" belongs on the field that is always present, `accountType`, not on `phone`. [Optional by default](/concepts/optional-by-default) explains the rule.
+- Check the type before you cast. The function receives `Object?`, and the chain's type validation does not stop later validations from running.
+- Keep the function pure. It can run more than once for one input, for example inside a list.
+- `message` and `messageFn` work as on every other modifier.

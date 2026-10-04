@@ -1,0 +1,60 @@
+---
+title: Schemas
+description: Nested schemas, reuse, naming, converting to a model, and forward references for schemas that refer to themselves.
+---
+
+A schema is a validator built with `l.schema()`. It checks that a value is a map and validates each named field with its own validator. This page covers the ways schemas combine. [Your first schema](/start/first-schema) is the tutorial; [`l.schema()`](/reference/types/schema) is the reference.
+
+## Fields
+
+The argument to `l.schema()` is a `Map<String, ValidatorReference>`. Each entry is a field: the key is the name expected in the input map, the value is the validator for that field. Keys the input has but the schema does not list are ignored.
+
+```dart
+final address = l.schema({
+  'street': l.string().required(),
+  'city': l.string().required(),
+  'postcode': l.string().regex(r'^\d{5}$').required(),
+});
+```
+
+## Nesting and reuse
+
+A schema is a validator, so it can be the validator of a field. Define a schema once and use it in several places. Each use can carry its own `.required()`.
+
+```dart
+final person = l.schema({
+  'name': l.string().required(),
+  'home': address.required(),
+  'work': address,
+});
+```
+
+Errors from a nested schema arrive as a nested error map, and `getError('home.city')` reaches into it. [Results and errors](/concepts/results) describes the shape.
+
+## Converting to a model
+
+`validateSchema` accepts a `fromJson` function. It runs only after every field passed, so your constructor can trust the shape it receives.
+
+```dart
+final result = user.validateSchema<User>(json, fromJson: User.fromJson);
+```
+
+## Schemas that refer to themselves
+
+A tree node whose children are tree nodes needs its own validator while it is still being defined. A plain reference does not work: the variable has no value yet. Wrap the reference in `forwardRef()`, which takes a function and calls it at validation time, when the variable is assigned.
+
+```dart
+late final Validator node;
+node = l.schema({
+  'value': l.string().required(),
+  'children': l.list(validators: [forwardRef(() => node.required())]),
+});
+```
+
+`forwardRef()` returns a `ValidatorReference`, the interface both validators and forward references implement. Anywhere Luthor accepts a validator inside a schema, a list, or a map, it accepts a forward reference too. The same mechanism covers two schemas that refer to each other: define both as `late final` and wrap each reference to the other.
+
+The generator detects a field whose type is the model's own class, directly or inside `List` or `Map`, and wraps it in `forwardRef()` for you. For a reference between two different models, annotate the parameter with `@luthorForwardRef`. [Type mapping](/generator/types) has the details.
+
+## Schema custom validators
+
+A field can be checked against its siblings with `.customWithSchema()`. The function receives the field's value and the whole input map. [Custom validators](/concepts/custom-validators) covers it.

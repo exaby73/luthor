@@ -1,0 +1,186 @@
+---
+/**
+ * A ruled index of the whole public API, one line per entry. Lives on the
+ * landing page. Keep it in step with `packages/luthor/lib`.
+ */
+interface Entry {
+  code: string;
+  href: string;
+  summary: string;
+}
+
+interface Group {
+  label: string;
+  entries: Entry[];
+}
+
+const groups: Group[] = [
+  {
+    label: 'Types',
+    entries: [
+      { code: 'l.string()', href: '/reference/types/string', summary: 'Must be a String.' },
+      { code: 'l.int()', href: '/reference/types/int', summary: 'Must be an int.' },
+      { code: 'l.double()', href: '/reference/types/double', summary: 'Must be a double.' },
+      { code: 'l.number()', href: '/reference/types/number', summary: 'Must be a num.' },
+      { code: 'l.boolean()', href: '/reference/types/boolean', summary: 'Must be a bool.' },
+      { code: 'l.list()', href: '/reference/types/list', summary: 'Must be a List; optional element validators.' },
+      { code: 'l.map()', href: '/reference/types/map', summary: 'Must be a Map; optional key and value validators.' },
+      { code: 'l.schema()', href: '/reference/types/schema', summary: 'Must be a Map with named fields.' },
+      { code: 'l.file()', href: '/reference/types/file', summary: 'Must be a file-like value.' },
+      { code: 'l.any()', href: '/reference/types/any', summary: 'Accepts any value.' },
+      { code: 'l.nullValue()', href: '/reference/types/null-value', summary: 'Must be null.' },
+    ],
+  },
+  {
+    label: 'Modifiers',
+    entries: [
+      { code: '.required()', href: '/reference/modifiers/required', summary: 'Rejects null and missing values.' },
+      { code: '.custom()', href: '/reference/modifiers/custom', summary: 'Checks the value with your function.' },
+      { code: '.customWithSchema()', href: '/reference/modifiers/custom-with-schema', summary: 'Checks the value with access to sibling fields.' },
+    ],
+  },
+  {
+    label: 'String modifiers',
+    entries: [
+      { code: '.min(n)', href: '/reference/string/min', summary: 'At least n characters.' },
+      { code: '.max(n)', href: '/reference/string/max', summary: 'At most n characters.' },
+      { code: '.length(n)', href: '/reference/string/length', summary: 'Exactly n characters.' },
+      { code: '.contains(s)', href: '/reference/string/contains', summary: 'Contains s.' },
+      { code: '.startsWith(s)', href: '/reference/string/starts-with', summary: 'Starts with s.' },
+      { code: '.endsWith(s)', href: '/reference/string/ends-with', summary: 'Ends with s.' },
+      { code: '.regex(p)', href: '/reference/string/regex', summary: 'Matches the pattern p.' },
+      { code: '.email()', href: '/reference/string/email', summary: 'Is an email address.' },
+      { code: '.uri()', href: '/reference/string/uri', summary: 'Parses as a URI; optional allowed schemes.' },
+      { code: '.url()', href: '/reference/string/url', summary: 'Is a URL with a scheme and a host.' },
+      { code: '.ip()', href: '/reference/string/ip', summary: 'Is an IPv4 or IPv6 address.' },
+      { code: '.uuid()', href: '/reference/string/uuid', summary: 'Is a UUID.' },
+      { code: '.cuid()', href: '/reference/string/cuid', summary: 'Is a CUID.' },
+      { code: '.cuid2()', href: '/reference/string/cuid2', summary: 'Is a CUID2.' },
+      { code: '.dateTime()', href: '/reference/string/date-time', summary: 'Parses with DateTime.tryParse.' },
+      { code: '.emoji()', href: '/reference/string/emoji', summary: 'Is an emoji.' },
+    ],
+  },
+  {
+    label: 'Number modifiers',
+    entries: [
+      { code: '.min(n)', href: '/reference/number/min', summary: 'Greater than or equal to n.' },
+      { code: '.max(n)', href: '/reference/number/max', summary: 'Less than or equal to n.' },
+    ],
+  },
+  {
+    label: 'Results and helpers',
+    entries: [
+      { code: 'SingleValidationResult', href: '/reference/results', summary: 'Returned by validateValue.' },
+      { code: 'SchemaValidationResult', href: '/reference/results', summary: 'Returned by validateSchema; has getError.' },
+      { code: 'getError(path)', href: '/reference/errors', summary: 'Reads one message from an error map by path.' },
+      { code: 'forwardRef()', href: '/reference/forward-ref', summary: 'Refers to a schema defined later or to itself.' },
+      { code: 'withName()', href: '/concepts/validators#field-names-in-messages', summary: 'Sets the field name used in messages.' },
+    ],
+  },
+];
+---
+
+<div class="lu-index not-content">
+  {
+    groups.map((group) => (
+      <section class="lu-index__group">
+        <h3>{group.label}</h3>
+        <ul>
+          {group.entries.map((e) => (
+            <li>
+              <a href={e.href}>
+                <code>{e.code}</code>
+                <span>{e.summary}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .lu-index {
+    column-gap: 3rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .lu-index {
+      columns: 2;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .lu-index {
+      columns: 3;
+    }
+  }
+
+  .lu-index__group {
+    break-inside: avoid;
+    margin-bottom: 2rem;
+  }
+
+  .lu-index__group h3 {
+    margin: 0 0 0.5rem;
+    font-size: var(--sl-text-xs);
+    font-weight: 650;
+    letter-spacing: 0.01em;
+    color: var(--sl-color-gray-3);
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--sl-color-hairline);
+  }
+
+  li {
+    margin: 0;
+    border-bottom: 1px solid var(--sl-color-hairline);
+  }
+
+  a {
+    display: grid;
+    grid-template-columns: minmax(9.5rem, auto) 1fr;
+    gap: 0.25rem 1rem;
+    align-items: baseline;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.25rem;
+    text-decoration: none;
+    color: var(--sl-color-gray-2);
+    font-size: var(--sl-text-sm);
+    line-height: 1.4;
+    transition: background-color 120ms ease, color 120ms ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    background: color-mix(in srgb, var(--sl-color-accent), transparent 92%);
+    color: var(--sl-color-white);
+  }
+
+  a:focus-visible {
+    outline-offset: -2px;
+  }
+
+  code {
+    font-family: var(--__sl-font-mono);
+    font-size: var(--sl-text-code-sm);
+    color: var(--sl-color-white);
+    white-space: nowrap;
+  }
+
+  a:hover code {
+    color: var(--sl-color-accent);
+  }
+
+  @media (max-width: 26rem) {
+    a {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

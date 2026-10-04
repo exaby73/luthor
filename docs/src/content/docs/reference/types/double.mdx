@@ -1,0 +1,57 @@
+---
+title: 'l.double()'
+description: Requires a double and unlocks the number modifiers.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when the value is a `double`. Returns a validator with [`.min()`](/reference/number/min) and [`.max()`](/reference/number/max). An `int` such as `42` fails, so for JSON input that may carry whole numbers use [`l.number()`](/reference/types/number).
+
+## Signature
+
+```dart wrap
+DoubleValidator double({String? message, String? Function()? messageFn})
+```
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value must be a double`. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+A `double` parameter maps to `l.double()`. `@HasMinDouble(n)` and `@HasMaxDouble(n)` add `.min(n)` and `.max(n)`.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final ratio = l.double();
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+@HasMinDouble(0) required double price, // l.double().min(0.0).required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="ratio.validateValue(input)"
+  cases={[
+    { input: "0.75", pass: true },
+    { input: "42", pass: false, message: "value must be a double" },
+  ]}
+/>

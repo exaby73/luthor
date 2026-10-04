@@ -1,0 +1,60 @@
+---
+title: '.dateTime()'
+description: Requires the string to parse as a DateTime.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when `DateTime.tryParse(value)` returns a value. That accepts ISO 8601 dates and date-times, with or without a time zone.
+
+## Signature
+
+```dart wrap
+StringValidator dateTime({String? message, String? Function()? messageFn})
+```
+
+Available on `l.string()`.
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value must be a valid date`. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+`@IsDateTime()`, or the constant `@isDateTime`. A parameter of type `DateTime` gets `.dateTime()` without any annotation, because JSON carries dates as strings. Put the annotation on the constructor parameter.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final date = l.string().dateTime();
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+required DateTime createdAt, // l.string().dateTime().required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="date.validateValue(input)"
+  cases={[
+    { input: "'2026-10-04'", pass: true },
+    { input: "'2026-10-04T10:15:00Z'", pass: true },
+    { input: "'yesterday'", pass: false, message: "value must be a valid date" },
+  ]}
+/>

@@ -1,0 +1,134 @@
+---
+title: Your first schema
+description: Validate a map against named fields, read errors by path, and convert valid input to a model.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+import Verdict from '../../../components/Verdict.astro';
+
+In this tutorial you validate a sign-up payload with three fields, one of them nested, then turn the valid map into a Dart object. It continues from [Your first validator](/start/first-validator).
+
+<Steps>
+
+1. Define the schema.
+
+   `l.schema()` takes a map from field name to validator. Each entry is a field. A schema is itself a validator, so a field's validator can be another schema.
+
+   ```dart title="bin/main.dart"
+   import 'package:luthor/luthor.dart';
+
+   final user = l.schema({
+     'email': l.string().email().required(),
+     'age': l.int().min(18),
+     'profile': l.schema({
+       'displayName': l.string().min(2).required(),
+     }).required(),
+   });
+   ```
+
+   `age` has no `.required()`, so it may be missing or `null`. When it is present it has to be an `int` of at least 18.
+
+2. Validate a map.
+
+   `validateSchema` takes a `Map<String, Object?>` and returns a `SchemaValidationResult`.
+
+   ```dart title="bin/main.dart" ins={11-19}
+   import 'package:luthor/luthor.dart';
+
+   final user = l.schema({
+     'email': l.string().email().required(),
+     'age': l.int().min(18),
+     'profile': l.schema({
+       'displayName': l.string().min(2).required(),
+     }).required(),
+   });
+
+   void main() {
+     final result = user.validateSchema({
+       'email': 'bad',
+       'age': 12,
+       'profile': {'displayName': 'x'},
+     });
+
+     print(result);
+   }
+   ```
+
+   The error case prints an error map. Nested schemas produce nested maps, and each field holds a list of messages. The messages use the field name because the schema supplies it.
+
+   ```txt wrap
+   SchemaValidationError(data: {email: bad, age: 12, profile: {displayName: x}}, errors: {email: [email must be a valid email address], age: [age must be greater than or equal to 18], profile: {displayName: [displayName must be at least 2 characters long]}})
+   ```
+
+3. Look an error up by path.
+
+   On `SchemaValidationError`, `getError` takes an error path, a dot-separated chain of field names, and returns the first message at that path or `null`.
+
+   ```dart title="bin/main.dart" ins={8-13}
+   void main() {
+     final result = user.validateSchema({
+       'email': 'bad',
+       'age': 12,
+       'profile': {'displayName': 'x'},
+     });
+
+     switch (result) {
+       case SchemaValidationSuccess(data: final data):
+         print('+ $data');
+       case SchemaValidationError():
+         print('- ${result.getError('profile.displayName')}');
+     }
+   }
+   ```
+
+   <Verdict
+     title="user.validateSchema(input)"
+     cases={[
+       {
+         input: "{'email': 'dev@example.com', 'profile': {'displayName': 'Ada'}}",
+         pass: true,
+       },
+       {
+         input: "{'email': 'bad', 'age': 12, 'profile': {'displayName': 'x'}}",
+         pass: false,
+         message: [
+           'email must be a valid email address',
+           'age must be greater than or equal to 18',
+           'profile.displayName: displayName must be at least 2 characters long',
+         ],
+       },
+     ]}
+   />
+
+4. Convert valid input to a model.
+
+   Pass `fromJson` to `validateSchema`. On success, `data` is the converted object. On failure, conversion does not run and `data` is `null`.
+
+   ```dart title="bin/main.dart"
+   class User {
+     const User({required this.email, this.age});
+
+     final String email;
+     final int? age;
+
+     factory User.fromJson(Map<String, Object?> json) => User(
+           email: json['email']! as String,
+           age: json['age'] as int?,
+         );
+   }
+
+   void main() {
+     final result = user.validateSchema<User>(
+       {'email': 'dev@example.com', 'profile': {'displayName': 'Ada'}},
+       fromJson: User.fromJson,
+     );
+
+     if (result case SchemaValidationSuccess(data: final user)) {
+       print(user.email); // dev@example.com
+     }
+   }
+   ```
+
+</Steps>
+
+Writing `fromJson` and the schema for the same class twice is where the generator earns its place. Next: [Generate a schema from a model](/start/code-generation).

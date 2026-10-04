@@ -1,0 +1,74 @@
+---
+title: '.customWithSchema()'
+description: Checks the value with access to the other fields of its schema.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Runs `customValidator(value, data)` where `data` is the map the field belongs to, and passes when it returns `true`. A thrown exception counts as `false`. Outside a schema there is no `data` and the validation passes. A missing optional field is skipped before this runs, so put the rule on a field that is always present. Returns a plain `Validator`, so call type-specific modifiers before it. [Custom validators](/concepts/custom-validators) has the longer treatment.
+
+## Signature
+
+```dart wrap
+Validator customWithSchema(SchemaCustomValidator customValidator, {String? message, String? Function()? messageFn})
+
+typedef SchemaCustomValidator = bool Function(Object? value, Map<String, Object?> data);
+```
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `customValidator` | `bool Function(Object?, Map<String, Object?>)` | Receives the field value and the enclosing map. Return `true` to pass. |
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value does not pass schema custom validation`. `value` is replaced by the field name. Pass `message` in practice.
+
+## Code generation
+
+`@WithSchemaCustomValidator(fn, message: ...)`. `fn` has to be a top-level function or a static method.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+bool matchesPassword(Object? value, Map<String, Object?> data) =>
+    value == data['password'];
+
+final signUp = l.schema({
+  'password': l.string().min(8).required(),
+  'confirm': l
+      .string()
+      .customWithSchema(matchesPassword, message: 'Passwords must match')
+      .required(),
+});
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+bool matchesPassword(Object? value, Map<String, Object?> data) =>
+    value == data['password'];
+
+@WithSchemaCustomValidator(matchesPassword, message: 'Passwords must match')
+required String confirm,
+// l.string().customWithSchema(matchesPassword, message: "Passwords must match").required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="signUp.validateSchema(input)"
+  cases={[
+    { input: "{'password': 'hunter2hunter2', 'confirm': 'hunter2hunter2'}", pass: true },
+    { input: "{'password': 'hunter2hunter2', 'confirm': 'nope'}", pass: false, message: "Passwords must match" },
+  ]}
+/>

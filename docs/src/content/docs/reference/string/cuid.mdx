@@ -1,0 +1,59 @@
+---
+title: '.cuid()'
+description: Requires the string to be a CUID.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when the string matches the CUID pattern: a `c` followed by at least eight characters that are not whitespace or `-`.
+
+## Signature
+
+```dart wrap
+StringValidator cuid({String? message, String? Function()? messageFn})
+```
+
+Available on `l.string()`.
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value must be a valid cuid`. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+`@IsCuid()`, or the constant `@isCuid`. Put the annotation on the constructor parameter.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final id = l.string().cuid();
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+@IsCuid() required String id, // l.string().cuid().required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="id.validateValue(input)"
+  cases={[
+    { input: "'cjld2cjxh0000qzrmn831i7rn'", pass: true },
+    { input: "'123'", pass: false, message: "value must be a valid cuid" },
+  ]}
+/>

@@ -1,0 +1,60 @@
+---
+title: '.length()'
+description: Requires a string of exactly a given number of characters.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when `value.length` equals `length`.
+
+## Signature
+
+```dart wrap
+StringValidator length(int length, {String? message, String? Function()? messageFn})
+```
+
+Available on `l.string()`.
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `length` | `int` | The only accepted length. Must be 0 or more. |
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value must be exactly 3 characters long`. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+`@HasLength(n)`. Put the annotation on the constructor parameter.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final iso = l.string().length(3);
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+@HasLength(2) required String countryCode, // l.string().length(2).required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="iso.validateValue(input)"
+  cases={[
+    { input: "'abc'", pass: true },
+    { input: "'abcd'", pass: false, message: "value must be exactly 3 characters long" },
+  ]}
+/>

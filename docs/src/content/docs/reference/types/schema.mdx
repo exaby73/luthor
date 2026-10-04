@@ -1,0 +1,68 @@
+---
+title: 'l.schema()'
+description: Requires a Map with named fields, each with its own validator.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when the value is a map and every listed field passes its validator. Keys in the input that the schema does not list are ignored. A field whose key is missing is skipped unless its validator has `.required()`. Validate with `validateSchema`, which returns a `SchemaValidationResult` and an error map keyed by field. [Schemas](/concepts/schemas) explains nesting and reuse.
+
+## Signature
+
+```dart wrap
+Validator schema(Map<String, ValidatorReference> validatorSchema)
+```
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `validatorSchema` | `Map<String, ValidatorReference>` | Field name to validator. Values may be validators, nested schemas, or forward references. |
+
+## Error message
+
+A field's messages come from its own validator and carry the field name: `email must be a valid email address`. A nested schema given a value that is not a map reports `value must be a map` under its field. The `getError` method reads one message by error path. [Error messages](/reference/errors) lists the shapes.
+
+## Code generation
+
+Every `@luthor` model produces a schema named `$ModelSchema`, and a field whose type is another model refers to that model's schema.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final user = l.schema({
+  'email': l.string().email().required(),
+  'age': l.int().min(18),
+});
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+required Address address, // $AddressSchema.required()
+Address? previous,        // $AddressSchema
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="user.validateSchema(input)"
+  cases={[
+    { input: "{'email': 'dev@example.com'}", pass: true },
+    { input: "{'email': 'dev@example.com', 'age': 30}", pass: true },
+    { input: "{'email': 'bad', 'age': 12}", pass: false, message: ["email must be a valid email address", "age must be greater than or equal to 18"] },
+    { input: "{'age': 30}", pass: false, message: "email is required" },
+  ]}
+/>
+
+Convert valid input with `fromJson`:
+
+```dart
+final result = user.validateSchema<User>(json, fromJson: User.fromJson);
+```

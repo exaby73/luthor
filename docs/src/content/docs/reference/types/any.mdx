@@ -1,0 +1,51 @@
+---
+title: 'l.any()'
+description: Accepts any value.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Always passes. Use it for a field you want listed in a schema without constraints. `.required()` still works on it, and so do custom validators.
+
+## Signature
+
+```dart wrap
+Validator any()
+```
+
+## Error message
+
+None. `l.any().required()` reports `value is required` for `null`.
+
+## Code generation
+
+A `dynamic` parameter maps to `l.any()`. It never gets `.required()`, because `dynamic` admits `null`.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final payload = l.any();
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+required dynamic payload, // l.any()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="payload.validateValue(input)"
+  cases={[
+    { input: "42", pass: true },
+    { input: "null", pass: true },
+    { input: "{'k': 'v'}", pass: true },
+  ]}
+/>

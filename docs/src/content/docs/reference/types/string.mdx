@@ -1,0 +1,59 @@
+---
+title: 'l.string()'
+description: Requires a String and unlocks the string modifiers.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when the value is a `String`. Returns a `StringValidator`, which has every [string modifier](/reference/string/min). `null` passes until you add [`.required()`](/reference/modifiers/required).
+
+## Signature
+
+```dart wrap
+StringValidator string({String? message, String? Function()? messageFn})
+```
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value must be a string`. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+A `String` parameter maps to `l.string()`. A `DateTime` parameter maps to `l.string().dateTime()`. Non-nullable parameters get `.required()`.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final name = l.string();
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+required String name, // l.string().required()
+String? nickname,     // l.string()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="name.validateValue(input)"
+  cases={[
+    { input: "'Ada'", pass: true },
+    { input: "null", pass: true },
+    { input: "42", pass: false, message: "value must be a string" },
+  ]}
+/>

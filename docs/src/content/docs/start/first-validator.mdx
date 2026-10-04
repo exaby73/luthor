@@ -1,0 +1,119 @@
+---
+title: Your first validator
+description: Build a validator from l, run it against a few values, and read the result.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+import Verdict from '../../../components/Verdict.astro';
+
+In this tutorial you build a validator for an email address, run it against three inputs, and branch on the result. You need a Dart project with `luthor` installed. [Installation](/installation) covers that.
+
+<Steps>
+
+1. Create `bin/main.dart` and start from `l`.
+
+   Every validator starts from the global getter `l`. Calling a type method such as `string()` returns a validator that checks the Dart type. Each modifier you chain after it returns a new validator with one more validation.
+
+   ```dart title="bin/main.dart"
+   import 'package:luthor/luthor.dart';
+
+   void main() {
+     final email = l.string().email().required();
+   }
+   ```
+
+   `l.string()` checks that the value is a `String`. `.email()` checks that it looks like an email address. `.required()` rejects `null`.
+
+2. Validate a value.
+
+   Call `validateValue`. It returns a `SingleValidationResult`, never throws, and `isValid` tells you which case you got.
+
+   ```dart title="bin/main.dart" ins={6-8}
+   import 'package:luthor/luthor.dart';
+
+   void main() {
+     final email = l.string().email().required();
+
+     print(email.validateValue('dev@example.com').isValid);
+     print(email.validateValue('bad').isValid);
+     print(email.validateValue(null).isValid);
+   }
+   ```
+
+   Run it with `dart run bin/main.dart`. You should see:
+
+   ```txt
+   true
+   false
+   false
+   ```
+
+3. Read the error message.
+
+   `SingleValidationResult` is sealed with two cases, `SingleValidationSuccess` and `SingleValidationError`. Replace the three prints with a `switch`. The compiler requires both cases.
+
+   ```dart title="bin/main.dart" ins={6-13}
+   import 'package:luthor/luthor.dart';
+
+   void main() {
+     final email = l.string().email().required();
+
+     for (final input in ['dev@example.com', 'bad', null]) {
+       switch (email.validateValue(input)) {
+         case SingleValidationSuccess(data: final value):
+           print('+ $value');
+         case SingleValidationError(errors: final errors):
+           print('- $input: ${errors.first}');
+       }
+     }
+   }
+   ```
+
+   The output now carries the messages:
+
+   <Verdict
+     title="email.validateValue(input)"
+     cases={[
+       { input: "'dev@example.com'", pass: true },
+       { input: "'bad'", pass: false, message: 'value must be a valid email address' },
+       { input: 'null', pass: false, message: 'value is required' },
+     ]}
+   />
+
+4. Name the value.
+
+   Messages say `value` because the validator has no name. Give it one with `withName`, and the name replaces `value` in every message the chain produces.
+
+   ```dart title="bin/main.dart" del={4} ins={5}
+   import 'package:luthor/luthor.dart';
+
+   void main() {
+     final email = l.string().email().required();
+     final email = l.withName('email').string().email().required();
+   ```
+
+   <Verdict
+     title="email.validateValue(input)"
+     cases={[
+       { input: "'bad'", pass: false, message: 'email must be a valid email address' },
+       { input: 'null', pass: false, message: 'email is required' },
+     ]}
+   />
+
+5. Reuse the base validator.
+
+   Validators are immutable. Chaining returns a new validator and leaves the one you chained from unchanged, so a base validator can branch into several without one leaking into another.
+
+   ```dart
+   final text = l.string();
+   final email = text.email();
+   final uuid = text.uuid();
+
+   text.validateValue('anything').isValid;  // true
+   email.validateValue('anything').isValid; // false
+   uuid.validateValue('anything').isValid;  // false
+   ```
+
+</Steps>
+
+You have built a validator, run it, branched on the result, and named it. Next, [Your first schema](/start/first-schema) does the same for a map with several fields.

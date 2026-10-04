@@ -1,0 +1,965 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-04T16:06:57+00:00",
+  "title": "Design System: Luthor docs",
+  "source": {
+    "tokens": "src/styles/theme.css",
+    "codeBlocks": "astro.config.mjs (expressiveCode.styleOverrides)",
+    "components": [
+      "src/components/Verdict.astro",
+      "src/components/Hero.astro",
+      "src/components/ApiIndex.astro",
+      "src/components/Footer.astro",
+      "src/components/SiteTitle.astro"
+    ],
+    "themes": {
+      "dark": ":root",
+      "light": ":root[data-theme='light']"
+    }
+  },
+  "extensions": {
+    "colorMeta": {
+      "paper-dark": {
+        "role": "neutral",
+        "displayName": "Paper (dark)",
+        "theme": "dark",
+        "canonical": "oklch(20.0% 0.013 264.2)",
+        "tonalRamp": [
+          "#080b11",
+          "#22252c",
+          "#3e4249",
+          "#5d6169",
+          "#7e828a",
+          "#a1a5ad",
+          "#c5c9d2",
+          "#eaeff7"
+        ]
+      },
+      "paper-light": {
+        "role": "neutral",
+        "displayName": "Paper (light)",
+        "theme": "light",
+        "canonical": "oklch(97.9% 0.003 264.5)",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#242526",
+          "#414243",
+          "#606163",
+          "#818284",
+          "#a4a5a7",
+          "#c8c9cb",
+          "#edeef0"
+        ]
+      },
+      "ink-dark": {
+        "role": "neutral",
+        "displayName": "Ink (dark)",
+        "theme": "dark",
+        "canonical": "oklch(95.4% 0.005 258.3)",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#242527",
+          "#404244",
+          "#606164",
+          "#818285",
+          "#a3a5a8",
+          "#c7c9cc",
+          "#edeff2"
+        ]
+      },
+      "ink-light": {
+        "role": "neutral",
+        "displayName": "Ink (light)",
+        "theme": "light",
+        "canonical": "oklch(20.9% 0.013 264.2)",
+        "tonalRamp": [
+          "#080b11",
+          "#22252b",
+          "#3f4249",
+          "#5e6169",
+          "#7e828a",
+          "#a1a5ad",
+          "#c5c9d2",
+          "#eaeff7"
+        ]
+      },
+      "text-dark": {
+        "role": "neutral",
+        "displayName": "Text (dark)",
+        "theme": "dark",
+        "canonical": "oklch(80.3% 0.017 262.7)",
+        "tonalRamp": [
+          "#080b12",
+          "#21252d",
+          "#3d424b",
+          "#5c616b",
+          "#7d838d",
+          "#9fa5b0",
+          "#c3c9d4",
+          "#e8effa"
+        ]
+      },
+      "text-light": {
+        "role": "neutral",
+        "displayName": "Text (light)",
+        "theme": "light",
+        "canonical": "oklch(37.5% 0.022 264.3)",
+        "tonalRamp": [
+          "#070b15",
+          "#202530",
+          "#3c424e",
+          "#5b616e",
+          "#7c8290",
+          "#9ea5b3",
+          "#c2c9d8",
+          "#e7effe"
+        ]
+      },
+      "text-strong-dark": {
+        "role": "neutral",
+        "displayName": "Text strong (dark)",
+        "theme": "dark",
+        "canonical": "oklch(90.6% 0.009 264.5)",
+        "tonalRamp": [
+          "#090b0f",
+          "#232529",
+          "#404247",
+          "#5f6166",
+          "#808288",
+          "#a2a5ab",
+          "#c6c9cf",
+          "#ebeef5"
+        ]
+      },
+      "text-strong-light": {
+        "role": "neutral",
+        "displayName": "Text strong (light)",
+        "theme": "light",
+        "canonical": "oklch(28.5% 0.018 266.3)",
+        "tonalRamp": [
+          "#080b13",
+          "#21252e",
+          "#3e424c",
+          "#5d616c",
+          "#7d828d",
+          "#a0a5b0",
+          "#c4c9d5",
+          "#e9eefb"
+        ]
+      },
+      "muted-dark": {
+        "role": "neutral",
+        "displayName": "Muted (dark)",
+        "theme": "dark",
+        "canonical": "oklch(65.8% 0.024 263.1)",
+        "tonalRamp": [
+          "#060b15",
+          "#1f2531",
+          "#3b424f",
+          "#5a616f",
+          "#7b8391",
+          "#9da5b5",
+          "#c1c9d9",
+          "#e7effe"
+        ]
+      },
+      "muted-light": {
+        "role": "neutral",
+        "displayName": "Muted (light)",
+        "theme": "light",
+        "canonical": "oklch(50.9% 0.022 262.9)",
+        "tonalRamp": [
+          "#070b15",
+          "#1f2530",
+          "#3c424e",
+          "#5b616e",
+          "#7b8390",
+          "#9ea5b4",
+          "#c2c9d8",
+          "#e7effe"
+        ]
+      },
+      "faint-dark": {
+        "role": "neutral",
+        "displayName": "Faint (dark)",
+        "theme": "dark",
+        "canonical": "oklch(50.5% 0.026 263.1)",
+        "tonalRamp": [
+          "#060b16",
+          "#1e2532",
+          "#3b4250",
+          "#5a6170",
+          "#7a8392",
+          "#9da5b6",
+          "#c0cadb",
+          "#e6efff"
+        ]
+      },
+      "faint-light": {
+        "role": "neutral",
+        "displayName": "Faint (light)",
+        "theme": "light",
+        "canonical": "oklch(65.5% 0.021 263.0)",
+        "tonalRamp": [
+          "#070b14",
+          "#20252f",
+          "#3c424d",
+          "#5b616e",
+          "#7c838f",
+          "#9ea5b3",
+          "#c2c9d7",
+          "#e7effd"
+        ]
+      },
+      "rule-dark": {
+        "role": "neutral",
+        "displayName": "Rule (dark)",
+        "theme": "dark",
+        "canonical": "oklch(30.9% 0.019 264.2)",
+        "tonalRamp": [
+          "#070b13",
+          "#20252f",
+          "#3d424d",
+          "#5c616d",
+          "#7c828e",
+          "#9fa5b2",
+          "#c3c9d6",
+          "#e8effc"
+        ]
+      },
+      "rule-light": {
+        "role": "neutral",
+        "displayName": "Rule (light)",
+        "theme": "light",
+        "canonical": "oklch(86.6% 0.012 264.5)",
+        "tonalRamp": [
+          "#090b10",
+          "#22252b",
+          "#3f4249",
+          "#5e6168",
+          "#7f828a",
+          "#a1a5ad",
+          "#c5c9d1",
+          "#eaeff7"
+        ]
+      },
+      "hairline-dark": {
+        "role": "neutral",
+        "displayName": "Hairline (dark)",
+        "theme": "dark",
+        "canonical": "oklch(28.8% 0.018 262.2)",
+        "tonalRamp": [
+          "#070b13",
+          "#20252e",
+          "#3d424c",
+          "#5c616c",
+          "#7d838d",
+          "#9fa5b1",
+          "#c3c9d5",
+          "#e8effb"
+        ]
+      },
+      "hairline-light": {
+        "role": "neutral",
+        "displayName": "Hairline (light)",
+        "theme": "light",
+        "canonical": "oklch(90.3% 0.010 267.4)",
+        "tonalRamp": [
+          "#090b10",
+          "#23252a",
+          "#404248",
+          "#5f6167",
+          "#808289",
+          "#a2a5ac",
+          "#c6c9d0",
+          "#ebeef5"
+        ]
+      },
+      "hairline-soft-dark": {
+        "role": "neutral",
+        "displayName": "Hairline soft (dark)",
+        "theme": "dark",
+        "canonical": "oklch(30.9% 0.019 264.2)",
+        "tonalRamp": [
+          "#070b13",
+          "#20252f",
+          "#3d424d",
+          "#5c616d",
+          "#7c828e",
+          "#9fa5b2",
+          "#c3c9d6",
+          "#e8effc"
+        ]
+      },
+      "hairline-soft-light": {
+        "role": "neutral",
+        "displayName": "Hairline soft (light)",
+        "theme": "light",
+        "canonical": "oklch(88.8% 0.012 264.5)",
+        "tonalRamp": [
+          "#090b10",
+          "#22252b",
+          "#3f4248",
+          "#5e6168",
+          "#7f828a",
+          "#a1a5ad",
+          "#c5c9d1",
+          "#eaeff7"
+        ]
+      },
+      "code-bg-dark": {
+        "role": "neutral",
+        "displayName": "Code background (dark)",
+        "theme": "dark",
+        "canonical": "oklch(17.3% 0.011 268.1)",
+        "tonalRamp": [
+          "#090b10",
+          "#23252b",
+          "#3f4248",
+          "#5e6168",
+          "#7f8289",
+          "#a2a5ac",
+          "#c6c9d0",
+          "#ebeef6"
+        ]
+      },
+      "code-bg-light": {
+        "role": "neutral",
+        "displayName": "Code background (light)",
+        "theme": "light",
+        "canonical": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "code-chrome-dark": {
+        "role": "neutral",
+        "displayName": "Code chrome (dark)",
+        "theme": "dark",
+        "canonical": "oklch(21.8% 0.015 266.9)",
+        "tonalRamp": [
+          "#080b11",
+          "#22252c",
+          "#3e424a",
+          "#5d616a",
+          "#7e828b",
+          "#a1a5ae",
+          "#c5c9d3",
+          "#eaeef9"
+        ]
+      },
+      "code-chrome-light": {
+        "role": "neutral",
+        "displayName": "Code chrome (light)",
+        "theme": "light",
+        "canonical": "oklch(96.0% 0.005 258.3)",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#242527",
+          "#404244",
+          "#606164",
+          "#818285",
+          "#a3a5a8",
+          "#c7c9cc",
+          "#edeff2"
+        ]
+      },
+      "inline-code-bg-dark": {
+        "role": "neutral",
+        "displayName": "Inline code background (dark)",
+        "theme": "dark",
+        "canonical": "oklch(25.5% 0.017 259.8)",
+        "tonalRamp": [
+          "#070b12",
+          "#20252d",
+          "#3d424b",
+          "#5c626b",
+          "#7c838d",
+          "#9fa5b0",
+          "#c3cad4",
+          "#e8effa"
+        ]
+      },
+      "inline-code-bg-light": {
+        "role": "neutral",
+        "displayName": "Inline code background (light)",
+        "theme": "light",
+        "canonical": "oklch(93.3% 0.007 260.7)",
+        "tonalRamp": [
+          "#090b0e",
+          "#232529",
+          "#404246",
+          "#5f6166",
+          "#808287",
+          "#a2a5aa",
+          "#c6c9ce",
+          "#eceff4"
+        ]
+      },
+      "pass-green-dark": {
+        "role": "primary",
+        "displayName": "Pass green (dark)",
+        "theme": "dark",
+        "canonical": "oklch(77.3% 0.133 159.7)",
+        "tonalRamp": [
+          "#001006",
+          "#032d1b",
+          "#0e4e33",
+          "#0d734b",
+          "#159a65",
+          "#49be87",
+          "#72e4ab",
+          "#c6fede"
+        ]
+      },
+      "pass-green-light": {
+        "role": "primary",
+        "displayName": "Pass green (light)",
+        "theme": "light",
+        "canonical": "oklch(51.1% 0.121 155.5)",
+        "tonalRamp": [
+          "#001004",
+          "#002e17",
+          "#084f2d",
+          "#007542",
+          "#389762",
+          "#5fbb84",
+          "#84e1a7",
+          "#c9feda"
+        ]
+      },
+      "pass-green-high-dark": {
+        "role": "primary",
+        "displayName": "Pass green high (dark)",
+        "theme": "dark",
+        "canonical": "oklch(84.3% 0.098 161.9)",
+        "tonalRamp": [
+          "#001006",
+          "#002d1c",
+          "#084f35",
+          "#1b7250",
+          "#449570",
+          "#68b892",
+          "#8dddb6",
+          "#c4fee0"
+        ]
+      },
+      "pass-green-high-light": {
+        "role": "primary",
+        "displayName": "Pass green high (light)",
+        "theme": "light",
+        "canonical": "oklch(42.6% 0.099 156.2)",
+        "tonalRamp": [
+          "#001005",
+          "#002e17",
+          "#054f2d",
+          "#267249",
+          "#4b9469",
+          "#6fb88b",
+          "#93ddaf",
+          "#c8fedb"
+        ]
+      },
+      "pass-green-low-dark": {
+        "role": "primary",
+        "displayName": "Pass green low (dark)",
+        "theme": "dark",
+        "canonical": "oklch(29.8% 0.044 161.1)",
+        "tonalRamp": [
+          "#001007",
+          "#0e2c1e",
+          "#2c493a",
+          "#4b6959",
+          "#6b8b7a",
+          "#8eae9c",
+          "#b1d3c0",
+          "#d6f8e5"
+        ]
+      },
+      "pass-green-low-light": {
+        "role": "primary",
+        "displayName": "Pass green low (light)",
+        "theme": "light",
+        "canonical": "oklch(93.4% 0.031 160.2)",
+        "tonalRamp": [
+          "#010f07",
+          "#172a20",
+          "#33473c",
+          "#52675b",
+          "#73887c",
+          "#95ab9e",
+          "#b8d0c2",
+          "#ddf5e7"
+        ]
+      },
+      "fail-red-dark": {
+        "role": "secondary",
+        "displayName": "Fail red (dark)",
+        "theme": "dark",
+        "canonical": "oklch(72.6% 0.136 25.8)",
+        "tonalRamp": [
+          "#200000",
+          "#4a0508",
+          "#7b1417",
+          "#a03a36",
+          "#c75d56",
+          "#ee8078",
+          "#feb3ab",
+          "#fee9e7"
+        ]
+      },
+      "fail-red-light": {
+        "role": "secondary",
+        "displayName": "Fail red (light)",
+        "theme": "light",
+        "canonical": "oklch(50.1% 0.178 28.7)",
+        "tonalRamp": [
+          "#1f0000",
+          "#4c0202",
+          "#7d0e0a",
+          "#b0221b",
+          "#d84c3f",
+          "#f97969",
+          "#fcb5aa",
+          "#fee9e5"
+        ]
+      },
+      "caution-amber-dark": {
+        "role": "secondary",
+        "displayName": "Caution amber (dark)",
+        "theme": "dark",
+        "canonical": "oklch(78.5% 0.127 81.5)",
+        "tonalRamp": [
+          "#130900",
+          "#322200",
+          "#563d05",
+          "#7c5b15",
+          "#a57a1f",
+          "#cd9c38",
+          "#f3c060",
+          "#feecce"
+        ]
+      },
+      "caution-amber-light": {
+        "role": "secondary",
+        "displayName": "Caution amber (light)",
+        "theme": "light",
+        "canonical": "oklch(50.0% 0.109 69.6)",
+        "tonalRamp": [
+          "#150800",
+          "#371f00",
+          "#5c3905",
+          "#845615",
+          "#ac7530",
+          "#d19855",
+          "#f7bd79",
+          "#feebd7"
+        ]
+      },
+      "note-blue-dark": {
+        "role": "tertiary",
+        "displayName": "Note blue (dark)",
+        "theme": "dark",
+        "canonical": "oklch(74.0% 0.117 264.8)",
+        "tonalRamp": [
+          "#000036",
+          "#071d5d",
+          "#223d7f",
+          "#405ea3",
+          "#5f80c9",
+          "#81a3ef",
+          "#b1c9fc",
+          "#e7effe"
+        ]
+      },
+      "note-blue-light": {
+        "role": "tertiary",
+        "displayName": "Note blue (light)",
+        "theme": "light",
+        "canonical": "oklch(49.1% 0.181 262.8)",
+        "tonalRamp": [
+          "#000037",
+          "#001a63",
+          "#03339f",
+          "#2558c6",
+          "#457ced",
+          "#78a4f7",
+          "#afcafd",
+          "#e7effe"
+        ]
+      },
+      "syntax-purple-dark": {
+        "role": "tertiary",
+        "displayName": "Syntax purple (dark)",
+        "theme": "dark",
+        "canonical": "oklch(78.0% 0.112 299.7)",
+        "tonalRamp": [
+          "#120027",
+          "#2f1052",
+          "#4c3074",
+          "#6b5197",
+          "#8d72bc",
+          "#b095e1",
+          "#d2bcfc",
+          "#f1ebfe"
+        ]
+      },
+      "syntax-purple-light": {
+        "role": "tertiary",
+        "displayName": "Syntax purple (light)",
+        "theme": "light",
+        "canonical": "oklch(50.1% 0.190 292.4)",
+        "tonalRamp": [
+          "#0f002a",
+          "#2b0660",
+          "#4b169b",
+          "#6940c1",
+          "#8965e8",
+          "#a990fc",
+          "#cac0fb",
+          "#eeecff"
+        ]
+      },
+      "on-accent-dark": {
+        "role": "neutral",
+        "displayName": "On accent (dark)",
+        "theme": "dark",
+        "canonical": "oklch(20.8% 0.021 162.1)",
+        "tonalRamp": [
+          "#040e08",
+          "#1c2822",
+          "#38463f",
+          "#57655e",
+          "#78867e",
+          "#9aa9a1",
+          "#becec5",
+          "#e3f3ea"
+        ]
+      },
+      "on-accent-light": {
+        "role": "neutral",
+        "displayName": "On accent (light)",
+        "theme": "light",
+        "canonical": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "selection-dark": {
+        "role": "neutral",
+        "displayName": "Selection (dark)",
+        "theme": "dark",
+        "canonical": "rgba(92, 207, 151, 0.28)"
+      },
+      "selection-light": {
+        "role": "neutral",
+        "displayName": "Selection (light)",
+        "theme": "light",
+        "canonical": "rgba(13, 122, 71, 0.2)"
+      },
+      "backdrop-dark": {
+        "role": "neutral",
+        "displayName": "Backdrop (dark)",
+        "theme": "dark",
+        "canonical": "rgba(10, 12, 16, 0.7)"
+      },
+      "backdrop-light": {
+        "role": "neutral",
+        "displayName": "Backdrop (light)",
+        "theme": "light",
+        "canonical": "rgba(40, 46, 58, 0.5)"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The landing headline only."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "The page title h1 on every docs page."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "h2. Opens a ruled section with a 1px top hairline."
+      },
+      "subtitle": {
+        "displayName": "Subtitle",
+        "purpose": "h3. h4 is the same weight at 1rem."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "The one-sentence landing lead."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Prose in a 46rem column."
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Tables, aside bodies, sidebar links, tabs, footer meta."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Group labels, table headers, aside titles. Mixed case, never uppercase."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Code blocks and the report figure, in the mono."
+      },
+      "code-small": {
+        "displayName": "Code small",
+        "purpose": "API index identifiers and editor tab labels."
+      }
+    },
+    "shadows": [
+      {
+        "name": "dialog-dark",
+        "value": "0 16px 40px rgba(0, 0, 0, 0.45)",
+        "purpose": "The search dialog in dark mode. The only shadow on an authored surface."
+      },
+      {
+        "name": "dialog-light",
+        "value": "0 16px 40px rgba(20, 24, 32, 0.16)",
+        "purpose": "The search dialog in light mode."
+      },
+      {
+        "name": "overlay-dark",
+        "value": "0 8px 24px rgba(0, 0, 0, 0.35)",
+        "purpose": "Starlight's medium step for popovers. Unused by authored components."
+      },
+      {
+        "name": "overlay-light",
+        "value": "0 8px 24px rgba(20, 24, 32, 0.12)",
+        "purpose": "Starlight's medium step in light mode. Unused by authored components."
+      },
+      {
+        "name": "content",
+        "value": "none",
+        "purpose": "Code frames, pagination links, menu button, step counters, and every content surface."
+      }
+    ],
+    "motion": [
+      {
+        "name": "transition-colour",
+        "value": "120ms ease",
+        "purpose": "Every hover and focus colour or border-colour change."
+      },
+      {
+        "name": "row-reveal",
+        "value": "420ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Landing report rows fade in from 4px left. Off under prefers-reduced-motion."
+      },
+      {
+        "name": "row-reveal-start",
+        "value": "200ms",
+        "purpose": "Delay before the first row."
+      },
+      {
+        "name": "row-reveal-step",
+        "value": "180ms",
+        "purpose": "Delay between rows. The counter ticks 120ms after each row lands."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "index-one-column",
+        "value": "26rem",
+        "purpose": "Below this the API index row stacks identifier over summary."
+      },
+      {
+        "name": "table-scroll",
+        "value": "40rem",
+        "purpose": "Below this tables scroll sideways; at and above, the API index runs two columns."
+      },
+      {
+        "name": "sidebar",
+        "value": "50rem",
+        "purpose": "Starlight's sidebar and search field breakpoint."
+      },
+      {
+        "name": "hero-two-column",
+        "value": "64rem",
+        "purpose": "The landing first viewport goes two column; the API index goes three."
+      },
+      {
+        "name": "landing-container",
+        "value": "72rem",
+        "purpose": "Landing page container width. Docs pages keep 46rem."
+      }
+    ],
+    "focus": {
+      "default": "box-shadow: -5px 0 0 -1px var(--sl-color-accent), 5px 0 0 -1px var(--sl-color-accent); outline: 2px solid transparent; outline-offset: 2px;",
+      "fields": "box-shadow: -4px 0 0 0 var(--sl-color-accent), 4px 0 0 0 var(--sl-color-accent);",
+      "sidebarLink": "box-shadow: inset 2px 0 0 0 var(--sl-color-accent);",
+      "purpose": "A printed bracket: two vertical green bars either side of the element. Sidebar links use an inset left rule so the bracket does not collide with the rail."
+    },
+    "codeThemes": {
+      "dark": "github-dark-default",
+      "light": "github-light-default",
+      "backgroundOverride": "var(--lu-code-bg)"
+    },
+    "lines": {
+      "hairline": "1px",
+      "stateMark": "2px",
+      "reportRowDivider": "1px dashed, hairline at 65%"
+    }
+  },
+  "components": [
+    {
+      "name": "Prose link",
+      "kind": "custom",
+      "refersTo": "link-inline",
+      "description": "Every link inside markdown content. Green with a half-strength 1px underline that goes solid on hover.",
+      "html": "<p class=\"ds-prose\">Values are optional until you say otherwise. <a class=\"ds-link\" href=\"#\">Optional by default</a> explains why.</p>",
+      "css": ".ds-prose { font-family: 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif; font-size: 1rem; line-height: 1.65; color: var(--sl-color-gray-2, #b9bfca); } .ds-link { color: var(--sl-color-accent, #5ccf97); text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: color-mix(in srgb, var(--sl-color-accent, #5ccf97), transparent 55%); text-underline-offset: 0.2em; transition: text-decoration-color 120ms ease, color 120ms ease; } .ds-link:hover { color: var(--sl-color-accent-high, #8fe0b8); text-decoration-color: currentColor; } .ds-link:focus-visible { box-shadow: -5px 0 0 -1px var(--sl-color-accent), 5px 0 0 -1px var(--sl-color-accent); outline: 2px solid transparent; outline-offset: 2px; }"
+    },
+    {
+      "name": "Hero links",
+      "kind": "button",
+      "refersTo": "link-hero-primary",
+      "description": "The two text links under the landing headline. The site has no buttons; this is the strongest call to action it draws.",
+      "html": "<p class=\"ds-hero-links\"><a class=\"ds-hero-link ds-hero-link--primary\" href=\"#\">Start with installation</a><a class=\"ds-hero-link\" href=\"#\">Browse the API reference</a></p>",
+      "css": ".ds-hero-links { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; margin: 0; font-family: 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif; font-size: 1rem; } .ds-hero-link { display: inline-flex; align-items: center; min-height: 2.75rem; color: var(--sl-color-white, #eef0f3); font-weight: 500; text-decoration: underline; text-decoration-thickness: 2px; text-decoration-color: var(--sl-color-gray-4, #5d6574); text-underline-offset: 0.3em; transition: color 120ms ease; } .ds-hero-link--primary { font-weight: 600; text-decoration-color: var(--sl-color-accent, #5ccf97); } .ds-hero-link:hover, .ds-hero-link:focus-visible { color: var(--sl-color-accent, #5ccf97); } .ds-hero-link:focus-visible { box-shadow: -5px 0 0 -1px var(--sl-color-accent), 5px 0 0 -1px var(--sl-color-accent); outline: 2px solid transparent; outline-offset: 2px; }"
+    },
+    {
+      "name": "Search trigger",
+      "kind": "input",
+      "refersTo": "search-trigger",
+      "description": "The header search field. A hairline box on the code background with a mono keyboard hint.",
+      "html": "<button class=\"ds-search\" type=\"button\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m20 20-3.5-3.5\"/></svg><span>Search</span><kbd class=\"ds-search__kbd\">Ctrl K</kbd></button>",
+      "css": ".ds-search { display: flex; align-items: center; gap: 0.5rem; width: 100%; max-width: 22rem; height: 2.25rem; padding-inline: 0.625rem 0.5rem; border: 1px solid var(--sl-color-hairline, #262b34); border-radius: 0.125rem; background: var(--lu-code-bg, #0e1015); color: var(--sl-color-gray-3, #8a92a1); font-family: 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif; font-size: 0.875rem; cursor: pointer; transition: border-color 120ms ease, color 120ms ease; } .ds-search:hover, .ds-search:focus-visible { border-color: var(--sl-color-gray-4, #5d6574); color: var(--sl-color-white, #eef0f3); } .ds-search:focus-visible { box-shadow: -5px 0 0 -1px var(--sl-color-accent), 5px 0 0 -1px var(--sl-color-accent); outline: 2px solid transparent; outline-offset: 2px; } .ds-search__kbd { margin-inline-start: auto; border: 1px solid var(--sl-color-hairline, #262b34); border-radius: 0.125rem; padding: 0.1rem 0.35rem; font-family: 'Atkinson Hyperlegible Mono Variable', ui-monospace, monospace; font-size: 0.75rem; color: var(--sl-color-gray-3, #8a92a1); background: transparent; }"
+    },
+    {
+      "name": "Sidebar group",
+      "kind": "nav",
+      "refersTo": "sidebar-link",
+      "description": "A sidebar group with its 1px rail. The current page lays a 2px green rule over the rail; no background in any state.",
+      "html": "<nav class=\"ds-sidebar\"><p class=\"ds-sidebar__label\">Start here</p><ul class=\"ds-sidebar__list\"><li><a href=\"#\">Installation</a></li><li><a href=\"#\" aria-current=\"page\">Your first validator</a></li><li><a href=\"#\">Your first schema</a></li><li><a href=\"#\">Generate a schema</a></li></ul></nav>",
+      "css": ".ds-sidebar { font-family: 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif; width: 15rem; } .ds-sidebar__label { margin: 0 0 0.4rem; font-size: 0.8125rem; font-weight: 650; letter-spacing: 0.01em; color: var(--sl-color-white, #eef0f3); } .ds-sidebar__list { list-style: none; margin: 0; padding: 0; border-inline-start: 1px solid var(--sl-color-hairline-light, #2b303a); } .ds-sidebar__list a { position: relative; display: block; padding: 0.3rem 0.5rem 0.3rem 0.875rem; font-size: 0.875rem; line-height: 1.4; color: var(--sl-color-gray-2, #b9bfca); text-decoration: none; border-radius: 0; transition: color 120ms ease; } .ds-sidebar__list a:hover { color: var(--sl-color-white, #eef0f3); } .ds-sidebar__list a[aria-current='page'] { color: var(--sl-color-white, #eef0f3); font-weight: 600; } .ds-sidebar__list a[aria-current='page']::before { content: ''; position: absolute; inset-inline-start: -1px; top: 0.3rem; bottom: 0.3rem; width: 2px; background: var(--sl-color-accent, #5ccf97); } .ds-sidebar__list a:focus-visible { outline: none; box-shadow: inset 2px 0 0 0 var(--sl-color-accent, #5ccf97); }"
+    },
+    {
+      "name": "Tabs",
+      "kind": "nav",
+      "refersTo": "tab",
+      "description": "The hand-written versus generated switch. Hairline under the list, 2px green underline on the selected tab, synced across pages with syncKey=\"codegen\".",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\"><button class=\"ds-tab\" role=\"tab\" aria-selected=\"true\">Hand-written</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Generated</button></div>",
+      "css": ".ds-tabs { display: flex; gap: 0.25rem; border-bottom: 1px solid var(--sl-color-hairline, #262b34); font-family: 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif; } .ds-tab { padding: 0.45rem 0.75rem; margin-bottom: -1px; border: 0; border-bottom: 2px solid transparent; background: none; font: inherit; font-size: 0.875rem; color: var(--sl-color-gray-3, #8a92a1); cursor: pointer; transition: color 120ms ease, border-color 120ms ease; } .ds-tab:hover { color: var(--sl-color-white, #eef0f3); border-color: var(--sl-color-gray-4, #5d6574); } .ds-tab[aria-selected='true'] { color: var(--sl-color-white, #eef0f3); font-weight: 600; border-color: var(--sl-color-accent, #5ccf97); } .ds-tab:focus-visible { box-shadow: -5px 0 0 -1px var(--sl-color-accent), 5px 0 0 -1px var(--sl-color-accent); outline: 2px solid transparent; outline-offset: 2px; }"
+    },
+    {
+      "name": "Aside",
+      "kind": "card",
+      "refersTo": "aside",
+      "description": "Note, tip, caution, and danger callouts. A uniform 1px border in the role colour over an 8 percent tint. Shown as a caution.",
+      "html": "<aside class=\"ds-aside ds-aside--caution\"><p class=\"ds-aside__title\">Caution</p><div class=\"ds-aside__content\">Values are optional by default. Add <code>.required()</code> or <code>null</code> passes.</div></aside>",
+      "css": ".ds-aside { --role: var(--sl-color-orange, #e2b04f); border: 1px solid var(--role); border-radius: 0.125rem; background: color-mix(in srgb, var(--role), transparent 92%); padding: 0.875rem 1rem; color: var(--sl-color-gray-1, #dde0e6); font-family: 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif; } .ds-aside--note { --role: var(--sl-color-blue, #86a9f5); } .ds-aside--tip { --role: var(--sl-color-accent, #5ccf97); } .ds-aside--danger { --role: var(--sl-color-red, #f08279); } .ds-aside__title { margin: 0 0 0.5rem; font-size: 0.8125rem; font-weight: 650; letter-spacing: 0.01em; color: var(--role); } .ds-aside__content { font-size: 0.875rem; line-height: 1.6; } .ds-aside__content code { font-family: 'Atkinson Hyperlegible Mono Variable', ui-monospace, monospace; font-size: 0.875em; padding: 0.1em 0.35em; border-radius: 0.125rem; background: var(--sl-color-bg-inline-code, #1e232b); color: var(--sl-color-white, #eef0f3); }"
+    },
+    {
+      "name": "Report figure",
+      "kind": "custom",
+      "refersTo": "report-figure",
+      "description": "Verdict.astro, the signature component. One row per input, a bold verdict glyph, the +n -n counter, and a Which: line under each failure.",
+      "html": "<figure class=\"ds-report\"><figcaption class=\"ds-report__head\"><code class=\"ds-report__title\">l.string().email().required().validateValue(input)</code><span class=\"ds-report__count\" aria-label=\"1 passed, 2 failed\"><span class=\"ds-pass\">+1</span><span class=\"ds-fail\">-2</span></span></figcaption><ol class=\"ds-report__rows\"><li class=\"ds-report__row ds-pass\"><span class=\"ds-report__glyph\" aria-hidden=\"true\">+</span><code class=\"ds-report__input\">'dev@example.com'</code></li><li class=\"ds-report__row ds-fail\"><span class=\"ds-report__glyph\" aria-hidden=\"true\">-</span><code class=\"ds-report__input\">'bad'</code><span class=\"ds-report__message\">value must be a valid email address</span></li><li class=\"ds-report__row ds-fail\"><span class=\"ds-report__glyph\" aria-hidden=\"true\">-</span><code class=\"ds-report__input\">null</code><span class=\"ds-report__message\">value is required</span></li></ol></figure>",
+      "css": ".ds-report { margin: 0; border: 1px solid var(--sl-color-hairline, #262b34); border-radius: 0.125rem; background: var(--lu-code-bg, #0e1015); font-family: 'Atkinson Hyperlegible Mono Variable', ui-monospace, monospace; font-size: 0.875rem; line-height: 1.5; color: var(--sl-color-gray-1, #dde0e6); overflow: hidden; } .ds-report__head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding: 0.5rem 1rem; border-bottom: 1px solid var(--sl-color-hairline, #262b34); background: var(--lu-code-chrome, #171a21); font-size: 0.8125rem; color: var(--sl-color-gray-3, #8a92a1); } .ds-report__title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: inherit; color: var(--sl-color-gray-2, #b9bfca); } .ds-report__count { flex: 0 0 auto; font-variant-numeric: tabular-nums; letter-spacing: 0.02em; } .ds-report__count .ds-pass { color: var(--sl-color-accent, #5ccf97); } .ds-report__count .ds-fail { margin-inline-start: 0.5em; color: var(--sl-color-red, #f08279); } .ds-report__rows { list-style: none; margin: 0; padding: 0.5rem 0; } .ds-report__row { display: grid; grid-template-columns: 1.25rem 1fr; column-gap: 0.5rem; align-items: baseline; padding: 0.3rem 1rem; } .ds-report__row + .ds-report__row { border-top: 1px dashed color-mix(in srgb, var(--sl-color-hairline, #262b34), transparent 35%); } .ds-report__glyph { text-align: center; font-weight: 700; } .ds-pass > .ds-report__glyph { color: var(--sl-color-accent, #5ccf97); } .ds-fail > .ds-report__glyph { color: var(--sl-color-red, #f08279); } .ds-report__input { font: inherit; color: var(--sl-color-white, #eef0f3); overflow-wrap: anywhere; } .ds-report__message { grid-column: 2; color: var(--sl-color-red, #f08279); overflow-wrap: anywhere; } .ds-report__message::before { content: 'Which: '; color: var(--sl-color-gray-3, #8a92a1); }"
+    },
+    {
+      "name": "API index rows",
+      "kind": "custom",
+      "refersTo": "index-row",
+      "description": "The ruled index on the landing page. Identifier in mono on the left, summary on the right, a hairline under each row, green tint on hover.",
+      "html": "<section class=\"ds-index\"><h3 class=\"ds-index__label\">Types</h3><ul class=\"ds-index__list\"><li><a href=\"#\"><code>l.string()</code><span>Must be a String.</span></a></li><li><a href=\"#\"><code>l.int()</code><span>Must be an int.</span></a></li><li><a href=\"#\"><code>l.schema()</code><span>Must be a Map with named fields.</span></a></li></ul></section>",
+      "css": ".ds-index { font-family: 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif; max-width: 22rem; } .ds-index__label { margin: 0 0 0.5rem; font-size: 0.8125rem; font-weight: 650; letter-spacing: 0.01em; color: var(--sl-color-gray-3, #8a92a1); } .ds-index__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--sl-color-hairline, #262b34); } .ds-index__list li { border-bottom: 1px solid var(--sl-color-hairline, #262b34); } .ds-index__list a { display: grid; grid-template-columns: minmax(9.5rem, auto) 1fr; gap: 0.25rem 1rem; align-items: baseline; min-height: 2.5rem; padding: 0.5rem 0.25rem; text-decoration: none; color: var(--sl-color-gray-2, #b9bfca); font-size: 0.875rem; line-height: 1.4; transition: background-color 120ms ease, color 120ms ease; } .ds-index__list a:hover, .ds-index__list a:focus-visible { background: color-mix(in srgb, var(--sl-color-accent, #5ccf97), transparent 92%); color: var(--sl-color-white, #eef0f3); } .ds-index__list a:focus-visible { box-shadow: -5px 0 0 -1px var(--sl-color-accent), 5px 0 0 -1px var(--sl-color-accent); outline: 2px solid transparent; outline-offset: 2px; outline-offset: -2px; } .ds-index__list code { font-family: 'Atkinson Hyperlegible Mono Variable', ui-monospace, monospace; font-size: 0.8125rem; color: var(--sl-color-white, #eef0f3); white-space: nowrap; } .ds-index__list a:hover code { color: var(--sl-color-accent, #5ccf97); }"
+    },
+    {
+      "name": "Pagination link",
+      "kind": "card",
+      "refersTo": "pagination-link",
+      "description": "Previous and next links at the foot of a page. A hairline box whose border turns green on hover; the only box in the system a reader clicks.",
+      "html": "<a class=\"ds-page-link\" href=\"#\"><span class=\"ds-page-link__label\">Next</span><span class=\"ds-page-link__title\">Your first schema <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"square\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></span></a>",
+      "css": ".ds-page-link { display: inline-flex; flex-direction: column; gap: 0.25rem; min-width: 14rem; padding: 0.875rem 1rem; border: 1px solid var(--sl-color-hairline, #262b34); border-radius: 0.125rem; box-shadow: none; text-decoration: none; font-family: 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif; color: var(--sl-color-gray-3, #8a92a1); font-size: 0.8125rem; transition: border-color 120ms ease; } .ds-page-link:hover { border-color: var(--sl-color-accent, #5ccf97); } .ds-page-link:focus-visible { box-shadow: -5px 0 0 -1px var(--sl-color-accent), 5px 0 0 -1px var(--sl-color-accent); outline: 2px solid transparent; outline-offset: 2px; } .ds-page-link__title { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--sl-color-white, #eef0f3); font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.01em; } .ds-page-link__title svg { color: var(--sl-color-accent, #5ccf97); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The test report",
+    "overview": "The site is set like the output of `dart test`. Every example states an input and prints the verdict beside it, with a `+passed -failed` counter in the corner and a `Which:` line under each failure. The page is the paper that report prints on. Light mode is a cool near-white sheet with iron ink. Dark mode is a graphite panel with a blue cast and bone ink. Both modes use the same 1px hairlines and the same five colour roles.\n\nDensity is high and even. Prose sits in a 46rem measure. Headings, code blocks, verdict figures, and tables all start on the same left edge. Rules separate sections; fills do not. State is shown with a mark (a 2px rule, a bracket, an underline), never with a tinted background on the whole element. The two exceptions are the hover tint on index rows and the 8 percent tint behind asides, both drawn at a strength that reads as paper, not as a card.\n\nThe build refused the stock docs hero with two pill buttons, cards, gradients, glow, and drop shadows on content. One motion exists: the landing report reveals its rows in sequence while the counter ticks. Nothing else moves beyond 120ms colour transitions.",
+    "keyCharacteristics": [
+      "Two full palettes (dark `:root`, light `[data-theme='light']`) with identical role assignments.",
+      "Pass green is the only accent. It marks links, the current page, passed rows, focus, and the mark.",
+      "Every rule, border, and divider is 1px. Current-item markers and the primary underline are 2px.",
+      "One radius, 0.125rem. Several elements are square.",
+      "One sans (Atkinson Hyperlegible Next) for prose and UI, its mono sibling for code, counters, and the figure.",
+      "No shadows on content. The search dialog is the only shadowed surface."
+    ],
+    "rules": [
+      {
+        "name": "The rationed colour rule",
+        "body": "Green is for links, current position, passed verdicts, and focus. Red is for failed verdicts, error text, deletions, and danger asides. Amber is for caution asides. Blue and purple are for syntax and note asides. Anything not on that list is a neutral. A new element that wants colour has to name which role it is.",
+        "section": "colors"
+      },
+      {
+        "name": "The same-paper rule",
+        "body": "Header, sidebar, and content share one background value in each theme. Depth comes from the hairline between them, not from a tonal step.",
+        "section": "colors"
+      },
+      {
+        "name": "The two-theme rule",
+        "body": "Every colour token has a dark and a light value with the same role. Code blocks use github-dark-default and github-light-default with their backgrounds replaced by the code background token, so code sits on the same paper as the figure next to it.",
+        "section": "colors"
+      },
+      {
+        "name": "The weight ladder rule",
+        "body": "Four weights, and each has one job. 400 is reading text. 500 is the secondary hero link and the search input. 600 is the current nav item, the selected tab, the hero links, and fact values. 650 is every heading from `h2` down, strong text, and labels. 700 is `h1`, the wordmark, and the pass or fail glyph.",
+        "section": "typography"
+      },
+      {
+        "name": "The tight-heading rule",
+        "body": "Letter spacing tightens as size grows: -0.025em on display, -0.02em on headline, -0.015em on title, -0.01em on subtitle, 0 on body, +0.01em on labels. No heading is uppercase.",
+        "section": "typography"
+      },
+      {
+        "name": "The hairline rule",
+        "body": "Every border, divider, and rail is 1px of the hairline token. The only lines heavier than that are state marks: the 2px current rule, the 2px tab and editor-tab indicator, the 2px underline on hero links and the hovered wordmark, and the 2px code line-marker accent.",
+        "section": "elevation"
+      },
+      {
+        "name": "The mark-not-fill rule",
+        "body": "Current, selected, and focused states are drawn as lines beside or under the element. Backgrounds change only on hover of an index row (green at 8 percent) and the open menu button (one neutral step).",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do print the verdict. An example that validates something ends in a report figure or a `switch` over the result, never in \"this passes\".",
+      "Do draw every border, rail, and divider at 1px with the hairline token, and reserve 2px for current, selected, and focus marks.",
+      "Do keep green for links, current position, passed verdicts, and focus; red for failed verdicts, error text, deletions, and danger asides; amber for caution asides.",
+      "Do use 0.125rem on anything with a corner and square corners on sidebar links, tabs, and step counters.",
+      "Do keep hand-written and generated code in `<Tabs syncKey=\"codegen\">` so the switch persists across pages.",
+      "Do set counters, versions, and the pass or fail numbers in the mono with tabular numerals.",
+      "Do keep new motion behind `prefers-reduced-motion` and limit it to one authored moment per page; colour transitions stay at 120ms.",
+      "Do give every colour a dark and a light value with the same role before using it."
+    ],
+    "donts": [
+      "Don't add buttons, pills, filled call-to-action blocks, or cards. Interactive text is a link with an underline.",
+      "Don't add shadows, gradients, glow, or backdrop blur to content. The search dialog is the only shadowed surface.",
+      "Don't tint the header or sidebar a different value from the content paper.",
+      "Don't mark current or selected state with a filled background. Use the 2px rule or underline.",
+      "Don't use purple or blue in UI chrome; they belong to syntax highlighting and note asides.",
+      "Don't use uppercase or letter-spaced labels above headings. Labels are mixed case at 650 and name a group of items.",
+      "Don't stripe tables or add vertical rules to them.",
+      "Don't colour a link red or amber; those roles are verdicts and warnings, not affordances."
+    ]
+  }
+}

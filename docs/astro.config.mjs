@@ -1,236 +1,227 @@
+// @ts-check
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
-import tailwind from '@astrojs/tailwind';
+// The directory this site lives in inside the monorepo. Used only to build
+// the "Edit page" link, so renaming the directory needs no config change.
+const siteDir = basename(dirname(fileURLToPath(import.meta.url)));
 
-// https://astro.build/config
 export default defineConfig({
   site: 'https://luthor.ex3.dev',
-  base: '/',
+  output: 'static',
+  trailingSlash: 'ignore',
   integrations: [
     starlight({
       title: 'Luthor',
-      disable404Route: true,
-      head: [
-        {
-          tag: 'script',
-          attrs: {
-            defer: true,
-            src: 'https://cdn.jsdelivr.net/npm/alpinejs@3.14.0/dist/cdn.min.js',
-          },
-        },
-        {
-          tag: 'script',
-          attrs: {
-            src: '/code-gen-switcher.js',
-          },
-        },
-      ],
+      description:
+        'Luthor validates Dart values against schemas built with a chainable API. luthor_generator builds those schemas from annotated models.',
+      favicon: '/favicon.svg',
+      lastUpdated: true,
+      pagination: true,
       social: [
-        {
-          icon: 'github',
-          label: 'GitHub',
-          href: 'https://github.com/exaby73/luthor',
-        },
-      ],
-      sidebar: [
-        {
-          label: 'Basics',
-          items: [
-            {
-              label: 'Installation',
-              link: '/installation',
-            },
-            {
-              label: 'Concepts',
-              link: '/concepts',
-            },
-            {
-              label: 'Validation Result',
-              link: '/result',
-            },
-            {
-              label: 'Comprehensive Example',
-              link: '/comprehensive-example',
-            },
-          ],
-        },
-        {
-          label: 'Single Values',
-          items: [
-            {
-              label: 'Int',
-              link: '/single-values/int',
-            },
-            {
-              label: 'Double',
-              link: '/single-values/double',
-            },
-            {
-              label: 'Num',
-              link: '/single-values/num',
-            },
-            {
-              label: 'Bool',
-              link: '/single-values/bool',
-            },
-            {
-              label: 'String',
-              link: '/single-values/string',
-            },
-            {
-              label: 'File',
-              link: '/single-values/file',
-            },
-            {
-              label: 'Null',
-              link: '/single-values/null',
-            },
-            {
-              label: 'Dynamic',
-              link: '/single-values/dynamic',
-            },
-            {
-              label: 'List',
-              link: '/single-values/list',
-            },
-            {
-              label: 'Map',
-              link: '/single-values/map',
-            },
-          ],
-        },
-        {
-          label: 'Modifiers',
-          items: [
-            {
-              label: 'Required',
-              link: '/modifiers/required',
-            },
-            {
-              label: 'Custom',
-              link: '/modifiers/custom',
-            },
-            {
-              label: 'Number Modifiers',
-              items: [
-                {
-                  label: 'Min',
-                  link: '/modifiers/number-modifiers/min',
-                },
-                {
-                  label: 'Max',
-                  link: '/modifiers/number-modifiers/max',
-                },
-              ],
-            },
-            {
-              label: 'String Modifiers',
-              items: [
-                {
-                  label: 'Min',
-                  link: '/modifiers/string-modifiers/min',
-                },
-                {
-                  label: 'Max',
-                  link: '/modifiers/string-modifiers/max',
-                },
-                {
-                  label: 'Length',
-                  link: '/modifiers/string-modifiers/length',
-                },
-                {
-                  label: 'Contains',
-                  link: '/modifiers/string-modifiers/contains',
-                },
-                {
-                  label: 'Starts With',
-                  link: '/modifiers/string-modifiers/starts-with',
-                },
-                {
-                  label: 'Ends With',
-                  link: '/modifiers/string-modifiers/ends-with',
-                },
-                {
-                  label: 'DateTime',
-                  link: '/modifiers/string-modifiers/date-time',
-                },
-                {
-                  label: 'Email',
-                  link: '/modifiers/string-modifiers/email',
-                },
-                {
-                  label: 'Emoji',
-                  link: '/modifiers/string-modifiers/emoji',
-                },
-                {
-                  label: 'Regex',
-                  link: '/modifiers/string-modifiers/regex',
-                },
-                {
-                  label: 'Uri',
-                  link: '/modifiers/string-modifiers/uri',
-                },
-                {
-                  label: 'URL',
-                  link: '/modifiers/string-modifiers/url',
-                },
-                {
-                  label: 'UUID',
-                  link: '/modifiers/string-modifiers/uuid',
-                },
-                {
-                  label: 'CUID',
-                  link: '/modifiers/string-modifiers/cuid',
-                },
-                {
-                  label: 'CUID 2',
-                  link: '/modifiers/string-modifiers/cuid-2',
-                },
-              ],
-            },
-          ],
-        },
-        {
-          label: 'Schemas',
-          items: [
-            {
-              label: 'Defining schemas',
-              link: '/schemas/defining-schemas',
-            },
-            {
-              label: 'Code Generation',
-              link: '/schemas/code-generation',
-            },
-          ],
-        },
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/exaby73/luthor' },
+        { icon: 'seti:dart', label: 'pub.dev', href: 'https://pub.dev/packages/luthor' },
       ],
       editLink: {
-        // Logic to handle the edit link in src/components/EditLink.astro
-        baseUrl: 'https://example.com',
+        baseUrl: `https://github.com/exaby73/luthor/edit/main/${siteDir}/`,
       },
       components: {
-        ThemeProvider: './src/components/ThemeProvider.astro',
-        ThemeSelect: './src/components/ThemeSelect.astro',
         SiteTitle: './src/components/SiteTitle.astro',
-        Sidebar: './src/components/Sidebar.astro',
-        Pagination: './src/components/Pagination.astro',
+        Footer: './src/components/Footer.astro',
         Hero: './src/components/Hero.astro',
-        EditLink: './src/components/EditLink.astro',
       },
       customCss: [
-        '@fontsource-variable/space-grotesk/index.css',
-        '@fontsource/space-mono/400.css',
-        '@fontsource/space-mono/700.css',
+        '@fontsource-variable/atkinson-hyperlegible-next/index.css',
+        '@fontsource-variable/atkinson-hyperlegible-next/wght-italic.css',
+        '@fontsource-variable/atkinson-hyperlegible-mono/index.css',
         './src/styles/theme.css',
       ],
       expressiveCode: {
-        themes: ['github-dark'],
+        themes: ['github-dark-default', 'github-light-default'],
+        styleOverrides: {
+          borderRadius: '0.125rem',
+          borderWidth: '1px',
+          borderColor: 'var(--sl-color-hairline)',
+          codeBackground: 'var(--lu-code-bg)',
+          codeFontSize: 'var(--sl-text-code)',
+          codeLineHeight: '1.6',
+          codePaddingBlock: '0.875rem',
+          codePaddingInline: '1.125rem',
+          codeSelectionBackground: 'var(--lu-selection)',
+          uiFontFamily: 'var(--__sl-font-mono)',
+          uiFontSize: 'var(--sl-text-xs)',
+          focusBorder: 'var(--sl-color-accent)',
+          scrollbarThumbColor: 'var(--sl-color-gray-5)',
+          scrollbarThumbHoverColor: 'var(--sl-color-gray-4)',
+          frames: {
+            shadowColor: 'transparent',
+            frameBoxShadowCssValue: 'none',
+            editorTabBarBackground: 'var(--lu-code-chrome)',
+            editorTabBarBorderBottomColor: 'var(--sl-color-hairline)',
+            editorActiveTabBackground: 'var(--lu-code-bg)',
+            editorActiveTabForeground: 'var(--sl-color-white)',
+            editorActiveTabBorderColor: 'var(--sl-color-hairline)',
+            editorActiveTabIndicatorTopColor: 'var(--sl-color-accent)',
+            editorActiveTabIndicatorBottomColor: 'transparent',
+            editorActiveTabIndicatorHeight: '2px',
+            editorTabBorderRadius: '0',
+            editorTabsMarginInlineStart: '0',
+            editorTabsMarginBlockStart: '0',
+            terminalBackground: 'var(--lu-code-bg)',
+            terminalTitlebarBackground: 'var(--lu-code-chrome)',
+            terminalTitlebarBorderBottomColor: 'var(--sl-color-hairline)',
+            terminalTitlebarDotsForeground: 'var(--sl-color-gray-4)',
+            terminalTitlebarDotsOpacity: '0.6',
+            terminalTitlebarForeground: 'var(--sl-color-gray-3)',
+            inlineButtonBackground: 'var(--lu-code-bg)',
+            inlineButtonBorder: 'var(--sl-color-hairline)',
+            inlineButtonBorderOpacity: '1',
+            inlineButtonForeground: 'var(--sl-color-gray-2)',
+            tooltipSuccessBackground: 'var(--sl-color-accent)',
+            tooltipSuccessForeground: 'var(--sl-color-text-invert)',
+          },
+          textMarkers: {
+            markBackground: 'var(--lu-mark-bg)',
+            markBorderColor: 'var(--sl-color-accent)',
+            insBackground: 'var(--lu-ins-bg)',
+            insBorderColor: 'var(--sl-color-accent)',
+            insDiffIndicatorColor: 'var(--sl-color-accent)',
+            delBackground: 'var(--lu-del-bg)',
+            delBorderColor: 'var(--sl-color-red)',
+            delDiffIndicatorColor: 'var(--sl-color-red)',
+            lineMarkerAccentWidth: '2px',
+          },
+        },
       },
-      pagination: false,
-      lastUpdated: true,
+      sidebar: [
+        {
+          label: 'Start here',
+          items: [
+            'installation',
+            'start/first-validator',
+            'start/first-schema',
+            'start/code-generation',
+          ],
+        },
+        {
+          label: 'Concepts',
+          items: [
+            'concepts/validators',
+            'concepts/optional-by-default',
+            'concepts/results',
+            'concepts/messages',
+            'concepts/schemas',
+            'concepts/custom-validators',
+          ],
+        },
+        {
+          label: 'Code generation',
+          items: [
+            'generator/output',
+            'generator/types',
+            'generator/annotations',
+            'generator/keys',
+            'generator/models',
+            'generator/example',
+          ],
+        },
+        {
+          label: 'API reference',
+          items: [
+            {
+              label: 'Types',
+              items: [
+                'reference/types/string',
+                'reference/types/int',
+                'reference/types/double',
+                'reference/types/number',
+                'reference/types/boolean',
+                'reference/types/list',
+                'reference/types/map',
+                'reference/types/schema',
+                'reference/types/file',
+                'reference/types/any',
+                'reference/types/null-value',
+              ],
+            },
+            {
+              label: 'Modifiers',
+              items: [
+                'reference/modifiers/required',
+                'reference/modifiers/custom',
+                'reference/modifiers/custom-with-schema',
+              ],
+            },
+            {
+              label: 'String modifiers',
+              items: [
+                'reference/string/min',
+                'reference/string/max',
+                'reference/string/length',
+                'reference/string/contains',
+                'reference/string/starts-with',
+                'reference/string/ends-with',
+                'reference/string/regex',
+                'reference/string/email',
+                'reference/string/uri',
+                'reference/string/url',
+                'reference/string/ip',
+                'reference/string/uuid',
+                'reference/string/cuid',
+                'reference/string/cuid2',
+                'reference/string/date-time',
+                'reference/string/emoji',
+              ],
+            },
+            {
+              label: 'Number modifiers',
+              items: ['reference/number/min', 'reference/number/max'],
+            },
+            'reference/results',
+            'reference/errors',
+            'reference/forward-ref',
+          ],
+        },
+      ],
     }),
-    tailwind(),
   ],
-  output: 'static',
+  // Old URLs from the previous site layout.
+  redirects: {
+    '/concepts': '/concepts/validators',
+    '/result': '/concepts/results',
+    '/comprehensive-example': '/generator/example',
+    '/schemas/defining-schemas': '/concepts/schemas',
+    '/schemas/code-generation': '/generator/output',
+    '/single-values/int': '/reference/types/int',
+    '/single-values/double': '/reference/types/double',
+    '/single-values/num': '/reference/types/number',
+    '/single-values/bool': '/reference/types/boolean',
+    '/single-values/string': '/reference/types/string',
+    '/single-values/file': '/reference/types/file',
+    '/single-values/null': '/reference/types/null-value',
+    '/single-values/dynamic': '/reference/types/any',
+    '/single-values/list': '/reference/types/list',
+    '/single-values/map': '/reference/types/map',
+    '/modifiers/required': '/reference/modifiers/required',
+    '/modifiers/custom': '/reference/modifiers/custom',
+    '/modifiers/number-modifiers/min': '/reference/number/min',
+    '/modifiers/number-modifiers/max': '/reference/number/max',
+    '/modifiers/string-modifiers/min': '/reference/string/min',
+    '/modifiers/string-modifiers/max': '/reference/string/max',
+    '/modifiers/string-modifiers/length': '/reference/string/length',
+    '/modifiers/string-modifiers/contains': '/reference/string/contains',
+    '/modifiers/string-modifiers/starts-with': '/reference/string/starts-with',
+    '/modifiers/string-modifiers/ends-with': '/reference/string/ends-with',
+    '/modifiers/string-modifiers/date-time': '/reference/string/date-time',
+    '/modifiers/string-modifiers/email': '/reference/string/email',
+    '/modifiers/string-modifiers/emoji': '/reference/string/emoji',
+    '/modifiers/string-modifiers/regex': '/reference/string/regex',
+    '/modifiers/string-modifiers/uri': '/reference/string/uri',
+    '/modifiers/string-modifiers/url': '/reference/string/url',
+    '/modifiers/string-modifiers/uuid': '/reference/string/uuid',
+    '/modifiers/string-modifiers/cuid': '/reference/string/cuid',
+    '/modifiers/string-modifiers/cuid-2': '/reference/string/cuid2',
+  },
 });

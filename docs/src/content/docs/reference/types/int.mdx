@@ -1,0 +1,58 @@
+---
+title: 'l.int()'
+description: Requires an int and unlocks the number modifiers.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when the value is an `int`. Returns a validator with [`.min()`](/reference/number/min) and [`.max()`](/reference/number/max). A `double` with an integral value, such as `42.0`, fails. JSON decoded with `dart:convert` gives `int` for `42` and `double` for `42.0`, so an API that may send either should use [`l.number()`](/reference/types/number).
+
+## Signature
+
+```dart wrap
+IntValidator int({String? message, String? Function()? messageFn})
+```
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value must be an integer`. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+An `int` parameter maps to `l.int()`. `@HasMin(n)` and `@HasMax(n)` add `.min(n)` and `.max(n)`.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final count = l.int();
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+@HasMin(18) required int age, // l.int().min(18).required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="count.validateValue(input)"
+  cases={[
+    { input: "42", pass: true },
+    { input: "42.0", pass: false, message: "value must be an integer" },
+    { input: "'42'", pass: false, message: "value must be an integer" },
+  ]}
+/>

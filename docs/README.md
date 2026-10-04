@@ -1,66 +1,16 @@
-# Starlight Starter Kit: Ion Theme
+# Luthor documentation
 
-[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
+The documentation site for [`luthor`](https://pub.dev/packages/luthor) and [`luthor_generator`](https://pub.dev/packages/luthor_generator), published at https://luthor.ex3.dev.
 
-```
-npm create astro@latest -- --template louisescher/starlight-ion-theme
-```
+Built with [Astro](https://astro.build) and [Starlight](https://starlight.astro.build). Package manager: npm. Node 24.16 or later (see `.tool-versions` at the repository root).
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/louisescher/starlight-ion-theme)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/louisescher/starlight-ion-theme)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Flouisescher%2Fstarlight-ion-theme&project-name=my-starlight-ion-docs&repository-name=my-starlight-ion-docs)
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![158shots_so](https://github.com/louisescher/starlight-ion-theme/assets/66965600/64241499-8c8e-4672-bf4d-b2d8ff2a6862)
-
-## 🚀 Project Structure
-
-Inside of your Astro + Starlight project, you'll see the following folders and files:
-
-```
-.
-├── public/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── content/
-│   │   ├── docs/
-│   │   └── config.ts
-│   ├── icons/
-│   ├── schemas/
-│   ├── styles/
-│   ├── utils/
-│   └── env.d.ts
-├── astro.config.mjs
-├── package.json
-└── tsconfig.json
+```sh
+npm install
+npm run dev      # local server
+npm run build    # astro check + astro build, output in dist/
+npm run preview  # serve dist/
 ```
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
+Pages live in `src/content/docs/`. The sidebar order and the redirects from old URLs are in `astro.config.mjs`. Design tokens are in `src/styles/theme.css`.
 
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
-
-Static assets, like favicons, can be placed in the `public/` directory.
-
-Any component overrides made by this theme can be found in `src/components/`, any icons are located in `src/icons/`, and all styles are
-in the `src/styles/` directory.
-
-To find out more, start your development server and check out the **Features** page.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+Terminology follows `GLOSSARY.md` at the repository root. Example outputs are taken from running the code against the packages in this repository; keep them that way when editing.

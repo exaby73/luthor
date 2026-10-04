@@ -1,0 +1,60 @@
+---
+title: '.min()'
+description: Requires a string of at least a given number of characters.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when `value.length` is at least `minLength`. The count is in UTF-16 code units, which is what Dart's `String.length` returns.
+
+## Signature
+
+```dart wrap
+StringValidator min(int minLength, {String? message, String? Function()? messageFn})
+```
+
+Available on `l.string()`.
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `minLength` | `int` | The smallest accepted length. Must be 0 or more. |
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value must be at least 8 characters long`. For a limit of 1 the message says `1 character long`. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+`@HasMin(n)` on a `String` parameter. On an `int` parameter the same annotation means a minimum value. Put the annotation on the constructor parameter.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final password = l.string().min(8);
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+@HasMin(8) required String password, // l.string().min(8).required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="password.validateValue(input)"
+  cases={[
+    { input: "'hunter2hunter2'", pass: true },
+    { input: "'abc'", pass: false, message: "value must be at least 8 characters long" },
+  ]}
+/>

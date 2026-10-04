@@ -1,0 +1,84 @@
+---
+title: '.max()'
+description: Requires a number to be at most a given value.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when the value is at most the limit. The limit has the same type as the validator: `int` on `l.int()`, `double` on `l.double()`, `num` on `l.number()`.
+
+## Signature
+
+```dart wrap
+IntValidator max(int maxValue, {String? message, String? Function()? messageFn})     // on l.int()
+DoubleValidator max(double maxValue, {String? message, String? Function()? messageFn}) // on l.double()
+NumberValidator max(num maxValue, {String? message, String? Function()? messageFn})    // on l.number()
+```
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `maxValue` | `int, double, or num` | The maximum accepted value, inclusive. |
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value must be less than or equal to 18`, with the limit as given. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+The annotation depends on the parameter type. Put it on the constructor parameter.
+
+| Parameter type | Annotation |
+|---|---|
+| `int` | `@HasMax(n)` |
+| `double` | `@HasMaxDouble(n)` |
+| `num` | `@HasMaxNumber(n)` |
+
+On a `String` parameter, `@HasMax` means a maximum length instead. An annotation that does not match the parameter type is ignored.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final age = l.int().max(100);
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+@HasMax(100) required int age,           // l.int().max(100).required()
+@HasMaxDouble(1.5) required double ratio, // l.double().max(1.5).required()
+@HasMaxNumber(1000) required num total,   // l.number().max(1000).required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="age.validateValue(input)"
+  cases={[
+    { input: "100", pass: true },
+    { input: "101", pass: false, message: "value must be less than or equal to 100" },
+  ]}
+/>
+
+On a double validator the limit is a double:
+
+```dart
+final ratio = l.double().max(1.5);
+```
+
+<Verdict
+  title="ratio.validateValue(input)"
+  cases={[
+    { input: "1.5", pass: true },
+    { input: "2.0", pass: false, message: "value must be less than or equal to 1.5" },
+  ]}
+/>

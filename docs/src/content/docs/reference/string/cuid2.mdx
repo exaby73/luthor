@@ -1,0 +1,59 @@
+---
+title: '.cuid2()'
+description: Requires the string to be a CUID2.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when the string is lowercase alphanumeric and starts with a letter. That is the whole CUID2 grammar, so short strings such as `'a'` pass too. Add [`.length()`](/reference/string/length) if you generate CUID2s of a fixed length.
+
+## Signature
+
+```dart wrap
+StringValidator cuid2({String? message, String? Function()? messageFn})
+```
+
+Available on `l.string()`.
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value must be a valid cuid2`. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+`@IsCuid2()`, or the constant `@isCuid2`. Put the annotation on the constructor parameter.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final id = l.string().cuid2();
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+@IsCuid2() required String id, // l.string().cuid2().required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="id.validateValue(input)"
+  cases={[
+    { input: "'tz4a98xxat96iws9zmbrgj3a'", pass: true },
+    { input: "'123'", pass: false, message: "value must be a valid cuid2" },
+  ]}
+/>

@@ -1,0 +1,59 @@
+---
+title: 'l.file()'
+description: Requires a file-like value.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when the value's runtime type name contains one of `file`, `multipart`, `xfile`, `stream`, `bytes`, `uint8list`, or `bytedata`, compared in lowercase. That covers `dart:io` `File`, `Uint8List`, `ByteData`, `MultipartFile`, `XFile`, and streams. It is a name check, not a type check: a `List<int>` fails, and an unrelated class whose name happens to contain `file` passes. For stricter rules, use a [custom validator](/reference/modifiers/custom). `null` passes until you add `.required()`.
+
+## Signature
+
+```dart wrap
+Validator file({String? message, String? Function()? messageFn})
+```
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value must be a file`. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+Annotate the parameter with `@IsFile()` or the constant `@isFile`. Without the annotation, a field typed `File` or `Object` is not mapped to `l.file()`.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final upload = l.file();
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+@IsFile() required Object avatar, // l.file().required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="upload.validateValue(input)"
+  cases={[
+    { input: "Uint8List.fromList([1, 2, 3])", pass: true },
+    { input: "null", pass: true },
+    { input: "'avatar.png'", pass: false, message: "value must be a file" },
+    { input: "[1, 2, 3]", pass: false, message: "value must be a file" },
+  ]}
+/>

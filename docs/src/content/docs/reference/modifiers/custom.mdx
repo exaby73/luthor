@@ -1,0 +1,67 @@
+---
+title: '.custom()'
+description: Checks the value with a function of your own.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Runs `customValidator(value)` and passes when it returns `true`. A thrown exception counts as `false`. The function receives `null` like any other value. Returns a plain `Validator`, so call type-specific modifiers before it. [Custom validators](/concepts/custom-validators) has the longer treatment.
+
+## Signature
+
+```dart wrap
+Validator custom(CustomValidator customValidator, {String? message, String? Function()? messageFn})
+
+typedef CustomValidator = bool Function(Object? value);
+```
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `customValidator` | `bool Function(Object?)` | Return `true` to pass. |
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value does not pass custom validation`. `value` is replaced by the field name when there is one. Pass `message` in practice; the default says nothing about the rule.
+
+## Code generation
+
+`@WithCustomValidator(fn, message: ...)`. `fn` has to be a top-level function or a static method, because the generated code refers to it by name.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+bool isEven(Object? value) => value is int && value.isEven;
+
+final evenNumber = l.int().custom(isEven, message: 'must be even');
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+bool isTrue(Object? value) => value == true;
+
+@WithCustomValidator(isTrue, message: 'You must accept the terms')
+required bool acceptedTerms,
+// l.boolean().custom(isTrue, message: "You must accept the terms").required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="evenNumber.validateValue(input)"
+  cases={[
+    { input: "4", pass: true },
+    { input: "3", pass: false, message: "must be even" },
+    { input: "null", pass: false, message: "must be even" },
+  ]}
+/>

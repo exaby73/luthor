@@ -1,0 +1,73 @@
+---
+title: 'l.map()'
+description: Requires a Map, optionally validating keys and values.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when the value is a `Map` and, if given, every key passes `keyValidator` and every value passes `valueValidator`. Use [`l.schema()`](/reference/types/schema) instead when the keys are known field names.
+
+## Signature
+
+```dart wrap
+Validator map({ValidatorReference? keyValidator, ValidatorReference? valueValidator, String? message, String? Function()? messageFn})
+```
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `keyValidator` | `ValidatorReference?` | Run against every key. |
+| `valueValidator` | `ValidatorReference?` | Run against every value. |
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value must be a Map` when the value is not a map. Key and value failures produce an error map with `keys` and `values` entries, each keyed by the offending map key:
+
+```dart
+{
+  'keys': {'not-an-email': ['value must be a valid email address']},
+  'values': {'not-an-email': ['value must be an integer']},
+}
+```
+
+`validateSchema` returns that shape. `validateValue` flattens it to a list of `key: message` strings. Inside a schema it nests under the field name.
+
+## Code generation
+
+A `Map<K, V>` parameter maps to `l.map(keyValidator: ..., valueValidator: ...)` with validators derived from `K` and `V`. Non-nullable `K` and `V` get `.required()`; a non-nullable field gets `.required()` on the map itself. A `Map<String, Comment>` inside `Comment` wraps the value validator in `forwardRef()`.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final scores = l.map(
+  keyValidator: l.string().email().required(),
+  valueValidator: l.int().required(),
+);
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+required Map<String, int> scores,
+// l.map(keyValidator: l.string().required(), valueValidator: l.int().required()).required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="scores.validateValue(input)"
+  cases={[
+    { input: "{'dev@example.com': 10}", pass: true },
+    { input: "{'not-an-email': 'x'}", pass: false, message: ["not-an-email: value must be a valid email address", "not-an-email: value must be an integer"] },
+    { input: "[]", pass: false, message: "value must be a Map" },
+  ]}
+/>

@@ -1,0 +1,60 @@
+---
+title: '.startsWith()'
+description: Requires the string to start with a given prefix.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when `value.startsWith(string)` is true. The comparison is case-sensitive.
+
+## Signature
+
+```dart wrap
+StringValidator startsWith(String string, {String? message, String? Function()? messageFn})
+```
+
+Available on `l.string()`.
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `string` | `String` | The required prefix. |
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value does not start with "+"`, with the prefix quoted. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+`@StartsWith(s)`. Put the annotation on the constructor parameter.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final phone = l.string().startsWith('+');
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+@StartsWith('+') required String phone, // l.string().startsWith("+").required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="phone.validateValue(input)"
+  cases={[
+    { input: "'+44 20 7946 0958'", pass: true },
+    { input: "'020 7946 0958'", pass: false, message: "value does not start with \"+\"" },
+  ]}
+/>

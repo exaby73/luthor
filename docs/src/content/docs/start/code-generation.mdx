@@ -1,0 +1,127 @@
+---
+title: Generate a schema from a model
+description: Annotate a freezed model with @luthor, run build_runner, and validate with the generated function and keys.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+import Verdict from '../../../components/Verdict.astro';
+
+In this tutorial you turn the `User` model from [Your first schema](/start/first-schema) into an annotated class, generate its schema, and validate input with the generated function. It uses `freezed` and `json_serializable`. [Models without freezed](/generator/models) shows the other setups.
+
+<Steps>
+
+1. Add the packages.
+
+   ```sh
+   dart pub add luthor freezed_annotation json_annotation
+   dart pub add dev:build_runner dev:luthor_generator dev:freezed dev:json_serializable
+   ```
+
+   On Dart 3.11 use `freezed` 3.2.x. `freezed` 4 needs Dart 3.13 or later.
+
+2. Write the model.
+
+   Annotate the class with `@luthor` next to `@freezed`. Put Luthor's annotations on the constructor parameters: `@IsEmail()` adds `.email()`, `@HasMin(18)` on an `int` adds `.min(18)`. Non-nullable parameters become required fields; nullable ones stay optional.
+
+   ```dart title="lib/user.dart"
+   import 'package:freezed_annotation/freezed_annotation.dart';
+   import 'package:luthor/luthor.dart';
+
+   part 'user.freezed.dart';
+   part 'user.g.dart';
+
+   @luthor
+   @freezed
+   abstract class User with _$User {
+     const factory User({
+       @HasMin(2) required String name,
+       @IsEmail() required String email,
+       @HasMin(18) int? age,
+     }) = _User;
+
+     factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+   }
+   ```
+
+3. Run the generator.
+
+   ```sh
+   dart run build_runner build
+   ```
+
+   `user.g.dart` now holds five generated items for `User`: the schema `$UserSchema`, the validate function `$UserValidate`, the `validateSelf` extension, the schema keys `UserSchemaKeys`, and the error keys `UserErrorKeys`. The schema is the one you would have written by hand:
+
+   ```dart title="lib/user.g.dart (excerpt)"
+   Validator $UserSchema = l.withName('User').schema({
+     UserSchemaKeys.name: l.string().min(2).required(),
+     UserSchemaKeys.email: l.string().email().required(),
+     UserSchemaKeys.age: l.int().min(18),
+   });
+
+   SchemaValidationResult<User> $UserValidate(Map<String, dynamic> json) =>
+       $UserSchema.validateSchema(json, fromJson: User.fromJson);
+   ```
+
+4. Validate with the generated function.
+
+   `$UserValidate` validates the map and, on success, converts it with `User.fromJson`. You get a `User` back, not a map.
+
+   ```dart title="bin/main.dart"
+   import 'package:luthor/luthor.dart';
+   import 'package:my_app/user.dart';
+
+   void main() {
+     final result = $UserValidate({
+       'name': 'Ada',
+       'email': 'ada@example.com',
+       'age': 36,
+     });
+
+     switch (result) {
+       case SchemaValidationSuccess(data: final user):
+         print('+ ${user.name} <${user.email}>');
+       case SchemaValidationError(errors: final errors):
+         print('- $errors');
+     }
+   }
+   ```
+
+   <Verdict
+     title="$UserValidate(input)"
+     cases={[
+       { input: "{'name': 'Ada', 'email': 'ada@example.com', 'age': 36}", pass: true },
+       { input: "{'name': 'Ada', 'email': 'ada@example.com'}", pass: true },
+       {
+         input: "{'name': 'A', 'email': 'ada', 'age': 12}",
+         pass: false,
+         message: [
+           'name must be at least 2 characters long',
+           'email must be a valid email address',
+           'age must be greater than or equal to 18',
+         ],
+       },
+     ]}
+   />
+
+5. Read errors with the error keys.
+
+   `UserErrorKeys` is a record whose fields hold the error path of each model field. Use it with `getError` instead of a string, and a renamed field becomes a compile error instead of a `null`.
+
+   ```dart
+   if (result case SchemaValidationError()) {
+     print(result.getError(UserErrorKeys.email)); // email must be a valid email address
+   }
+   ```
+
+6. Validate an existing instance.
+
+   The generated extension validates a model you already have, by serialising it with `toJson()` and running the schema.
+
+   ```dart
+   final user = User(name: 'A', email: 'ada', age: 12);
+   user.validateSelf().isValid; // false
+   ```
+
+</Steps>
+
+That is the whole loop: annotate, generate, validate. [What gets generated](/generator/output) describes each generated item, and [Supported field types](/generator/types) lists how every Dart type maps to a validator.

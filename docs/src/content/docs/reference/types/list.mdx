@@ -1,0 +1,62 @@
+---
+title: 'l.list()'
+description: Requires a List, optionally validating each element.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when the value is a `List` and, if `validators` is given, every element passes at least one of them. The list of validators is an any-of: `[l.int(), l.string()]` accepts a list that mixes integers and strings. Nested schemas and forward references are accepted as element validators.
+
+## Signature
+
+```dart wrap
+Validator list({List<ValidatorReference>? validators, String? message, String? Function()? messageFn})
+```
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `validators` | `List<ValidatorReference>?` | Each element must pass at least one of these. Omit to accept any list. |
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value must be a list` without element validators, and `value must be a list or does not match the validations` with them. The list reports one message for the whole list.
+
+## Code generation
+
+A `List<T>` parameter maps to `l.list(validators: [...])` with the element validator derived from `T`. A non-nullable `T` gets `.required()` inside the list; a nullable `T?` does not. A `List<Comment>` inside `Comment` is wrapped in `forwardRef()`.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final tags = l.list(validators: [l.string().required()]);
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+required List<String> tags,    // l.list(validators: [l.string().required()]).required()
+List<String?>? notes,          // l.list(validators: [l.string()])
+required List<Address> places, // l.list(validators: [$AddressSchema.required()]).required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="tags.validateValue(input)"
+  cases={[
+    { input: "['a', 'b']", pass: true },
+    { input: "[]", pass: true },
+    { input: "['a', 1]", pass: false, message: "value must be a list or does not match the validations" },
+    { input: "'a'", pass: false, message: "value must be a list or does not match the validations" },
+  ]}
+/>

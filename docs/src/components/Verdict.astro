@@ -1,0 +1,226 @@
+---
+/**
+ * A test-report style figure: each row is one input and the verdict Luthor
+ * returned for it. Rows marked `pass: false` show the error message the
+ * validator produced. The numbers in the header follow `dart test` output:
+ * `+passed -failed`.
+ */
+export interface VerdictCase {
+  /** The input, shown as Dart source. */
+  input: string;
+  /** Whether the validator accepted the input. */
+  pass: boolean;
+  /** The error message, or messages, for a failed input. */
+  message?: string | string[];
+}
+
+interface Props {
+  /** Label in the header, for example the validator expression. */
+  title?: string;
+  cases: VerdictCase[];
+  /** Reveal rows one at a time on load. Used once, on the landing page. */
+  animate?: boolean;
+}
+
+const { title = 'report', cases, animate = false } = Astro.props;
+const passed = cases.filter((c) => c.pass).length;
+const failed = cases.length - passed;
+---
+
+<figure
+  class:list={['lu-report', 'not-content', { 'is-animated': animate }]}
+  data-step-ms={animate ? 180 : undefined}
+  data-start-ms={animate ? 200 : undefined}
+>
+  <figcaption class="lu-report__head">
+    <code class="lu-report__title">{title}</code>
+    <span
+      class="lu-report__count"
+      aria-label={`${passed} passed, ${failed} failed`}
+      data-passed={passed}
+      data-failed={failed}
+    >
+      <span class="pass">+{passed}</span>
+      <span class="fail">-{failed}</span>
+    </span>
+  </figcaption>
+  <ol class="lu-report__rows">
+    {
+      cases.map((c, i) => (
+        <li
+          class:list={['lu-report__row', c.pass ? 'pass' : 'fail']}
+          style={animate ? `--i: ${i}` : undefined}
+        >
+          <span class="lu-report__glyph" aria-hidden="true">
+            {c.pass ? '+' : '-'}
+          </span>
+          <span class="sr-only">{c.pass ? 'valid' : 'invalid'}: </span>
+          <code class="lu-report__input">{c.input}</code>
+          {!c.pass &&
+            c.message &&
+            (Array.isArray(c.message) ? c.message : [c.message]).map((m) => (
+              <span class="lu-report__message">{m}</span>
+            ))}
+        </li>
+      ))
+    }
+  </ol>
+</figure>
+
+<style>
+  .lu-report {
+    margin: 1.5rem 0 1.75rem;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 0.125rem;
+    background: var(--lu-code-bg);
+    font-family: var(--__sl-font-mono);
+    font-size: var(--sl-text-code);
+    line-height: 1.5;
+    color: var(--sl-color-gray-1);
+    overflow: hidden;
+  }
+
+  .lu-report__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--sl-color-hairline);
+    background: var(--lu-code-chrome);
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+  }
+
+  .lu-report__title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font: inherit;
+    color: var(--sl-color-gray-2);
+    background: none;
+    padding: 0;
+  }
+
+  .lu-report__count {
+    flex: 0 0 auto;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+
+  .lu-report__count .pass {
+    color: var(--sl-color-accent);
+  }
+
+  .lu-report__count .fail {
+    margin-inline-start: 0.5em;
+    color: var(--sl-color-red);
+  }
+
+  .lu-report__rows {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+  }
+
+  .lu-report__row {
+    display: grid;
+    grid-template-columns: 1.25rem 1fr;
+    column-gap: 0.5rem;
+    align-items: baseline;
+    padding: 0.3rem 1rem;
+    margin: 0;
+  }
+
+  .lu-report__row + .lu-report__row {
+    border-top: 1px dashed color-mix(in srgb, var(--sl-color-hairline), transparent 35%);
+  }
+
+  .lu-report__glyph {
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .pass > .lu-report__glyph {
+    color: var(--sl-color-accent);
+  }
+
+  .fail > .lu-report__glyph {
+    color: var(--sl-color-red);
+  }
+
+  .lu-report__input {
+    font: inherit;
+    color: var(--sl-color-white);
+    background: none;
+    padding: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .lu-report__message {
+    grid-column: 2;
+    color: var(--sl-color-red);
+    overflow-wrap: anywhere;
+  }
+
+  .lu-report__message::before {
+    content: 'Which: ';
+    color: var(--sl-color-gray-3);
+  }
+
+  /* One authored moment: the landing report runs on load. */
+  .is-animated .lu-report__row {
+    animation: lu-row-in 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(200ms + var(--i, 0) * 180ms);
+  }
+
+  @keyframes lu-row-in {
+    from {
+      opacity: 0;
+      transform: translateX(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .is-animated .lu-report__row {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  // The landing report's counter ticks as each row lands, in step with the
+  // CSS reveal. Without JavaScript, or with reduced motion, the final count
+  // is already in the markup.
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce) {
+    for (const figure of document.querySelectorAll<HTMLElement>('.lu-report.is-animated')) {
+      const count = figure.querySelector<HTMLElement>('.lu-report__count');
+      const rows = figure.querySelectorAll<HTMLElement>('.lu-report__row');
+      if (!count) continue;
+      const pass = count.querySelector<HTMLElement>('.pass');
+      const fail = count.querySelector<HTMLElement>('.fail');
+      const step = Number(figure.dataset.stepMs ?? 180);
+      const start = Number(figure.dataset.startMs ?? 200);
+      let passed = 0;
+      let failed = 0;
+      const paint = () => {
+        if (pass) pass.textContent = `+${passed}`;
+        if (fail) fail.textContent = `-${failed}`;
+      };
+      paint();
+      rows.forEach((row, i) => {
+        setTimeout(() => {
+          if (row.classList.contains('pass')) passed += 1;
+          else failed += 1;
+          paint();
+        }, start + i * step + 120);
+      });
+    }
+  }
+</script>

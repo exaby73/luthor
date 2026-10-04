@@ -1,0 +1,85 @@
+---
+title: Message functions
+description: Replace a default error message with a fixed string or with a function that runs when the validation fails.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../components/Verdict.astro';
+
+Every type and modifier has a default message, listed on [Error messages](/reference/errors). Two named parameters change it: `message` and `messageFn`. Every generator annotation takes the same two.
+
+## A fixed message
+
+`message` replaces the default with the string you pass. The field name is not inserted; the string is used as is.
+
+```dart
+final email = l.string().email(message: 'Enter an email address').required(message: 'Email is required');
+```
+
+<Verdict
+  title="email.validateValue(input)"
+  cases={[
+    { input: "'dev@example.com'", pass: true },
+    { input: "'bad'", pass: false, message: 'Enter an email address' },
+    { input: 'null', pass: false, message: 'Email is required' },
+  ]}
+/>
+
+## A message function
+
+`messageFn` is a `String? Function()`. Luthor calls it when the validation fails and uses what it returns. It takes no arguments. Use it when the message depends on state that is not known when the validator is built, such as the current locale, or when building the message is costly.
+
+```dart
+String? tooShort() => tr('password.tooShort');
+
+final password = l.string().min(8, messageFn: tooShort);
+```
+
+If the function returns `null`, the default message is used.
+
+## Precedence
+
+When both are given, `message` wins over `messageFn`, and `messageFn` wins over the default.
+
+```dart
+l.string().min(8, message: 'fixed', messageFn: () => 'from function').validateValue('ab');
+// errors: [fixed]
+```
+
+## With the generator
+
+Annotations accept the same parameters. `messageFn` has to be a top-level function or a static method, because the generated code refers to it by name.
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final email = l.string().email(messageFn: Messages.email).required();
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart
+class Messages {
+  static String? email() => 'Enter an email address';
+}
+
+@luthor
+@freezed
+abstract class SignUp with _$SignUp {
+  const factory SignUp({
+    @IsEmail(messageFn: Messages.email) required String email,
+  }) = _SignUp;
+
+  factory SignUp.fromJson(Map<String, dynamic> json) => _$SignUpFromJson(json);
+}
+// generated: l.string().email(messageFn: Messages.email).required()
+```
+
+  </TabItem>
+</Tabs>
+
+## Field names
+
+Default messages start with the field name: the schema key, or the name given to `withName`, or `value` when there is neither. A custom `message` does not get the name added, so include it yourself if the message will be shown away from its field.

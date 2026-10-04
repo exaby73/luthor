@@ -1,0 +1,59 @@
+---
+title: '.email()'
+description: Requires the string to look like an email address.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when the string matches Luthor's email pattern: a local part, one `@`, and a domain. It checks shape, not deliverability.
+
+## Signature
+
+```dart wrap
+StringValidator email({String? message, String? Function()? messageFn})
+```
+
+Available on `l.string()`.
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value must be a valid email address`. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+`@IsEmail()`, or the constant `@isEmail`. Put the annotation on the constructor parameter.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final email = l.string().email();
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+@IsEmail() required String email, // l.string().email().required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="email.validateValue(input)"
+  cases={[
+    { input: "'dev@example.com'", pass: true },
+    { input: "'bad'", pass: false, message: "value must be a valid email address" },
+  ]}
+/>

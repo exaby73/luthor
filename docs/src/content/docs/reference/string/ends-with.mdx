@@ -1,0 +1,60 @@
+---
+title: '.endsWith()'
+description: Requires the string to end with a given suffix.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when `value.endsWith(string)` is true. The comparison is case-sensitive.
+
+## Signature
+
+```dart wrap
+StringValidator endsWith(String string, {String? message, String? Function()? messageFn})
+```
+
+Available on `l.string()`.
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `string` | `String` | The required suffix. |
+| `message` | `String?` | Replaces the default error message. |
+| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+
+## Error message
+
+`value does not end with ".dart"`, with the suffix quoted. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+`@EndsWith(s)`. Put the annotation on the constructor parameter.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final path = l.string().endsWith('.dart');
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+@EndsWith('.dart') required String path, // l.string().endsWith(".dart").required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict
+  title="path.validateValue(input)"
+  cases={[
+    { input: "'main.dart'", pass: true },
+    { input: "'main.js'", pass: false, message: "value does not end with \".dart\"" },
+  ]}
+/>

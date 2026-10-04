@@ -31,12 +31,14 @@ final class ModelField {
     required this.key,
     required this.annotations,
     required this.hasDefault,
+    required this.usesConverter,
   });
 
   final FormalParameterElement parameter;
   final String key;
   final List<DartObject> annotations;
   final bool hasDefault;
+  final bool usesConverter;
 
   String get name => parameter.name!;
 
@@ -93,62 +95,51 @@ final class ModelReader {
       );
     }
     final constructor = _selectConstructor(element);
-    final mappable = isMappable(element);
-    final naming = mappable
-        ? mappableNaming(
-            ConstantReader(
-              mappableClassChecker.firstAnnotationOf(element),
-            ).peek('caseStyle')?.objectValue,
-          )
-        : jsonSerializableNaming(
-            ConstantReader(
-              jsonSerializableChecker.firstAnnotationOf(constructor) ??
-                  jsonSerializableChecker.firstAnnotationOf(element),
-            ).peek('fieldRename')?.objectValue,
-          );
+    final context = _ClassContext(element, constructor);
     return Model(
       element: element,
       constructor: constructor,
       fields: [
         for (final parameter in constructor.formalParameters)
-          ?_field(parameter, element, naming, mappable: mappable),
+          ?_field(parameter, context),
       ],
-      serializer: mappable ? ModelSerializer.mappable : ModelSerializer.json,
+      serializer: context.mappable
+          ? ModelSerializer.mappable
+          : ModelSerializer.json,
     );
   }
 
-  ModelField? _field(
-    FormalParameterElement parameter,
-    InterfaceElement owner,
-    KeyNaming naming, {
-    required bool mappable,
-  }) {
+  ModelField? _field(FormalParameterElement parameter, _ClassContext context) {
     final annotations = [
-      for (final source in _annotationSources(parameter, owner))
+      for (final source in _annotationSources(parameter, context.element))
         for (final annotation in source.metadata.annotations)
           ?annotation.computeConstantValue(),
     ];
     final jsonKey = ConstantReader(
       firstAnnotation(annotations, jsonKeyChecker),
     );
-    if (!mappable &&
+    if (!context.mappable &&
         (jsonKey.peek('includeFromJson')?.boolValue == false ||
             jsonKey.peek('ignore')?.boolValue == true)) {
       return null;
     }
-    final explicitKey = mappable
+    final explicitKey = context.mappable
         ? ConstantReader(
             firstAnnotation(annotations, mappableFieldChecker),
           ).peek('key')?.stringValue
         : jsonKey.peek('name')?.stringValue;
     return ModelField(
       parameter: parameter,
-      key: explicitKey ?? naming(parameter.name!),
+      key: explicitKey ?? context.naming(parameter.name!),
       annotations: annotations,
       hasDefault:
           _hasDefaultValue(parameter) ||
           firstAnnotation(annotations, defaultChecker) != null ||
           jsonKey.peek('defaultValue') != null,
+      usesConverter:
+          jsonKey.peek('fromJson') != null ||
+          annotations.any(_isConverter) ||
+          context.isConverted(parameter.type),
     );
   }
 
@@ -255,4 +246,63 @@ final class ModelReader {
     final node = parsed.getFragmentDeclaration(constructor.firstFragment)?.node;
     return node is ConstructorDeclaration && node.redirectedConstructor != null;
   }
+}
+
+final class _ClassContext {
+  _ClassContext(this.element, ConstructorElement constructor)
+    : mappable = ModelReader.isMappable(element),
+      _jsonSerializable = ConstantReader(
+        jsonSerializableChecker.firstAnnotationOf(constructor) ??
+            jsonSerializableChecker.firstAnnotationOf(element),
+      );
+
+  final ClassElement element;
+  final bool mappable;
+  final ConstantReader _jsonSerializable;
+
+  late final KeyNaming naming = mappable
+      ? mappableNaming(
+          ConstantReader(
+            mappableClassChecker.firstAnnotationOf(element),
+          ).peek('caseStyle')?.objectValue,
+        )
+      : jsonSerializableNaming(
+          _jsonSerializable.peek('fieldRename')?.objectValue,
+        );
+
+  late final List<DartType> _convertedTypes = [
+    for (final converter in [
+      ...?_jsonSerializable.peek('converters')?.listValue,
+      for (final annotation in element.metadata.annotations)
+        if (annotation.computeConstantValue() case final value?
+            when _isConverter(value))
+          value,
+    ])
+      ?_convertedType(converter),
+  ];
+
+  bool isConverted(DartType type) {
+    final typeSystem = element.library.typeSystem;
+    final target = typeSystem.promoteToNonNull(type);
+    return _convertedTypes.any(
+      (converted) => typeSystem.promoteToNonNull(converted) == target,
+    );
+  }
+}
+
+bool _isConverter(DartObject annotation) {
+  final type = annotation.type;
+  return type is InterfaceType &&
+      jsonConverterChecker.isAssignableFromType(type);
+}
+
+DartType? _convertedType(DartObject converter) {
+  final type = converter.type;
+  if (type is! InterfaceType) return null;
+  for (final supertype in [type, ...type.allSupertypes]) {
+    if (jsonConverterChecker.isExactlyType(supertype)) {
+      return supertype.typeArguments.first;
+    }
+  }
+  return null;
 }

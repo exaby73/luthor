@@ -25,11 +25,13 @@ final class FieldValidators {
     final explicitDateTime = applied.any(
       (entry) => entry.$1.method == 'dateTime',
     );
-    var (expr, kind) = _forType(
-      field.type,
-      _FieldContext(field, owner),
-      implicitDateTime: !explicitDateTime,
-    );
+    var (expr, kind) = field.usesConverter
+        ? (const ValidatorExpr(TypeEntry(runtime.EntryType.any)), FieldKind.any)
+        : _forType(
+            field.type,
+            _FieldContext(field, owner),
+            implicitDateTime: !explicitDateTime,
+          );
 
     final modifiers = <String>[];
     final refinements = <String>[];

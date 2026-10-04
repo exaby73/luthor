@@ -112,6 +112,7 @@ final class LibraryEmitter {
   }
 
   Model? _nestedModel(ModelField field) {
+    if (field.usesConverter) return null;
     final element = field.type.element;
     if (element is! ClassElement) return null;
     if (!luthorChecker.hasAnnotationOf(element) &&

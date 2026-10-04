@@ -26,7 +26,7 @@ final class FieldValidators {
     final explicitDateTime = applied.any(
       (entry) => entry.$1.annotation == IsDateTime,
     );
-    var (expr, kind) = field.usesConverter
+    var (expr, kind) = field.usesConverter || field.readsWholeMap
         ? (const ValidatorExpr(TypeEntry(runtime.EntryType.any)), FieldKind.any)
         : _forType(
             field.type,
@@ -40,7 +40,7 @@ final class FieldValidators {
       if (!rule.appliesTo.contains(kind)) {
         throw _misplaced(rule, field, owner, kind);
       }
-      final arguments = _arguments(rule, annotation, field);
+      final arguments = _arguments(rule, annotation, field, owner, kind);
       switch (rule.effect) {
         case RuleEffect.entry:
           final entryType = runtime.EntryType.values.byName(rule.method);
@@ -55,7 +55,8 @@ final class FieldValidators {
 
     return expr.copyWith(
       modifiers: [...expr.modifiers, ...modifiers, ...refinements],
-      required: _isRequired(field.type) && !field.hasDefault,
+      required:
+          _isRequired(field.type) && !field.hasDefault && !field.readsWholeMap,
     );
   }
 
@@ -129,17 +130,12 @@ final class FieldValidators {
       );
     }
     if (type.element case final EnumElement enumElement) {
-      final values = serializedEnumValues(enumElement);
-      final entryType = switch (values) {
-        _ when values.every((value) => value is String) =>
-          runtime.EntryType.string,
-        _ when values.every((value) => value is int) => runtime.EntryType.int,
-        _ => runtime.EntryType.any,
-      };
+      final values = serializedEnumValues(enumElement).nonNulls;
       return (
-        entry(entryType, [
-          runtime.allowedValues(values.map(jsonLiteral).toList()),
-        ]),
+        ValidatorExpr(
+          AllowedValues(values.map(jsonLiteral).toList()),
+          required: required,
+        ),
         FieldKind.enumeration,
       );
     }
@@ -186,7 +182,7 @@ final class FieldValidators {
       '@${rule.annotationName} cannot be used on field `${field.name}` of '
       '`${owner.name}`: it applies to $accepted fields, but `${field.name}` '
       'is ${field.type.getDisplayString()}.$hint',
-      element: field.parameter,
+      element: field.element,
     );
   }
 
@@ -218,12 +214,13 @@ final class FieldValidators {
       return string([runtime.dateTime()]);
     }
     if (type.element case final EnumElement enumElement) {
-      final values = serializedEnumValues(enumElement);
-      return string([
-        runtime.allowedValues([
-          for (final value in values) dartStringLiteral('$value'),
+      return ValidatorExpr(
+        AllowedValues([
+          for (final value in serializedEnumValues(enumElement).nonNulls)
+            dartStringLiteral('$value'),
         ]),
-      ]);
+        required: true,
+      );
     }
     throw InvalidGenerationSourceError(
       'Luthor cannot validate field `${context.field.name}` of '
@@ -231,7 +228,7 @@ final class FieldValidators {
       '`${type.getDisplayString()}` is not supported. JSON object keys are '
       'strings, so luthor supports String, int, double, num, BigInt, '
       'DateTime, Uri and enum keys.',
-      element: context.field.parameter,
+      element: context.field.element,
     );
   }
 
@@ -261,7 +258,7 @@ final class FieldValidators {
       'Luthor cannot validate field `${context.field.name}` of '
       '`${context.owner.name}`: its type `${type.getDisplayString()}` '
       '$explanation',
-      element: context.field.parameter,
+      element: context.field.element,
     );
   }
 
@@ -284,15 +281,37 @@ final class FieldValidators {
     AnnotationRule rule,
     DartObject annotation,
     ModelField field,
+    Model owner,
+    FieldKind kind,
   ) {
     final reader = ConstantReader(annotation);
     String source(DartObject value) {
-      return plan.constants.of(value, usedBy: field.parameter);
+      return plan.constants.of(value, usedBy: field.element);
+    }
+
+    final positional = [
+      for (final name in rule.positional) reader.read(name).objectValue,
+    ];
+    if (rule.integralFor.contains(kind) &&
+        positional.first.type?.isDartCoreInt != true) {
+      throw InvalidGenerationSourceError(
+        '@${rule.annotationName} on field `${field.name}` of `${owner.name}` '
+        'needs an int, since `${field.name}` is '
+        '${field.type.getDisplayString()}.',
+        element: field.element,
+      );
     }
 
     return [
-      for (final name in rule.positional) source(reader.read(name).objectValue),
-      for (final name in [...rule.named, 'message', 'messageFn'])
+      if (rule.regExpFlags.isNotEmpty)
+        runtime.regExp(positional.first.toStringValue()!, {
+          for (final MapEntry(key: flag, value: byDefault)
+              in rule.regExpFlags.entries)
+            if (reader.read(flag).boolValue != byDefault) flag: !byDefault,
+        })
+      else
+        for (final value in positional) source(value),
+      for (final name in [...rule.named, 'message', 'messageBuilder'])
         if (reader.peek(name) case final value?)
           '$name: ${source(value.objectValue)}',
     ];

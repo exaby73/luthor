@@ -34,8 +34,10 @@ final class LibraryEmitter {
       ..writeln(');')
       ..writeln()
       ..writeln(
-        'final ${runtime.validatorType} $schemaName = '
-        '${_schema(model, (field) => '$schemaKeys.${field.name}')};',
+        runtime.schemaDeclaration(
+          schemaName,
+          _schema(model, (field) => '$schemaKeys.${field.name}'),
+        ),
       )
       ..writeln()
       ..writeln(
@@ -86,8 +88,10 @@ final class LibraryEmitter {
         final model = plan.models.read(element);
         _buffer
           ..writeln(
-            'final ${runtime.validatorType} $schemaName = '
-            '${_schema(model, (field) => dartStringLiteral(field.key))};',
+            runtime.schemaDeclaration(
+              schemaName,
+              _schema(model, (field) => dartStringLiteral(field.key)),
+            ),
           )
           ..writeln();
       }
@@ -100,7 +104,7 @@ final class LibraryEmitter {
     return runtime.schema(model.name, [
       for (final field in model.fields)
         (keyOf(field), _validators.forField(field, model).emit()),
-    ]);
+    ], passthrough: model.passthrough);
   }
 
   String _errorKeys(

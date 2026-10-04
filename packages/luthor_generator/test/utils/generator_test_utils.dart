@@ -185,9 +185,9 @@ String _runnerSource(
         (entry) =>
             '''
   try {
-    results[${jsonEncode(entry.key)}] = _describe(${entry.value});
+    results[${_stringLiteral(entry.key)}] = _describe(${entry.value});
   } catch (error) {
-    results[${jsonEncode(entry.key)}] = 'threw \${error.runtimeType}';
+    results[${_stringLiteral(entry.key)}] = 'threw \${error.runtimeType}';
   }''',
       )
       .join('\n');
@@ -201,8 +201,8 @@ import 'package:luthor/luthor.dart';
 $imports
 
 Object? _describe(Object? value) => switch (value) {
-  SchemaValidationSuccess() => 'success',
-  SchemaValidationError(:final errors) => errors,
+  ValidationSuccess() => 'success',
+  ValidationFailure(:final errors) => errors,
   _ => value,
 };
 
@@ -213,6 +213,9 @@ $evaluations
 }
 ''';
 }
+
+String _stringLiteral(String value) =>
+    jsonEncode(value).replaceAll(r'$', r'\$');
 
 class GenerationResult {
   const GenerationResult(this.output);

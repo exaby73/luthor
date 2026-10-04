@@ -23,7 +23,7 @@ void main() {
         );
         expectOutputContains(
           generation.output,
-          r'''FieldsSchemaKeys.path: l.string().regex("^foo\\d+\$", message: "can't match").required(),''',
+          r'''FieldsSchemaKeys.path: l.string().regex(RegExp(r'^foo\d+$'), message: "can't match").required(),''',
         );
         expectOutputContains(
           generation.output,
@@ -42,11 +42,11 @@ void main() {
         );
         expectOutputContains(
           generation.output,
-          'FieldsSchemaKeys.amount: l.number().max(99).min(0).required(),',
+          'FieldsSchemaKeys.amount: l.num().max(99).min(0).required(),',
         );
         expectOutputContains(
           generation.output,
-          'FieldsSchemaKeys.tags: l.list(validators: [l.string().required()]).required(),',
+          'FieldsSchemaKeys.tags: l.list(l.string().required()).required(),',
         );
         expectOutputContains(
           generation.output,
@@ -72,6 +72,79 @@ void main() {
 
     test('When generated code is analyzed then it compiles', () async {
       await expectGeneratedCodeCompiles(allValidatorsSource);
+    });
+  });
+
+  group('Given annotations that use the 1.0 options', () {
+    late String output;
+
+    setUp(() async {
+      output = (await generateSharedPart(_optionsSource)).output;
+    });
+
+    test('Then MatchRegex emits a RegExp with the flags that differ', () {
+      expectOutputContains(
+        output,
+        r'''OptionsSchemaKeys.code: l.string().regex(RegExp(r'^ab.c$', caseSensitive: false, dotAll: true)).required(),''',
+      );
+    });
+
+    test('Then a pattern with a quote is an escaped string', () {
+      expectOutputContains(
+        output,
+        '''OptionsSchemaKeys.quoted: l.string().regex(RegExp("it's")),''',
+      );
+    });
+
+    test('Then IsFile passes its accept function', () {
+      expectOutputContains(
+        output,
+        'OptionsSchemaKeys.upload: l.file(accept: isUpload).required(),',
+      );
+    });
+
+    test('Then messageBuilder is passed through', () {
+      expectOutputContains(
+        output,
+        'OptionsSchemaKeys.name: l.string().min(3, messageBuilder: tooShort).required(),',
+      );
+    });
+
+    test('Then a fractional bound on a num field is kept', () {
+      expectOutputContains(
+        output,
+        'OptionsSchemaKeys.amount: l.num().min(0.5).required(),',
+      );
+    });
+
+    group('When the validate function runs', () {
+      late Map<String, Object?> results;
+
+      setUpAll(() async {
+        results = await evaluateGenerated(_optionsSource, {
+          'valid':
+              r'''$OptionsValidate({'code': 'AB\nC', 'upload': 'file.txt', 'name': 'Ada', 'amount': 1})''',
+          'invalid':
+              r'''$OptionsValidate({'code': 'abd', 'upload': 1, 'name': 'Al', 'amount': 0.25})''',
+        });
+      });
+
+      test('Then values matching the flags and accept function pass', () {
+        expect(results['valid'], 'success');
+      });
+
+      test('Then each failing option reports its error', () {
+        expect(results['invalid'], {
+          'code': [r'code must match the pattern ^ab.c$'],
+          'upload': ['upload must be a file'],
+          'name': ['short: name must be at least 3 characters long'],
+          'amount': ['amount must be greater than or equal to 0.5'],
+        });
+      });
+    });
+
+    test('When generated code is analyzed then it compiles', () async {
+      await expectGeneratedCodeCompiles(_optionsSource);
     });
   });
 
@@ -132,6 +205,54 @@ void main() {
   });
 }
 
+const _optionsSource = r'''
+import 'package:luthor/luthor.dart';
+
+part 'profile.g.dart';
+
+bool isUpload(Object value) => value is String;
+
+String tooShort(ValidationIssue issue) => 'short: ${issue.message}';
+
+@luthor
+class Options {
+  @MatchRegex(r'^ab.c$', caseSensitive: false, dotAll: true)
+  final String code;
+  @MatchRegex("it's")
+  final String? quoted;
+  @IsFile(accept: isUpload)
+  final Object upload;
+  @HasMin(3, messageBuilder: tooShort)
+  final String name;
+  @HasMin(0.5)
+  final num amount;
+
+  const Options({
+    required this.code,
+    this.quoted,
+    required this.upload,
+    required this.name,
+    required this.amount,
+  });
+
+  factory Options.fromJson(Map<String, dynamic> json) => Options(
+    code: json['code'] as String,
+    quoted: json['quoted'] as String?,
+    upload: json['upload'] as Object,
+    name: json['name'] as String,
+    amount: json['amount'] as num,
+  );
+
+  Map<String, dynamic> toJson() => {
+    'code': code,
+    'quoted': quoted,
+    'upload': upload,
+    'name': name,
+    'amount': amount,
+  };
+}
+''';
+
 const _fileMessageSource = '''
 import 'dart:io';
 
@@ -180,7 +301,7 @@ class Bounds {
   final double ratio;
 
   const Bounds({
-    @HasMaxDouble(double.infinity) @HasMinDouble(double.negativeInfinity)
+    @HasMax(double.infinity) @HasMin(double.negativeInfinity)
     required this.ratio,
   });
 

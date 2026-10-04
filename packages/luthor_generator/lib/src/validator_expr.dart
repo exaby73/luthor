@@ -33,6 +33,12 @@ final class TypeEntry extends ValidatorBase {
   final List<String> arguments;
 }
 
+final class AllowedValues extends ValidatorBase {
+  const AllowedValues(this.literals);
+
+  final List<String> literals;
+}
+
 final class ListOf extends ValidatorBase {
   const ListOf(this.element);
 

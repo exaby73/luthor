@@ -13,30 +13,36 @@ void main() {
     test('Then enum names are the allowed values', () {
       expectOutputContains(
         output,
-        'EnumsSchemaKeys.role: l.string().custom((value) => value == null || const <Object?>["admin", "member"].contains(value), message: "must be one of \\"admin\\", \\"member\\"").required(),',
+        'EnumsSchemaKeys.role: l.oneOf(["admin", "member"]).required(),',
       );
     });
 
     test('Then enum list items are checked', () {
       expectOutputContains(
         output,
-        'EnumsSchemaKeys.roles: l.list(validators: [l.string().custom((value) => value == null || const <Object?>["admin", "member"].contains(value)',
+        'EnumsSchemaKeys.roles: l.list(l.oneOf(["admin", "member"]).required()),',
       );
     });
 
     test('Then JsonValue and JsonEnum fieldRename values are used', () {
-      expectOutputContains(output, 'const <Object?>["R", "dark_blue"]');
+      expectOutputContains(
+        output,
+        'EnumsSchemaKeys.color: l.oneOf(["R", "dark_blue"]).required(),',
+      );
     });
 
     test('Then a JsonEnum valueField selects integer values', () {
       expectOutputContains(
         output,
-        'EnumsSchemaKeys.level: l.int().custom((value) => value == null || const <Object?>[10, 20].contains(value)',
+        'EnumsSchemaKeys.level: l.oneOf([10, 20]).required(),',
       );
     });
 
     test('Then a MappableEnum case style is used', () {
-      expectOutputContains(output, 'const <Object?>["SMALL_SIZE", "huge"]');
+      expectOutputContains(
+        output,
+        'EnumsSchemaKeys.size: l.oneOf(["SMALL_SIZE", "huge"]).required(),',
+      );
     });
 
     group('When the validate function runs', () {
@@ -47,7 +53,7 @@ void main() {
           'valid':
               r'''$EnumsValidate({'role': 'admin', 'roles': ['member'], 'color': 'R', 'level': 20, 'size': 'huge'})''',
           'invalid':
-              r'''$EnumsValidate({'role': 'owner', 'roles': ['admin'], 'color': 'R', 'level': 20, 'size': 'huge'})''',
+              r'''$EnumsValidate({'role': 'owner', 'roles': ['admin', 'guest'], 'color': 'R', 'level': 20, 'size': 'huge'})''',
         });
       });
 
@@ -55,9 +61,10 @@ void main() {
         expect(results['valid'], 'success');
       });
 
-      test('Then an unknown value is a validation error', () {
+      test('Then unknown values are errors at their paths', () {
         expect(results['invalid'], {
-          'role': ['must be one of "admin", "member"'],
+          'role': ['role must be one of: admin, member'],
+          'roles.1': ['roles must be one of: admin, member'],
         });
       });
     });
@@ -77,11 +84,11 @@ void main() {
     test('Then sets and iterables are validated as lists', () {
       expectOutputContains(
         output,
-        'JsonTypesSchemaKeys.tags: l.list(validators: [l.string().required()]).required(),',
+        'JsonTypesSchemaKeys.tags: l.list(l.string().required()).required(),',
       );
       expectOutputContains(
         output,
-        'JsonTypesSchemaKeys.scores: l.list(validators: [l.int().required()]).required(),',
+        'JsonTypesSchemaKeys.scores: l.list(l.int().required()).required(),',
       );
     });
 

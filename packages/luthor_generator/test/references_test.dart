@@ -20,7 +20,7 @@ void main() {
     test('Then custom validator functions keep the import prefix', () {
       expectOutputContains(
         output,
-        'l.int().custom(v.isPositive, messageFn: v.positiveMessage).required()',
+        'l.int().custom(v.isPositive, messageBuilder: v.positiveMessage).required()',
       );
     });
 
@@ -81,7 +81,7 @@ class Shop {
 
   const Shop({
     required this.address,
-    @WithCustomValidator(v.isPositive, messageFn: v.positiveMessage)
+    @WithCustomValidator(v.isPositive, messageBuilder: v.positiveMessage)
     required this.count,
     @WithCustomValidator(v.NumChecks.small) required this.size,
   });
@@ -101,9 +101,11 @@ class Shop {
 ''',
   'address.dart': _addressLibrary,
   'validators.dart': '''
+import 'package:luthor/luthor.dart';
+
 bool isPositive(Object? value) => value is int && value > 0;
 
-String positiveMessage() => 'must be positive';
+String positiveMessage(ValidationIssue issue) => 'must be positive';
 
 extension NumChecks on int {
   static bool small(Object? value) => value is int && value < 10;

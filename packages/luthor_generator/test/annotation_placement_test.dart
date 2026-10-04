@@ -18,13 +18,25 @@ void main() {
     );
   });
 
-  group('Given a double bound on an int field', () {
+  group('Given a fractional bound on an int field', () {
     test(
-      'When the builder runs then it reports the misplaced annotation',
+      'When the builder runs then it reports that the bound must be an int',
       () async {
         expect(
-          await generationErrors(_misplaced('@HasMaxDouble(5.0)', 'int')),
-          contains('@HasMaxDouble cannot be used on field `value`'),
+          await generationErrors(_misplaced('@HasMax(5.5)', 'int')),
+          contains('@HasMax on field `value` of `Misplaced` needs an int'),
+        );
+      },
+    );
+  });
+
+  group('Given a fractional bound on a String field', () {
+    test(
+      'When the builder runs then it reports that the bound must be an int',
+      () async {
+        expect(
+          await generationErrors(_misplaced('@HasMin(1.5)', 'String')),
+          contains('@HasMin on field `value` of `Misplaced` needs an int'),
         );
       },
     );
@@ -59,7 +71,7 @@ void main() {
       );
       expectOutputContains(
         output,
-        'BoundsSchemaKeys.amount: l.number().min(1).required(),',
+        'BoundsSchemaKeys.amount: l.num().min(1).required(),',
       );
     });
 

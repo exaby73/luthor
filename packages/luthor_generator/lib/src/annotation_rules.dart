@@ -30,6 +30,8 @@ final class AnnotationRule {
     this.positional = const [],
     this.named = const [],
     this.effect = RuleEffect.modifier,
+    this.integralFor = const {},
+    this.regExpFlags = const {},
   });
 
   final Type annotation;
@@ -38,6 +40,12 @@ final class AnnotationRule {
   final List<String> positional;
   final List<String> named;
   final RuleEffect effect;
+
+  /// The field kinds on which the first positional value must be an `int`.
+  final Set<FieldKind> integralFor;
+
+  /// The `RegExp` flags of a pattern rule, with their default values.
+  final Map<String, bool> regExpFlags;
 
   TypeChecker get checker =>
       TypeChecker.typeNamed(annotation, inPackage: 'luthor');
@@ -52,11 +60,30 @@ const _sizable = {
   FieldKind.double,
   FieldKind.number,
 };
-const _fractional = {FieldKind.double, FieldKind.number};
-const _every = {...FieldKind.values};
+const _integral = {FieldKind.string, FieldKind.int};
+const _refinable = {
+  FieldKind.string,
+  FieldKind.int,
+  FieldKind.double,
+  FieldKind.number,
+  FieldKind.boolean,
+  FieldKind.list,
+  FieldKind.map,
+  FieldKind.schema,
+  FieldKind.enumeration,
+  FieldKind.any,
+  FieldKind.file,
+};
+const _every = {..._refinable, FieldKind.nullValue};
 
 const annotationRules = <AnnotationRule>[
-  AnnotationRule(IsFile, 'file', appliesTo: _every, effect: RuleEffect.entry),
+  AnnotationRule(
+    IsFile,
+    'file',
+    appliesTo: _every,
+    named: ['accept'],
+    effect: RuleEffect.entry,
+  ),
   AnnotationRule(IsDateTime, 'dateTime', appliesTo: _string),
   AnnotationRule(IsEmail, 'email', appliesTo: _string),
   AnnotationRule(
@@ -65,31 +92,19 @@ const annotationRules = <AnnotationRule>[
     appliesTo: _string,
     positional: ['length'],
   ),
-  AnnotationRule(HasMin, 'min', appliesTo: _sizable, positional: ['min']),
-  AnnotationRule(HasMax, 'max', appliesTo: _sizable, positional: ['max']),
   AnnotationRule(
-    HasMinDouble,
+    HasMin,
     'min',
-    appliesTo: _fractional,
+    appliesTo: _sizable,
     positional: ['min'],
+    integralFor: _integral,
   ),
   AnnotationRule(
-    HasMaxDouble,
+    HasMax,
     'max',
-    appliesTo: _fractional,
+    appliesTo: _sizable,
     positional: ['max'],
-  ),
-  AnnotationRule(
-    HasMinNumber,
-    'min',
-    appliesTo: _fractional,
-    positional: ['min'],
-  ),
-  AnnotationRule(
-    HasMaxNumber,
-    'max',
-    appliesTo: _fractional,
-    positional: ['max'],
+    integralFor: _integral,
   ),
   AnnotationRule(IsUri, 'uri', appliesTo: _string, named: ['allowedSchemes']),
   AnnotationRule(IsUrl, 'url', appliesTo: _string, named: ['allowedSchemes']),
@@ -98,6 +113,12 @@ const annotationRules = <AnnotationRule>[
     'regex',
     appliesTo: _string,
     positional: ['pattern'],
+    regExpFlags: {
+      'caseSensitive': true,
+      'multiLine': false,
+      'unicode': false,
+      'dotAll': false,
+    },
   ),
   AnnotationRule(
     StartsWith,
@@ -125,14 +146,14 @@ const annotationRules = <AnnotationRule>[
   AnnotationRule(
     WithCustomValidator,
     'custom',
-    appliesTo: _every,
+    appliesTo: _refinable,
     positional: ['customValidator'],
     effect: RuleEffect.refinement,
   ),
   AnnotationRule(
     WithSchemaCustomValidator,
     'customWithSchema',
-    appliesTo: _every,
+    appliesTo: _refinable,
     positional: ['customValidator'],
     effect: RuleEffect.refinement,
   ),

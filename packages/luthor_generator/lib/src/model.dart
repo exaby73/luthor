@@ -16,6 +16,7 @@ final class Model {
     required this.fields,
     required this.serializer,
     required this.hasToJson,
+    required this.passthrough,
   });
 
   final ClassElement element;
@@ -24,27 +25,37 @@ final class Model {
   final ModelSerializer serializer;
   final bool hasToJson;
 
+  /// Whether the schema keeps unknown keys, because the serializer reads keys
+  /// that are not fields.
+  final bool passthrough;
+
   String get name => element.name!;
 }
 
 final class ModelField {
   const ModelField({
-    required this.parameter,
+    required this.element,
+    required this.name,
+    required this.type,
     required this.key,
     required this.annotations,
     required this.hasDefault,
     required this.usesConverter,
+    required this.readsWholeMap,
   });
 
-  final FormalParameterElement parameter;
+  /// The constructor parameter or settable field the value is read into.
+  final Element element;
+  final String name;
+  final DartType type;
   final String key;
   final List<DartObject> annotations;
   final bool hasDefault;
   final bool usesConverter;
 
-  String get name => parameter.name!;
-
-  DartType get type => parameter.type;
+  /// Whether the serializer reads the value from the whole map, as
+  /// `@JsonKey(readValue: ...)` does, instead of from [key] alone.
+  final bool readsWholeMap;
 }
 
 DartObject? firstAnnotation(
@@ -95,17 +106,94 @@ final class ModelReader {
     }
     final constructor = _selectConstructor(element);
     final context = _ClassContext(element, constructor);
+    final parameterNames = {
+      for (final parameter in constructor.formalParameters) parameter.name,
+    };
+    final fields = [
+      for (final parameter in constructor.formalParameters)
+        ?_parameterField(parameter, context),
+      if (!context.mappable && jsonSerializableChecker.hasAnnotationOf(element))
+        for (final field in _settableFields(element))
+          if (!parameterNames.contains(field.name))
+            ?_settableField(field, context),
+    ];
     return Model(
       element: element,
       constructor: constructor,
-      fields: [
-        for (final parameter in constructor.formalParameters)
-          ?_field(parameter, context),
-      ],
+      fields: fields,
       serializer: context.mappable
           ? ModelSerializer.mappable
           : ModelSerializer.json,
       hasToJson: context.mappable || _hasToJson(element, context),
+      passthrough:
+          context.readsPrivateField ||
+          fields.any((field) => field.readsWholeMap) ||
+          (context.mappable && context.hasMappableHook),
+    );
+  }
+
+  /// The instance fields that `json_serializable` assigns after calling the
+  /// constructor: public fields with a getter and a setter, declared on the
+  /// class or inherited.
+  Iterable<FieldElement> _settableFields(ClassElement element) sync* {
+    final seen = <String>{};
+    for (final type in [
+      element,
+      for (final supertype in element.allSupertypes)
+        if (!supertype.isDartCoreObject) supertype.element,
+    ]) {
+      for (final field in type.fields) {
+        final name = field.name;
+        if (name == null || field.isStatic || !seen.add(name)) continue;
+        if (field.getter == null) continue;
+        if (element.lookUpSetter(name: name, library: element.library) ==
+            null) {
+          continue;
+        }
+        yield field;
+      }
+    }
+  }
+
+  ModelField? _parameterField(
+    FormalParameterElement parameter,
+    _ClassContext context,
+  ) {
+    return _field(
+      element: parameter,
+      name: parameter.name!,
+      type: parameter.type,
+      annotations: [
+        for (final source in _annotationSources(parameter, context.element))
+          for (final annotation in source.metadata.annotations)
+            ?annotation.computeConstantValue(),
+      ],
+      hasDefault: _hasDefaultValue(parameter),
+      context: context,
+    );
+  }
+
+  ModelField? _settableField(FieldElement field, _ClassContext context) {
+    final annotations = [
+      for (final annotation in field.metadata.annotations)
+        ?annotation.computeConstantValue(),
+    ];
+    if (!field.isPublic) {
+      final jsonKey = ConstantReader(
+        firstAnnotation(annotations, jsonKeyChecker),
+      );
+      if (jsonKey.peek('includeFromJson')?.boolValue == true) {
+        context.readsPrivateField = true;
+      }
+      return null;
+    }
+    return _field(
+      element: field,
+      name: field.name!,
+      type: field.type,
+      annotations: annotations,
+      hasDefault: false,
+      context: context,
     );
   }
 
@@ -122,12 +210,14 @@ final class ModelReader {
         context.createsToJson;
   }
 
-  ModelField? _field(FormalParameterElement parameter, _ClassContext context) {
-    final annotations = [
-      for (final source in _annotationSources(parameter, context.element))
-        for (final annotation in source.metadata.annotations)
-          ?annotation.computeConstantValue(),
-    ];
+  ModelField? _field({
+    required Element element,
+    required String name,
+    required DartType type,
+    required List<DartObject> annotations,
+    required bool hasDefault,
+    required _ClassContext context,
+  }) {
     final jsonKey = ConstantReader(
       firstAnnotation(annotations, jsonKeyChecker),
     );
@@ -142,17 +232,20 @@ final class ModelReader {
           ).peek('key')?.stringValue
         : jsonKey.peek('name')?.stringValue;
     return ModelField(
-      parameter: parameter,
-      key: explicitKey ?? context.naming(parameter.name!),
+      element: element,
+      name: name,
+      type: type,
+      key: explicitKey ?? context.naming(name),
       annotations: annotations,
       hasDefault:
-          _hasDefaultValue(parameter) ||
+          hasDefault ||
           firstAnnotation(annotations, defaultChecker) != null ||
           jsonKey.peek('defaultValue') != null,
       usesConverter:
           jsonKey.peek('fromJson') != null ||
           annotations.any(_isConverter) ||
-          context.isConverted(parameter.type),
+          context.isConverted(type),
+      readsWholeMap: !context.mappable && jsonKey.peek('readValue') != null,
     );
   }
 
@@ -272,6 +365,18 @@ final class _ClassContext {
   final ClassElement element;
   final bool mappable;
   final ConstantReader _jsonSerializable;
+
+  /// Whether `json_serializable` reads a private field marked with
+  /// `@JsonKey(includeFromJson: true)`, which a schema key cannot name.
+  bool readsPrivateField = false;
+
+  /// Whether a `@MappableClass(hook: ...)` may read the whole map before
+  /// decoding.
+  bool get hasMappableHook =>
+      ConstantReader(
+        mappableClassChecker.firstAnnotationOf(element),
+      ).peek('hook') !=
+      null;
 
   bool get createsToJson =>
       _jsonSerializable.peek('createToJson')?.boolValue != false;

@@ -1,16 +1,26 @@
 import 'package:luthor_generator/src/dart_source.dart';
 import 'package:luthor_generator/src/validator_expr.dart';
 
-const validatorType = 'Validator';
-const schemaResultType = 'SchemaValidationResult';
+const schemaValidatorType = 'SchemaValidator';
+const resultType = 'ValidationResult';
 
 String typeEntry(EntryType type, [List<String> arguments = const []]) {
   return 'l.${type.method}(${arguments.join(', ')})';
 }
 
-String schema(String name, Iterable<(String, String)> fields) {
+String schemaDeclaration(String schemaName, String schema) {
+  return 'final $schemaValidatorType $schemaName = $schema;';
+}
+
+String schema(
+  String name,
+  Iterable<(String, String)> fields, {
+  bool passthrough = false,
+}) {
   final entries = fields.map((field) => '  ${field.$1}: ${field.$2},\n');
-  return 'l.withName(${dartStringLiteral(name)}).schema({\n${entries.join()}})';
+  return 'l.schema({\n${entries.join()}})'
+      '${passthrough ? '.passthrough()' : ''}'
+      '.withName(${dartStringLiteral(name)})';
 }
 
 String validator(ValidatorExpr expr) {
@@ -18,8 +28,8 @@ String validator(ValidatorExpr expr) {
   return switch (expr.base) {
     TypeEntry(:final type, :final arguments) =>
       '${typeEntry(type, arguments)}$chain',
-    ListOf(:final element) =>
-      'l.list(validators: [${validator(element)}])$chain',
+    AllowedValues(:final literals) => 'l.oneOf([${literals.join(', ')}])$chain',
+    ListOf(:final element) => 'l.list(${validator(element)})$chain',
     MapOf(:final key, :final value) =>
       'l.map(keyValidator: ${validator(key)}, valueValidator: ${validator(value)})$chain',
     SchemaRef(:final reference) => 'forwardRef(() => $reference$chain)',
@@ -32,18 +42,13 @@ String modifier(String method, List<String> arguments) {
 
 String dateTime() => modifier('dateTime', const []);
 
-String allowedValues(List<String> literals) {
-  final values = literals.join(', ');
-  final message = dartStringLiteral('must be one of ${literals.join(', ')}');
-  return modifier('custom', [
-    '(value) => value == null || const <Object?>[$values].contains(value)',
-    'message: $message',
-  ]);
+String regExp(String pattern, Map<String, bool> flags) {
+  return 'RegExp(${[dartRawStringLiteral(pattern), for (final MapEntry(:key, :value) in flags.entries) '$key: $value'].join(', ')})';
 }
 
 String parsableKey(String parser, String description) {
   return modifier('custom', [
-    '(value) => value is String && $parser.tryParse(value) != null',
+    '(key) => $parser.tryParse(key) != null',
     'message: ${dartStringLiteral('must be a string containing $description')}',
   ]);
 }
@@ -54,7 +59,7 @@ String validateFunction({
   required String schemaName,
   required String fromJson,
 }) {
-  return '$schemaResultType<$modelType> $functionName(Map<String, dynamic> json) => '
+  return '$resultType<$modelType> $functionName(Object? json) => '
       '$schemaName.validateSchema(json, fromJson: $fromJson);';
 }
 
@@ -63,15 +68,15 @@ String validateSelf({
   required String validateFunction,
   required String json,
 }) {
-  return '$schemaResultType<$modelType> validateSelf() => $validateFunction($json);';
+  return '$resultType<$modelType> validateSelf() => $validateFunction($json);';
 }
 
 enum EntryType {
   string('string'),
   int('int'),
   double('double'),
-  number('number'),
-  boolean('boolean'),
+  number('num'),
+  boolean('bool'),
   any('any'),
   file('file'),
   nullValue('nullValue');

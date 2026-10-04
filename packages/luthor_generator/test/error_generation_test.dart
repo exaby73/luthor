@@ -146,7 +146,7 @@ void main() {
 
         expectOutputContains(
           generation.output,
-          r'''final Validator _$PosOnlySchema = l.withName("PosOnly").schema({"a": l.string().required()});''',
+          r'''final SchemaValidator _$PosOnlySchema = l.schema({"a": l.string().required()}).withName("PosOnly");''',
         );
       },
     );

@@ -11,8 +11,12 @@ void main() {
         results = await evaluateGenerated(_nestedCollectionsSource, {
           'grid': r'''$GridValidate({'rows': [[{'rows': []}]]})''',
           'invalidGrid': r'''$GridValidate({'rows': 'nope'})''',
+          'deepGrid':
+              r'''$GridValidate({'rows': [[{'rows': [[{'rows': 'nope'}]]}]]})''',
           'bucket':
               r'''$BucketValidate({'groups': {'a': [{'groups': null}]}})''',
+          'deepBucket':
+              r'''$BucketValidate({'groups': {'a': [{'groups': {'b': [{'groups': 5}]}}]}})''',
         });
       });
 
@@ -20,12 +24,26 @@ void main() {
         expect(results['grid'], 'success');
       });
 
-      test('Then an invalid recursive field reports an error', () {
-        expect(results['invalidGrid'], isA<Map<String, Object?>>());
+      test('Then an invalid top-level recursive field reports an error', () {
+        expect(results['invalidGrid'], {
+          'rows': ['rows must be a list'],
+        });
+      });
+
+      test('Then an invalid field two levels down reports its path', () {
+        expect(results['deepGrid'], {
+          'rows.0.0.rows.0.0.rows': ['rows must be a list'],
+        });
       });
 
       test('Then a map of lists of the model validates', () {
         expect(results['bucket'], 'success');
+      });
+
+      test('Then an invalid field inside a nested map reports its path', () {
+        expect(results['deepBucket'], {
+          'groups.a.0.groups.b.0.groups': ['groups must be a map'],
+        });
       });
     });
 
@@ -42,8 +60,12 @@ void main() {
         results = await evaluateGenerated(_mutualSource, {
           'author':
               r'''$AuthorValidate({'name': 'A', 'books': [{'title': 'B', 'author': {'name': 'C'}}]})''',
+          'invalidAuthor':
+              r'''$AuthorValidate({'name': 'A', 'books': [{'title': 'B', 'author': {'name': 'C', 'books': [{'title': 1}]}}]})''',
           'org':
               r'''$OrgValidate({'dept': {'staff': [{'dept': {'staff': []}}]}})''',
+          'invalidOrg':
+              r'''$OrgValidate({'dept': {'staff': [{'dept': {'staff': [{'dept': {}}]}}]}})''',
         });
       });
 
@@ -51,8 +73,20 @@ void main() {
         expect(results['author'], 'success');
       });
 
+      test('Then annotated mutual recursion reports nested errors', () {
+        expect(results['invalidAuthor'], {
+          'books.0.author.books.0.title': ['title must be a string'],
+        });
+      });
+
       test('Then auto-generated mutual recursion validates', () {
         expect(results['org'], 'success');
+      });
+
+      test('Then auto-generated mutual recursion reports nested errors', () {
+        expect(results['invalidOrg'], {
+          'dept.staff.0.dept.staff.0.dept.staff': ['staff is required'],
+        });
       });
     });
   });
@@ -78,7 +112,7 @@ void main() {
       test('Then the nested reference is still a forward reference', () {
         expectOutputContains(
           plain,
-          r'''l.list(validators: [forwardRef(() => $TreeSchema.required())])''',
+          r'''l.list(forwardRef(() => $TreeSchema.required()))''',
         );
       });
     });

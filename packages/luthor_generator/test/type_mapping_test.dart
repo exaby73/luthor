@@ -20,7 +20,7 @@ void main() {
     test('Then DateTime list items get the date check', () {
       expectOutputContains(
         output,
-        'TypesSchemaKeys.dates: l.list(validators: [l.string().dateTime().required()]).required(),',
+        'TypesSchemaKeys.dates: l.list(l.string().dateTime().required()).required(),',
       );
     });
 

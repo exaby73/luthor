@@ -44,9 +44,7 @@ void main() {
         });
 
         expect(results['shop'], {
-          'geo': {
-            'lat': ['lat must be a double'],
-          },
+          'geo.lat': ['lat must be a double'],
         });
       },
     );
@@ -64,7 +62,7 @@ void main() {
 
       expectOutputContains(
         generation.output,
-        r'''final Validator $ShopSchema = l.withName("Shop").schema({''',
+        r'''final SchemaValidator $ShopSchema = l.schema({''',
       );
     });
   });

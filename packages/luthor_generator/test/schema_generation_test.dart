@@ -41,7 +41,7 @@ void main() {
         expect(
           generation.output,
           contains(
-            r'''SchemaValidationResult<Profile> $ProfileValidate(Map<String, dynamic> json) =>''',
+            r'''ValidationResult<Profile> $ProfileValidate(Object? json) =>''',
           ),
         );
         expect(
@@ -52,7 +52,7 @@ void main() {
         );
         expectOutputContains(
           generation.output,
-          r'''SchemaValidationResult<Profile> validateSelf() => $ProfileValidate(_$luthorJsonMap(toJson()));''',
+          r'''ValidationResult<Profile> validateSelf() => $ProfileValidate(_$luthorJsonMap(toJson()));''',
         );
       });
     });
@@ -98,7 +98,7 @@ void main() {
         expect(generation.output, contains('MappedProfileMapper.fromMap'));
         expectOutputContains(
           generation.output,
-          r'''SchemaValidationResult<MappedProfile> validateSelf() => $MappedProfileValidate(toMap());''',
+          r'''ValidationResult<MappedProfile> validateSelf() => $MappedProfileValidate(toMap());''',
         );
       });
     });

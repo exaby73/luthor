@@ -4,6 +4,13 @@ String dartStringLiteral(String value) {
   return jsonEncode(value).replaceAll(r'$', r'\$');
 }
 
+String dartRawStringLiteral(String value) {
+  if (value.contains("'") || value.contains('\n') || value.contains('\r')) {
+    return dartStringLiteral(value);
+  }
+  return "r'$value'";
+}
+
 String jsonLiteral(Object? value) {
   return switch (value) {
     final String string => dartStringLiteral(string),

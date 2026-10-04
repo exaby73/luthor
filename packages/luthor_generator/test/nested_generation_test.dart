@@ -20,7 +20,7 @@ void main() {
       test('Then list item schemas are referenced lazily', () {
         expectOutputContains(
           generation.output,
-          r'''ArticleSchemaKeys.comments: l.list(validators: [forwardRef(() => _$CommentSchema.required())]).required(),''',
+          r'''ArticleSchemaKeys.comments: l.list(forwardRef(() => _$CommentSchema.required())).required(),''',
         );
       });
     });
@@ -41,9 +41,7 @@ void main() {
       test('Then forwardRef wraps the self reference', () {
         expect(
           generation.output,
-          contains(
-            r'''validators: [forwardRef(() => $NodeSchema.required())]''',
-          ),
+          contains(r'''l.list(forwardRef(() => $NodeSchema.required()))'''),
         );
       });
     });

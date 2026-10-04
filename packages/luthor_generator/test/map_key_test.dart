@@ -13,7 +13,7 @@ void main() {
     test('Then int keys are strings that parse to int', () {
       expectOutputContains(
         output,
-        'KeyedSchemaKeys.byId: l.map(keyValidator: l.string().custom((value) => value is String && int.tryParse(value) != null, message: "must be a string containing an integer").required(),',
+        'KeyedSchemaKeys.byId: l.map(keyValidator: l.string().custom((key) => int.tryParse(key) != null, message: "must be a string containing an integer").required(),',
       );
     });
 
@@ -27,7 +27,7 @@ void main() {
     test('Then enum keys are the enum values', () {
       expectOutputContains(
         output,
-        'KeyedSchemaKeys.byRole: l.map(keyValidator: l.string().custom((value) => value == null || const <Object?>["admin", "member"].contains(value)',
+        'KeyedSchemaKeys.byRole: l.map(keyValidator: l.oneOf(["admin", "member"]).required(),',
       );
     });
 
@@ -39,7 +39,7 @@ void main() {
           'valid':
               r'''$KeyedValidate({'byId': {'1': 'a'}, 'byDay': {'2024-01-01': 1}, 'byRole': {'admin': 1}})''',
           'invalid':
-              r'''$KeyedValidate({'byId': {'one': 'a'}, 'byDay': {}, 'byRole': {}})''',
+              r'''$KeyedValidate({'byId': {'one': 'a'}, 'byDay': {'Monday': 1}, 'byRole': {'owner': 1}})''',
         });
       });
 
@@ -47,8 +47,12 @@ void main() {
         expect(results['valid'], 'success');
       });
 
-      test('Then a key that does not parse is a validation error', () {
-        expect(results['invalid'], isA<Map<String, Object?>>());
+      test('Then each key that does not parse is a key error on its map', () {
+        expect(results['invalid'], {
+          'byId': ['byId has an invalid key "one"'],
+          'byDay': ['byDay has an invalid key "Monday"'],
+          'byRole': ['byRole has an invalid key "owner"'],
+        });
       });
     });
   });

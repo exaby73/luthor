@@ -53,9 +53,7 @@ void main() {
 
       test('Then nested errors are still reported', () {
         expect(results['invalid'], {
-          'home': {
-            'street': ['street must be at least 1 character long'],
-          },
+          'home.street': ['street must be at least 1 character long'],
         });
       });
     });

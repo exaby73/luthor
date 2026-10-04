@@ -17,7 +17,7 @@
 - **BREAKING**: Fields with a `JsonConverter` or a `@JsonKey(fromJson: ...)` function are validated as `l.any()`.
 - **BREAKING**: Nested schema references are always wrapped in `forwardRef`. `@luthorForwardRef` is still accepted but has no effect.
 - **BREAKING**: Validation annotations are emitted in the order they are written, so `@HasMin(8) @HasMax(200)` generates `.min(8).max(200)`.
-- **BREAKING**: The generator's internal libraries moved under `lib/src`. Only `package:luthor_generator/builder.dart` is public.
+- **BREAKING**: The generator's internal libraries moved under `lib/src`. Only `package:luthor_generator/builder.dart` and `package:luthor_generator/luthor_generator.dart`, which exports it, are public.
 - **BREAKING**: `luthor_generator` no longer depends on `json_annotation`, `freezed_annotation`, `dart_mappable` or `collection`. Serializer annotations are matched by name and package.
 - **FIX**: Apply `source_gen:combining_builder`, so projects without `json_serializable` get a `.g.dart` file.
 - **FIX**: Build the schema from the constructor the serializer uses: the one named in `@JsonSerializable(constructor: ...)`, the `@MappableConstructor`, the unnamed constructor, or the first public constructor with parameters. A private or `fromJson` constructor declared first no longer produces an empty or wrong schema.

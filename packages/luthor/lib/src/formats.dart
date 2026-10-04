@@ -13,6 +13,8 @@ final _uuid = RegExp(
 final _cuid = RegExp(r'^c[^\s-]{8,}$', caseSensitive: false);
 final _cuid2 = RegExp(r'^[a-z][a-z0-9]*$');
 final _emoji = RegExp(
+  // The lint parses the pattern without the unicode flag.
+  // ignore: valid_regexps
   r'^(?:\p{Regional_Indicator}{2}'
   r'|[0-9#*]\uFE0F?\u20E3'
   r'|(?:(?=\p{Emoji_Presentation})\p{Extended_Pictographic}\uFE0F?'

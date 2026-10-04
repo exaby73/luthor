@@ -132,16 +132,23 @@ Future<Map<String, Object?>> evaluateGeneratedLibraries(
 }
 
 void expectOutputContains(String output, String expected) {
-  expect(_compact(output), contains(_compact(expected)));
+  expect(_compact(output), matches(_snippetPattern(expected)));
 }
 
 void expectOutputLacks(String output, String unexpected) {
-  expect(_compact(output), isNot(contains(_compact(unexpected))));
+  expect(_compact(output), isNot(matches(_snippetPattern(unexpected))));
 }
 
 String _compact(String value) => value
     .replaceAll(RegExp(r'\s+'), '')
-    .replaceAll(RegExp(r',(?=[)\]}]|$)'), '');
+    .replaceAll(RegExp(r',(?=[)\]}])'), '');
+
+RegExp _snippetPattern(String snippet) {
+  final compact = _compact(snippet);
+  if (!compact.endsWith(',')) return RegExp(RegExp.escape(compact));
+  final body = RegExp.escape(compact.substring(0, compact.length - 1));
+  return RegExp('$body(?:,|(?=[)\\]}]))');
+}
 
 AssetId _partAsset(String library) {
   final stem = library.substring(0, library.length - '.dart'.length);

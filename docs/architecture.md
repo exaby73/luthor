@@ -103,7 +103,7 @@ Two type choices are worth knowing. `DateTime` maps to `l.string().dateTime()`, 
 
 - A `modifier` (most rules) appends `.method(args)` in the order the annotations are written.
 - A `refinement` (`@WithCustomValidator` and `@WithSchemaCustomValidator`) appends after every modifier.
-- An `entry` (`@IsFile`) replaces the base validator, so a field becomes `l.file(accept: ...)`.
+- An `entry` (`@IsFile`) replaces the base validator, so a field becomes `l.file(accept: ...)`. The generator does not map the declared type of such a field, so a field typed as a package class such as `MultipartFile` works.
 
 `FieldValidators.forField` applies the rules. An annotation on a field kind outside its `appliesTo` fails generation, and so does a fractional `@HasMin` or `@HasMax` on an `int` or `String` field (`integralFor`). `message` and `messageBuilder` are passed for every rule, so a rule never lists them. `.required()` comes last.
 

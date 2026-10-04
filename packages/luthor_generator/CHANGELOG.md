@@ -34,6 +34,7 @@
 - **FIX**: Nested model fields in `ErrorKeys` get a `$key` entry for the field's own error. Every `ErrorKeys` entry is the flat error path that `getError` looks up, such as `home.street`.
 - **FIX**: Accept `fromJson` generative constructors and static methods, not only factories.
 - **FIX**: Keep the `message` and `messageBuilder` of `@IsFile`, emit `double.infinity`, `double.negativeInfinity` and `double.nan` in annotation values, escape `$` in class names passed to `withName`, and stop marking `Null` fields as required.
+- **FIX**: `@IsFile` generates `l.file()` whatever the field's declared type, so a field typed as a package class such as `MultipartFile`, or a list of one, no longer fails generation as "not a luthor model".
 - **FIX**: Detect `DateTime`, `Uri`, `File` and serializer annotations by library instead of by display name, so same-named types from other packages are not mistaken for them.
 
 # 0.18.0

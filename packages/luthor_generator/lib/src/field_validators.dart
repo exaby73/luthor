@@ -26,7 +26,11 @@ final class FieldValidators {
     final explicitDateTime = applied.any(
       (entry) => entry.$1.annotation == IsDateTime,
     );
-    var (expr, kind) = field.usesConverter || field.readsWholeMap
+    final untyped =
+        field.usesConverter ||
+        field.readsWholeMap ||
+        applied.any((entry) => entry.$1.effect == RuleEffect.entry);
+    var (expr, kind) = untyped
         ? (const ValidatorExpr(TypeEntry(runtime.EntryType.any)), FieldKind.any)
         : _forType(
             field.type,

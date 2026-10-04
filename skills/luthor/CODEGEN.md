@@ -132,7 +132,7 @@ Put validation annotations on the constructor parameter or on the field. They ap
 | `@HasMin(n)`, `@HasMax(n)` | `.min(n)`, `.max(n)`: the length of a `String`, the value of a number | `String`, `int` (`n` must be an `int`), `double`, `num` |
 | `@MatchRegex(r'^\d+$', caseSensitive: false)` | `.regex(RegExp(...))`, with its flags | `String` |
 | `@StartsWith('x')`, `@EndsWith('x')`, `@Contains('x')` | `.startsWith()`, `.endsWith()`, `.contains()` | `String` |
-| `@isFile`, `@IsFile(accept: ...)` | replaces the type with `l.file()` | any |
+| `@isFile`, `@IsFile(accept: ...)` | replaces the type with `l.file()` | any, including package classes such as `MultipartFile` |
 | `@WithCustomValidator(fn)` | `.custom(fn)` | any except `Null` |
 | `@WithSchemaCustomValidator(fn)` | `.customWithSchema(fn)` | any except `Null` |
 

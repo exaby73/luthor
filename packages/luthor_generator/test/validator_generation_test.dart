@@ -162,6 +162,61 @@ void main() {
     );
   });
 
+  group('Given @IsFile on fields typed as a package file class', () {
+    late String output;
+
+    setUp(() async {
+      output = (await generateSharedParts(_packageFileSources))['upload.dart']!;
+    });
+
+    test('Then the field emits l.file with its accept function', () {
+      expectOutputContains(
+        output,
+        'UploadSchemaKeys.avatar: l.file(accept: isMultipart).required(),',
+      );
+    });
+
+    test('Then a nullable field without accept emits l.file', () {
+      expectOutputContains(output, 'UploadSchemaKeys.cover: l.file(),');
+    });
+
+    test('Then a list of the class emits l.file for the field', () {
+      expectOutputContains(
+        output,
+        'UploadSchemaKeys.attachments: l.file(accept: isMultipartList).required(),',
+      );
+    });
+
+    test('When generated code is analyzed then it compiles', () async {
+      await expectGeneratedLibrariesCompile(_packageFileSources);
+    });
+
+    group('When the validate function runs', () {
+      late Map<String, Object?> results;
+
+      setUpAll(() async {
+        results = await evaluateGeneratedLibraries(_packageFileSources, {
+          'valid':
+              r'''$UploadValidate({'avatar': MultipartFile('a.png'), 'attachments': [MultipartFile('b.pdf')]})''',
+          'invalid':
+              r'''$UploadValidate({'avatar': 'a.png', 'cover': 1, 'attachments': ['b.pdf']})''',
+        });
+      });
+
+      test('Then values the accept functions approve pass', () {
+        expect(results['valid'], 'success');
+      });
+
+      test('Then values that are not files fail', () {
+        expect(results['invalid'], {
+          'avatar': ['avatar must be a file'],
+          'cover': ['cover must be a file'],
+          'attachments': ['attachments must be a file'],
+        });
+      });
+    });
+  });
+
   group('Given a model with a static fromJson method', () {
     test(
       'When the builder generates the validate function then it uses the method',
@@ -341,3 +396,48 @@ class Imposter {
   Map<String, dynamic> toJson() => {'value': value};
 }
 ''';
+
+const _packageFileSources = {
+  'upload.dart': '''
+import 'package:luthor/luthor.dart';
+
+import 'multipart.dart';
+
+part 'upload.g.dart';
+
+bool isMultipart(Object value) => value is MultipartFile;
+
+bool isMultipartList(Object value) => value is List<MultipartFile>;
+
+@luthor
+class Upload {
+  @IsFile(accept: isMultipart)
+  final MultipartFile avatar;
+  @isFile
+  final MultipartFile? cover;
+  @IsFile(accept: isMultipartList)
+  final List<MultipartFile> attachments;
+
+  const Upload({required this.avatar, this.cover, required this.attachments});
+
+  factory Upload.fromJson(Map<String, dynamic> json) => Upload(
+    avatar: json['avatar'] as MultipartFile,
+    cover: json['cover'] as MultipartFile?,
+    attachments: (json['attachments'] as List).cast<MultipartFile>(),
+  );
+
+  Map<String, dynamic> toJson() => {
+    'avatar': avatar,
+    'cover': cover,
+    'attachments': attachments,
+  };
+}
+''',
+  'multipart.dart': '''
+class MultipartFile {
+  final String filename;
+
+  const MultipartFile(this.filename);
+}
+''',
+};

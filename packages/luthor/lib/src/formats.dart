@@ -12,18 +12,15 @@ final _uuid = RegExp(
 );
 final _cuid = RegExp(r'^c[^\s-]{8,}$', caseSensitive: false);
 final _cuid2 = RegExp(r'^[a-z][a-z0-9]*$');
-final _emoji = RegExp(
-  // The lint parses the pattern without the unicode flag.
-  // ignore: valid_regexps
-  r'^(?:\p{Regional_Indicator}{2}'
-  r'|[0-9#*]\uFE0F?\u20E3'
-  r'|(?:(?=\p{Emoji_Presentation})\p{Extended_Pictographic}\uFE0F?'
-  r'|\p{Extended_Pictographic}\uFE0F)'
-  r'\p{Emoji_Modifier}?'
-  r'(?:[\u{E0020}-\u{E007E}]+\u{E007F})?'
-  r'(?:\u200D\p{Extended_Pictographic}\uFE0F?\p{Emoji_Modifier}?)*)+$',
-  unicode: true,
-);
+const _emojiPattern =
+    r'^(?:\p{Regional_Indicator}{2}'
+    r'|[0-9#*]\uFE0F?\u20E3'
+    r'|(?:(?=\p{Emoji_Presentation})\p{Extended_Pictographic}\uFE0F?'
+    r'|\p{Extended_Pictographic}\uFE0F)'
+    r'\p{Emoji_Modifier}?'
+    r'(?:[\u{E0020}-\u{E007E}]+\u{E007F})?'
+    r'(?:\u200D\p{Extended_Pictographic}\uFE0F?\p{Emoji_Modifier}?)*)+$';
+final _emoji = RegExp(_emojiPattern, unicode: true);
 final _ipv4 = RegExp(
   r'^(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}'
   r'(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)$',

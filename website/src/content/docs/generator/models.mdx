@@ -1,18 +1,23 @@
 ---
 title: Models without freezed
-description: Use luthor_generator with json_serializable classes, plain classes, and dart_mappable.
+description: Use luthor_generator with json_serializable classes, plain classes, and dart_mappable, and what the serializer tells the generator.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Generated from '../../../components/Generated.astro';
+import Output from '../../../components/Output.astro';
+import Verdict from '../../../components/Verdict.astro';
 
-The generator needs two things from a class: a constructor with named parameters, and a way to convert a map to an instance. `freezed` supplies both, but it is not required. This page shows the three other setups with the same `User` model.
+The generator needs two things from a class: a constructor with named parameters, and a way to convert a map to an instance. `freezed` supplies both, but it is not required. This page shows the three other setups with the same `User` model, and the generated code for each.
 
 ## What the generator needs
 
 - The class is annotated with `@luthor`.
-- The first constructor has the parameters you want validated, as named parameters, with the annotations on them.
-- Either a factory constructor named `fromJson`, or the `@MappableClass` annotation from `dart_mappable`.
-- For `validateSelf`, a `toJson()` method, or `toMap()` with `dart_mappable`.
+- A constructor with named parameters. The schema follows the constructor the serializer uses: the one named in `@JsonSerializable(constructor:)`, the `@MappableConstructor`, the unnamed constructor, or else the first public constructor with parameters.
+- Either a `fromJson` factory, generative constructor or static method, or the `@MappableClass` annotation from `dart_mappable`.
+- For `validateSelf`, a `toJson()` method or `dart_mappable`'s `toMap()`. Without one, the extension is not generated.
+
+No `build.yaml` is needed. The builder applies `source_gen`'s combining builder, so a `.g.dart` is produced even without `json_serializable`.
 
 ## Setups
 
@@ -31,14 +36,14 @@ import 'package:luthor/luthor.dart';
 part 'user.g.dart';
 
 @luthor
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class User {
-  const User({required this.name, required this.email, this.age});
+  const User({required this.fullName, required this.email, this.age});
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   @HasMin(2)
-  final String name;
+  final String fullName;
   @IsEmail()
   final String email;
   @HasMin(18)
@@ -48,17 +53,9 @@ class User {
 }
 ```
 
-The annotations above are on the fields, and the generator ignores them there. Move them to the constructor parameters:
+Annotations on fields are read, and `fieldRename` applies to the keys:
 
-```dart title="lib/user.dart" del={2} ins={3-6}
-class User {
-  const User({required this.name, required this.email, this.age});
-  const User({
-    @HasMin(2) required this.name,
-    @IsEmail() required this.email,
-    @HasMin(18) this.age,
-  });
-```
+<Generated file="json_user.g.dart" from="const UserSchemaKeys" to='.withName("User");' title="lib/user.g.dart" />
 
   </TabItem>
   <TabItem label="Plain class">
@@ -82,10 +79,10 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        name: json['name'] as String,
-        email: json['email'] as String,
-        age: json['age'] as int?,
-      );
+    name: json['name'] as String,
+    email: json['email'] as String,
+    age: json['age'] as int?,
+  );
 
   final String name;
   final String email;
@@ -95,15 +92,9 @@ class User {
 }
 ```
 
-Without `json_serializable` or `freezed` in the project, nothing asks `build_runner` to write the combined `.g.dart` file. If the file does not appear, enable the combining builder:
+A hand-written `fromJson` has to read only the keys of its constructor parameters, because the schema strips every other key before `fromJson` runs.
 
-```yaml title="build.yaml"
-targets:
-  $default:
-    builders:
-      source_gen:combining_builder:
-        enabled: true
-```
+<Generated file="plain_user.g.dart" from="const UserSchemaKeys" to='.withName("User");' title="lib/user.g.dart" />
 
   </TabItem>
   <TabItem label="dart_mappable">
@@ -121,39 +112,50 @@ part 'user.g.dart';
 part 'user.mapper.dart';
 
 @luthor
-@MappableClass()
+@MappableClass(caseStyle: CaseStyle.snakeCase)
 class User with UserMappable {
   const User({
-    @HasMin(2) required this.name,
+    @HasMin(2) required this.fullName,
     @IsEmail() required this.email,
     @HasMin(18) this.age,
   });
 
-  final String name;
+  final String fullName;
   final String email;
   final int? age;
 }
 ```
 
-The generated validate function calls `UserMapper.fromMap`, and `validateSelf` calls `toMap()`. No `fromJson` factory is needed. The same `build.yaml` note as for plain classes applies when `json_serializable` is absent.
+The validate function calls `UserMapper.fromMap`, `validateSelf` calls `toMap()`, and `caseStyle` applies to the keys:
+
+<Generated file="mappable_user.g.dart" from="const UserSchemaKeys" to="$UserValidate(toMap());" title="lib/user.g.dart" />
 
   </TabItem>
 </Tabs>
 
-## Generated code is the same
+All three validate the same input the same way:
 
-Whatever the setup, the generated schema, keys, and validate function are identical. Only the conversion call differs:
+<Verdict id="gen.models" />
 
-```dart
-// freezed, json_serializable, plain class
-SchemaValidationResult<User> $UserValidate(Map<String, dynamic> json) =>
-    $UserSchema.validateSchema(json, fromJson: User.fromJson);
+<Output id="gen.models.keys" title="UserSchemaKeys.fullName for json_serializable and dart_mappable, UserSchemaKeys.name for the plain class" />
 
-// dart_mappable
-SchemaValidationResult<User> $UserValidate(Map<String, dynamic> json) =>
-    $UserSchema.validateSchema(json, fromJson: UserMapper.fromMap);
-```
+## What the serializer tells the generator
+
+The generator reads the serializer's annotations so the schema matches what `fromJson` will do:
+
+| Annotation | Effect on the schema |
+|---|---|
+| `@JsonKey(name:)`, `@JsonSerializable(fieldRename:)` on the class or the `freezed` factory | The key |
+| `@MappableField(key:)`, `@MappableClass(caseStyle:)` | The key |
+| `@JsonKey(defaultValue:)`, a constructor default, `@Default` | The field is optional |
+| `@JsonKey(includeFromJson: false)` | The field is left out |
+| `@JsonKey(fromJson:)`, a `JsonConverter` on the field, class or `@JsonSerializable(converters:)` | The field is `l.any()` |
+| `@JsonKey(readValue:)` | The field is an optional `l.any()` and the schema gets `.passthrough()` |
+| `@JsonSerializable(createToJson: false)`, `@Freezed(toJson: false)` | No `validateSelf` |
+| Public settable fields on a `@JsonSerializable` class that are not constructor parameters | Schema fields, required unless nullable or defaulted |
+
+Global options in another builder's `build.yaml`, such as `json_serializable`'s `field_rename`, are not read. Put them on the class.
 
 ## Classes you do not annotate
 
-A field whose type is a class without `@luthor` still gets a schema, as long as that class meets the requirements above. The generator emits an auto-generated schema for it after the annotated model. If two annotated models in one library refer to the same un-annotated class, both emit it and the library does not compile. Annotate the shared class.
+A field whose type is a class without `@luthor` still gets a schema, as long as that class meets the requirements above. The generator emits a private `_$ClassSchema` for it in the library that uses it, without public keys or a validate function. Annotate the class with `@luthor` when you want those.

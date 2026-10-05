@@ -1,49 +1,60 @@
 ---
-title: 'Results'
-description: The members of SingleValidationResult and SchemaValidationResult.
+title: 'ValidationResult'
+description: The sealed result type, its two cases, and the error views every result exposes.
 ---
 
-Both result types are sealed classes with one success case and one error case. [Results and errors](/concepts/results) explains how to use them; this page lists the members.
+import Output from '../../../components/Output.astro';
 
-## SingleValidationResult
+Every validation returns a `ValidationResult<T>`: a `ValidationSuccess<T>` holding the typed output, or a `ValidationFailure<T>` holding the issues. The error views are defined on the base class and are empty on success, so you can read them without matching first. [Results and issues](/concepts/results) explains how to use them.
 
-Returned by `validateValue<T>(T value)`.
+## Members
 
-| Member | On `SingleValidationSuccess<T>` | On `SingleValidationError<T>` |
-|---|---|---|
-| `isValid` | `true` | `false` |
-| `data` | `T`, the input | `T`, the input |
-| `errors` | not present | `List<String>` of messages |
-| `toString()` | `SingleValidationSuccess(data: ...)` | `SingleValidationError(data: ..., errors: [...])` |
+| Member | Type | On success | On failure |
+|---|---|---|---|
+| `isValid` | `bool` | `true` | `false` |
+| `issues` | `List<ValidationIssue>` | `[]` | every issue, in the order found |
+| `messages` | `List<String>` | `[]` | each issue's message, in issue order |
+| `errors` | `Map<String, List<String>>` | `{}` | messages grouped by error path |
+| `getError(path)` | `String?` | `null` | the first message at exactly `path`, or `null` |
+| `getErrors(path)` | `List<String>` | `[]` | every message at exactly `path` |
+| `toString()` | `String` | `ValidationSuccess(data: ...)` | `ValidationFailure(errors: {...})` |
+
+`ValidationSuccess<T>` adds `data`, the output of type `T`. `ValidationFailure<T>` adds `input`, the raw value that was validated.
+
+`path` is an error path: dot-joined field keys, map keys and list indices, such as `address.city` or `items.1.id`. The validated value itself has the empty path `''`, which is also where object-level errors from `.custom()` on a schema live. `getError` never throws; a path with no issue returns `null`.
+
+## Where `T` comes from
+
+| Call | `T` |
+|---|---|
+| `l.string().validate(x)` | `String?` |
+| `l.string().required().validate(x)` | `String` |
+| `l.list(l.int().required()).validate(x)` | `List<int>?` |
+| `schema.validate(x)` | `Map<String, Object?>?`, or non-nullable after `.required()` |
+| `schema.validateSchema(x, fromJson: User.fromJson)` | `User` |
+| `$UserValidate(x)` | `User` |
+
+## Example
 
 ```dart
-switch (l.string().email().validateValue(input)) {
-  case SingleValidationSuccess(data: final email):
-  case SingleValidationError(errors: final errors):
+final result = l.string().email().required().withName('email').validate('bad');
+
+switch (result) {
+  case ValidationSuccess(:final data):
+    print('valid: $data');
+  case ValidationFailure(:final messages):
+    print('invalid: $messages');
 }
+
+print(result.isValid);
+print(result.errors);
+print(result.getError(''));
 ```
 
-## SchemaValidationResult
+Printed output of the three result shapes:
 
-Returned by `validateSchema<T>(Map<String, Object?> value, {FromJson<T>? fromJson})`, where `FromJson<T>` is `T Function(Map<String, Object?> json)`.
+<Output id="result.toString" />
 
-| Member | On `SchemaValidationSuccess<T>` | On `SchemaValidationError<T>` |
-|---|---|---|
-| `isValid` | `true` | `false` |
-| `data` | `T`: the converted model when `fromJson` was given, otherwise the input map | `T?`: the input map, or `null` when `fromJson` was given |
-| `errors` | not present | `Map<String, dynamic>`, the error map |
-| `getError(String path)` | not present | first message at the error path, or `null` |
-| `toString()` | `SchemaValidationSuccess(data: ...)` | `SchemaValidationError(data: ..., errors: {...})` |
+On a success, every error view is empty:
 
-`getError` splits the path on `.` and walks the error map. It returns `null` when the field passed. It throws a `StateError` when the path stops at a nested map instead of a list of messages. [Error messages](/reference/errors) describes the map.
-
-```dart
-switch (user.validateSchema<User>(json, fromJson: User.fromJson)) {
-  case SchemaValidationSuccess(data: final user):
-  case SchemaValidationError(errors: final errors):
-}
-```
-
-## Generated validate function
-
-For a model `User`, `luthor_generator` emits `SchemaValidationResult<User> $UserValidate(Map<String, dynamic> json)`, which calls `validateSchema` with the model's `fromJson`. [What gets generated](/generator/output) lists the rest.
+<Output id="success.views" />

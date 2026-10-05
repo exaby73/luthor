@@ -1,0 +1,10 @@
+name: luthor_docs_verdicts
+description: Runs every runtime example in the docs against packages/luthor and writes src/data/verdicts.json.
+publish_to: none
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  luthor:
+    path: ../../../packages/luthor

@@ -1,17 +1,18 @@
 ---
 title: 'l.string()'
-description: Requires a String and unlocks the string modifiers.
+description: Requires a String and gives access to the string modifiers.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when the value is a `String`. Returns a `StringValidator`, which has every [string modifier](/reference/string/min). `null` passes until you add [`.required()`](/reference/modifiers/required).
+Passes when the value is a `String`. Returns a `StringValidator<String?>`, which has every [string modifier](/reference/string/min); `.required()` narrows the output to `String`. `null` passes until you add `.required()`.
 
 ## Signature
 
 ```dart wrap
-StringValidator string({String? message, String? Function()? messageFn})
+StringValidator<String?> string({String? message, MessageBuilder? messageBuilder})
 ```
 
 ## Parameters
@@ -19,15 +20,15 @@ StringValidator string({String? message, String? Function()? messageFn})
 | Parameter | Type | Meaning |
 |---|---|---|
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value must be a string`. `value` is replaced by the field name when there is one.
+Code `invalidType`. Default message: `value must be a string`, with `params['expected']` set to `'string'`. `value` is replaced by the field name when there is one.
 
 ## Code generation
 
-A `String` parameter maps to `l.string()`. A `DateTime` parameter maps to `l.string().dateTime()`. Non-nullable parameters get `.required()`.
+A `String` parameter maps to `l.string()`; `DateTime` and `Uri` parameters map to `l.string()` with `.dateTime()` for `DateTime`. Non-nullable parameters without a default get `.required()`.
 
 ## Example
 
@@ -44,16 +45,12 @@ final name = l.string();
 ```dart wrap
 required String name, // l.string().required()
 String? nickname,     // l.string()
+required Uri homepage, // l.string().required()
 ```
 
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="name.validateValue(input)"
-  cases={[
-    { input: "'Ada'", pass: true },
-    { input: "null", pass: true },
-    { input: "42", pass: false, message: "value must be a string" },
-  ]}
-/>
+<Verdict id="type.string" />
+
+Lengths in `.min()`, `.max()` and `.length()` count UTF-16 code units, like `String.length`.

@@ -1,0 +1,92 @@
+---
+title: 'ValidationIssue and IssueCode'
+description: The members of an issue, and every issue code with the params it sets.
+---
+
+import Output from '../../../components/Output.astro';
+
+A `ValidationIssue` is one problem found during validation. Issues are the source of every other error view: `messages`, `errors` and `getError` are derived from them.
+
+## ValidationIssue
+
+| Member | Type | Meaning |
+|---|---|---|
+| `code` | `IssueCode` | The kind of problem. |
+| `path` | `List<Object>` | Where the problem is: schema field keys and map keys as `String`, list indices as `int`. Empty for the validated value itself. |
+| `errorPath` | `String` | `path` joined with dots, such as `items.1.id`. `''` for the value itself. |
+| `message` | `String` | The error message, after `message`, `messageBuilder` and `l.messageBuilder` have been applied. |
+| `params` | `Map<String, Object?>` | The values that describe the problem, such as `{'min': 3}`. Each code documents its params below. |
+| `fieldName` | `String?` | The name used in default messages: the field key inside a schema, or the `withName` name, or `null`. |
+| `withMessage(String)` | `ValidationIssue` | A copy with the message replaced. |
+
+```dart
+final issue = l.int().min(18).withName('age').validate(12).issues.single;
+
+print(issue.code);
+print(issue.code.name);
+print(issue.path);
+print(issue.errorPath);
+print(issue.message);
+print(issue.params);
+print(issue.fieldName);
+```
+
+<Output id="issue.fields" />
+
+`toString()` prints the code, the path and the message:
+
+<Output id="issue.toString" />
+
+## IssueCode
+
+`IssueCode` is an extension type over a `String`, so it compares by name and can be used in a `switch`. The set is open: a minor release may add codes, so always include a default case.
+
+```dart
+switch (issue.code) {
+  case IssueCode.tooSmall:
+    print('too small');
+  case IssueCode.invalidType:
+    print('wrong type');
+  case IssueCode.required:
+    print('missing');
+  default:
+    print('other');
+}
+```
+
+<Output id="issue.code.switch" />
+
+Every code, the validation that produces it, and the params it sets:
+
+| Code | Produced by | Params |
+|---|---|---|
+| `required` | `.required()` on `null` or a missing field; `validateSchema(null)` | |
+| `invalidType` | Every type: `l.string()`, `l.int()`, `l.double()`, `l.num()`, `l.bool()`, `l.list()`, `l.map()`, `l.schema()`, `l.file()`, `l.nullValue()`; also a map key or value that fails its type argument | `expected`, the type name such as `'string'` |
+| `tooSmall` | number `.min(n)` | `min` |
+| `tooBig` | number `.max(n)` | `max` |
+| `notFinite` | `.finite()` | |
+| `tooShort` | string `.min(n)` | `min` |
+| `tooLong` | string `.max(n)` | `max` |
+| `invalidLength` | `.length(n)` | `length` |
+| `invalidEmail` | `.email()` | |
+| `invalidDateTime` | `.dateTime()` | |
+| `invalidUri` | `.uri()` | `allowedSchemes` |
+| `invalidUrl` | `.url()` | `allowedSchemes` |
+| `invalidEmoji` | `.emoji()` | |
+| `invalidUuid` | `.uuid()` | |
+| `invalidCuid` | `.cuid()` | |
+| `invalidCuid2` | `.cuid2()` | |
+| `invalidIp` | `.ip()` | `version`, an `IpVersion?` |
+| `invalidPattern` | `.regex(p)` | `pattern`, the source string |
+| `missingPrefix` | `.startsWith(s)` | `prefix` |
+| `missingSuffix` | `.endsWith(s)` | `suffix` |
+| `missingSubstring` | `.contains(s)` | `substring` |
+| `notOneOf` | `l.oneOf([...])` | `allowed`, the list of values |
+| `invalidUnion` | `l.union([...])` when no option passes | `issues`, a `List<List<ValidationIssue>>`, one list per option |
+| `invalidKey` | `l.map()` when a key fails its key validator; reported at the map's path | `key`, and `issues`, the key validator's issues |
+| `unrecognizedKey` | `.strict()` for each unknown key; reported at the key's path | `key` |
+| `custom` | `.custom()` and `.customWithSchema()` when the function returns `false` or throws | |
+| `tooDeep` | Nesting deeper than `l.maxDepth` | `maxDepth` |
+| `fromJsonFailed` | `validateSchema` when `fromJson` throws | `error`, the thrown object |
+
+The default message for each code is on [Error messages](/reference/errors).

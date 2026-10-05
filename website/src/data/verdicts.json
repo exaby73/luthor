@@ -1,0 +1,1876 @@
+{
+  "generatedBy": "website/scripts/verdicts/bin/verdicts.dart",
+  "dart": "3.11.5",
+  "verdicts": {
+    "email": {
+      "title": "email.validate(input)",
+      "cases": [
+        {
+          "input": "'dev@example.com'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'bad'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidEmail",
+              "message": "value must be a valid email address"
+            }
+          ]
+        },
+        {
+          "input": "null",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "required",
+              "message": "value is required"
+            }
+          ]
+        }
+      ]
+    },
+    "email.named": {
+      "title": "email.validate(input)",
+      "cases": [
+        {
+          "input": "'bad'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidEmail",
+              "message": "email must be a valid email address"
+            }
+          ]
+        },
+        {
+          "input": "null",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "required",
+              "message": "email is required"
+            }
+          ]
+        }
+      ]
+    },
+    "hero": {
+      "title": "user.validate(input)",
+      "cases": [
+        {
+          "input": "{'email': 'dev@example.com', 'profile': {'displayName': 'Ada'}}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'email': 'dev@example.com', 'age': 42, 'profile': {'displayName': 'Ada'}}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'email': 'bad', 'age': 12, 'profile': {'displayName': 'x'}}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "email",
+              "code": "invalidEmail",
+              "message": "email must be a valid email address"
+            },
+            {
+              "path": "age",
+              "code": "tooSmall",
+              "message": "age must be greater than or equal to 18"
+            },
+            {
+              "path": "profile.displayName",
+              "code": "tooShort",
+              "message": "displayName must be at least 2 characters long"
+            }
+          ]
+        }
+      ]
+    },
+    "optional.email": {
+      "title": "l.string().email().validate(input)",
+      "cases": [
+        {
+          "input": "null",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'dev@example.com'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'bad'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidEmail",
+              "message": "value must be a valid email address"
+            }
+          ]
+        }
+      ]
+    },
+    "required.empty": {
+      "title": "l.string().required().validate(input)",
+      "cases": [
+        {
+          "input": "''",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "null",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "required",
+              "message": "value is required"
+            }
+          ]
+        }
+      ]
+    },
+    "messages.fixed": {
+      "title": "email.validate(input)",
+      "cases": [
+        {
+          "input": "'dev@example.com'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'bad'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidEmail",
+              "message": "Enter an email address"
+            }
+          ]
+        },
+        {
+          "input": "null",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "required",
+              "message": "Email is required"
+            }
+          ]
+        }
+      ]
+    },
+    "passthrough": {
+      "title": "l.schema({'name': l.string().required()}).passthrough().validate(input)",
+      "cases": [
+        {
+          "input": "{'name': 'Ada', 'role': 'admin'}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'role': 'admin'}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "name",
+              "code": "required",
+              "message": "name is required"
+            }
+          ]
+        }
+      ]
+    },
+    "strict": {
+      "title": "l.schema({'name': l.string().required()}).strict().validate(input)",
+      "cases": [
+        {
+          "input": "{'name': 'Ada'}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'name': 'Ada', 'role': 'admin'}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "role",
+              "code": "unrecognizedKey",
+              "message": "role is not an allowed key"
+            }
+          ]
+        }
+      ]
+    },
+    "schema.custom": {
+      "title": "dateRange.validate(input)",
+      "cases": [
+        {
+          "input": "{'start': '2026-01-01', 'end': '2026-02-01'}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'start': '2026-02-01', 'end': '2026-01-01'}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "custom",
+              "message": "end must be after start"
+            }
+          ]
+        },
+        {
+          "input": "{'start': 'yesterday', 'end': '2026-01-01'}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "start",
+              "code": "invalidDateTime",
+              "message": "start must be a valid date"
+            }
+          ]
+        }
+      ]
+    },
+    "node": {
+      "title": "node.validate(input)",
+      "cases": [
+        {
+          "input": "{'value': 'root', 'children': [{'value': 'leaf'}]}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'value': 'root', 'children': [{'value': 'a', 'children': [{'value': 1}]}]}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "children.0.children.0.value",
+              "code": "invalidType",
+              "message": "value must be a string"
+            }
+          ]
+        }
+      ]
+    },
+    "maxDepth": {
+      "title": "node.validate(input) with l.maxDepth = 4",
+      "cases": [
+        {
+          "input": "deep(1)",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "deep(5)",
+          "pass": false,
+          "issues": [
+            {
+              "path": "children.0.children.0.children",
+              "code": "tooDeep",
+              "message": "children is nested deeper than 4 levels"
+            }
+          ]
+        }
+      ]
+    },
+    "custom": {
+      "title": "evenNumber.validate(input)",
+      "cases": [
+        {
+          "input": "4",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "3",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "custom",
+              "message": "must be even"
+            }
+          ]
+        },
+        {
+          "input": "null",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'4'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidType",
+              "message": "value must be an integer"
+            }
+          ]
+        }
+      ]
+    },
+    "signUp": {
+      "title": "signUp.validate(input)",
+      "cases": [
+        {
+          "input": "{'password': 'hunter2hunter2', 'confirm': 'hunter2hunter2'}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'password': 'hunter2hunter2', 'confirm': 'nope'}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "confirm",
+              "code": "custom",
+              "message": "Passwords must match"
+            }
+          ]
+        },
+        {
+          "input": "{'password': 'hunter2hunter2'}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "confirm",
+              "code": "required",
+              "message": "confirm is required"
+            }
+          ]
+        }
+      ]
+    },
+    "account": {
+      "title": "account.validate(input)",
+      "cases": [
+        {
+          "input": "{'accountType': 'personal'}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'accountType': 'business', 'phone': '+44 20 7946 0958'}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'accountType': 'business'}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "accountType",
+              "code": "custom",
+              "message": "A business account needs a phone number"
+            }
+          ]
+        }
+      ]
+    },
+    "type.string": {
+      "title": "name.validate(input)",
+      "cases": [
+        {
+          "input": "'Ada'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "null",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "42",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidType",
+              "message": "value must be a string"
+            }
+          ]
+        }
+      ]
+    },
+    "type.int": {
+      "title": "count.validate(input)",
+      "cases": [
+        {
+          "input": "42",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "42.0",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidType",
+              "message": "value must be an integer"
+            }
+          ]
+        },
+        {
+          "input": "'42'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidType",
+              "message": "value must be an integer"
+            }
+          ]
+        }
+      ]
+    },
+    "type.double": {
+      "title": "ratio.validate(input)",
+      "cases": [
+        {
+          "input": "0.75",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "42",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidType",
+              "message": "value must be a double"
+            }
+          ]
+        },
+        {
+          "input": "double.nan",
+          "pass": true,
+          "issues": []
+        }
+      ]
+    },
+    "type.num": {
+      "title": "amount.validate(input)",
+      "cases": [
+        {
+          "input": "42",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "4.2",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'1'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidType",
+              "message": "value must be a number"
+            }
+          ]
+        }
+      ]
+    },
+    "type.bool": {
+      "title": "flag.validate(input)",
+      "cases": [
+        {
+          "input": "true",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "false",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'true'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidType",
+              "message": "value must be a bool"
+            }
+          ]
+        }
+      ]
+    },
+    "type.list": {
+      "title": "tags.validate(input)",
+      "cases": [
+        {
+          "input": "['a', 'b']",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "[]",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "['a', 1, null]",
+          "pass": false,
+          "issues": [
+            {
+              "path": "1",
+              "code": "invalidType",
+              "message": "value must be a string"
+            },
+            {
+              "path": "2",
+              "code": "required",
+              "message": "value is required"
+            }
+          ]
+        },
+        {
+          "input": "'a'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidType",
+              "message": "value must be a list"
+            }
+          ]
+        }
+      ]
+    },
+    "type.map": {
+      "title": "scores.validate(input)",
+      "cases": [
+        {
+          "input": "{'dev@example.com': 10}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'not-an-email': 'x'}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidKey",
+              "message": "value has an invalid key \"not-an-email\""
+            },
+            {
+              "path": "not-an-email",
+              "code": "invalidType",
+              "message": "value must be an integer"
+            }
+          ]
+        },
+        {
+          "input": "[]",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidType",
+              "message": "value must be a map"
+            }
+          ]
+        }
+      ]
+    },
+    "type.schema": {
+      "title": "user.validate(input)",
+      "cases": [
+        {
+          "input": "{'email': 'dev@example.com'}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'email': 'dev@example.com', 'age': 30, 'extra': true}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'email': 'bad', 'age': 12}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "email",
+              "code": "invalidEmail",
+              "message": "email must be a valid email address"
+            },
+            {
+              "path": "age",
+              "code": "tooSmall",
+              "message": "age must be greater than or equal to 18"
+            }
+          ]
+        },
+        {
+          "input": "{'age': 30}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "email",
+              "code": "required",
+              "message": "email is required"
+            }
+          ]
+        },
+        {
+          "input": "'not a map'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidType",
+              "message": "value must be a map"
+            }
+          ]
+        }
+      ]
+    },
+    "type.union": {
+      "title": "idOrEmail.validate(input)",
+      "cases": [
+        {
+          "input": "42",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'dev@example.com'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'bad'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidUnion",
+              "message": "value does not match any allowed option"
+            }
+          ]
+        },
+        {
+          "input": "0",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidUnion",
+              "message": "value does not match any allowed option"
+            }
+          ]
+        },
+        {
+          "input": "null",
+          "pass": true,
+          "issues": []
+        }
+      ]
+    },
+    "type.oneOf": {
+      "title": "role.validate(input)",
+      "cases": [
+        {
+          "input": "'admin'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'owner'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "notOneOf",
+              "message": "value must be one of: admin, member"
+            }
+          ]
+        },
+        {
+          "input": "'Admin'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "notOneOf",
+              "message": "value must be one of: admin, member"
+            }
+          ]
+        },
+        {
+          "input": "null",
+          "pass": true,
+          "issues": []
+        }
+      ]
+    },
+    "type.file": {
+      "title": "upload.validate(input)",
+      "cases": [
+        {
+          "input": "Uint8List.fromList([1, 2, 3])",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "<int>[1, 2, 3]",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "null",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'avatar.png'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidType",
+              "message": "value must be a file"
+            }
+          ]
+        },
+        {
+          "input": "{'path': 'avatar.png'}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidType",
+              "message": "value must be a file"
+            }
+          ]
+        }
+      ]
+    },
+    "type.any": {
+      "title": "payload.validate(input)",
+      "cases": [
+        {
+          "input": "42",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "null",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'k': 'v'}",
+          "pass": true,
+          "issues": []
+        }
+      ]
+    },
+    "type.nullValue": {
+      "title": "cleared.validate(input)",
+      "cases": [
+        {
+          "input": "null",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "1",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidType",
+              "message": "value must be null"
+            }
+          ]
+        }
+      ]
+    },
+    "mod.required": {
+      "title": "name.validate(input)",
+      "cases": [
+        {
+          "input": "'Ada'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "''",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "null",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "required",
+              "message": "value is required"
+            }
+          ]
+        }
+      ]
+    },
+    "mod.withName": {
+      "title": "l.string().email().withName('email').validate(input)",
+      "cases": [
+        {
+          "input": "'bad'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidEmail",
+              "message": "email must be a valid email address"
+            }
+          ]
+        }
+      ]
+    },
+    "str.min": {
+      "title": "password.validate(input)",
+      "cases": [
+        {
+          "input": "'hunter2hunter2'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'abc'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "tooShort",
+              "message": "value must be at least 8 characters long"
+            }
+          ]
+        }
+      ]
+    },
+    "str.max": {
+      "title": "code.validate(input)",
+      "cases": [
+        {
+          "input": "'abc'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'abcd'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "tooLong",
+              "message": "value must not be more than 3 characters long"
+            }
+          ]
+        }
+      ]
+    },
+    "str.length": {
+      "title": "iso.validate(input)",
+      "cases": [
+        {
+          "input": "'abc'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'abcd'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidLength",
+              "message": "value must be exactly 3 characters long"
+            }
+          ]
+        }
+      ]
+    },
+    "str.contains": {
+      "title": "handle.validate(input)",
+      "cases": [
+        {
+          "input": "'dev@example.com'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'a'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "missingSubstring",
+              "message": "value does not contain \"@\""
+            }
+          ]
+        }
+      ]
+    },
+    "str.startsWith": {
+      "title": "phone.validate(input)",
+      "cases": [
+        {
+          "input": "'+44 20 7946 0958'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'020 7946 0958'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "missingPrefix",
+              "message": "value does not start with \"+\""
+            }
+          ]
+        }
+      ]
+    },
+    "str.endsWith": {
+      "title": "path.validate(input)",
+      "cases": [
+        {
+          "input": "'main.dart'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'main.js'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "missingSuffix",
+              "message": "value does not end with \".dart\""
+            }
+          ]
+        }
+      ]
+    },
+    "str.regex": {
+      "title": "slug.validate(input)",
+      "cases": [
+        {
+          "input": "'hello-world'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'Hello World'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidPattern",
+              "message": "value must match the pattern ^[a-z0-9-]+$"
+            }
+          ]
+        }
+      ]
+    },
+    "str.email": {
+      "title": "email.validate(input)",
+      "cases": [
+        {
+          "input": "'dev@example.com'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'user@localhost'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'bad'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidEmail",
+              "message": "value must be a valid email address"
+            }
+          ]
+        }
+      ]
+    },
+    "str.uri": {
+      "title": "link.validate(input)",
+      "cases": [
+        {
+          "input": "'https://example.com'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'HTTPS://example.com'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'mailto:dev@example.com'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidUri",
+              "message": "value must be a valid uri. Allowed scheme is https"
+            }
+          ]
+        },
+        {
+          "input": "'not a uri at all'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidUri",
+              "message": "value must be a valid uri. Allowed scheme is https"
+            }
+          ]
+        }
+      ]
+    },
+    "str.url": {
+      "title": "avatar.validate(input)",
+      "cases": [
+        {
+          "input": "'https://example.com/docs'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'example.com'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidUrl",
+              "message": "value must be a valid URL"
+            }
+          ]
+        },
+        {
+          "input": "'mailto:dev@example.com'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidUrl",
+              "message": "value must be a valid URL"
+            }
+          ]
+        }
+      ]
+    },
+    "str.ip": {
+      "title": "v4.validate(input)",
+      "cases": [
+        {
+          "input": "'192.168.0.1'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'::1'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidIp",
+              "message": "value must be a valid IPv4 address"
+            }
+          ]
+        },
+        {
+          "input": "'999.1.1.1'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidIp",
+              "message": "value must be a valid IPv4 address"
+            }
+          ]
+        }
+      ]
+    },
+    "str.uuid": {
+      "title": "id.validate(input)",
+      "cases": [
+        {
+          "input": "'123e4567-e89b-12d3-a456-426614174000'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'123'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidUuid",
+              "message": "value must be a valid uuid"
+            }
+          ]
+        }
+      ]
+    },
+    "str.cuid": {
+      "title": "id.validate(input)",
+      "cases": [
+        {
+          "input": "'cjld2cjxh0000qzrmn831i7rn'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'xcjld2cjxh0000qzrmn831i7rn'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidCuid",
+              "message": "value must be a valid cuid"
+            }
+          ]
+        },
+        {
+          "input": "'123'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidCuid",
+              "message": "value must be a valid cuid"
+            }
+          ]
+        }
+      ]
+    },
+    "str.cuid2": {
+      "title": "id.validate(input)",
+      "cases": [
+        {
+          "input": "'tz4a98xxat96iws9zmbrgj3a'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'a'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'123'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidCuid2",
+              "message": "value must be a valid cuid2"
+            }
+          ]
+        }
+      ]
+    },
+    "str.dateTime": {
+      "title": "date.validate(input)",
+      "cases": [
+        {
+          "input": "'2026-10-04'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'2026-10-04T10:15:00Z'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'2023-02-30'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidDateTime",
+              "message": "value must be a valid date"
+            }
+          ]
+        },
+        {
+          "input": "'20261004'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidDateTime",
+              "message": "value must be a valid date"
+            }
+          ]
+        },
+        {
+          "input": "'yesterday'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidDateTime",
+              "message": "value must be a valid date"
+            }
+          ]
+        }
+      ]
+    },
+    "str.emoji": {
+      "title": "reaction.validate(input)",
+      "cases": [
+        {
+          "input": "'🎉'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'👨‍👩‍👧'",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "'→'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidEmoji",
+              "message": "value must be a valid emoji"
+            }
+          ]
+        },
+        {
+          "input": "'a'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidEmoji",
+              "message": "value must be a valid emoji"
+            }
+          ]
+        }
+      ]
+    },
+    "num.min": {
+      "title": "age.validate(input)",
+      "cases": [
+        {
+          "input": "18",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "17",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "tooSmall",
+              "message": "value must be greater than or equal to 18"
+            }
+          ]
+        }
+      ]
+    },
+    "num.min.double": {
+      "title": "ratio.validate(input)",
+      "cases": [
+        {
+          "input": "0.75",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "0.25",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "tooSmall",
+              "message": "value must be greater than or equal to 0.5"
+            }
+          ]
+        }
+      ]
+    },
+    "num.max": {
+      "title": "age.validate(input)",
+      "cases": [
+        {
+          "input": "100",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "101",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "tooBig",
+              "message": "value must be less than or equal to 100"
+            }
+          ]
+        }
+      ]
+    },
+    "num.max.double": {
+      "title": "ratio.validate(input)",
+      "cases": [
+        {
+          "input": "1.5",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "2.0",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "tooBig",
+              "message": "value must be less than or equal to 1.5"
+            }
+          ]
+        }
+      ]
+    },
+    "num.finite": {
+      "title": "price.validate(input)",
+      "cases": [
+        {
+          "input": "19.99",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "double.nan",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "notFinite",
+              "message": "value must be a finite number"
+            }
+          ]
+        },
+        {
+          "input": "double.infinity",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "notFinite",
+              "message": "value must be a finite number"
+            }
+          ]
+        }
+      ]
+    },
+    "defaults": {
+      "title": "default messages",
+      "rows": [
+        {
+          "validation": "l.string()",
+          "code": "invalidType",
+          "message": "value must be a string"
+        },
+        {
+          "validation": "l.int()",
+          "code": "invalidType",
+          "message": "value must be an integer"
+        },
+        {
+          "validation": "l.double()",
+          "code": "invalidType",
+          "message": "value must be a double"
+        },
+        {
+          "validation": "l.num()",
+          "code": "invalidType",
+          "message": "value must be a number"
+        },
+        {
+          "validation": "l.bool()",
+          "code": "invalidType",
+          "message": "value must be a bool"
+        },
+        {
+          "validation": "l.list(...)",
+          "code": "invalidType",
+          "message": "value must be a list"
+        },
+        {
+          "validation": "l.map()",
+          "code": "invalidType",
+          "message": "value must be a map"
+        },
+        {
+          "validation": "l.schema({...})",
+          "code": "invalidType",
+          "message": "value must be a map"
+        },
+        {
+          "validation": "l.file()",
+          "code": "invalidType",
+          "message": "value must be a file"
+        },
+        {
+          "validation": "l.nullValue()",
+          "code": "invalidType",
+          "message": "value must be null"
+        },
+        {
+          "validation": "l.union([...])",
+          "code": "invalidUnion",
+          "message": "value does not match any allowed option"
+        },
+        {
+          "validation": "l.oneOf(['a', 'b'])",
+          "code": "notOneOf",
+          "message": "value must be one of: a, b"
+        },
+        {
+          "validation": ".required()",
+          "code": "required",
+          "message": "value is required"
+        },
+        {
+          "validation": ".custom(f)",
+          "code": "custom",
+          "message": "value does not pass custom validation"
+        },
+        {
+          "validation": ".customWithSchema(f)",
+          "code": "custom",
+          "message": "value does not pass schema custom validation"
+        },
+        {
+          "validation": ".min(8) on a string",
+          "code": "tooShort",
+          "message": "value must be at least 8 characters long"
+        },
+        {
+          "validation": ".max(3) on a string",
+          "code": "tooLong",
+          "message": "value must not be more than 3 characters long"
+        },
+        {
+          "validation": ".length(3)",
+          "code": "invalidLength",
+          "message": "value must be exactly 3 characters long"
+        },
+        {
+          "validation": ".contains('@')",
+          "code": "missingSubstring",
+          "message": "value does not contain \"@\""
+        },
+        {
+          "validation": ".startsWith('+')",
+          "code": "missingPrefix",
+          "message": "value does not start with \"+\""
+        },
+        {
+          "validation": ".endsWith('.dart')",
+          "code": "missingSuffix",
+          "message": "value does not end with \".dart\""
+        },
+        {
+          "validation": ".regex(RegExp(r'^\\d+$'))",
+          "code": "invalidPattern",
+          "message": "value must match the pattern ^\\d+$"
+        },
+        {
+          "validation": ".email()",
+          "code": "invalidEmail",
+          "message": "value must be a valid email address"
+        },
+        {
+          "validation": ".uri()",
+          "code": "invalidUri",
+          "message": "value must be a valid uri"
+        },
+        {
+          "validation": ".uri(allowedSchemes: ['https'])",
+          "code": "invalidUri",
+          "message": "value must be a valid uri. Allowed scheme is https"
+        },
+        {
+          "validation": ".url()",
+          "code": "invalidUrl",
+          "message": "value must be a valid URL"
+        },
+        {
+          "validation": ".url(allowedSchemes: ['http', 'https'])",
+          "code": "invalidUrl",
+          "message": "value must be a valid URL. Allowed schemes are http, https"
+        },
+        {
+          "validation": ".ip()",
+          "code": "invalidIp",
+          "message": "value must be a valid IP address"
+        },
+        {
+          "validation": ".ip(version: IpVersion.v4)",
+          "code": "invalidIp",
+          "message": "value must be a valid IPv4 address"
+        },
+        {
+          "validation": ".uuid()",
+          "code": "invalidUuid",
+          "message": "value must be a valid uuid"
+        },
+        {
+          "validation": ".cuid()",
+          "code": "invalidCuid",
+          "message": "value must be a valid cuid"
+        },
+        {
+          "validation": ".cuid2()",
+          "code": "invalidCuid2",
+          "message": "value must be a valid cuid2"
+        },
+        {
+          "validation": ".dateTime()",
+          "code": "invalidDateTime",
+          "message": "value must be a valid date"
+        },
+        {
+          "validation": ".emoji()",
+          "code": "invalidEmoji",
+          "message": "value must be a valid emoji"
+        },
+        {
+          "validation": ".min(18) on a number",
+          "code": "tooSmall",
+          "message": "value must be greater than or equal to 18"
+        },
+        {
+          "validation": ".max(100) on a number",
+          "code": "tooBig",
+          "message": "value must be less than or equal to 100"
+        },
+        {
+          "validation": ".finite()",
+          "code": "notFinite",
+          "message": "value must be a finite number"
+        },
+        {
+          "validation": ".strict() unknown key",
+          "code": "unrecognizedKey",
+          "message": "role is not an allowed key"
+        },
+        {
+          "validation": "map key validator",
+          "code": "invalidKey",
+          "message": "value has an invalid key \"x\""
+        },
+        {
+          "validation": "l.maxDepth exceeded",
+          "code": "tooDeep",
+          "message": "value is nested deeper than 1 levels"
+        },
+        {
+          "validation": "fromJson threw",
+          "code": "fromJsonFailed",
+          "message": "value could not be converted"
+        }
+      ]
+    }
+  },
+  "outputs": {
+    "email.isValid": [
+      "true",
+      "false",
+      "false"
+    ],
+    "email.switch": [
+      "+ dev@example.com",
+      "- bad: value must be a valid email address",
+      "- null: value is required"
+    ],
+    "reuse": [
+      "true",
+      "false",
+      "false"
+    ],
+    "user.print": [
+      "ValidationFailure(errors: {email: [email must be a valid email address], age: [age must be greater than or equal to 18], profile.displayName: [displayName must be at least 2 characters long]})"
+    ],
+    "user.errors": [
+      "{\n  \"email\": [\n    \"email must be a valid email address\"\n  ],\n  \"age\": [\n    \"age must be greater than or equal to 18\"\n  ],\n  \"profile.displayName\": [\n    \"displayName must be at least 2 characters long\"\n  ]\n}"
+    ],
+    "user.getError": [
+      "email must be a valid email address",
+      "displayName must be at least 2 characters long",
+      "null",
+      "age must be greater than or equal to 18"
+    ],
+    "user.switch": [
+      "- displayName must be at least 2 characters long"
+    ],
+    "user.output": [
+      "ValidationSuccess(data: {email: dev@example.com, profile: {displayName: Ada}})"
+    ],
+    "user.fromJson": [
+      "ValidationSuccess(data: User(email: dev@example.com, age: null))",
+      "dev@example.com"
+    ],
+    "user.fromJson.fail": [
+      "ValidationFailure(errors: {email: [email must be a valid email address], age: [age must be greater than or equal to 18], profile.displayName: [displayName must be at least 2 characters long]})"
+    ],
+    "chain.messages": [
+      "[value must be at least 8 characters long, value does not contain \"@\"]"
+    ],
+    "typefail": [
+      "[value must be a string]"
+    ],
+    "names": [
+      "value must be a valid email address",
+      "email must be a valid email address",
+      "{email: [email must be a valid email address]}"
+    ],
+    "required.anywhere": [
+      "[value must be at least 3 characters long]",
+      "[value must be at least 3 characters long]"
+    ],
+    "typed.output": [
+      "int",
+      "List<String>"
+    ],
+    "optional.schema": [
+      "true",
+      "true",
+      "false"
+    ],
+    "order.errors": [
+      "{\n  \"id\": [\n    \"id must be a valid uuid\"\n  ],\n  \"items.1.qty\": [\n    \"qty must be greater than or equal to 1\"\n  ],\n  \"items.2.sku\": [\n    \"sku is required\"\n  ],\n  \"items.2.qty\": [\n    \"qty must be an integer\"\n  ],\n  \"address.city\": [\n    \"city is required\"\n  ],\n  \"scores\": [\n    \"scores has an invalid key \\\"not-an-email\\\"\"\n  ],\n  \"scores.not-an-email\": [\n    \"scores must be an integer\"\n  ]\n}"
+    ],
+    "order.issues": [
+      "ValidationIssue(code: invalidUuid, path: id, message: id must be a valid uuid)",
+      "ValidationIssue(code: tooSmall, path: items.1.qty, message: qty must be greater than or equal to 1)",
+      "ValidationIssue(code: required, path: items.2.sku, message: sku is required)",
+      "ValidationIssue(code: invalidType, path: items.2.qty, message: qty must be an integer)",
+      "ValidationIssue(code: required, path: address.city, message: city is required)",
+      "ValidationIssue(code: invalidKey, path: scores, message: scores has an invalid key \"not-an-email\")",
+      "ValidationIssue(code: invalidType, path: scores.not-an-email, message: scores must be an integer)"
+    ],
+    "order.getErrors": [
+      "qty must be greater than or equal to 1",
+      "[]",
+      "scores has an invalid key \"not-an-email\"",
+      "scores must be an integer",
+      "city is required",
+      "null"
+    ],
+    "order.objectLevel": [
+      "{: [order must have at least one item]}",
+      "order must have at least one item"
+    ],
+    "order.isValid": [
+      "false",
+      "7"
+    ],
+    "issue.fields": [
+      "tooSmall",
+      "tooSmall",
+      "[]",
+      "",
+      "age must be greater than or equal to 18",
+      "{min: 18}",
+      "age"
+    ],
+    "issue.toString": [
+      "ValidationIssue(code: tooSmall, path: , message: age must be greater than or equal to 18)"
+    ],
+    "issue.code.switch": [
+      "too small",
+      "wrong type",
+      "missing"
+    ],
+    "success.views": [
+      "{}",
+      "[]",
+      "null",
+      "[]"
+    ],
+    "result.toString": [
+      "ValidationSuccess(data: dev@example.com)",
+      "ValidationFailure(errors: {: [value must be a valid email address]})",
+      "ValidationFailure(errors: {email: [email must be a valid email address]})"
+    ],
+    "no.shortcircuit": [
+      "[value must be an integer]",
+      "[value must be at least 8 characters long, value does not contain \"@\"]"
+    ],
+    "messages.builder": [
+      "[at least 8 characters]",
+      "[at least 8 characters]",
+      "[password: password must be at least 8 characters long]"
+    ],
+    "messages.precedence": [
+      "[fixed]"
+    ],
+    "messages.global": [
+      "{email: [keine gültige E-Mail-Adresse], age: [age must be greater than or equal to 18]}",
+      "[Wert fehlt]",
+      "[Pflichtfeld]"
+    ],
+    "messages.global.reset": [
+      "[value is required]"
+    ],
+    "person.nested": [
+      "{home.postcode: [postcode must match the pattern ^\\d{5}$]}",
+      "postcode must match the pattern ^\\d{5}$"
+    ],
+    "unknown.strip": [
+      "ValidationSuccess(data: {name: Ada})"
+    ],
+    "unknown.passthrough": [
+      "ValidationSuccess(data: {name: Ada, role: admin})"
+    ],
+    "unknown.strict": [
+      "ValidationFailure(errors: {role: [role is not an allowed key]})",
+      "role is not an allowed key"
+    ],
+    "schema.custom.getError": [
+      "end must be after start"
+    ],
+    "node.getError": [
+      "value must be a string"
+    ],
+    "mutual": [
+      "{posts.0.author.name: [name must be a string]}"
+    ],
+    "schema.notmap": [
+      "[value must be a map]",
+      "[send an object]"
+    ],
+    "schema.nested.notmap": [
+      "{profile: [profile must be a map]}"
+    ],
+    "fromJson.throws": [
+      "ValidationFailure(errors: {: [value could not be converted]})",
+      "ValidationFailure(errors: {: [value is required]})"
+    ],
+    "depth.default": [
+      "512",
+      "true"
+    ],
+    "depth.small": [
+      "ValidationFailure(errors: {children.0.children.0.children: [children is nested deeper than 4 levels]})",
+      "{maxDepth: 4}"
+    ],
+    "depth.reset": [
+      "512"
+    ],
+    "custom.default": [
+      "[value does not pass custom validation]",
+      "[value does not pass custom validation]"
+    ],
+    "schemaData.root": [
+      "{lines.1.currency: [line currency must match the order currency]}"
+    ],
+    "customWithSchema.outside": [
+      "true"
+    ],
+    "type.list.nullable": [
+      "ValidationSuccess(data: [1, null])",
+      "ValidationFailure(errors: {1: [value is required]})"
+    ],
+    "type.map.errors": [
+      "{: [value has an invalid key \"not-an-email\"], not-an-email: [value must be an integer]}"
+    ],
+    "type.map.plain": [
+      "ValidationSuccess(data: {a: 1})",
+      "{a: [value must be a int]}"
+    ],
+    "type.schema.output": [
+      "ValidationSuccess(data: {email: dev@example.com, age: 30})"
+    ],
+    "type.union.issue": [
+      "invalidUnion",
+      "[ValidationIssue(code: invalidType, path: , message: value must be an integer)]",
+      "[ValidationIssue(code: invalidEmail, path: , message: value must be a valid email address)]"
+    ],
+    "type.oneOf.output": [
+      "ValidationSuccess(data: 1)",
+      "ValidationSuccess(data: admin)"
+    ],
+    "type.file.accept": [
+      "true"
+    ],
+    "type.any.required": [
+      "[value is required]"
+    ],
+    "mod.withName.schema": [
+      "{contact: [contact must be a valid email address]}"
+    ],
+    "str.regex.flags": [
+      "true",
+      "true"
+    ],
+    "str.uri.plain": [
+      "true",
+      "false"
+    ],
+    "str.url.schemes": [
+      "[value must be a valid URL. Allowed scheme is https]"
+    ],
+    "str.ip.any": [
+      "true",
+      "[value must be a valid IP address]",
+      "[value must be a valid IPv6 address]"
+    ],
+    "num.finite.without": [
+      "true",
+      "true"
+    ]
+  }
+}

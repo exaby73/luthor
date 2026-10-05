@@ -1,85 +1,116 @@
 ---
-title: Message functions
-description: Replace a default error message with a fixed string or with a function that runs when the validation fails.
+title: Message builders
+description: Replace a default error message with a fixed string, a function of the issue, or one global builder for every message.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../components/Output.astro';
 import Verdict from '../../../components/Verdict.astro';
 
-Every type and modifier has a default message, listed on [Error messages](/reference/errors). Two named parameters change it: `message` and `messageFn`. Every generator annotation takes the same two.
+Every validation has a default message, listed on [Error messages](/reference/errors). Three things can replace it: `message` on the validation, `messageBuilder` on the validation, and `l.messageBuilder` for the whole isolate. Every generator annotation takes the first two.
 
 ## A fixed message
 
 `message` replaces the default with the string you pass. The field name is not inserted; the string is used as is.
 
 ```dart
-final email = l.string().email(message: 'Enter an email address').required(message: 'Email is required');
+final email = l
+    .string()
+    .email(message: 'Enter an email address')
+    .required(message: 'Email is required');
 ```
 
-<Verdict
-  title="email.validateValue(input)"
-  cases={[
-    { input: "'dev@example.com'", pass: true },
-    { input: "'bad'", pass: false, message: 'Enter an email address' },
-    { input: 'null', pass: false, message: 'Email is required' },
-  ]}
-/>
+<Verdict id="messages.fixed" />
 
-## A message function
+## A message builder
 
-`messageFn` is a `String? Function()`. Luthor calls it when the validation fails and uses what it returns. It takes no arguments. Use it when the message depends on state that is not known when the validator is built, such as the current locale, or when building the message is costly.
+`messageBuilder` is a `String Function(ValidationIssue issue)`. Luthor calls it when the validation fails, with the issue it is about to report. The issue carries the default message, the code, the path, the params and the field name, so the builder can use any of them.
 
 ```dart
-String? tooShort() => tr('password.tooShort');
+String short(ValidationIssue issue) => 'at least ${issue.params['min']} characters';
 
-final password = l.string().min(8, messageFn: tooShort);
+l.string().min(8, messageBuilder: short).validate('ab').messages;
+l.string().min(8, messageBuilder: short).withName('password').validate('ab').messages;
+l.string().min(8, messageBuilder: (issue) => '${issue.fieldName}: ${issue.message}')
+    .withName('password')
+    .validate('ab')
+    .messages;
 ```
 
-If the function returns `null`, the default message is used.
+<Output id="messages.builder" />
+
+## One builder for every message
+
+Set `l.messageBuilder` to translate or restyle every message in one place. It runs for every issue that has no `message` or `messageBuilder` of its own. Switch on `issue.code` and return `issue.message` for the codes you do not handle.
+
+```dart
+l.messageBuilder = (issue) => switch (issue.code) {
+  IssueCode.required => '${issue.fieldName ?? 'Wert'} fehlt',
+  IssueCode.invalidEmail => 'keine gültige E-Mail-Adresse',
+  _ => issue.message,
+};
+
+l.schema({'email': l.string().email().required(), 'age': l.int().min(18)})
+    .validate({'email': 'bad', 'age': 3})
+    .errors;
+l.string().required().validate(null).messages;
+l.string().required(message: 'Pflichtfeld').validate(null).messages;
+```
+
+<Output id="messages.global" />
+
+Set it back to `null` to restore the defaults.
 
 ## Precedence
 
-When both are given, `message` wins over `messageFn`, and `messageFn` wins over the default.
+For each issue: `message` on the validation, then `messageBuilder` on the validation, then `l.messageBuilder`, then the default.
 
-```dart
-l.string().min(8, message: 'fixed', messageFn: () => 'from function').validateValue('ab');
-// errors: [fixed]
-```
+<Output id="messages.precedence" title="l.string().min(8, message: 'fixed', messageBuilder: (issue) => 'built').validate('ab').messages" />
 
 ## With the generator
 
-Annotations accept the same parameters. `messageFn` has to be a top-level function or a static method, because the generated code refers to it by name.
+Annotations accept `message` and `messageBuilder`. A `messageBuilder` has to be a top-level function or a static method, because annotation arguments are constants and the generated code refers to the function by name.
 
 <Tabs syncKey="codegen">
   <TabItem label="Hand-written">
 
 ```dart
-final email = l.string().email(messageFn: Messages.email).required();
+bool isEven(int value) => value.isEven;
+
+String seatMessage(ValidationIssue issue) => 'Seat ${issue.params['min']} or higher';
+
+final ticket = l.schema({
+  'seat': l.int().custom(isEven, message: 'must be even').required(),
+  'row': l.int().min(1, messageBuilder: seatMessage).required(),
+});
 ```
 
   </TabItem>
   <TabItem label="Generated">
 
 ```dart
-class Messages {
-  static String? email() => 'Enter an email address';
-}
+bool isEven(int value) => value.isEven;
+
+String seatMessage(ValidationIssue issue) =>
+    'Seat ${issue.params['min']} or higher';
 
 @luthor
 @freezed
-abstract class SignUp with _$SignUp {
-  const factory SignUp({
-    @IsEmail(messageFn: Messages.email) required String email,
-  }) = _SignUp;
+abstract class Ticket with _$Ticket {
+  const factory Ticket({
+    @WithCustomValidator(isEven, message: 'must be even') required int seat,
+    @HasMin(1, messageBuilder: seatMessage) required int row,
+  }) = _Ticket;
 
-  factory SignUp.fromJson(Map<String, dynamic> json) => _$SignUpFromJson(json);
+  factory Ticket.fromJson(Map<String, dynamic> json) => _$TicketFromJson(json);
 }
-// generated: l.string().email(messageFn: Messages.email).required()
 ```
 
   </TabItem>
 </Tabs>
 
+<Verdict id="gen.ticket" />
+
 ## Field names
 
-Default messages start with the field name: the schema key, or the name given to `withName`, or `value` when there is neither. A custom `message` does not get the name added, so include it yourself if the message will be shown away from its field.
+Default messages start with the field name: the schema key, or the name given to `withName`, or `value` when there is neither. A custom `message` does not get the name added, so include it yourself if the message will be shown away from its field. A builder gets it as `issue.fieldName`.

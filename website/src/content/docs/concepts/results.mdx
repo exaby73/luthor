@@ -1,46 +1,54 @@
 ---
-title: Results and errors
-description: The two sealed result types, the shape of the error map, error paths, and getError.
+title: Results and issues
+description: The sealed ValidationResult, the issues behind it, and the four ways to read errors from any result.
 ---
 
-Luthor never throws for invalid input. Each validation call returns a sealed result with a success case and an error case. This page describes both results and the error map that schema validation produces. [The reference](/reference/results) lists the members.
+import Output from '../../../components/Output.astro';
 
-## Single-value validation
+Luthor never throws for invalid input. `validate` and `validateSchema` return a `ValidationResult<T>` with two cases: `ValidationSuccess<T>` holding the output, and `ValidationFailure<T>` holding a list of issues. Everything else you can read from a result is derived from those issues. [The reference](/reference/results) lists the members.
 
-`validateValue` returns `SingleValidationResult<T>`, where `T` is the type of the value you passed in.
+## Matching on the result
+
+The result is sealed, so a `switch` has to handle both cases and the compiler tells you when one is missing. Object patterns pull the fields out.
 
 ```dart
-final result = l.string().min(8).contains('@').validateValue('ab');
+final result = l.string().email().required().validate(input);
 
 switch (result) {
-  case SingleValidationSuccess(data: final value):
-    // value is 'ab'
-  case SingleValidationError(data: final value, errors: final errors):
-    // errors is a List<String>:
-    // [value must be at least 8 characters long, value does not contain "@"]
+  case ValidationSuccess(:final data):
+    sendTo(data);
+  case ValidationFailure(:final issues):
+    for (final issue in issues) {
+      log(issue.code, issue.errorPath, issue.message);
+    }
 }
 ```
 
-`isValid` is available on both cases for the times you only need a boolean. `data` is the input, unchanged, on both cases.
+`T` is the validator's output type, `String` here. With `validateSchema` and a `fromJson`, `T` is your model.
 
-## Schema validation
+## Issues are the source
 
-`validateSchema` returns `SchemaValidationResult<T>`. Without `fromJson`, `T` is the input map type and `data` is the input. With `fromJson`, `T` is your model, `data` is the converted model on success, and `data` is `null` on failure because conversion did not run.
+A `ValidationIssue` records one problem: a `code` such as `IssueCode.tooSmall`, the `path` to the value inside the input, the `message`, the `params` the check used, and the `fieldName` that went into the message.
 
 ```dart
-final result = userSchema.validateSchema<User>(json, fromJson: User.fromJson);
-
-switch (result) {
-  case SchemaValidationSuccess(data: final user):
-    // user is a User
-  case SchemaValidationError(errors: final errors):
-    // errors is a Map<String, dynamic>
-}
+final issue = l.int().min(18).withName('age').validate(12).issues.single;
+print(issue);
 ```
 
-## The error map
+<Output id="issue.toString" />
 
-A schema error holds an error map keyed by field name. A field whose validator is a plain chain maps to a `List<String>` of messages. A field whose validator is a nested schema maps to a nested error map. Fields that passed are absent.
+Switch on the code when the UI needs to react to the kind of problem rather than show the text. The set of codes is open, so keep a default case. [ValidationIssue and IssueCode](/reference/issues) lists every code and its params.
+
+## Four views of the same issues
+
+Every result, success or failure, exposes the issues in four shapes. On a success all four are empty, so you can read them without matching first.
+
+| View | Type | Use it for |
+|---|---|---|
+| `issues` | `List<ValidationIssue>` | Logging, telemetry, switching on codes |
+| `messages` | `List<String>` | A flat list of text, for a toast or a log line |
+| `errors` | `Map<String, List<String>>` | Form fields: messages grouped by error path |
+| `getError(path)`, `getErrors(path)` | `String?`, `List<String>` | One field's first message, or all of them |
 
 ```dart
 final user = l.schema({
@@ -51,49 +59,41 @@ final user = l.schema({
   }).required(),
 });
 
-user.validateSchema({
+final result = user.validate({
   'email': 'bad',
   'age': 12,
   'profile': {'displayName': 'x'},
 });
 ```
 
-The error map for that input:
+<Output id="user.errors" title="result.errors" lang="json" />
+
+<Output id="user.getError" title="result.getError('email'), ('profile.displayName'), ('profile'), ('age')" />
+
+`getError('profile')` is `null` because the issue sits at `profile.displayName`, not at `profile`. [Errors and error paths](/concepts/errors) explains the paths.
+
+## Success data is the output, not the input
+
+A schema or list returns a new collection of the validated values. For a schema, that means unknown keys are gone unless the schema has `.passthrough()`:
+
+<Output id="user.output" title="user.validate({...valid, 'extra': 1})" />
+
+## Converting to a model
+
+`validateSchema` takes a `fromJson` and runs it on the output map after every field passed. The success case then holds the model.
 
 ```dart
-{
-  'email': ['email must be a valid email address'],
-  'age': ['age must be greater than or equal to 18'],
-  'profile': {
-    'displayName': ['displayName must be at least 2 characters long'],
-  },
-}
+final result = user.validateSchema(json, fromJson: User.fromJson);
 ```
 
-A map field validated with `keyValidator` or `valueValidator` nests its messages under `keys` and `values`, so a map that happens to contain a key named `keys` cannot collide with them. [`l.map()`](/reference/types/map) shows the shape.
+<Output id="user.fromJson" />
 
-## Error paths and `getError`
+Two things that used to throw are now failures: a `fromJson` that throws becomes a `fromJsonFailed` issue, and `null` input becomes a `required` issue.
 
-`SchemaValidationError.getError` takes an error path, a dot-separated chain of field names, and returns the first message at that path, or `null` when the field passed.
-
-```dart
-if (result case SchemaValidationError()) {
-  result.getError('email');               // email must be a valid email address
-  result.getError('profile.displayName'); // displayName must be at least 2 characters long
-  result.getError('profile');             // null: profile holds a nested map, not messages
-}
-```
-
-`getError` throws a `StateError` if the path points at a nested map rather than a list of messages, as in the last line's sibling case where `profile` itself failed with nested errors. Ask for the leaf field.
-
-With the generator, the `ErrorKeys` record holds every error path of a model as a typed constant, so `result.getError(UserErrorKeys.profile.displayName)` replaces the string. [Schema keys and error keys](/generator/keys) covers it.
+<Output id="fromJson.throws" />
 
 ## Printing a result
 
-Both result types override `toString`, which is what the examples on this site print:
+Both cases override `toString`. The failure form prints the error map.
 
-```txt
-SingleValidationSuccess(data: dev@example.com)
-SingleValidationError(data: bad, errors: [value must be a valid email address])
-SchemaValidationError(data: {email: bad}, errors: {email: [email must be a valid email address]})
-```
+<Output id="result.toString" />

@@ -4,33 +4,32 @@ description: Requires a string of exactly a given number of characters.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when `value.length` equals `length`.
+Passes when `value.length` equals `length`. Throws `ArgumentError` for a negative length.
 
 ## Signature
 
 ```dart wrap
-StringValidator length(int length, {String? message, String? Function()? messageFn})
+StringValidator<O> length(int length, {String? message, MessageBuilder? messageBuilder})
 ```
-
-Available on `l.string()`.
 
 ## Parameters
 
 | Parameter | Type | Meaning |
 |---|---|---|
-| `length` | `int` | The only accepted length. Must be 0 or more. |
+| `length` | `int` | The only accepted length. `params['length']`. |
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value must be exactly 3 characters long`. `value` is replaced by the field name when there is one.
+Code `invalidLength`. Default message: `value must be exactly 3 characters long`. `value` is replaced by the field name when there is one.
 
 ## Code generation
 
-`@HasLength(n)`. Put the annotation on the constructor parameter.
+`@HasLength(n)`. Put the annotation on the constructor parameter or the field.
 
 ## Example
 
@@ -51,10 +50,4 @@ final iso = l.string().length(3);
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="iso.validateValue(input)"
-  cases={[
-    { input: "'abc'", pass: true },
-    { input: "'abcd'", pass: false, message: "value must be exactly 3 characters long" },
-  ]}
-/>
+<Verdict id="str.length" />

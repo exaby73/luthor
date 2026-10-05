@@ -1,84 +1,92 @@
 ---
 title: How validators work
-description: What a validator is, how chaining builds one, why they are immutable, and where field names in messages come from.
+description: What a validator is, how chaining builds one, why the output is typed, and where field names in messages come from.
 ---
 
-A validator is an immutable object that holds an ordered list of validations. Validating a value runs every validation in order and collects the messages of the ones that fail. This page explains the model behind the API so the reference pages make sense.
+import Output from '../../../components/Output.astro';
+
+A validator is an immutable object that holds a type check and an ordered list of validations, and produces a typed output when a value passes. This page explains the model behind the API so the reference pages make sense.
 
 ## Everything starts from `l`
 
-`l` is a top-level getter that returns a fresh, empty `Validator`. The first method you call on it is usually a type, such as `string()`, `int()`, or `schema()`. A type adds one validation that checks the Dart type of the value, and for `string`, `int`, `double`, and `number` it returns a validator that also has the modifiers for that type.
+`l` is the validator factory. Its type methods each start a validator with one type check: `string()`, `int()`, `double()`, `num()`, `bool()`, `list()`, `map()`, `schema()`, `union()`, `oneOf()`, `file()`, `any()` and `nullValue()`. Type methods exist only on `l`, so `l.string().int()` does not compile. Each returns a validator class with the modifiers that fit its type.
 
 ```dart
-l.string()  // has .email(), .min(), .regex(), and the other string modifiers
-l.int()     // has .min() and .max()
-l.list()    // no type-specific modifiers
+l.string();          // StringValidator: .email(), .min(), .regex(), and the other string modifiers
+l.int();             // NumberValidator<int, int?>: .min(), .max(), .finite()
+l.schema({});        // SchemaValidator: .passthrough(), .strict(), validateSchema()
+l.list(l.string());  // ListValidator: only the shared modifiers
 ```
 
-`.required()`, `.custom()`, and `.customWithSchema()` return a plain `Validator`, so call the type-specific modifiers before them.
+Every validator has the shared modifiers `required()`, `withName()`, `custom()` and `customWithSchema()`. `l.nullValue()` is the exception: it has only `withName()`.
 
 ## Chaining adds validations
 
-A modifier returns a new validator with one more validation appended. Order matters only for the order of messages. Every validation runs, so a failed input can produce several messages at once.
+A modifier returns a new validator with one more validation appended, and the return type is the same validator class, so modifiers chain in any order. `l.string().required().min(3)` and `l.string().min(3).required()` are the same validator.
+
+<Output id="required.anywhere" />
+
+Validations run in chain order, and every validation after the type check runs, so one failed input can carry several messages. The type check is the one exception: when it fails, nothing else runs.
+
+<Output id="chain.messages" title="l.string().min(8).contains('@').validate('ab').messages" />
+<Output id="typefail" title="l.string().email().validate(42).messages" />
+
+## The output is typed
+
+The type parameter of a validator is its output type. `l.string()` is a `StringValidator<String?>`, and `.required()` narrows it to `StringValidator<String>`. On success, `data` has that type, so you get a `String` or a `List<int>` without a cast or any generated code.
 
 ```dart
-l.string().min(8).contains('@').validateValue('ab');
-// errors: [value must be at least 8 characters long, value does not contain "@"]
+final count = l.int().required().validate(42);
+if (count case ValidationSuccess(:final data)) {
+  print(data.runtimeType); // data is an int
+}
+
+final tags = l.list(l.string().required()).required().validate(['a']);
+if (tags case ValidationSuccess(:final data)) {
+  print(data.runtimeType); // data is a List<String>
+}
 ```
+
+<Output id="typed.output" />
+
+Schemas, lists and maps produce a new collection of the validated values rather than returning the input. [Schemas](/concepts/schemas) covers what that means for unknown keys.
 
 ## Validators are immutable
 
-Chaining never changes the validator you chained from. A base validator can be shared and extended in several places without the extensions affecting each other. Define common validators once, at the top level or in a class, and reuse them across schemas.
+Chaining never changes the validator you chained from. A base validator can be shared and extended in several places without the extensions affecting each other. Define common validators once and reuse them across schemas.
 
 ```dart
 final text = l.string();
 final email = text.email();
-final shortCode = text.length(6);
+final uuid = text.uuid();
 
-text.validateValue('hello').isValid;      // true
-email.validateValue('hello').isValid;     // false
-shortCode.validateValue('hello').isValid; // false
+text.validate('anything').isValid;
+email.validate('anything').isValid;
+uuid.validate('anything').isValid;
 ```
 
-## Validations do not short-circuit
-
-A string modifier on a non-string input reports the type failure, and the other validations still run and report too. When you show one message, show the first.
-
-```dart
-l.string().email().validateValue(42);
-// errors: [value must be a string, value must be a valid email address]
-```
+<Output id="reuse" />
 
 ## Field names in messages
 
-Default messages start with the field name. Outside a schema there is none, so messages say `value`. Set one with `withName`. Inside a schema, the field key is the name.
+Default messages start with a field name. Validated on its own, a validator has none and messages say `value`. `withName()` sets one. Inside a schema, the field key is the name, and `withName` on the field's validator is ignored.
 
 ```dart
-l.string().email().validateValue('bad');
-// value must be a valid email address
-
-l.withName('email').string().email().validateValue('bad');
-// email must be a valid email address
-
-l.schema({'email': l.string().email()}).validateSchema({'email': 'bad'});
-// {email: [email must be a valid email address]}
+l.string().email().validate('bad').messages.first;
+l.string().email().withName('email').validate('bad').messages.first;
+l.schema({'email': l.string().email()}).validate({'email': 'bad'}).errors;
 ```
 
-Call `withName` on `l`, before the type. Every generated schema starts with `l.withName('ModelName')`.
+<Output id="names" />
+
+Every generated schema ends in `.withName('ModelName')`, which names the model in the `must be a map` message when the input is not a map.
 
 ## Custom messages
 
-Every type and modifier accepts `message` and `messageFn`. `message` is a fixed string. `messageFn` is a function called when the validation fails, for messages that depend on runtime state such as a locale. When both are given, `message` wins.
-
-```dart
-l.string().required(message: 'Email is required');
-l.string().min(8, messageFn: () => tr('password.tooShort'));
-```
-
-The generator annotations take the same two parameters. `messageFn` has to be a top-level function or a static method so the generated code can refer to it.
+Every type and modifier accepts `message`, a fixed string, and `messageBuilder`, a function that receives the issue and returns the string. `l.messageBuilder` sets one builder for every message. [Message builders](/concepts/messages) covers all three.
 
 ## Where to go next
 
 - [Optional by default](/concepts/optional-by-default) covers how `null` and missing fields are treated.
-- [Results and errors](/concepts/results) covers the two result types and the error map.
-- [Schemas](/concepts/schemas) covers nesting, reuse, and forward references.
+- [Results and issues](/concepts/results) covers `ValidationResult` and `ValidationIssue`.
+- [Schemas](/concepts/schemas) covers nesting, unknown keys, and forward references.

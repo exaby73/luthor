@@ -1,0 +1,95 @@
+---
+title: Upgrading to 1.0
+description: Every 0.x call and its 1.0 replacement, for the runtime and the generator, plus the behaviour changes to check.
+---
+
+1.0 renames a few methods, replaces the two result types with one, and changes how errors are shaped. This page is the migration list, built from the two changelogs. Work through the tables, then the behaviour changes, then run your tests.
+
+## Requirements
+
+Dart 3.11 or Flutter 3.41 or later. For the generator, your project's `analyzer` has to resolve between 10 and 14, which every Flutter release from 3.41 does. With `freezed`, use 3.2.x on Dart 3.11 and 4 on Dart 3.13 or later.
+
+```yaml title="pubspec.yaml"
+dependencies:
+  luthor: ^1.0.0
+dev_dependencies:
+  luthor_generator: ^1.0.0
+```
+
+## Runtime calls
+
+| 0.x | 1.0 |
+|---|---|
+| `l.number()` | `l.num()` |
+| `l.boolean()` | `l.bool()` |
+| `v.validateValue(x)` | `v.validate(x)` |
+| `schema.validateSchema(map)` | `schema.validate(map)` |
+| `schema.validateSchema<User>(map, fromJson: User.fromJson)` | `schema.validateSchema(map, fromJson: User.fromJson)` |
+| `SingleValidationResult<T>`, `SchemaValidationResult<T>` | `ValidationResult<T>` |
+| `SingleValidationSuccess(data:)`, `SchemaValidationSuccess(data:)` | `ValidationSuccess(:final data)` |
+| `SingleValidationError(errors:)` | `ValidationFailure(:final messages)` |
+| `SchemaValidationError(errors:)` | `ValidationFailure(:final errors)` |
+| `(result as SchemaValidationError).getError('a.b')` | `result.getError('a.b')`, on any result |
+| `errors['[DEFAULT]']` | `result.getErrors('')` |
+| `l.list(validators: [v])` | `l.list(v)` |
+| `l.list(validators: [a, b])` | `l.list(l.union([a, b]))` |
+| `l.list()` | `l.list(l.any())` |
+| `l.custom(f)`, `l.required()` | `l.any().custom(f)`, `l.any().required()` |
+| `l.withName('x').string()` | `l.string().withName('x')` |
+| `l.string().regex(r'^\d+$')` | `l.string().regex(RegExp(r'^\d+$'))` |
+| `messageFn: () => 'text'` | `messageBuilder: (issue) => 'text'` |
+| `custom((Object? value) => ...)` | `custom((value) => ...)`, where `value` has the validator's type |
+| `customWithSchema((value, Map data) => ...)` | `customWithSchema((value, SchemaData data) => ...)` |
+| `Validator v = l.string()` | `StringValidator v = l.string()` |
+| `Validator(initialValidations: ...)` | Removed. Start from `l`. |
+
+## Annotations
+
+| 0.x | 1.0 |
+|---|---|
+| `@HasMinDouble(1.5)`, `@HasMinNumber(1)` | `@HasMin(1.5)`, `@HasMin(1)` |
+| `@HasMaxDouble(1.5)`, `@HasMaxNumber(1)` | `@HasMax(1.5)`, `@HasMax(1)` |
+| `@IsEmail(messageFn: f)` | `@IsEmail(messageBuilder: f)`, where `f` takes a `ValidationIssue` |
+| `@WithCustomValidator(bool Function(Object?) f)` | `@WithCustomValidator(f)`, where `f` takes the field's type |
+| `@WithSchemaCustomValidator(bool Function(Object?, Map) f)` | `@WithSchemaCustomValidator(f)`, where `f` takes the field's type and `SchemaData` |
+| `@MatchRegex(r'...')` | Unchanged. The generator builds the `RegExp`. New flags: `caseSensitive`, `multiLine`, `unicode`, `dotAll`. |
+| `@luthorForwardRef` | Deprecated, no effect. Remove it; every nested reference is a forward reference now. |
+
+## Generated code
+
+| 0.x | 1.0 |
+|---|---|
+| `Validator $XSchema` | `final SchemaValidator $XSchema` |
+| `$XValidate(Map<String, dynamic>)` returning `SchemaValidationResult<X>` | `$XValidate(Object?)` returning `ValidationResult<X>` |
+| `XErrorKeys.address` for a nested model: a record of paths | The same record plus `$key`, the nested field's own path |
+| Public `$YSchema`, `YSchemaKeys`, `$YValidate` for a class without `@luthor` | Private `_$YSchema` only. Annotate `Y` with `@luthor` for the public API. |
+| `validateSelf()` on every model | Only on models with `toJson()` or a `dart_mappable` `toMap()` |
+| `build.yaml` with `source_gen:combining_builder` for plain classes | Not needed |
+
+## Behaviour changes to check
+
+These change results without changing your code. Each links to the page that explains the new behaviour.
+
+- **Unknown keys are stripped.** The output of a schema, and the map a generated `fromJson` receives, contain only declared fields. Add `.passthrough()` to keep extra keys. [Schemas](/concepts/schemas#unknown-keys).
+- **Validation stops after a failed type check.** `l.int().min(1).validate('5')` reports one issue, not two. [How validators work](/concepts/validators#chaining-adds-validations).
+- **Custom validators are not called for `null`** and receive the typed value. Add `.required()` where `null` must fail. [Custom validators](/concepts/custom-validators).
+- **`customWithSchema` outside a schema runs** with empty `SchemaData` instead of passing automatically.
+- **List element errors are per element**, at `items.1`, not one message for the list. Map value errors sit at `scores.key`; key errors are `invalidKey` issues at `scores`. [Errors and error paths](/concepts/errors).
+- **Object-level errors** from `.custom()` on a schema are at `''`, not mixed into field errors.
+- **`getError` never throws** and returns `null` for a path that holds nested errors.
+- **`withName` returns a copy** and no longer renames the receiver. Call it on the validator, not on `l`.
+- **`l.nullValue()` has no `.required()`.**
+- **Recursive schemas validate every level.** Input that used to pass because nested levels were skipped may now fail. [`forwardRef()`](/reference/forward-ref).
+- **Deep input fails with `tooDeep`** past `l.maxDepth`, default 512. [Max depth](/concepts/max-depth).
+- **Stricter formats.** `dateTime()` rejects impossible dates and the basic format; `uri()` requires a scheme; `emoji()` rejects arrows and punctuation; `cuid()` is anchored at the start; `ip()` matches the whole string and accepts `::1`. See each modifier's reference page.
+- **`l.file()` is structural.** `File`, `TypedData`, `ByteBuffer`, `List<int>` and `Stream<List<int>>` pass; a class named like a file does not. Use `accept:` for package types. [`l.file()`](/reference/types/file).
+- **Default messages changed in places**: `must be a map` is lowercase, the regex message names the pattern, and list messages no longer say "or does not match the validations". [Error messages](/reference/errors).
+- **Generated enums validate.** An enum field used to be unsupported; it now generates `l.oneOf()` of the serialized values.
+- **`@IsFile` works on any field type**, including package classes such as `MultipartFile` and lists of them, with `accept:` receiving the whole value.
+- **Generated annotation order follows source order.** `@HasMin(8) @HasMax(200)` generates `.min(8).max(200)`.
+- **Generation fails for** `freezed` unions, generic models, and annotations on a field type they do not apply to. These used to generate code that skipped validation.
+- **`double` fields still generate `l.double()`**, which rejects JSON integers. Type the field as `num` if your API may send `1` for `1.0`. [Supported field types](/generator/types).
+
+## Removed
+
+`Validation`, the concrete `*Validation` classes, and the internal members `validations`, `schemaValidation`, `hasRequiredValidation`, `setSchemaDataForValidations`, `validateValueWithFieldName` and `validateSchemaWithFieldName` are no longer exported. `luthor_generator`'s internals moved under `lib/src`; `package:luthor_generator/builder.dart` and `package:luthor_generator/luthor_generator.dart` are the public entry points.

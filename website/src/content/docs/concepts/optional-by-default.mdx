@@ -1,32 +1,26 @@
 ---
 title: Optional by default
-description: Why a Luthor validator accepts null until you add .required(), and what that means for schema fields.
+description: Why a Luthor validator accepts null until you add .required(), and what that means for schema fields and custom validators.
 ---
 
+import Output from '../../../components/Output.astro';
 import Verdict from '../../../components/Verdict.astro';
 
 A validator with no `.required()` accepts `null`. Inside a schema, it also accepts a missing field. This is the opposite of Zod, where every schema is required until you call `.optional()`, and it is deliberate.
 
 ## The design choice
 
-Dart's null safety is explicit: a `String?` says in the type that the value may be absent, and a `String` says it may not. Luthor follows the same rule. The validator describes the shape of a value when it is present. Whether it has to be present is a separate decision, so it is a separate modifier.
+Dart's null safety is explicit: a `String?` says in the type that the value may be absent, and a `String` says it may not. Luthor follows the same rule. The validator describes the shape of a value when it is present. Whether it has to be present is a separate decision, so it is a separate modifier, and the output type tracks it: `l.string()` validates to `String?`, `l.string().required()` to `String`.
 
-The generator depends on this. It maps a Dart type to a validator and then adds `.required()` when the parameter is non-nullable and has no `@Default`. A `String? nickname` becomes `l.string()`, a `String name` becomes `l.string().required()`. The schema and the type agree without any extra annotation.
+The generator depends on this. It maps a Dart type to a validator and adds `.required()` when the parameter is non-nullable and has no default. A `String? nickname` becomes `l.string()`, a `String name` becomes `l.string().required()`. The schema and the type agree without any extra annotation.
 
 ## What optional means
 
-For a single value, every type and modifier validation accepts `null`. A [custom validator](/concepts/custom-validators) is the exception: it receives `null` and decides for itself.
+For a single value, `null` passes the type check and skips every other validation on the chain, including custom validators. A custom validator is never called with `null`.
 
-<Verdict
-  title="l.string().email().validateValue(input)"
-  cases={[
-    { input: 'null', pass: true },
-    { input: "'dev@example.com'", pass: true },
-    { input: "'bad'", pass: false, message: 'value must be a valid email address' },
-  ]}
-/>
+<Verdict id="optional.email" />
 
-For a schema field, a missing key skips every validation on that field, including custom validators. A schema custom validator on an optional field never runs for input that leaves the field out. A key that is present with a `null` value is validated like a single value. If a check only makes sense when the field exists, make the field required, or attach the check to a field that is always present.
+For a schema field, a missing key skips every validation on that field. A key that is present with a `null` value is validated like a single value, which also passes unless the field is required. The field does not appear in the output when it was missing, and appears as `null` when it was present.
 
 ```dart
 final schema = l.schema({
@@ -34,25 +28,23 @@ final schema = l.schema({
   'nickname': l.string().min(2),
 });
 
-schema.validateSchema({'email': 'dev@example.com'}).isValid;                  // true
-schema.validateSchema({'email': 'dev@example.com', 'nickname': null}).isValid; // true
-schema.validateSchema({'email': 'dev@example.com', 'nickname': 'x'}).isValid;  // false
+schema.validate({'email': 'dev@example.com'}).isValid;
+schema.validate({'email': 'dev@example.com', 'nickname': null}).isValid;
+schema.validate({'email': 'dev@example.com', 'nickname': 'x'}).isValid;
 ```
+
+<Output id="optional.schema" />
+
+A consequence for [schema custom validators](/concepts/custom-validators): a rule on an optional field never runs for input that leaves the field out. Put a rule such as "phone is required for business accounts" on `accountType`, which is always present, and read `phone` from the schema data.
 
 ## What required means
 
 `.required()` adds one validation: the value is not `null`. A missing schema field counts as `null`. It says nothing about emptiness. An empty string or an empty list passes `.required()`. Use `.min(1)` on a string, or a custom validator on a list, when you need content.
 
-<Verdict
-  title="l.string().required().validateValue(input)"
-  cases={[
-    { input: "''", pass: true },
-    { input: 'null', pass: false, message: 'value is required' },
-  ]}
-/>
+<Verdict id="required.empty" />
 
-Required in Luthor is unrelated to Dart's `required` keyword. The keyword decides whether a caller has to pass an argument. The modifier decides whether `null` is a valid value. The generator reads nullability, not the keyword: `required String? note` produces an optional validator.
+Required in Luthor is unrelated to Dart's `required` keyword. The keyword decides whether a caller has to pass an argument. The modifier decides whether `null` is a valid value. The generator reads nullability and defaults, not the keyword: `required String? note` produces an optional validator, and so does `@Default('en') String locale`.
 
 ## Where `.required()` goes in a chain
 
-Put `.required()` last. Type-specific modifiers such as `.email()` and `.min()` belong before it, so the type and its modifiers read as one unit and the chain type-checks.
+Anywhere. Every modifier returns the validator's own type, so `l.string().required().min(3)` and `l.string().min(3).required()` compile and behave the same. The convention in these docs is to put `.required()` last so the type and its modifiers read as one unit.

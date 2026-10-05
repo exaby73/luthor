@@ -4,41 +4,33 @@ description: Requires a Map, optionally validating keys and values.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when the value is a `Map` and, if given, every key passes `keyValidator` and every value passes `valueValidator`. Use [`l.schema()`](/reference/types/schema) instead when the keys are known field names.
+Passes when the value is a `Map` and, if given, every key passes `keyValidator` and every value passes `valueValidator`. Without validators, keys and values are only checked to be of type `K` and `V`. A value failure is reported at the key's path, such as `scores.alice`. A key failure is one `invalidKey` issue at the map's own path, so key and value errors never share a path. The output is a new `Map<K, V>` of the valid entries. Use [`l.schema()`](/reference/types/schema) when the keys are known field names.
 
 ## Signature
 
 ```dart wrap
-Validator map({ValidatorReference? keyValidator, ValidatorReference? valueValidator, String? message, String? Function()? messageFn})
+MapValidator<K, V, Map<K, V>?> map<K, V>({ValidatorReference<K>? keyValidator, ValidatorReference<V>? valueValidator, String? message, MessageBuilder? messageBuilder})
 ```
 
 ## Parameters
 
 | Parameter | Type | Meaning |
 |---|---|---|
-| `keyValidator` | `ValidatorReference?` | Run against every key. |
-| `valueValidator` | `ValidatorReference?` | Run against every value. |
+| `keyValidator` | `ValidatorReference<K>?` | Runs on every key. |
+| `valueValidator` | `ValidatorReference<V>?` | Runs on every value. |
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value must be a Map` when the value is not a map. Key and value failures produce an error map with `keys` and `values` entries, each keyed by the offending map key:
-
-```dart
-{
-  'keys': {'not-an-email': ['value must be a valid email address']},
-  'values': {'not-an-email': ['value must be an integer']},
-}
-```
-
-`validateSchema` returns that shape. `validateValue` flattens it to a list of `key: message` strings. Inside a schema it nests under the field name.
+Code `invalidType`. Default message: `value must be a map` when the value is not a map. A failing key produces `value has an invalid key "k"` with code `invalidKey`, `params['key']` and `params['issues']`. Values carry their own validator's code. `value` is replaced by the field name when there is one.
 
 ## Code generation
 
-A `Map<K, V>` parameter maps to `l.map(keyValidator: ..., valueValidator: ...)` with validators derived from `K` and `V`. Non-nullable `K` and `V` get `.required()`; a non-nullable field gets `.required()` on the map itself. A `Map<String, Comment>` inside `Comment` wraps the value validator in `forwardRef()`.
+A `Map<K, V>` parameter maps to `l.map(keyValidator:, valueValidator:)` with validators derived from `K` and `V`. JSON object keys are strings, so a key type of `int`, `double`, `num` or `BigInt` becomes `l.string().custom(...)` that parses the string, and an enum key becomes `l.oneOf()` of the serialized names.
 
 ## Example
 
@@ -63,11 +55,12 @@ required Map<String, int> scores,
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="scores.validateValue(input)"
-  cases={[
-    { input: "{'dev@example.com': 10}", pass: true },
-    { input: "{'not-an-email': 'x'}", pass: false, message: ["not-an-email: value must be a valid email address", "not-an-email: value must be an integer"] },
-    { input: "[]", pass: false, message: "value must be a Map" },
-  ]}
-/>
+<Verdict id="type.map" />
+
+The error map for the failing input, with the key error at the map's path and the value error at the key's path:
+
+<Output id="type.map.errors" />
+
+Without validators, only the type arguments are checked:
+
+<Output id="type.map.plain" />

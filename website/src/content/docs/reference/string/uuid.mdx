@@ -4,32 +4,31 @@ description: Requires the string to be a UUID.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when the string has the eight-four-four-four-twelve hexadecimal shape of a UUID.
+Passes when the string has the 8-4-4-4-12 hexadecimal shape of a UUID. Any version and variant digit is accepted.
 
 ## Signature
 
 ```dart wrap
-StringValidator uuid({String? message, String? Function()? messageFn})
+StringValidator<O> uuid({String? message, MessageBuilder? messageBuilder})
 ```
-
-Available on `l.string()`.
 
 ## Parameters
 
 | Parameter | Type | Meaning |
 |---|---|---|
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value must be a valid uuid`. `value` is replaced by the field name when there is one.
+Code `invalidUuid`. Default message: `value must be a valid uuid`. `value` is replaced by the field name when there is one.
 
 ## Code generation
 
-`@IsUuid()`, or the constant `@isUuid`. Put the annotation on the constructor parameter.
+`@IsUuid()`, or the constant `@isUuid`. Put the annotation on the constructor parameter or the field.
 
 ## Example
 
@@ -50,10 +49,4 @@ final id = l.string().uuid();
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="id.validateValue(input)"
-  cases={[
-    { input: "'123e4567-e89b-12d3-a456-426614174000'", pass: true },
-    { input: "'123'", pass: false, message: "value must be a valid uuid" },
-  ]}
-/>
+<Verdict id="str.uuid" />

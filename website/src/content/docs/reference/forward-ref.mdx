@@ -3,39 +3,71 @@ title: 'forwardRef()'
 description: Refer to a validator that is defined later, or to the schema being defined.
 ---
 
-`forwardRef()` wraps a function that returns a validator. Luthor calls the function at validation time, so the validator it returns can be one that is still being defined when the schema literal is built. [Schemas](/concepts/schemas) has the explanation; this page lists the facts.
+import Output from '../../../components/Output.astro';
+import Verdict from '../../../components/Verdict.astro';
+
+`forwardRef()` wraps a function that returns a validator. Luthor calls the function each time a value is validated, so the validator it returns can be one that is still being defined when the schema literal is built. [Schemas](/concepts/schemas) has the explanation.
 
 ## Signature
 
-```dart wrap
-ValidatorReference forwardRef(Validator Function() resolver)
+```dart
+ValidatorReference<O> forwardRef<O>(Validator<O> Function() resolver)
+
+abstract interface class ValidatorReference<O> {
+  Validator<O> resolve();
+}
 ```
 
-`ValidatorReference` is the interface shared by `Validator` and forward references. It has one method, `resolve()`, which returns the `Validator`. Every place that takes a validator inside a schema, a list, or a map is typed as `ValidatorReference`, so a forward reference fits wherever a validator does.
+`ValidatorReference` is the interface shared by every validator and every forward reference. Schema fields, list elements, map keys and values, and union options are all typed as `ValidatorReference`, so a forward reference fits wherever a validator does.
 
 ## Parameters
 
 | Parameter | Type | Meaning |
 |---|---|---|
-| `resolver` | `Validator Function()` | Called each time the reference is resolved. Return the validator to use, with any modifiers such as `.required()` applied inside the function. |
+| `resolver` | `Validator<O> Function()` | Called on each validation. Return the validator to use, with modifiers such as `.required()` applied inside the function. |
 
 ## Example
 
 ```dart
-late final Validator node;
+late final SchemaValidator node;
 node = l.schema({
   'value': l.string().required(),
-  'children': l.list(validators: [forwardRef(() => node.required())]),
+  'children': l.list(forwardRef(() => node.required())),
 });
 ```
 
-Two schemas that refer to each other follow the same pattern: declare both as `late final` and wrap each reference to the other.
+<Verdict id="node" />
+
+Every level is validated, and the error path says where:
+
+<Output id="node.getError" title="node.validate(...).getError('children.0.children.0.value')" />
+
+Two schemas that refer to each other follow the same pattern:
+
+```dart
+late final SchemaValidator author;
+late final SchemaValidator post;
+author = l.schema({
+  'name': l.string().required(),
+  'posts': l.list(forwardRef(() => post.required())),
+});
+post = l.schema({
+  'title': l.string().required(),
+  'author': forwardRef(() => author),
+});
+```
+
+<Output id="mutual" />
+
+Recursion is bounded by the input and by [`l.maxDepth`](/concepts/max-depth).
 
 ## Code generation
 
-The generator wraps a field in `forwardRef()` when the field's type is the model's own class, directly or as a `List` element or `Map` value. For a reference from one model to a different model that refers back, annotate the parameter with `@luthorForwardRef`.
+The generator wraps every reference to another model's schema in `forwardRef()`, so self-referential and mutually recursive models work without any annotation.
 
-```dart wrap
-List<Comment>? replies,        // forwardRef(() => $CommentSchema.required()) inside l.list()
-@luthorForwardRef User? user,  // forwardRef(() => $UserSchema)
+`@luthorForwardRef` and its class `LuthorForwardRef` are deprecated. The generator still accepts the annotation, and the generated code is the same with or without it. Remove it; the analyzer reports a deprecation warning while it is there. Hand-written `forwardRef()` in runtime code is unaffected and still needed for a hand-written schema that refers to itself.
+
+```dart
+List<Node>? children, // l.list(forwardRef(() => $NodeSchema.required()))
+Node? parent,         // forwardRef(() => $NodeSchema)
 ```

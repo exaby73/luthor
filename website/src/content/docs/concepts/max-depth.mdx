@@ -1,0 +1,60 @@
+---
+title: Max depth
+description: How l.maxDepth bounds nesting in validated input, and why the limit fails closed.
+---
+
+import Output from '../../../components/Output.astro';
+import Verdict from '../../../components/Verdict.astro';
+
+Schemas, lists, maps and unions nest. A recursive schema built with `forwardRef()` nests as deep as its input does, and untrusted input can be very deep. `l.maxDepth` is the limit: when a nesting validator sits deeper than that inside the value, validation stops there with a `tooDeep` issue.
+
+## The default
+
+The default is `512`, also available as `ValidatorFactory.defaultMaxDepth`. A tree 100 levels deep validates without touching it.
+
+```dart
+late final SchemaValidator node;
+node = l.schema({
+  'value': l.string().required(),
+  'children': l.list(forwardRef(() => node.required())),
+});
+
+Object deep(int n) =>
+    n == 0 ? {'value': 'leaf'} : {'value': 'n$n', 'children': [deep(n - 1)]};
+
+print(l.maxDepth);
+print(node.validate(deep(100)).isValid);
+```
+
+<Output id="depth.default" />
+
+## Lowering it
+
+Set `l.maxDepth` before validating. The setting is read on each `validate` call, so it applies to validators built earlier. Depth counts every nesting validator on the way down: a schema field is one level, a list element another.
+
+```dart
+l.maxDepth = 4;
+final result = node.validate(deep(5));
+print(result);
+print(result.issues.single.params);
+```
+
+<Output id="depth.small" />
+
+<Verdict id="maxDepth" />
+
+The issue is reported at the path where the limit was crossed, with `params['maxDepth']` set to the limit.
+
+## It fails closed
+
+Input beyond the limit is reported as invalid, never accepted unchecked. That is the point of the guard: a recursive schema facing a hostile payload returns a failure instead of a `StackOverflowError`.
+
+## Restoring the default
+
+```dart
+l.maxDepth = ValidatorFactory.defaultMaxDepth;
+```
+
+<Output id="depth.reset" />
+
+The setting is global to the isolate, like `l.messageBuilder`. Set it once at startup rather than around individual calls.

@@ -1,0 +1,47 @@
+---
+title: 'l, the validator factory'
+description: The object every validator starts from, and the two global settings it holds.
+---
+
+import Output from '../../../components/Output.astro';
+
+`l` is the single instance of `ValidatorFactory`. Every validator starts with one of its type methods, and it holds the settings that apply to every validation in the isolate.
+
+## Type methods
+
+| Method | Returns | Output type before and after `.required()` |
+|---|---|---|
+| [`string()`](/reference/types/string) | `StringValidator` | `String?`, `String` |
+| [`int()`](/reference/types/int) | `NumberValidator<int, _>` | `int?`, `int` |
+| [`double()`](/reference/types/double) | `NumberValidator<double, _>` | `double?`, `double` |
+| [`num()`](/reference/types/num) | `NumberValidator<num, _>` | `num?`, `num` |
+| [`bool()`](/reference/types/bool) | `BoolValidator` | `bool?`, `bool` |
+| [`list(element)`](/reference/types/list) | `ListValidator<E, _>` | `List<E>?`, `List<E>` |
+| [`map()`](/reference/types/map) | `MapValidator<K, V, _>` | `Map<K, V>?`, `Map<K, V>` |
+| [`schema(fields)`](/reference/types/schema) | `SchemaValidator` | `Map<String, Object?>?`, `Map<String, Object?>` |
+| [`union(options)`](/reference/types/union) | `UnionValidator` | `Object?`, `Object` |
+| [`oneOf(values)`](/reference/types/one-of) | `OneOfValidator<T, _>` | `T?`, `T` |
+| [`file()`](/reference/types/file) | `FileValidator` | `Object?`, `Object` |
+| [`any()`](/reference/types/any) | `AnyValidator` | `Object?`, `Object` |
+| [`nullValue()`](/reference/types/null-value) | `NullValidator` | `Null`; has no `required()` |
+
+Type methods exist only on `l`. `l.string().int()` does not compile. Every type method except `any()` takes `message` and `messageBuilder` for its type check. `IntValidator`, `DoubleValidator` and `NumValidator` are typedefs for the three `NumberValidator` forms.
+
+## Settings
+
+| Setting | Type | Default | Meaning |
+|---|---|---|---|
+| `l.messageBuilder` | `MessageBuilder?` | `null` | Builds the message of every issue that has no `message` or `messageBuilder` of its own. [Message builders](/concepts/messages). |
+| `l.maxDepth` | `int` | `512`, also `ValidatorFactory.defaultMaxDepth` | How deep schemas, lists, maps and unions may nest inside a value before validation stops with a `tooDeep` issue. [Max depth](/concepts/max-depth). |
+
+Both are read when `validate` is called, so a change applies to validators built earlier.
+
+```dart
+print(l.maxDepth);
+l.maxDepth = 4;
+// ...
+l.maxDepth = ValidatorFactory.defaultMaxDepth;
+print(l.maxDepth);
+```
+
+<Output id="depth.reset" />

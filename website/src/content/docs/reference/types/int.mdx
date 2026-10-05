@@ -1,17 +1,18 @@
 ---
 title: 'l.int()'
-description: Requires an int and unlocks the number modifiers.
+description: Requires an int and gives access to the number modifiers.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when the value is an `int`. Returns a validator with [`.min()`](/reference/number/min) and [`.max()`](/reference/number/max). A `double` with an integral value, such as `42.0`, fails. JSON decoded with `dart:convert` gives `int` for `42` and `double` for `42.0`, so an API that may send either should use [`l.number()`](/reference/types/number).
+Passes when the value `is int`. Returns an `IntValidator`, a `NumberValidator<int, int?>` with [`.min()`](/reference/number/min), [`.max()`](/reference/number/max) and [`.finite()`](/reference/number/finite). On the VM, `42.0` is a `double` and fails. On the web every number is a JavaScript number, so `42.0 is int` is true there. For JSON that may carry either form, use [`l.num()`](/reference/types/num).
 
 ## Signature
 
 ```dart wrap
-IntValidator int({String? message, String? Function()? messageFn})
+NumberValidator<int, int?> int({String? message, MessageBuilder? messageBuilder})
 ```
 
 ## Parameters
@@ -19,15 +20,15 @@ IntValidator int({String? message, String? Function()? messageFn})
 | Parameter | Type | Meaning |
 |---|---|---|
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value must be an integer`. `value` is replaced by the field name when there is one.
+Code `invalidType`. Default message: `value must be an integer`. `value` is replaced by the field name when there is one.
 
 ## Code generation
 
-An `int` parameter maps to `l.int()`. `@HasMin(n)` and `@HasMax(n)` add `.min(n)` and `.max(n)`.
+An `int` parameter maps to `l.int()`. `@HasMin(n)` and `@HasMax(n)` add `.min(n)` and `.max(n)`; a fractional `n` on an `int` field fails generation.
 
 ## Example
 
@@ -48,11 +49,4 @@ final count = l.int();
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="count.validateValue(input)"
-  cases={[
-    { input: "42", pass: true },
-    { input: "42.0", pass: false, message: "value must be an integer" },
-    { input: "'42'", pass: false, message: "value must be an integer" },
-  ]}
-/>
+<Verdict id="type.int" />

@@ -4,32 +4,31 @@ description: Requires the string to be a CUID2.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when the string is lowercase alphanumeric and starts with a letter. That is the whole CUID2 grammar, so short strings such as `'a'` pass too. Add [`.length()`](/reference/string/length) if you generate CUID2s of a fixed length.
+Passes when the string is a lowercase letter followed by lowercase letters and digits. That is the whole CUID2 grammar, so any lowercase word passes. Add [`.length()`](/reference/string/length) if you generate CUID2s of a fixed length.
 
 ## Signature
 
 ```dart wrap
-StringValidator cuid2({String? message, String? Function()? messageFn})
+StringValidator<O> cuid2({String? message, MessageBuilder? messageBuilder})
 ```
-
-Available on `l.string()`.
 
 ## Parameters
 
 | Parameter | Type | Meaning |
 |---|---|---|
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value must be a valid cuid2`. `value` is replaced by the field name when there is one.
+Code `invalidCuid2`. Default message: `value must be a valid cuid2`. `value` is replaced by the field name when there is one.
 
 ## Code generation
 
-`@IsCuid2()`, or the constant `@isCuid2`. Put the annotation on the constructor parameter.
+`@IsCuid2()`, or the constant `@isCuid2`. Put the annotation on the constructor parameter or the field.
 
 ## Example
 
@@ -50,10 +49,4 @@ final id = l.string().cuid2();
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="id.validateValue(input)"
-  cases={[
-    { input: "'tz4a98xxat96iws9zmbrgj3a'", pass: true },
-    { input: "'123'", pass: false, message: "value must be a valid cuid2" },
-  ]}
-/>
+<Verdict id="str.cuid2" />

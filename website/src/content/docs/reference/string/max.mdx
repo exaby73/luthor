@@ -4,33 +4,32 @@ description: Requires a string of at most a given number of characters.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when `value.length` is at most `maxLength`.
+Passes when `value.length` is at most `maxLength`. Throws `ArgumentError` for a negative length.
 
 ## Signature
 
 ```dart wrap
-StringValidator max(int maxLength, {String? message, String? Function()? messageFn})
+StringValidator<O> max(int maxLength, {String? message, MessageBuilder? messageBuilder})
 ```
-
-Available on `l.string()`.
 
 ## Parameters
 
 | Parameter | Type | Meaning |
 |---|---|---|
-| `maxLength` | `int` | The largest accepted length. Must be 0 or more. |
+| `maxLength` | `int` | The largest accepted length. `params['max']`. |
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value must not be more than 3 characters long`. `value` is replaced by the field name when there is one.
+Code `tooLong`. Default message: `value must not be more than 3 characters long`. `value` is replaced by the field name when there is one.
 
 ## Code generation
 
-`@HasMax(n)` on a `String` parameter. On an `int` parameter the same annotation means a maximum value. Put the annotation on the constructor parameter.
+`@HasMax(n)` on a `String` field. On a number field it means a maximum value. Put the annotation on the constructor parameter or the field.
 
 ## Example
 
@@ -51,10 +50,4 @@ final code = l.string().max(3);
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="code.validateValue(input)"
-  cases={[
-    { input: "'abc'", pass: true },
-    { input: "'abcd'", pass: false, message: "value must not be more than 3 characters long" },
-  ]}
-/>
+<Verdict id="str.max" />

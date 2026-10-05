@@ -1,0 +1,32 @@
+---
+title: Use Luthor with AI coding agents
+description: Install the Luthor agent skill so a coding agent knows the API and the generator before it writes code.
+---
+
+A coding agent that has not seen Luthor tends to invent methods or write 0.x calls. The Luthor skill teaches agents the Luthor API and code generation.
+
+## Install the skill
+
+```sh
+npx skills add exaby73/luthor
+```
+
+The command adds the skill to your project's agent skills directory, where tools that read the skills format pick it up. The skill lives in the Luthor repository under `skills/luthor/`.
+
+## What to tell the agent
+
+The skill covers the API. Your project still has to say which setup it uses, because the generator supports several. One line in your agent instructions is enough:
+
+```md
+Models use freezed with @luthor. Run `dart run build_runner build` after changing a model.
+```
+
+Or, for a project without a generator:
+
+```md
+Validation uses hand-written luthor schemas in lib/validation/. Do not add luthor_generator.
+```
+
+## Checking the result
+
+Generated or hand-written, the same checks apply. `dart analyze` catches a 0.x call, because the renamed methods no longer exist in 1.0. For the rest, [Upgrading to 1.0](/guides/upgrading) lists the behaviour changes an agent trained on older examples is most likely to get wrong: unknown keys are stripped, custom validators are not called for `null`, and errors are a flat map keyed by path.

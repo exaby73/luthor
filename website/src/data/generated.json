@@ -1,0 +1,321 @@
+{
+  "generatedBy": "website/scripts/generated/bin/check.dart",
+  "dart": "3.13.4",
+  "verdicts": {
+    "gen.tutorial": {
+      "title": "$UserValidate(input)",
+      "cases": [
+        {
+          "input": "{'name': 'Ada', 'email': 'ada@example.com', 'age': 36}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'name': 'Ada', 'email': 'ada@example.com'}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'name': 'A', 'email': 'ada', 'age': 12}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "name",
+              "code": "tooShort",
+              "message": "name must be at least 2 characters long"
+            },
+            {
+              "path": "email",
+              "code": "invalidEmail",
+              "message": "email must be a valid email address"
+            },
+            {
+              "path": "age",
+              "code": "tooSmall",
+              "message": "age must be greater than or equal to 18"
+            }
+          ]
+        },
+        {
+          "input": "'not a map'",
+          "pass": false,
+          "issues": [
+            {
+              "path": "",
+              "code": "invalidType",
+              "message": "User must be a map"
+            }
+          ]
+        }
+      ]
+    },
+    "gen.user": {
+      "title": "$UserValidate(input)",
+      "cases": [
+        {
+          "input": "{'name': 'Ada', 'email_address': 'ada@example.com', 'age': 36, 'role': 'admin', 'address': {...}}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'name': 'A', 'email_address': 'ada', 'age': 12, 'role': 'owner', 'address': {..., 'postcode': '12'}}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "name",
+              "code": "tooShort",
+              "message": "name must be at least 2 characters long"
+            },
+            {
+              "path": "email_address",
+              "code": "invalidEmail",
+              "message": "email_address must be a valid email address"
+            },
+            {
+              "path": "age",
+              "code": "tooSmall",
+              "message": "age must be greater than or equal to 18"
+            },
+            {
+              "path": "role",
+              "code": "notOneOf",
+              "message": "role must be one of: admin, member"
+            },
+            {
+              "path": "address.postcode",
+              "code": "invalidPattern",
+              "message": "postcode must match the pattern ^\\d{5}$"
+            }
+          ]
+        }
+      ]
+    },
+    "gen.registration": {
+      "title": "$RegistrationValidate(input)",
+      "cases": [
+        {
+          "input": "{'name': 'Ada', 'email_address': 'ada@example.com', 'password': 'hunter2hunter2', 'confirm': 'hunter2hunter2', 'accountType': 'personal', 'age': 36, 'address': {...}}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'name': 'A', 'email_address': 'ada', 'password': 'short', 'confirm': 'different', 'accountType': 'business', 'age': 17, 'address': {..., 'postcode': '12'}}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "name",
+              "code": "tooShort",
+              "message": "name must be at least 2 characters long"
+            },
+            {
+              "path": "email_address",
+              "code": "invalidEmail",
+              "message": "email_address must be a valid email address"
+            },
+            {
+              "path": "password",
+              "code": "tooShort",
+              "message": "password must be at least 8 characters long"
+            },
+            {
+              "path": "confirm",
+              "code": "custom",
+              "message": "Passwords must match"
+            },
+            {
+              "path": "accountType",
+              "code": "custom",
+              "message": "A business account needs a phone number"
+            },
+            {
+              "path": "age",
+              "code": "tooSmall",
+              "message": "age must be greater than or equal to 18"
+            },
+            {
+              "path": "address.postcode",
+              "code": "invalidPattern",
+              "message": "postcode must match the pattern ^\\d{5}$"
+            }
+          ]
+        }
+      ]
+    },
+    "gen.signUp": {
+      "title": "$SignUpValidate(input)",
+      "cases": [
+        {
+          "input": "{'name': 'Ada', 'email': 'ada@example.com', 'password': 'hunter2hunter2', 'confirm': 'hunter2hunter2', 'website': 'https://ada.dev'}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'name': 'Ada', 'email': 'ada@example.com', 'password': 'hunter2hunter2', 'confirm': 'nope', 'website': 'http://ada.dev', 'accountType': 'team'}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "confirm",
+              "code": "custom",
+              "message": "Passwords must match"
+            },
+            {
+              "path": "website",
+              "code": "invalidUrl",
+              "message": "website must be a valid URL. Allowed scheme is https"
+            },
+            {
+              "path": "accountType",
+              "code": "notOneOf",
+              "message": "accountType must be one of: personal, business"
+            }
+          ]
+        }
+      ]
+    },
+    "gen.node": {
+      "title": "$NodeValidate(input)",
+      "cases": [
+        {
+          "input": "{'value': 'root', 'children': [{'value': 'leaf'}]}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'value': 'root', 'children': [{'value': 'a', 'children': [{'value': 1}]}]}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "children.0.children.0.value",
+              "code": "invalidType",
+              "message": "value must be a string"
+            }
+          ]
+        },
+        {
+          "input": "{'value': 'root', 'parent': {'value': 2}}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "parent.value",
+              "code": "invalidType",
+              "message": "value must be a string"
+            }
+          ]
+        }
+      ]
+    },
+    "gen.ticket": {
+      "title": "$TicketValidate(input)",
+      "cases": [
+        {
+          "input": "{'seat': 4, 'row': 2}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'seat': 3, 'row': 0}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "seat",
+              "code": "custom",
+              "message": "must be even"
+            },
+            {
+              "path": "row",
+              "code": "tooSmall",
+              "message": "Seat 1 or higher"
+            }
+          ]
+        }
+      ]
+    },
+    "gen.models": {
+      "title": "$UserValidate(input), for each setup",
+      "cases": [
+        {
+          "input": "json_serializable: {'full_name': 'Ada', 'email': 'ada@example.com'}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "plain class: {'name': 'Ada', 'email': 'ada@example.com'}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "dart_mappable: {'full_name': 'Ada', 'email': 'ada@example.com'}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "plain class: {'name': 'A', 'email': 'ada'}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "name",
+              "code": "tooShort",
+              "message": "name must be at least 2 characters long"
+            },
+            {
+              "path": "email",
+              "code": "invalidEmail",
+              "message": "email must be a valid email address"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "outputs": {
+    "gen.tutorial.switch": [
+      "+ Ada <ada@example.com>",
+      "- {name: [name must be at least 2 characters long], email: [email must be a valid email address], age: [age must be greater than or equal to 18]}"
+    ],
+    "gen.tutorial.errorKeys": [
+      "email must be a valid email address",
+      "age must be greater than or equal to 18"
+    ],
+    "gen.tutorial.validateSelf": [
+      "false",
+      "{name: [name must be at least 2 characters long], email: [email must be a valid email address], age: [age must be greater than or equal to 18]}"
+    ],
+    "gen.user.errors": [
+      "{\n  \"name\": [\n    \"name must be at least 2 characters long\"\n  ],\n  \"email_address\": [\n    \"email_address must be a valid email address\"\n  ],\n  \"age\": [\n    \"age must be greater than or equal to 18\"\n  ],\n  \"role\": [\n    \"role must be one of: admin, member\"\n  ],\n  \"address.postcode\": [\n    \"postcode must match the pattern ^\\\\d{5}$\"\n  ]\n}"
+    ],
+    "gen.user.keys": [
+      "email_address must be a valid email address",
+      "postcode must match the pattern ^\\d{5}$",
+      "null",
+      "email_address",
+      "address"
+    ],
+    "gen.user.notmap": [
+      "{address: [address must be a map]}"
+    ],
+    "gen.user.unknown": [
+      "true"
+    ],
+    "gen.user.validateSelf": [
+      "ValidationFailure(errors: {name: [name must be at least 2 characters long], email_address: [email_address must be a valid email address]})"
+    ],
+    "gen.registration.lines": [
+      "- name must be at least 2 characters long",
+      "- email_address must be a valid email address",
+      "- password must be at least 8 characters long",
+      "- Passwords must match",
+      "- A business account needs a phone number",
+      "- age must be greater than or equal to 18",
+      "- postcode must match the pattern ^\\d{5}$"
+    ],
+    "gen.node.keys": [
+      "children",
+      "parent"
+    ],
+    "gen.models.keys": [
+      "full_name",
+      "full_name",
+      "name"
+    ]
+  }
+}

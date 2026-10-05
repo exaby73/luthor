@@ -1,32 +1,37 @@
 ---
 title: 'l.schema()'
-description: Requires a Map with named fields, each with its own validator.
+description: Requires a map with named fields, each with its own validator.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when the value is a map and every listed field passes its validator. Keys in the input that the schema does not list are ignored. A field whose key is missing is skipped unless its validator has `.required()`. Validate with `validateSchema`, which returns a `SchemaValidationResult` and an error map keyed by field. [Schemas](/concepts/schemas) explains nesting and reuse.
+Passes when the value is a map and every declared field passes its validator. A missing field is skipped unless its validator is required. Unknown keys are stripped from the output by default; [`.passthrough()`](/reference/schema/passthrough) keeps them and [`.strict()`](/reference/schema/strict) rejects them. The output is a new `Map<String, Object?>` with the validated value of each present field. Validate with `validate`, or with `validateSchema` to convert the output with `fromJson`. [Schemas](/concepts/schemas) explains nesting, reuse and forward references.
 
 ## Signature
 
 ```dart wrap
-Validator schema(Map<String, ValidatorReference> validatorSchema)
+SchemaValidator<Map<String, Object?>?> schema(Map<String, ValidatorReference<Object?>> fields, {String? message, MessageBuilder? messageBuilder})
+
+ValidationResult<T> validateSchema<T>(Object? input, {required FromJson<T> fromJson})
 ```
 
 ## Parameters
 
 | Parameter | Type | Meaning |
 |---|---|---|
-| `validatorSchema` | `Map<String, ValidatorReference>` | Field name to validator. Values may be validators, nested schemas, or forward references. |
+| `fields` | `Map<String, ValidatorReference<Object?>>` | Field name to validator. Values may be validators, nested schemas, or forward references. |
+| `message` | `String?` | Replaces the default error message. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-A field's messages come from its own validator and carry the field name: `email must be a valid email address`. A nested schema given a value that is not a map reports `value must be a map` under its field. The `getError` method reads one message by error path. [Error messages](/reference/errors) lists the shapes.
+Code `invalidType`. Default message: `value must be a map` when the value is not a map; `message` and `messageBuilder` apply to that case only. Field failures carry their own code at the field's path and use the field key as the field name. A `fromJson` that throws produces `value could not be converted` with code `fromJsonFailed`, and `null` input to `validateSchema` produces a `required` issue.
 
 ## Code generation
 
-Every `@luthor` model produces a schema named `$ModelSchema`, and a field whose type is another model refers to that model's schema.
+Every `@luthor` model produces `final SchemaValidator $ModelSchema`, and a field whose type is another model refers to that model's schema through `forwardRef()`. [What gets generated](/generator/output) shows the whole output.
 
 ## Example
 
@@ -44,25 +49,21 @@ final user = l.schema({
   <TabItem label="Generated">
 
 ```dart wrap
-required Address address, // $AddressSchema.required()
-Address? previous,        // $AddressSchema
+required Address address, // forwardRef(() => $AddressSchema.required())
+Address? previous,        // forwardRef(() => $AddressSchema)
 ```
 
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="user.validateSchema(input)"
-  cases={[
-    { input: "{'email': 'dev@example.com'}", pass: true },
-    { input: "{'email': 'dev@example.com', 'age': 30}", pass: true },
-    { input: "{'email': 'bad', 'age': 12}", pass: false, message: ["email must be a valid email address", "age must be greater than or equal to 18"] },
-    { input: "{'age': 30}", pass: false, message: "email is required" },
-  ]}
-/>
+<Verdict id="type.schema" />
+
+The output drops the unknown key:
+
+<Output id="type.schema.output" />
 
 Convert valid input with `fromJson`:
 
 ```dart
-final result = user.validateSchema<User>(json, fromJson: User.fromJson);
+final result = user.validateSchema(json, fromJson: User.fromJson);
 ```

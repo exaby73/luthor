@@ -4,33 +4,34 @@ description: Checks the value with access to the other fields of its schema.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Runs `customValidator(value, data)` where `data` is the map the field belongs to, and passes when it returns `true`. A thrown exception counts as `false`. Outside a schema there is no `data` and the validation passes. A missing optional field is skipped before this runs, so put the rule on a field that is always present. Returns a plain `Validator`, so call type-specific modifiers before it. [Custom validators](/concepts/custom-validators) has the longer treatment.
+Runs `validator(value, data)` where `data` is a `SchemaData`: a read-only map of the sibling fields as they were received, with `data.root` holding the outermost schema's map. Passes when the function returns `true`. Like `.custom()`, it receives the typed value, is never called for `null`, treats a thrown exception as `false`, and runs on a schema or list only after every child passed. Inside a list, `data` is the schema that holds the list. Outside any schema, `data` is empty. A missing optional field is skipped before this runs, so put a rule on a field that is always present.
 
 ## Signature
 
 ```dart wrap
-Validator customWithSchema(SchemaCustomValidator customValidator, {String? message, String? Function()? messageFn})
+Self customWithSchema(SchemaCustomValidator<T> validator, {String? message, MessageBuilder? messageBuilder})
 
-typedef SchemaCustomValidator = bool Function(Object? value, Map<String, Object?> data);
+typedef SchemaCustomValidator<T> = bool Function(T value, SchemaData data);
 ```
 
 ## Parameters
 
 | Parameter | Type | Meaning |
 |---|---|---|
-| `customValidator` | `bool Function(Object?, Map<String, Object?>)` | Receives the field value and the enclosing map. Return `true` to pass. |
+| `validator` | `bool Function(T, SchemaData)` | Receives the field value and the enclosing schema's data. Return `true` to pass. |
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value does not pass schema custom validation`. `value` is replaced by the field name. Pass `message` in practice.
+Code `custom`. Default message: `value does not pass schema custom validation`. `value` is replaced by the field name when there is one. Pass `message` in practice.
 
 ## Code generation
 
-`@WithSchemaCustomValidator(fn, message: ...)`. `fn` has to be a top-level function or a static method.
+`@WithSchemaCustomValidator(fn, message: ...)`. `fn` has to be a top-level function or a static method with the field's type: `bool matchesPassword(String value, SchemaData data)`.
 
 ## Example
 
@@ -38,7 +39,7 @@ typedef SchemaCustomValidator = bool Function(Object? value, Map<String, Object?
   <TabItem label="Hand-written">
 
 ```dart
-bool matchesPassword(Object? value, Map<String, Object?> data) =>
+bool matchesPassword(String value, SchemaData data) =>
     value == data['password'];
 
 final signUp = l.schema({
@@ -54,7 +55,7 @@ final signUp = l.schema({
   <TabItem label="Generated">
 
 ```dart wrap
-bool matchesPassword(Object? value, Map<String, Object?> data) =>
+bool matchesPassword(String value, SchemaData data) =>
     value == data['password'];
 
 @WithSchemaCustomValidator(matchesPassword, message: 'Passwords must match')
@@ -65,10 +66,22 @@ required String confirm,
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="signUp.validateSchema(input)"
-  cases={[
-    { input: "{'password': 'hunter2hunter2', 'confirm': 'hunter2hunter2'}", pass: true },
-    { input: "{'password': 'hunter2hunter2', 'confirm': 'nope'}", pass: false, message: "Passwords must match" },
-  ]}
-/>
+<Verdict id="signUp" />
+
+`data.root` reaches the top of a nested input:
+
+```dart
+final order = l.schema({
+  'currency': l.string().required(),
+  'lines': l.list(l.schema({
+    'amount': l.num().required(),
+    'currency': l
+        .string()
+        .customWithSchema((value, data) => value == data.root['currency'],
+            message: 'line currency must match the order currency')
+        .required(),
+  }).required()),
+});
+```
+
+<Output id="schemaData.root" />

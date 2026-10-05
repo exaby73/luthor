@@ -4,33 +4,32 @@ description: Requires the string to be an IPv4 or IPv6 address.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when the string matches the IPv4 pattern, the IPv6 pattern, or, when `version` is given, only that version. `IpVersion` is an enum with `v4` and `v6`.
+Passes when the whole string is an IP address of `version`, or of either version when `version` is `null`. IPv4 octets must not have leading zeros. IPv6 accepts `::` compression, including `::1` and `::`, and an embedded IPv4 address, but not a zone such as `%eth0`. `IpVersion` is an enum with `v4` and `v6`.
 
 ## Signature
 
 ```dart wrap
-StringValidator ip({IpVersion? version, String? message, String? Function()? messageFn})
+StringValidator<O> ip({IpVersion? version, String? message, MessageBuilder? messageBuilder})
 ```
-
-Available on `l.string()`.
 
 ## Parameters
 
 | Parameter | Type | Meaning |
 |---|---|---|
-| `version` | `IpVersion?` | `IpVersion.v4` or `IpVersion.v6`. Omit to accept either. |
+| `version` | `IpVersion?` | `IpVersion.v4` or `IpVersion.v6`. Omit to accept either. `params['version']`. |
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value must be a valid IP address`, `value must be a valid IPv4 address`, or `value must be a valid IPv6 address`, depending on `version`. `value` is replaced by the field name when there is one.
+Code `invalidIp`. Default message: `value must be a valid IP address`, `IPv4 address`, or `IPv6 address`, depending on `version`. `value` is replaced by the field name when there is one.
 
 ## Code generation
 
-`@IsIp(version: IpVersion.v4)`. There is no constant shorthand for this annotation. Put the annotation on the constructor parameter.
+`@IsIp(version: IpVersion.v4)`, or the constant `@isIp` for either version. Put the annotation on the constructor parameter or the field.
 
 ## Example
 
@@ -46,16 +45,12 @@ final v4 = l.string().ip(version: IpVersion.v4);
 
 ```dart wrap
 @IsIp(version: IpVersion.v4) required String host, // l.string().ip(version: IpVersion.v4).required()
+@isIp String? peer,                                   // l.string().ip()
 ```
 
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="v4.validateValue(input)"
-  cases={[
-    { input: "'192.168.0.1'", pass: true },
-    { input: "'::1'", pass: false, message: "value must be a valid IPv4 address" },
-    { input: "'999.1.1.1'", pass: false, message: "value must be a valid IPv4 address" },
-  ]}
-/>
+<Verdict id="str.ip" />
+
+<Output id="str.ip.any" />

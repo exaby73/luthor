@@ -1,0 +1,52 @@
+---
+title: 'l.num()'
+description: Requires a num, int or double, and gives access to the number modifiers.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when the value `is num`, which covers `int` and `double`. Returns a `NumValidator` with [`.min()`](/reference/number/min), [`.max()`](/reference/number/max) and [`.finite()`](/reference/number/finite) taking `num` limits. Use it for JSON numbers whose representation you do not control.
+
+## Signature
+
+```dart wrap
+NumberValidator<num, num?> num({String? message, MessageBuilder? messageBuilder})
+```
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `message` | `String?` | Replaces the default error message. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
+
+## Issue
+
+Code `invalidType`. Default message: `value must be a number`. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+A `num` parameter maps to `l.num()`. `@HasMin(n)` and `@HasMax(n)` add `.min(n)` and `.max(n)`, and `n` may be fractional.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final amount = l.num();
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+@HasMin(0) @HasMax(1.5) required num ratio, // l.num().min(0).max(1.5).required()
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict id="type.num" />

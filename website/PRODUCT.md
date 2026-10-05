@@ -14,7 +14,7 @@ Dart and Flutter developers who validate runtime input: HTTP request bodies on a
 
 ## Product Purpose
 
-Luthor is a pure Dart validation library. `l.string().email().required()` builds an immutable validator; `validateValue` and `validateSchema` return sealed result types (`SingleValidationResult`, `SchemaValidationResult`) instead of throwing. `luthor_generator` reads `@luthor` classes and emits a schema, a `$ClassValidate` function, a `validateSelf()` extension, and typed `SchemaKeys` and `ErrorKeys` records. Success is a developer going from `dart pub add luthor` to a validated, typed model in one sitting, and reaching for the generator without reading the source.
+Luthor is a pure Dart validation library. `l.string().email().required()` builds an immutable validator with a typed output; `validate` and `validateSchema` return one sealed `ValidationResult` instead of throwing, with every issue carrying a code, a path and a message. `luthor_generator` reads `@luthor` classes and emits a schema, a `$ClassValidate` function, a `validateSelf()` extension, and typed `SchemaKeys` and `ErrorKeys` records. Success is a developer going from `dart pub add luthor` to a validated, typed model in one sitting, and reaching for the generator without reading the source.
 
 ## Positioning
 
@@ -26,14 +26,14 @@ Read inside an editor or terminal session while writing Dart. Pages are opened f
 
 ## Capabilities and Constraints
 
-- Upcoming release is 1.0.0. Requires Dart 3.11 or Flutter 3.41 or later. `luthor_generator` supports analyzer 10 through 14.
+- Release 1.0.0. Requires Dart 3.11 or Flutter 3.41 or later. `luthor` has no dependencies. `luthor_generator` supports analyzer 10 through 14.
 - Install snippets use `^1.0.0`.
 - Public API lives in `packages/luthor/lib`; generator behaviour in `packages/luthor_generator/lib`. Docs must not describe API that is not there.
-- Single-value validators: `any`, `boolean`, `int`, `double`, `number`, `string`, `file`, `nullValue`, `list`, `map`, `schema`, `custom`, `customWithSchema`, `required`, plus `forwardRef()` for recursive schemas.
+- Types on `l`: `any`, `bool`, `int`, `double`, `num`, `string`, `file`, `nullValue`, `list`, `map`, `schema`, `union`, `oneOf`. Shared modifiers: `required`, `withName`, `custom`, `customWithSchema`; schema modifiers `passthrough` and `strict`; `forwardRef()` for recursive schemas; global `l.messageBuilder` and `l.maxDepth`.
 - String modifiers: `min`, `max`, `length`, `contains`, `startsWith`, `endsWith`, `dateTime`, `email`, `emoji`, `regex`, `uri`, `url`, `uuid`, `cuid`, `cuid2`, `ip`.
-- Number modifiers: `min`, `max` on `int`, `double`, `number`.
-- Every validation accepts `message` and `messageFn`.
-- Generator annotations mirror the modifiers (`@IsEmail`, `@HasMin`, `@MatchRegex`, `@IsFile`, `@WithCustomValidator`, `@WithSchemaCustomValidator`, `@luthorForwardRef`, and so on).
+- Number modifiers: `min`, `max`, `finite` on `int`, `double`, `num`.
+- Every validation accepts `message` and `messageBuilder`.
+- Generator annotations mirror the modifiers (`@IsEmail`, `@HasMin`, `@MatchRegex`, `@IsFile`, `@WithCustomValidator`, `@WithSchemaCustomValidator`, and so on). `@luthorForwardRef` is deprecated.
 - Docs site: Astro 7 + Starlight 0.42, npm, no Tailwind. Deployed at https://luthor.ex3.dev. Starlight stays the framework.
 
 ## Brand Commitments

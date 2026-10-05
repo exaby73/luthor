@@ -1,0 +1,54 @@
+---
+title: '.passthrough()'
+description: Keeps unknown keys in a schema's output.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
+import Verdict from '../../../../components/Verdict.astro';
+
+Returns a copy of the schema that copies keys it does not declare into the output, without validating them. Non-string keys are converted with `toString()`. The default is to strip unknown keys. Only `SchemaValidator` has this method.
+
+## Signature
+
+```dart wrap
+SchemaValidator<O> passthrough()
+```
+
+## Issue
+
+Code `none`. Default message: Adds no validation.
+
+## Code generation
+
+The generator emits `.passthrough()` when it cannot name every key the serializer may read: a field with `@JsonKey(readValue:)`, a private field with `@JsonKey(includeFromJson: true)`, or a `@MappableClass(hook:)`.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final user = l.schema({'name': l.string().required()}).passthrough();
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+final SchemaValidator $EventSchema = l
+    .schema({...})
+    .passthrough()
+    .withName("Event");
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict id="passthrough" />
+
+Compare the three behaviours on the same input:
+
+<Output id="unknown.strip" title="strip (default)" />
+<Output id="unknown.passthrough" title="passthrough" />
+<Output id="unknown.strict" title="strict" />

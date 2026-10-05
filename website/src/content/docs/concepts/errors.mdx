@@ -1,0 +1,94 @@
+---
+title: Errors and error paths
+description: The flat error map, how a path is built from field keys, map keys and list indices, and where object-level errors go.
+---
+
+import Output from '../../../components/Output.astro';
+
+A failed validation produces issues, and each issue has a path: the chain of keys and indices from the validated value down to the problem. The error map groups messages by that path. This page shows every shape a path can take.
+
+## The error map is flat
+
+`result.errors` is a `Map<String, List<String>>`. Keys are error paths with segments joined by dots. Nested schemas do not produce nested maps; `address.city` is one key. Fields that passed do not appear.
+
+The schema below has a nested schema, a list of schemas, a map with key and value validators, and an object-level rule:
+
+```dart
+final order = l.schema({
+  'id': l.string().uuid().required(),
+  'items': l.list(l.schema({
+    'sku': l.string().required(),
+    'qty': l.int().min(1).required(),
+  }).required()).required(),
+  'address': l.schema({'city': l.string().required()}).required(),
+  'scores': l.map(
+    keyValidator: l.string().email().required(),
+    valueValidator: l.int().required(),
+  ),
+}).custom((data) => (data['items']! as List).isNotEmpty,
+    message: 'order must have at least one item');
+
+final result = order.validate({
+  'id': 'nope',
+  'items': [
+    {'sku': 'A1', 'qty': 1},
+    {'sku': 'B2', 'qty': 0},
+    {'qty': 'two'},
+  ],
+  'address': {},
+  'scores': {'not-an-email': 'x', 'dev@example.com': 7},
+});
+```
+
+<Output id="order.errors" title="result.errors" lang="json" />
+
+## How a path is built
+
+| Segment | Added by | Example |
+|---|---|---|
+| A field key | A schema field | `address.city` |
+| A list index | A list element | `items.1.qty` |
+| A map key | A map value | `scores.not-an-email` |
+| Nothing | The validated value itself, and object-level errors | `''` |
+
+The same issues, as `ValidationIssue` objects, show the path on each one:
+
+<Output id="order.issues" title="result.issues" />
+
+Map keys are the exception to "the path names the bad value": a key that fails its key validator is reported at the map's own path as an `invalidKey` issue, because the key is the map's problem, not a value's. The failing value under that key is still reported at the key's path.
+
+## Reading by path
+
+`getError(path)` returns the first message at exactly that path, or `null`. `getErrors(path)` returns all of them. Neither throws, and neither looks into children: `getErrors('items.2')` is empty because the issues are at `items.2.sku` and `items.2.qty`.
+
+```dart
+result.getError('items.1.qty');
+result.getErrors('items.2');
+result.getError('scores');
+result.getError('scores.not-an-email');
+result.getError('address.city');
+result.getError('address');
+```
+
+<Output id="order.getErrors" />
+
+## Object-level errors
+
+A `.custom()` on a schema runs after every field passed and reports at the schema's own path. At the root that is the empty string, so it never collides with a field named anything. In a nested schema it is the nested field's key.
+
+```dart
+final emptyOrder = order.validate({
+  'id': '123e4567-e89b-12d3-a456-426614174000',
+  'items': [],
+  'address': {'city': 'Paris'},
+});
+
+emptyOrder.errors;
+emptyOrder.getError('');
+```
+
+<Output id="order.objectLevel" />
+
+## Paths and the generator
+
+For a model, the generated `ErrorKeys` record holds every error path as a constant, including nested ones: `UserErrorKeys.address.postcode` is `"address.postcode"`, and `UserErrorKeys.address.$key` is `"address"` for the nested field's own errors. [Schema keys and error keys](/generator/keys) covers the record.

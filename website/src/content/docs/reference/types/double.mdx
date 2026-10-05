@@ -1,17 +1,18 @@
 ---
 title: 'l.double()'
-description: Requires a double and unlocks the number modifiers.
+description: Requires a double and gives access to the number modifiers.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when the value is a `double`. Returns a validator with [`.min()`](/reference/number/min) and [`.max()`](/reference/number/max). An `int` such as `42` fails, so for JSON input that may carry whole numbers use [`l.number()`](/reference/types/number).
+Passes when the value `is double`. Returns a `DoubleValidator` with [`.min()`](/reference/number/min), [`.max()`](/reference/number/max) and [`.finite()`](/reference/number/finite). On the VM an `int` such as `42` fails, and `jsonDecode` produces an `int` for `42`, so a JSON field that may arrive without a decimal point should use [`l.num()`](/reference/types/num). `NaN` and infinity are doubles and pass until you add `.finite()`.
 
 ## Signature
 
 ```dart wrap
-DoubleValidator double({String? message, String? Function()? messageFn})
+NumberValidator<double, double?> double({String? message, MessageBuilder? messageBuilder})
 ```
 
 ## Parameters
@@ -19,15 +20,15 @@ DoubleValidator double({String? message, String? Function()? messageFn})
 | Parameter | Type | Meaning |
 |---|---|---|
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value must be a double`. `value` is replaced by the field name when there is one.
+Code `invalidType`. Default message: `value must be a double`. `value` is replaced by the field name when there is one.
 
 ## Code generation
 
-A `double` parameter maps to `l.double()`. `@HasMinDouble(n)` and `@HasMaxDouble(n)` add `.min(n)` and `.max(n)`.
+A `double` parameter maps to `l.double()`, which rejects JSON integers. That is deliberate: the validator mirrors the Dart type. If your backend may send `1` for a `double` field, type the field as `num`. `@HasMin(n)` and `@HasMax(n)` add `.min(n)` and `.max(n)`.
 
 ## Example
 
@@ -42,16 +43,11 @@ final ratio = l.double();
   <TabItem label="Generated">
 
 ```dart wrap
-@HasMinDouble(0) required double price, // l.double().min(0.0).required()
+@HasMin(0) required double price, // l.double().min(0).required()
+required num total,                // l.num().required(), accepts 1 and 1.0
 ```
 
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="ratio.validateValue(input)"
-  cases={[
-    { input: "0.75", pass: true },
-    { input: "42", pass: false, message: "value must be a double" },
-  ]}
-/>
+<Verdict id="type.double" />

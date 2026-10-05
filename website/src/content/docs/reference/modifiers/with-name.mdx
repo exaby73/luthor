@@ -1,0 +1,55 @@
+---
+title: '.withName()'
+description: Sets the field name used in default messages when a validator runs on its own.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
+import Verdict from '../../../../components/Verdict.astro';
+
+Returns a copy of the validator whose default messages start with `name` instead of `value`. It matters only when the validator validates a value directly; inside a schema, the field key is the field name and `withName` is ignored.
+
+## Signature
+
+```dart wrap
+Self withName(String? name)
+```
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `name` | `String?` | The field name, or `null` to clear it. |
+
+## Issue
+
+Code `none`. Default message: `withName` adds no validation. It changes the `fieldName` of every issue the validator produces, and so the `value` prefix of default messages.
+
+## Code generation
+
+Every generated schema ends in `.withName('ModelName')`, which names the whole model in the `must be a map` message when `$ModelValidate` receives something that is not a map.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final email = l.string().email().withName('email');
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+final SchemaValidator $UserSchema = l.schema({...}).withName("User");
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict id="mod.withName" />
+
+Inside a schema the key wins:
+
+<Output id="mod.withName.schema" />

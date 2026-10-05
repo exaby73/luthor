@@ -673,6 +673,22 @@ h1#_top {
   .sl-markdown-content :is(th, td):last-child {
     min-width: 16rem;
   }
+
+  /* Two-column tables, such as the migration lists, fit the screen instead:
+     code wraps and the columns share the width. */
+  .sl-markdown-content table:has(tr > td:nth-child(2):last-child) {
+    display: table;
+  }
+
+  .sl-markdown-content table:has(tr > td:nth-child(2):last-child) :is(th, td) {
+    min-width: 0;
+    width: 50%;
+  }
+
+  .sl-markdown-content table:has(tr > td:nth-child(2):last-child) td code {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
 }
 
 /* Definition-style parameter lists */

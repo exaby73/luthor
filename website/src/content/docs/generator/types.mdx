@@ -1,75 +1,117 @@
 ---
 title: Supported field types
-description: How luthor_generator maps each Dart parameter type to a validator, and which types it rejects.
+description: How luthor_generator maps each Dart field type to a validator, how it decides required, and which types fail generation.
 ---
 
-The generator reads the first constructor of a `@luthor` class and maps each parameter to a validator by its type. Annotations add modifiers, and nullability decides `.required()`. This page is the mapping table.
+import Generated from '../../../components/Generated.astro';
+import Verdict from '../../../components/Verdict.astro';
+
+The generator reads the constructor the serializer uses and maps each parameter to a validator by its type. Annotations add modifiers, and nullability and defaults decide `.required()`. This page is the mapping table.
 
 ## Type mapping
 
-| Parameter type | Generated validator | Modifiers from annotations |
+| Field type | Generated validator | Annotations that apply |
 |---|---|---|
 | `String` | `l.string()` | All [string annotations](/generator/annotations) |
-| `DateTime` | `l.string().dateTime()` | String annotations |
-| `int` | `l.int()` | `@HasMin`, `@HasMax` |
-| `double` | `l.double()` | `@HasMinDouble`, `@HasMaxDouble` |
-| `num` | `l.number()` | `@HasMinNumber`, `@HasMaxNumber` |
-| `bool` | `l.boolean()` | |
-| `dynamic` | `l.any()` | |
-| `Null` | `l.nullValue()` | |
-| `List<T>` | `l.list(validators: [T's validator])` | |
-| `Map<K, V>` | `l.map(keyValidator: K's validator, valueValidator: V's validator)` | |
-| A `@luthor` class `M` | `$MSchema` | |
-| A class with `fromJson` or `@MappableClass` and named parameters | `$MSchema`, auto-generated | |
-| Any type, with `@IsFile()` | `l.file()` | |
+| `DateTime`, `DateTime?` | `l.string().dateTime()` | String annotations |
+| `Uri` | `l.string()` | String annotations |
+| `int` | `l.int()` | `@HasMin`, `@HasMax` with integral values |
+| `double` | `l.double()` | `@HasMin`, `@HasMax` |
+| `num` | `l.num()` | `@HasMin`, `@HasMax` |
+| `bool` | `l.bool()` | |
+| An enum | `l.oneOf([...])` of the serialized values | |
+| `dynamic`, `Object`, `Object?` | `l.any()` | |
+| `Null` | `l.nullValue()` | none; a custom validator on it fails generation |
+| `List<T>`, `Set<T>`, `Iterable<T>` | `l.list(T's validator)` | |
+| `Map<K, V>` | `l.map(keyValidator: K's, valueValidator: V's)` | |
+| `File` from `dart:io`, `XFile` from `cross_file` | `l.file()` | |
+| Any declared type with `@IsFile()`, including package classes such as `MultipartFile` | `l.file()`, or `l.file(accept:)` when the annotation has one | |
+| A `@luthor` model `M` | `forwardRef(() => $MSchema)` | |
+| A class with `fromJson` or `@MappableClass` and named parameters | `forwardRef(() => _$MSchema)`, a private auto-generated schema | |
+| A field with a `JsonConverter` or `@JsonKey(fromJson:)` | `l.any()` | only the custom validator annotations |
 
-`@WithCustomValidator` and `@WithSchemaCustomValidator` apply to every type and are appended after the type's own modifiers.
+`@WithCustomValidator` and `@WithSchemaCustomValidator` apply to every type except `Null`, after the type's own modifiers.
+
+A `double` field generates `l.double()`, which rejects a JSON integer such as `1`. That mirrors the Dart type on purpose. If your backend may send `1` for a `double` field, type the field as `num`.
+
+## Enums
+
+An enum's serialized values come from the serializer's rules: the case names, or `@JsonValue`, `@JsonEnum(fieldRename:, valueField:)`, `@MappableEnum` and `@MappableValue`. The same applies to enums inside lists and as map keys.
+
+```dart
+enum Role { admin, member }
+
+@Default(Role.member) Role role, // l.oneOf(["admin", "member"])
+required Role role,              // l.oneOf(["admin", "member"]).required()
+```
 
 ## Required
 
-After the type and its modifiers, the generator appends `.required()` when all three hold: the type is not nullable, the type is not `dynamic`, and the parameter has no `@Default`. Dart's `required` keyword is not consulted.
+After the type and its modifiers, the generator appends `.required()` when all of these hold: the type is not nullable, the type is not `dynamic`, and the parameter has no default. A default is a constructor default value, a `freezed` `@Default`, or `@JsonKey(defaultValue:)`. Dart's `required` keyword is not consulted.
 
 ```dart
 required String name,         // l.string().required()
 String? nickname,             // l.string()
 required String? note,        // l.string()
 @Default('en') String locale, // l.string()
+String locale = 'en',         // l.string()
 required dynamic payload,     // l.any()
 ```
 
-## Lists and maps
+Fields with `@JsonKey(includeFromJson: false)` are left out of the schema.
 
-Element validators follow the same rules as top-level fields, including `.required()` for non-nullable element types.
+## Lists, sets and maps
+
+Element validators follow the same rules as top-level fields, including `.required()` for non-nullable element types, `.dateTime()` for `DateTime` elements, and `l.oneOf()` for enum elements.
 
 ```dart
-required List<String> tags,     // l.list(validators: [l.string().required()]).required()
-List<String?>? notes,           // l.list(validators: [l.string()])
-required List<Address> places,  // l.list(validators: [$AddressSchema.required()]).required()
-required Map<String, int> ages, // l.map(keyValidator: l.string().required(), valueValidator: l.int().required()).required()
+required List<String> tags,     // l.list(l.string().required()).required()
+List<String?>? notes,           // l.list(l.string())
+required Set<Role> roles,       // l.list(l.oneOf(["admin", "member"]).required()).required()
+required List<Address> places,  // l.list(forwardRef(() => $AddressSchema.required())).required()
 ```
 
-Inside a `List` or `Map`, a `File` element type maps to `l.file()` without an annotation. At the top level, `l.file()` needs `@IsFile()`.
-
-## Nested models and forward references
-
-A field typed as another `@luthor` model refers to that model's generated schema. When the field's type is the enclosing class itself, directly or as a `List` element or `Map` value, the generator wraps the reference in `forwardRef()` so the schema can refer to itself while it is being built. Use `@luthorForwardRef` on the parameter when two different models refer to each other.
+JSON object keys are strings, so a map key type of `int`, `double`, `num` or `BigInt` generates a string validator with a custom check that the string parses, and a key that fails is an `invalidKey` of the map. Enum keys generate `l.oneOf()` of the names as strings.
 
 ```dart
+required Map<String, int> ages,
+// l.map(keyValidator: l.string().required(), valueValidator: l.int().required()).required()
+required Map<int, String> labels,
+// l.map(keyValidator: l.string().custom((key) => int.tryParse(key) != null).required(), ...)
+```
+
+## Nested models and recursion
+
+A field typed as another `@luthor` model refers to that model's schema through `forwardRef()`. Every nested reference is wrapped, so a model that refers to itself, directly or through a list or map, and two models that refer to each other, work without annotation. `@luthorForwardRef` is deprecated and has no effect; remove it.
+
+```dart title="lib/node.dart"
 @luthor
 @freezed
-abstract class Comment with _$Comment {
-  const factory Comment({
-    required String id,
-    required String text,
-    List<Comment>? replies,       // forwardRef(() => $CommentSchema.required()) inside l.list()
-    Comment? parent,              // forwardRef(() => $CommentSchema)
-    @luthorForwardRef User? user, // forwardRef(() => $UserSchema)
-  }) = _Comment;
+abstract class Node with _$Node {
+  const factory Node({
+    required String value,
+    List<Node>? children,
+    Node? parent,
+  }) = _Node;
 
-  factory Comment.fromJson(Map<String, dynamic> json) => _$CommentFromJson(json);
+  factory Node.fromJson(Map<String, dynamic> json) => _$NodeFromJson(json);
 }
 ```
 
+<Generated file="node.g.dart" from="final SchemaValidator $NodeSchema" to='.withName("Node");' title="lib/node.g.dart" />
+
+<Verdict id="gen.node" />
+
+Every level is validated, including `parent`.
+
 ## Unsupported types
 
-The build fails with `UnsupportedTypeError` for a parameter whose type is none of the above. That includes enums and any class that has neither `@luthor` nor a `fromJson` factory or `@MappableClass` with named constructor parameters. For such a field, change the type to one the generator understands, for example `String` for an enum carried as its name, and add a custom validator for the allowed values.
+Generation fails with an `InvalidGenerationSourceError` that names the class, the field and the type, for:
+
+- `freezed` unions, classes with more than one redirecting factory.
+- Generic models, and fields whose type is a generic class or a type parameter.
+- Records and function types.
+- Types without a Luthor validator, such as `Duration` or a `BigInt` value. Give these a `JsonConverter`, which turns the field into `l.any()`.
+- An annotation on a field type it does not apply to, such as `@IsEmail` on an `int` or `@HasLength` on a `List`.
+
+Validators for list elements cannot be set through annotations yet.

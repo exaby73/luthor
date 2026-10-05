@@ -1,22 +1,23 @@
 ---
 title: Custom validators
-description: Check a value with your own function, alone or with access to the other fields of its schema.
+description: Check a typed value with your own function, alone or with access to the other fields of its schema.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../components/Output.astro';
 import Verdict from '../../../components/Verdict.astro';
 
-Two modifiers accept a function of your own. `.custom()` sees one value. `.customWithSchema()` sees one value and the map it came from. Both return `true` to pass and `false` to fail, and both treat a thrown exception as a failure.
+Two modifiers accept a function of your own. `.custom()` sees one value. `.customWithSchema()` sees one value and the schema data around it. Both receive the validator's typed value, run only after the type check passed, are never called with `null`, and treat a thrown exception as `false`.
 
 ## Custom validator
 
-A custom validator is a `bool Function(Object? value)`. Attach it with `.custom()`. It runs after the validations before it in the chain, on the value as given.
+A custom validator is a `bool Function(T value)`, where `T` is the validator's value type: `int` for `l.int()`, `String` for `l.string()`, `Map<String, Object?>` for a schema. Attach it with `.custom()`.
 
 <Tabs syncKey="codegen">
   <TabItem label="Hand-written">
 
 ```dart
-bool isEven(Object? value) => value is int && value.isEven;
+bool isEven(int value) => value.isEven;
 
 final evenNumber = l.int().custom(isEven, message: 'must be even');
 ```
@@ -25,7 +26,7 @@ final evenNumber = l.int().custom(isEven, message: 'must be even');
   <TabItem label="Generated">
 
 ```dart
-bool isEven(Object? value) => value is int && value.isEven;
+bool isEven(int value) => value.isEven;
 
 @luthor
 @freezed
@@ -38,31 +39,28 @@ abstract class Ticket with _$Ticket {
 }
 ```
 
-The function has to be a top-level function or a static method. Generated code refers to it by name, so a closure cannot be used.
+The function has to be a top-level function or a static method, with the field's type as its parameter. Generated code refers to it by name, so a closure cannot be used.
 
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="evenNumber.validateValue(input)"
-  cases={[
-    { input: '4', pass: true },
-    { input: '3', pass: false, message: 'must be even' },
-    { input: 'null', pass: false, message: 'must be even' },
-  ]}
-/>
+<Verdict id="custom" />
 
-The function receives `null` like any other value, so decide what `null` means for your check. Type validations such as `l.int()` accept `null`; a custom validator that only returns `true` for an `int` does not. Without `message`, the default is `value does not pass custom validation`, with the field name in place of `value`.
+Two rows explain the rules. `null` passes because the validator is optional and a custom validator is never called for `null`; add `.required()` to reject it. `'4'` fails the type check, and the custom validator does not run, so there is one message, not two.
+
+Without `message`, the default is `value does not pass custom validation`, and a function that throws produces the same message:
+
+<Output id="custom.default" />
 
 ## Schema custom validator
 
-A schema custom validator is a `bool Function(Object? value, Map<String, Object?> data)`. Attach it with `.customWithSchema()`. When the validator is a field of a schema, `data` is the whole input map, so the function can compare the field with its siblings. The usual case is a confirmation field.
+A schema custom validator is a `bool Function(T value, SchemaData data)`. Attach it with `.customWithSchema()`. `data` is a read-only map of the sibling fields in the schema that holds the value, as they were received, and `data.root` is the outermost schema's map. The usual case is a confirmation field.
 
 <Tabs syncKey="codegen">
   <TabItem label="Hand-written">
 
 ```dart
-bool matchesPassword(Object? value, Map<String, Object?> data) =>
+bool matchesPassword(String value, SchemaData data) =>
     value == data['password'];
 
 final signUp = l.schema({
@@ -78,7 +76,7 @@ final signUp = l.schema({
   <TabItem label="Generated">
 
 ```dart
-bool matchesPassword(Object? value, Map<String, Object?> data) =>
+bool matchesPassword(String value, SchemaData data) =>
     value == data['password'];
 
 @luthor
@@ -97,23 +95,59 @@ abstract class SignUp with _$SignUp {
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="signUp.validateSchema(input)"
-  cases={[
-    { input: "{'password': 'hunter2hunter2', 'confirm': 'hunter2hunter2'}", pass: true },
-    {
-      input: "{'password': 'hunter2hunter2', 'confirm': 'nope'}",
-      pass: false,
-      message: 'Passwords must match',
-    },
-  ]}
-/>
+<Verdict id="signUp" />
 
-`data` is the map the field belongs to, as received and before any conversion, so compare raw values. For a nested schema that is the nested map, not the root. Outside a schema there are no sibling fields; use `.custom()` for a single value.
+### A rule that depends on another field
+
+A missing optional field is skipped before any validator runs, so a rule such as "a business account needs a phone number" cannot live on `phone`. Put it on `accountType`, which is always present, and read `phone` from `data`.
+
+```dart
+bool phoneForBusiness(String value, SchemaData data) {
+  if (value != 'business') return true;
+  final phone = data['phone'];
+  return phone is String && phone.isNotEmpty;
+}
+
+final account = l.schema({
+  'accountType': l
+      .oneOf(['personal', 'business'])
+      .customWithSchema(phoneForBusiness, message: 'A business account needs a phone number')
+      .required(),
+  'phone': l.string(),
+});
+```
+
+<Verdict id="account" />
+
+### Reaching the root
+
+Inside a list or a nested schema, `data` is the nearest schema's map. `data.root` is the outermost one, so a line item can check the order it belongs to.
+
+```dart
+final order = l.schema({
+  'currency': l.string().required(),
+  'lines': l.list(l.schema({
+    'amount': l.num().required(),
+    'currency': l
+        .string()
+        .customWithSchema((value, data) => value == data.root['currency'],
+            message: 'line currency must match the order currency')
+        .required(),
+  }).required()),
+});
+```
+
+<Output id="schemaData.root" />
+
+Outside any schema, `data` is empty. The function still runs:
+
+<Output id="customWithSchema.outside" title="l.string().customWithSchema((v, data) => data.isEmpty).validate('x').isValid" />
 
 ## Rules that apply to both
 
-- A missing optional field skips its custom validators along with everything else, so a rule such as "phone is required for business accounts" belongs on the field that is always present, `accountType`, not on `phone`. [Optional by default](/concepts/optional-by-default) explains the rule.
-- Check the type before you cast. The function receives `Object?`, and the chain's type validation does not stop later validations from running.
+- The function receives the typed value and is never called for `null`. Decide separately whether `null` is allowed, with `.required()`.
+- A thrown exception counts as `false`. Nothing is printed.
+- On a schema, list, map or union, the function runs only when every child passed, so it can trust the shape.
 - Keep the function pure. It can run more than once for one input, for example inside a list.
-- `message` and `messageFn` work as on every other modifier.
+- `message` and `messageBuilder` work as on every other modifier. The code is `custom` for both.
+- For a rule about the whole object rather than one field, use `.custom()` on the schema; it reports at the schema's own path. [Schemas](/concepts/schemas#object-level-rules) shows it.

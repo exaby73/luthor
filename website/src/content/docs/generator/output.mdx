@@ -1,9 +1,13 @@
 ---
 title: What gets generated
-description: The five items luthor_generator writes for every @luthor model, with the generated code for one model.
+description: The five items luthor_generator writes for every @luthor model, shown as the real generated code for one model.
 ---
 
-For each class annotated with `@luthor`, the generator writes five items into the `part` file: a generated schema, a validate function, a `validateSelf` extension, schema keys, and error keys. This page shows all five for one model. The pages that follow use the same `User` and `Address`.
+import Generated from '../../../components/Generated.astro';
+import Output from '../../../components/Output.astro';
+import Verdict from '../../../components/Verdict.astro';
+
+For each class annotated with `@luthor`, the generator writes five items into the `part` file: a generated schema, a validate function, a `validateSelf` extension, schema keys, and error keys. This page shows all five for one model. The generated code is copied from a real `build_runner` run on the model below. The pages that follow use the same `User` and `Address`.
 
 ## The models
 
@@ -14,6 +18,8 @@ import 'package:luthor/luthor.dart';
 part 'user.freezed.dart';
 part 'user.g.dart';
 
+enum Role { admin, member }
+
 @luthor
 @freezed
 abstract class User with _$User {
@@ -21,6 +27,7 @@ abstract class User with _$User {
     @HasMin(2) required String name,
     @IsEmail() @JsonKey(name: 'email_address') required String email,
     @HasMin(18) int? age,
+    @Default(Role.member) Role role,
     required Address address,
   }) = _User;
 
@@ -42,95 +49,79 @@ abstract class Address with _$Address {
 
 ## Generated schema
 
-`$UserSchema` is a top-level `Validator`. Each field's validator is derived from the parameter type and its annotations. [Supported field types](/generator/types) lists the mapping. The schema is named after the model with `withName`.
+`$UserSchema` is a `final SchemaValidator`. Each field's validator is derived from the parameter type and its annotations; [Supported field types](/generator/types) lists the mapping. The enum becomes `l.oneOf()` of its names, the default makes `role` optional, and the nested model is referenced through `forwardRef()`. The schema is named after the model with `withName`.
 
-```dart title="lib/user.g.dart"
-Validator $UserSchema = l.withName('User').schema({
-  UserSchemaKeys.name: l.string().min(2).required(),
-  UserSchemaKeys.email: l.string().email().required(),
-  UserSchemaKeys.age: l.int().min(18),
-  UserSchemaKeys.address: $AddressSchema.required(),
-});
+<Generated file="user.g.dart" from="final SchemaValidator $UserSchema" to='.withName("User");' title="lib/user.g.dart" />
 
-Validator $AddressSchema = l.withName('Address').schema({
-  AddressSchemaKeys.street: l.string().required(),
-  AddressSchemaKeys.city: l.string().required(),
-  AddressSchemaKeys.postcode: l.string().regex("^\\d{5}\$").required(),
-});
-```
-
-String literals in generated code are double-quoted and escaped, so `r'^\d{5}$'` appears as `"^\\d{5}\$"`.
+<Generated file="user.g.dart" from="final SchemaValidator $AddressSchema" to='.withName("Address");' title="lib/user.g.dart" />
 
 ## Validate function
 
-`$UserValidate` runs `validateSchema` with the model's `fromJson`, so success carries a `User`.
+`$UserValidate` accepts any input and runs `validateSchema` with the model's `fromJson`, so success carries a `User`.
 
-```dart title="lib/user.g.dart"
-SchemaValidationResult<User> $UserValidate(Map<String, dynamic> json) =>
-    $UserSchema.validateSchema(json, fromJson: User.fromJson);
-```
+<Generated file="user.g.dart" from="ValidationResult<User> $UserValidate" to="fromJson: User.fromJson);" title="lib/user.g.dart" />
 
 For a `dart_mappable` model the function uses `UserMapper.fromMap` instead.
 
+<Verdict id="gen.user" />
+
+Input that is not a map at a nested field reports with the field's name:
+
+<Output id="gen.user.notmap" />
+
 ## `validateSelf` extension
 
-The extension serialises an instance with `toJson()` and validates the result, which is how you check a model you built in code rather than parsed from input.
+The extension serialises an instance with `toJson()`, converts any nested objects left as instances, and validates the result. It is how you check a model you built in code rather than parsed from input. It is generated only for models with a `toJson()` or a `dart_mappable` `toMap()`.
 
-```dart title="lib/user.g.dart"
-extension UserValidationExtension on User {
-  SchemaValidationResult<User> validateSelf() => $UserValidate(toJson());
-}
+<Generated file="user.g.dart" from="extension UserValidationExtension" to="}" title="lib/user.g.dart" />
+
+```dart
+final user = User(
+  name: 'A',
+  email: 'ada',
+  address: const Address(street: 's', city: 'c', postcode: '12345'),
+);
+print(user.validateSelf());
 ```
 
-`toJson()` has to produce nested maps for nested models. `json_serializable` leaves nested objects as instances unless `explicit_to_json` is on, and the nested schema then reports `value must be a map`. Turn it on in `build.yaml`:
-
-```yaml title="build.yaml"
-targets:
-  $default:
-    builders:
-      json_serializable:
-        options:
-          explicit_to_json: true
-```
-
-`dart_mappable` models use `toMap()`, which already nests.
+<Output id="gen.user.validateSelf" />
 
 ## Schema keys
 
-`UserSchemaKeys` is a record. Each field is named after the Dart parameter and holds the key as it appears in the input map, which is the `@JsonKey` name when there is one. The generated schema uses these keys, and you can use them when you read the raw map.
+`UserSchemaKeys` is a record. Each field is named after the Dart parameter and holds the key as it appears in the input map, which is the `@JsonKey` name when there is one. The generated schema uses these keys.
 
-```dart title="lib/user.g.dart"
-const UserSchemaKeys = (
-  name: "name",
-  email: "email_address",
-  age: "age",
-  address: "address",
-);
-```
+<Generated file="user.g.dart" from="const UserSchemaKeys" to=");" title="lib/user.g.dart" />
 
 ## Error keys
 
-`UserErrorKeys` has the same fields, but each holds an error path for `getError`. A field whose type is another model becomes a nested record whose paths are prefixed.
+`UserErrorKeys` has the same fields, but each holds an error path for `getError`. A field whose type is another model becomes a nested record whose paths carry the prefix, with `$key` for the field's own path.
 
-```dart title="lib/user.g.dart"
-const UserErrorKeys = (
-  name: "name",
-  email: "email_address",
-  age: "age",
-  address: (
-    street: "address.street",
-    city: "address.city",
-    postcode: "address.postcode",
-  ),
-);
-```
+<Generated file="user.g.dart" from="const UserErrorKeys" to=");" title="lib/user.g.dart" />
 
 ```dart
-result.getError(UserErrorKeys.address.postcode); // postcode must match regex
+print(result.getError(UserErrorKeys.email));
+print(result.getError(UserErrorKeys.address.postcode));
+print(result.getError(UserErrorKeys.address.$key));
+print(UserSchemaKeys.email);
+print(UserErrorKeys.address.$key);
 ```
+
+<Output id="gen.user.keys" />
 
 [Schema keys and error keys](/generator/keys) goes into both records.
 
+## Unknown keys
+
+A generated schema strips keys it does not declare before `fromJson` runs, like every 1.0 schema, so input with extra keys validates and the extras never reach the serializer:
+
+<Output id="gen.user.unknown" title="$UserValidate({..., 'nickname': 'A', 'address': {..., 'country': 'FR'}}).isValid" />
+
+Every key the serializer reads has to be a schema field, and the generator makes it one: for a `@JsonSerializable` class, public settable fields that are not constructor parameters are schema fields too. When the serializer may read keys the generator cannot name, the schema gets `.passthrough()` instead: a field with `@JsonKey(readValue:)`, a private field with `@JsonKey(includeFromJson: true)`, or a `@MappableClass(hook:)`.
+
 ## Auto-generated schemas
 
-When a field's type is a class that has no `@luthor` annotation but has a `fromJson` factory or `@MappableClass` and a constructor with named parameters, the generator emits the same five items for that class too, after the annotated model's. These are auto-generated schemas. When two annotated models in one library refer to the same un-annotated class, each emits a copy, which does not compile. Annotate the shared class with `@luthor` instead.
+When a field's type is a class without `@luthor` that has a `fromJson` or `@MappableClass` and a constructor with named parameters, the generator emits a private schema for it, `_$ClassSchema`, once per library. It gets no public keys, validate function or extension. Annotate the class with `@luthor` to get the public API.
+
+## Which constructor
+
+The schema follows the constructor the serializer uses: the one named in `@JsonSerializable(constructor:)`, the `@MappableConstructor`, the unnamed constructor, or else the first public constructor with parameters.

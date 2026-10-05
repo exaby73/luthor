@@ -4,6 +4,7 @@ description: Validate a map against named fields, read errors by path, and conve
 ---
 
 import { Steps } from '@astrojs/starlight/components';
+import Output from '../../../components/Output.astro';
 import Verdict from '../../../components/Verdict.astro';
 
 In this tutorial you validate a sign-up payload with three fields, one of them nested, then turn the valid map into a Dart object. It continues from [Your first validator](/start/first-validator).
@@ -30,7 +31,7 @@ In this tutorial you validate a sign-up payload with three fields, one of them n
 
 2. Validate a map.
 
-   `validateSchema` takes a `Map<String, Object?>` and returns a `SchemaValidationResult`.
+   `validate` accepts any input and returns a `ValidationResult<Map<String, Object?>?>`.
 
    ```dart title="bin/main.dart" ins={11-19}
    import 'package:luthor/luthor.dart';
@@ -44,7 +45,7 @@ In this tutorial you validate a sign-up payload with three fields, one of them n
    });
 
    void main() {
-     final result = user.validateSchema({
+     final result = user.validate({
        'email': 'bad',
        'age': 12,
        'profile': {'displayName': 'x'},
@@ -54,55 +55,38 @@ In this tutorial you validate a sign-up payload with three fields, one of them n
    }
    ```
 
-   The error case prints an error map. Nested schemas produce nested maps, and each field holds a list of messages. The messages use the field name because the schema supplies it.
+   The failure case prints the error map: one entry per failing field, keyed by its path. The nested field appears as `profile.displayName`, and the messages use the field names because the schema supplies them.
 
-   ```txt wrap
-   SchemaValidationError(data: {email: bad, age: 12, profile: {displayName: x}}, errors: {email: [email must be a valid email address], age: [age must be greater than or equal to 18], profile: {displayName: [displayName must be at least 2 characters long]}})
-   ```
+   <Output id="user.print" title="dart run bin/main.dart" />
 
 3. Look an error up by path.
 
-   On `SchemaValidationError`, `getError` takes an error path, a dot-separated chain of field names, and returns the first message at that path or `null`.
+   `getError` takes an error path, a dot-separated chain of field names, and returns the first message at that path or `null`. It is available on every result, so you can call it in either branch.
 
    ```dart title="bin/main.dart" ins={8-13}
    void main() {
-     final result = user.validateSchema({
+     final result = user.validate({
        'email': 'bad',
        'age': 12,
        'profile': {'displayName': 'x'},
      });
 
      switch (result) {
-       case SchemaValidationSuccess(data: final data):
+       case ValidationSuccess(:final data):
          print('+ $data');
-       case SchemaValidationError():
+       case ValidationFailure():
          print('- ${result.getError('profile.displayName')}');
      }
    }
    ```
 
-   <Verdict
-     title="user.validateSchema(input)"
-     cases={[
-       {
-         input: "{'email': 'dev@example.com', 'profile': {'displayName': 'Ada'}}",
-         pass: true,
-       },
-       {
-         input: "{'email': 'bad', 'age': 12, 'profile': {'displayName': 'x'}}",
-         pass: false,
-         message: [
-           'email must be a valid email address',
-           'age must be greater than or equal to 18',
-           'profile.displayName: displayName must be at least 2 characters long',
-         ],
-       },
-     ]}
-   />
+   <Output id="user.switch" title="dart run bin/main.dart" />
+
+   <Verdict id="hero" title="user.validate(input)" />
 
 4. Convert valid input to a model.
 
-   Pass `fromJson` to `validateSchema`. On success, `data` is the converted object. On failure, conversion does not run and `data` is `null`.
+   Use `validateSchema` with a `fromJson`. On success, `data` is the converted object. If validation fails, `fromJson` does not run. If `fromJson` throws, the result is a failure with a `fromJsonFailed` issue.
 
    ```dart title="bin/main.dart"
    class User {
@@ -118,16 +102,19 @@ In this tutorial you validate a sign-up payload with three fields, one of them n
    }
 
    void main() {
-     final result = user.validateSchema<User>(
+     final result = user.validateSchema(
        {'email': 'dev@example.com', 'profile': {'displayName': 'Ada'}},
        fromJson: User.fromJson,
      );
 
-     if (result case SchemaValidationSuccess(data: final user)) {
-       print(user.email); // dev@example.com
+     print(result);
+     if (result case ValidationSuccess(:final data)) {
+       print(data.email);
      }
    }
    ```
+
+   <Output id="user.fromJson" title="dart run bin/main.dart" />
 
 </Steps>
 

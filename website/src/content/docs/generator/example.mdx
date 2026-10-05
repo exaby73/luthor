@@ -3,26 +3,32 @@ title: Worked example
 description: A registration form with a nested address, a password confirmation, and a conditional rule, generated and validated end to end.
 ---
 
+import Generated from '../../../components/Generated.astro';
+import Output from '../../../components/Output.astro';
 import Verdict from '../../../components/Verdict.astro';
 
-This example puts the generator features together in one model: typed keys, `@JsonKey` names, a nested model, a schema custom validator for password confirmation, and a conditional rule that depends on another field. Read the earlier generator pages first; this one does not re-explain them.
+This example puts the generator features together in one model: typed keys, `@JsonKey` names, a nested model, a schema custom validator for password confirmation, and a conditional rule that depends on another field. Read the earlier generator pages first; this one does not re-explain them. The generated code and the outputs are from a real run.
 
 ## The models
+
+`Address` is the one from [What gets generated](/generator/output).
 
 ```dart title="lib/registration.dart"
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:luthor/luthor.dart';
 
+import 'user.dart';
+
 part 'registration.freezed.dart';
 part 'registration.g.dart';
 
-bool matchesPassword(Object? value, Map<String, Object?> data) =>
+bool matchesPassword(String value, SchemaData data) =>
     value == data['password'];
 
 /// A business account needs a phone number. The rule sits on `accountType`
-/// because that field is always present; a missing optional `phone` would
-/// never be validated.
-bool phoneForBusiness(Object? value, Map<String, Object?> data) {
+/// because that field is always present; a missing optional `phone` is never
+/// validated.
+bool phoneForBusiness(String value, SchemaData data) {
   if (value != 'business') return true;
   final phone = data['phone'];
   return phone is String && phone.isNotEmpty;
@@ -37,8 +43,10 @@ abstract class Registration with _$Registration {
     @HasMin(8) required String password,
     @WithSchemaCustomValidator(matchesPassword, message: 'Passwords must match')
     required String confirm,
-    @WithSchemaCustomValidator(phoneForBusiness,
-        message: 'A business account needs a phone number')
+    @WithSchemaCustomValidator(
+      phoneForBusiness,
+      message: 'A business account needs a phone number',
+    )
     required String accountType,
     String? phone,
     @HasMin(18) required int age,
@@ -47,18 +55,6 @@ abstract class Registration with _$Registration {
 
   factory Registration.fromJson(Map<String, dynamic> json) =>
       _$RegistrationFromJson(json);
-}
-
-@luthor
-@freezed
-abstract class Address with _$Address {
-  const factory Address({
-    required String street,
-    required String city,
-    @MatchRegex(r'^\d{5}$') required String postcode,
-  }) = _Address;
-
-  factory Address.fromJson(Map<String, dynamic> json) => _$AddressFromJson(json);
 }
 ```
 
@@ -80,90 +76,36 @@ void main() {
   });
 
   switch (result) {
-    case SchemaValidationSuccess(data: final registration):
-      print('+ ${registration.email}');
-    case SchemaValidationError():
-      for (final line in [
-        result.getError(RegistrationErrorKeys.name),
-        result.getError(RegistrationErrorKeys.email),
-        result.getError(RegistrationErrorKeys.password),
-        result.getError(RegistrationErrorKeys.confirm),
-        result.getError(RegistrationErrorKeys.accountType),
-        result.getError(RegistrationErrorKeys.age),
-        result.getError(RegistrationErrorKeys.address.postcode),
+    case ValidationSuccess(:final data):
+      print('+ ${data.email}');
+    case ValidationFailure():
+      for (final key in [
+        RegistrationErrorKeys.name,
+        RegistrationErrorKeys.email,
+        RegistrationErrorKeys.password,
+        RegistrationErrorKeys.confirm,
+        RegistrationErrorKeys.accountType,
+        RegistrationErrorKeys.age,
+        RegistrationErrorKeys.address.postcode,
       ]) {
-        if (line != null) print('- $line');
+        print('- ${result.getError(key)}');
       }
   }
 }
 ```
 
-<Verdict
-  title="$RegistrationValidate(input)"
-  cases={[
-    {
-      input: "{'name': 'Ada', 'email_address': 'ada@example.com', 'password': 'hunter2hunter2', 'confirm': 'hunter2hunter2', 'accountType': 'personal', 'age': 36, 'address': {...}}",
-      pass: true,
-    },
-    {
-      input: "{'name': 'A', 'email_address': 'ada', 'password': 'short', 'confirm': 'different', 'accountType': 'business', 'age': 17, 'address': {..., 'postcode': '12'}}",
-      pass: false,
-      message: [
-        'name must be at least 2 characters long',
-        'email_address must be a valid email address',
-        'password must be at least 8 characters long',
-        'Passwords must match',
-        'A business account needs a phone number',
-        'age must be greater than or equal to 18',
-        'address.postcode: postcode must match regex',
-      ],
-    },
-  ]}
-/>
+<Output id="gen.registration.lines" title="dart run bin/main.dart" />
 
-Two details worth noticing in the output. The email message says `email_address`, because the field name in messages is the input key, which `@JsonKey` renamed. The phone rule reports under `accountType`, where the validator lives, and `RegistrationErrorKeys.accountType` is the key that reads it.
+<Verdict id="gen.registration" />
+
+Two details worth noticing. The email message says `email_address`, because the field name in messages is the input key, which `@JsonKey` renamed. The phone rule reports under `accountType`, where the validator lives, and `RegistrationErrorKeys.accountType` is the key that reads it.
 
 ## What the generator wrote
 
-The schema, with the generated modifier order:
+The schema, with annotations applied in the order they were written:
 
-```dart title="lib/registration.g.dart (excerpt)"
-Validator $RegistrationSchema = l.withName('Registration').schema({
-  RegistrationSchemaKeys.name: l.string().max(50).min(2).required(),
-  RegistrationSchemaKeys.email: l.string().email().required(),
-  RegistrationSchemaKeys.password: l.string().min(8).required(),
-  RegistrationSchemaKeys.confirm: l
-      .string()
-      .customWithSchema(matchesPassword, message: "Passwords must match")
-      .required(),
-  RegistrationSchemaKeys.accountType: l
-      .string()
-      .customWithSchema(
-        phoneForBusiness,
-        message: "A business account needs a phone number",
-      )
-      .required(),
-  RegistrationSchemaKeys.phone: l.string(),
-  RegistrationSchemaKeys.age: l.int().min(18).required(),
-  RegistrationSchemaKeys.address: $AddressSchema.required(),
-});
-```
+<Generated file="registration.g.dart" from="final SchemaValidator $RegistrationSchema" to='.withName("Registration");' title="lib/registration.g.dart" />
 
 And the error keys, with the nested record for `address`:
 
-```dart title="lib/registration.g.dart (excerpt)"
-const RegistrationErrorKeys = (
-  name: "name",
-  email: "email_address",
-  password: "password",
-  confirm: "confirm",
-  accountType: "accountType",
-  phone: "phone",
-  age: "age",
-  address: (
-    street: "address.street",
-    city: "address.city",
-    postcode: "address.postcode",
-  ),
-);
-```
+<Generated file="registration.g.dart" from="const RegistrationErrorKeys" to=");" title="lib/registration.g.dart" />

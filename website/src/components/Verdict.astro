@@ -1,28 +1,50 @@
 ---
 /**
- * A test-report style figure: each row is one input and the verdict Luthor
- * returned for it. Rows marked `pass: false` show the error message the
- * validator produced. The numbers in the header follow `dart test` output:
- * `+passed -failed`.
+ * A test-report style figure: each row is one input and the result Luthor
+ * returned for it. Every row comes from a real run: `website/scripts/run.sh`
+ * writes src/data/verdicts.json (runtime examples, Dart 3.11) and
+ * src/data/generated.json (generated code, Dart 3.13). Pass the `id` of an
+ * entry; the figure refuses to render an id that is not in either file.
  */
-export interface VerdictCase {
-  /** The input, shown as Dart source. */
+import runtime from '../data/verdicts.json';
+import generated from '../data/generated.json';
+
+interface Issue {
+  path: string;
+  code: string;
+  message: string;
+}
+
+interface Case {
   input: string;
-  /** Whether the validator accepted the input. */
   pass: boolean;
-  /** The error message, or messages, for a failed input. */
-  message?: string | string[];
+  issues: Issue[];
+}
+
+interface Entry {
+  title: string;
+  cases: Case[];
 }
 
 interface Props {
-  /** Label in the header, for example the validator expression. */
+  /** Key in verdicts.json or generated.json. */
+  id: string;
+  /** Overrides the recorded title. */
   title?: string;
-  cases: VerdictCase[];
   /** Reveal rows one at a time on load. Used once, on the landing page. */
   animate?: boolean;
 }
 
-const { title = 'report', cases, animate = false } = Astro.props;
+const { id, title, animate = false } = Astro.props;
+const all = {
+  ...(runtime.verdicts as unknown as Record<string, Entry>),
+  ...(generated.verdicts as unknown as Record<string, Entry>),
+};
+const entry = all[id];
+if (!entry) {
+  throw new Error(`Verdict "${id}" is not in src/data/verdicts.json or generated.json. Run website/scripts/run.sh.`);
+}
+const cases = entry.cases;
 const passed = cases.filter((c) => c.pass).length;
 const failed = cases.length - passed;
 ---
@@ -33,7 +55,7 @@ const failed = cases.length - passed;
   data-start-ms={animate ? 200 : undefined}
 >
   <figcaption class="lu-report__head">
-    <code class="lu-report__title">{title}</code>
+    <code class="lu-report__title">{title ?? entry.title}</code>
     <span
       class="lu-report__count"
       aria-label={`${passed} passed, ${failed} failed`}
@@ -57,9 +79,11 @@ const failed = cases.length - passed;
           <span class="sr-only">{c.pass ? 'valid' : 'invalid'}: </span>
           <code class="lu-report__input">{c.input}</code>
           {!c.pass &&
-            c.message &&
-            (Array.isArray(c.message) ? c.message : [c.message]).map((m) => (
-              <span class="lu-report__message">{m}</span>
+            c.issues.map((issue) => (
+              <span class="lu-report__message">
+                {issue.path && <span class="lu-report__path">{issue.path}: </span>}
+                {issue.message}
+              </span>
             ))}
         </li>
       ))
@@ -167,6 +191,10 @@ const failed = cases.length - passed;
   .lu-report__message::before {
     content: 'Which: ';
     color: var(--sl-color-gray-3);
+  }
+
+  .lu-report__path {
+    color: var(--sl-color-gray-2);
   }
 
   /* One authored moment: the landing report runs on load. */

@@ -4,33 +4,32 @@ description: Requires the string to start with a given prefix.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when `value.startsWith(string)` is true. The comparison is case-sensitive.
+Passes when `value.startsWith(prefix)` is true. Case-sensitive.
 
 ## Signature
 
 ```dart wrap
-StringValidator startsWith(String string, {String? message, String? Function()? messageFn})
+StringValidator<O> startsWith(String prefix, {String? message, MessageBuilder? messageBuilder})
 ```
-
-Available on `l.string()`.
 
 ## Parameters
 
 | Parameter | Type | Meaning |
 |---|---|---|
-| `string` | `String` | The required prefix. |
+| `prefix` | `String` | The required prefix. `params['prefix']`. |
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value does not start with "+"`, with the prefix quoted. `value` is replaced by the field name when there is one.
+Code `missingPrefix`. Default message: `value does not start with "+"`. `value` is replaced by the field name when there is one.
 
 ## Code generation
 
-`@StartsWith(s)`. Put the annotation on the constructor parameter.
+`@StartsWith(s)`. Put the annotation on the constructor parameter or the field.
 
 ## Example
 
@@ -51,10 +50,4 @@ final phone = l.string().startsWith('+');
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="phone.validateValue(input)"
-  cases={[
-    { input: "'+44 20 7946 0958'", pass: true },
-    { input: "'020 7946 0958'", pass: false, message: "value does not start with \"+\"" },
-  ]}
-/>
+<Verdict id="str.startsWith" />

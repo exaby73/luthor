@@ -1,0 +1,31 @@
+---
+/**
+ * The printed output of an example, taken from src/data/verdicts.json or
+ * src/data/generated.json (see website/scripts/run.sh). Renders as a plain
+ * text code block so what the reader sees is what the run printed.
+ */
+import { Code } from '@astrojs/starlight/components';
+import runtime from '../data/verdicts.json';
+import generated from '../data/generated.json';
+
+interface Props {
+  /** Key under "outputs" in either data file. */
+  id: string;
+  /** Code block title, for example "dart run bin/main.dart". */
+  title?: string;
+  /** Language for highlighting. Defaults to plain text. */
+  lang?: string;
+}
+
+const { id, title, lang = 'txt' } = Astro.props;
+const all = {
+  ...(runtime.outputs as Record<string, string[]>),
+  ...(generated.outputs as Record<string, string[]>),
+};
+const lines = all[id];
+if (!lines) {
+  throw new Error(`Output "${id}" is not in src/data/verdicts.json or generated.json. Run website/scripts/run.sh.`);
+}
+---
+
+<Code code={lines.join('\n')} lang={lang} title={title} wrap />

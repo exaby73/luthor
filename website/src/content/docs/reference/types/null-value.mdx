@@ -4,14 +4,15 @@ description: Requires null.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes only when the value is `null`. Useful for a field that must be absent or cleared.
+Passes only when the value is `null`. Returns a `NullValidator`, which has `withName()` and nothing else: a required value can never be `null`, and a custom validator would never be called.
 
 ## Signature
 
 ```dart wrap
-Validator nullValue({String? message, String? Function()? messageFn})
+NullValidator nullValue({String? message, MessageBuilder? messageBuilder})
 ```
 
 ## Parameters
@@ -19,15 +20,15 @@ Validator nullValue({String? message, String? Function()? messageFn})
 | Parameter | Type | Meaning |
 |---|---|---|
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value must be null`. `value` is replaced by the field name when there is one.
+Code `invalidType`. Default message: `value must be null`. `value` is replaced by the field name when there is one.
 
 ## Code generation
 
-A parameter of type `Null` maps to `l.nullValue()`. `json_serializable` and `freezed` cannot serialize a `Null`-typed field, so use this with `dart_mappable` or a hand-written `fromJson`.
+A parameter of type `Null` maps to `l.nullValue()`. `json_serializable` and `freezed` cannot serialize a `Null`-typed field, so use it with `dart_mappable` or a hand-written `fromJson`. `@WithCustomValidator` on a `Null` field fails generation.
 
 ## Example
 
@@ -48,10 +49,4 @@ Null? deletedAt, // l.nullValue()
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="cleared.validateValue(input)"
-  cases={[
-    { input: "null", pass: true },
-    { input: "1", pass: false, message: "value must be null" },
-  ]}
-/>
+<Verdict id="type.nullValue" />

@@ -4,23 +4,24 @@ description: Accepts any value.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Always passes. Use it for a field you want listed in a schema without constraints. `.required()` still works on it, and so do custom validators.
+Always passes the type check. Use it for a field you want listed in a schema without constraints, or as the start of a chain that is only a custom validator: `l.any().custom(...)`. Returns an `AnyValidator<Object?>`; `.required()` narrows it to `Object`.
 
 ## Signature
 
 ```dart wrap
-Validator any()
+AnyValidator<Object?> any()
 ```
 
-## Error message
+## Issue
 
-None. `l.any().required()` reports `value is required` for `null`.
+Code `none`. Default message: `l.any()` has no type check, so it reports no issue of its own. `l.any().required()` reports `value is required` for `null`.
 
 ## Code generation
 
-A `dynamic` parameter maps to `l.any()`. It never gets `.required()`, because `dynamic` admits `null`.
+A `dynamic`, `Object` or `Object?` parameter maps to `l.any()`. `dynamic` never gets `.required()`, because `dynamic` admits `null`. A field with a `JsonConverter` or `@JsonKey(fromJson:)` is also validated as `l.any()`, because the generator cannot know the raw shape.
 
 ## Example
 
@@ -36,16 +37,12 @@ final payload = l.any();
 
 ```dart wrap
 required dynamic payload, // l.any()
+required Object meta,     // l.any().required()
 ```
 
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="payload.validateValue(input)"
-  cases={[
-    { input: "42", pass: true },
-    { input: "null", pass: true },
-    { input: "{'k': 'v'}", pass: true },
-  ]}
-/>
+<Verdict id="type.any" />
+
+<Output id="type.any.required" />

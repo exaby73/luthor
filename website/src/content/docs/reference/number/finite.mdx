@@ -1,0 +1,58 @@
+---
+title: '.finite()'
+description: Rejects NaN and infinity.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
+import Verdict from '../../../../components/Verdict.astro';
+
+Passes when `value.isFinite` is true. `NaN`, `double.infinity` and `double.negativeInfinity` are doubles, so they pass `l.double()` and `l.num()` unless `.finite()` is present. `jsonDecode` never produces them, but values computed in Dart can.
+
+## Signature
+
+```dart wrap
+NumberValidator<N, O> finite({String? message, MessageBuilder? messageBuilder})
+```
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `message` | `String?` | Replaces the default error message. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
+
+## Issue
+
+Code `notFinite`. Default message: `value must be a finite number`. `value` is replaced by the field name when there is one.
+
+## Code generation
+
+No annotation adds `.finite()` yet. Apply it to the generated schema's field by hand if you need it, or check it in a `@WithCustomValidator`.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final price = l.double().finite();
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+bool isFinite(double value) => value.isFinite;
+
+@WithCustomValidator(isFinite, message: 'must be finite') required double price,
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict id="num.finite" />
+
+Without `.finite()`:
+
+<Output id="num.finite.without" />

@@ -9,6 +9,7 @@ import Verdict from './Verdict.astro';
 const { data } = Astro.locals.starlightRoute.entry;
 const tagline = data.hero?.tagline ?? '';
 
+// The same schema the "hero" verdict in src/data/verdicts.json is run with.
 const schema = `final user = l.schema({
   'email': l.string().email().required(),
   'age': l.int().min(18),
@@ -16,26 +17,6 @@ const schema = `final user = l.schema({
     'displayName': l.string().min(2).required(),
   }).required(),
 });`;
-
-const cases = [
-  {
-    input: "{'email': 'dev@example.com', 'profile': {'displayName': 'Ada'}}",
-    pass: true,
-  },
-  {
-    input: "{'email': 'dev@example.com', 'age': 42, 'profile': {'displayName': 'Ada'}}",
-    pass: true,
-  },
-  {
-    input: "{'email': 'bad', 'age': 12, 'profile': {'displayName': 'x'}}",
-    pass: false,
-    message: [
-      'email must be a valid email address',
-      'age must be greater than or equal to 18',
-      'profile.displayName: displayName must be at least 2 characters long',
-    ],
-  },
-];
 ---
 
 <section class="lu-hero not-content">
@@ -49,7 +30,7 @@ const cases = [
     </div>
     <p class="lu-hero__links">
       <a class="lu-hero__primary" href="/installation">Start with installation</a>
-      <a href="/reference/types/string">Browse the API reference</a>
+      <a href="/guides/upgrading">Upgrade from 0.x</a>
     </p>
     <dl class="lu-hero__facts">
       <div>
@@ -62,14 +43,14 @@ const cases = [
       </div>
       <div>
         <dt>Dependencies</dt>
-        <dd><code>meta</code> only</dd>
+        <dd>none</dd>
       </div>
     </dl>
   </div>
 
   <div class="lu-hero__demo">
     <Code code={schema} lang="dart" title="user.dart" />
-    <Verdict title="user.validateSchema(input)" cases={cases} animate />
+    <Verdict id="hero" animate />
   </div>
 </section>
 
@@ -185,12 +166,6 @@ const cases = [
     margin: 0;
     color: var(--sl-color-white);
     font-weight: 600;
-  }
-
-  .lu-hero__facts code {
-    font-family: var(--__sl-font-mono);
-    font-weight: 500;
-    font-size: 0.9em;
   }
 
   .lu-hero__demo {

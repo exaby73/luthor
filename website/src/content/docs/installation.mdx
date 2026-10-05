@@ -4,6 +4,7 @@ description: Add luthor to a Dart or Flutter project, and luthor_generator if yo
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../components/Output.astro';
 
 ## Requirements
 
@@ -11,9 +12,9 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 |---|---|
 | Dart SDK | 3.11 |
 | Flutter | 3.41 |
-| `analyzer` (for `luthor_generator`) | 10, up to and including 14 |
+| `analyzer` resolved by your project, for `luthor_generator` | 10, up to and including 14 |
 
-`luthor` itself depends only on `package:meta`. `luthor_generator` works with `freezed`, `json_serializable`, and `dart_mappable`, and with plain classes that have a `fromJson` factory. Those packages are optional companions, not requirements. On Dart 3.11, use `freezed` 3.2.x; `freezed` 4 needs Dart 3.13 or later.
+`luthor` has no dependencies. `luthor_generator` works with `freezed`, `json_serializable`, `dart_mappable`, and plain classes with a `fromJson`. Those packages are optional companions. On Dart 3.11, use `freezed` 3.2.x; `freezed` 4 needs Dart 3.13 or later.
 
 ## Add luthor
 
@@ -41,7 +42,7 @@ dependencies:
   luthor: ^1.0.0
 ```
 
-Import it where you build validators:
+Import the package in each file that builds a validator.
 
 ```dart
 import 'package:luthor/luthor.dart';
@@ -49,7 +50,7 @@ import 'package:luthor/luthor.dart';
 
 ## Add luthor_generator
 
-Skip this section if you will write every schema by hand. The generator reads classes annotated with `@luthor` and writes a schema, a validate function, and typed keys for each one. It runs through `build_runner`.
+Skip this section if you will write every schema by hand. The generator reads classes annotated with `@luthor` and writes a schema, a validate function, and typed keys for each one. It runs through `build_runner` and needs no `build.yaml`.
 
 <Tabs syncKey="sdk">
   <TabItem label="Dart">
@@ -88,7 +89,7 @@ dart pub add dart_mappable
 dart pub add dev:dart_mappable_builder
 ```
 
-[Models without freezed](/generator/models) covers plain classes and `dart_mappable` in detail.
+[Models without freezed](/generator/models) covers `json_serializable` on its own, plain classes, and `dart_mappable`.
 
 Run the generator after you change an annotated class:
 
@@ -100,15 +101,17 @@ Use `watch` instead of `build` to regenerate on save.
 
 ## Check the install
 
-Run this file. It prints `SingleValidationSuccess(data: dev@example.com)`.
+Run this file.
 
 ```dart title="bin/check.dart"
 import 'package:luthor/luthor.dart';
 
 void main() {
   final email = l.string().email().required();
-  print(email.validateValue('dev@example.com'));
+  print(email.validate('dev@example.com'));
 }
 ```
+
+<Output id="result.toString" title="dart run bin/check.dart (first line)" />
 
 Next: [Your first validator](/start/first-validator).

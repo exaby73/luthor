@@ -1,0 +1,68 @@
+---
+title: What's new in 1.0
+description: The additions in luthor 1.0 and luthor_generator 1.0, each in a line or two with a link to its page.
+---
+
+1.0 is a breaking release. This page lists what is new; [Upgrading to 1.0](/guides/upgrading) lists what changed. The full changelogs are in the repository: [`luthor`](https://github.com/exaby73/luthor/blob/main/packages/luthor/CHANGELOG.md) and [`luthor_generator`](https://github.com/exaby73/luthor/blob/main/packages/luthor_generator/CHANGELOG.md).
+
+## Runtime
+
+**Typed output.** Validators are generic over their output. `l.int().required()` validates to an `int`, `l.list(l.string().required())` to a `List<String>`, with no cast and no generated code. [How validators work](/concepts/validators#the-output-is-typed).
+
+**One result type.** `validate` returns `ValidationResult<T>`, either `ValidationSuccess(data)` or `ValidationFailure(input, issues)`. `messages`, `errors`, `getError` and `getErrors` are on every result, empty on success. [Results and issues](/concepts/results).
+
+**Issues with codes.** Each problem is a `ValidationIssue` with an `IssueCode`, a path, a message, params and a field name. Switch on the code instead of parsing text. [ValidationIssue and IssueCode](/reference/issues).
+
+**A flat error map with real paths.** `errors` is keyed by error path: `address.city`, `items.1.qty`, `scores.alice`. List elements report at their index, map values at their key, and object-level errors at `''`. [Errors and error paths](/concepts/errors).
+
+**Modifiers in any order.** Every modifier returns the validator's own type, so `l.string().required().min(3)` compiles. [Optional by default](/concepts/optional-by-default#where-required-goes-in-a-chain).
+
+**`l.union()`.** A value that passes any one of several validators, with every option's issues kept in the failure. [`l.union()`](/reference/types/union).
+
+**`l.oneOf()`.** A fixed list of allowed values, which is also how the generator validates enums. [`l.oneOf()`](/reference/types/one-of).
+
+**Unknown keys.** Schemas strip keys they do not declare. `.passthrough()` keeps them, `.strict()` reports them. [Schemas](/concepts/schemas#unknown-keys).
+
+**`.finite()`.** Rejects `NaN` and infinity on `l.double()` and `l.num()`. [`.finite()`](/reference/number/finite).
+
+**`regex(RegExp)`.** The pattern is a `RegExp`, so flags apply and a bad pattern fails where it is written. [`.regex()`](/reference/string/regex).
+
+**Message builders.** `messageBuilder:` receives the issue, and `l.messageBuilder` sets one builder for every message, for translation. [Message builders](/concepts/messages).
+
+**`l.maxDepth`.** A nesting limit, default 512, that turns a hostile deep payload into a `tooDeep` issue instead of a stack overflow. [Max depth](/concepts/max-depth).
+
+**`l.file(accept:)`.** Accept package types such as `XFile` as files, with a structural check that survives minified web builds. [`l.file()`](/reference/types/file).
+
+**Typed custom validators.** `.custom()` and `.customWithSchema()` receive the typed value, never `null`, and `SchemaData` gives a schema custom validator the sibling fields plus `root`. [Custom validators](/concepts/custom-validators).
+
+**Recursion that validates.** Schemas built with `forwardRef()` validate every level, including mutual recursion. [`forwardRef()`](/reference/forward-ref).
+
+**No dependencies.** `luthor` dropped `meta`; it depends on nothing.
+
+## Generator
+
+**Enums.** An enum field generates `l.oneOf([...])` with the serialized values, honouring `@JsonValue`, `@JsonEnum`, `@MappableEnum` and `@MappableValue`. [Supported field types](/generator/types).
+
+**More types.** `Set`, `Iterable`, `Uri`, `Object`, and map keys of type `int`, `double`, `num`, `BigInt` and enums. [Supported field types](/generator/types).
+
+**Annotations on fields.** Validation annotations are read from fields as well as constructor parameters, including fields reached through `super.` parameters. [Annotations](/generator/annotations).
+
+**Serializer awareness.** `fieldRename`, `@JsonKey(name:)`, `@MappableField(key:)`, `@MappableClass(caseStyle:)`, constructor defaults, `@JsonKey(defaultValue:)`, `includeFromJson: false`, converters, and the constructor the serializer uses. [What gets generated](/generator/output).
+
+**`$key` in error keys.** A nested model field in `ErrorKeys` is a record with a `$key` for its own path. [Schema keys and error keys](/generator/keys).
+
+**No `build.yaml`.** The builder applies the combining builder itself, so plain classes and `dart_mappable` projects get a `.g.dart` without `json_serializable`. [Models without freezed](/generator/models).
+
+**Forward references everywhere.** Every nested schema reference is wrapped in `forwardRef()`. `@luthorForwardRef` is deprecated; remove it.
+
+**Clear failures.** Unions, generic models, unsupported types and annotations on the wrong field type fail generation with an error naming the class and field, instead of generating code that skipped validation. [Supported field types](/generator/types#unsupported-types).
+
+**`@isIp`.** A constant for `@IsIp()`. [`.ip()`](/reference/string/ip).
+
+**`@IsFile` on any type.** A field typed as a package class such as `MultipartFile`, or a list of one, generates `l.file(accept:)` instead of failing generation. [`l.file()`](/reference/types/file).
+
+**Analyzer 10 to 14.** The generator resolves on every Flutter release from 3.41 onwards. [Installation](/installation#requirements).
+
+## Agents
+
+**A skill for coding agents.** `npx skills add exaby73/luthor` installs a skill that teaches agents the Luthor API and code generation. [Use Luthor with AI coding agents](/guides/ai-agents).

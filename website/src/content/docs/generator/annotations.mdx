@@ -1,9 +1,12 @@
 ---
 title: Annotations
-description: Every luthor annotation, the modifier it adds, the parameter types it applies to, and the rules that apply to all of them.
+description: Every luthor annotation, the modifier it adds, the field types it applies to, and the rules that apply to all of them.
 ---
 
-Each annotation adds one modifier to the validator the generator derives from the parameter type. Most have a class form that takes arguments and a lowercase constant for the no-argument case: `@IsEmail()` and `@isEmail` are the same.
+import Generated from '../../../components/Generated.astro';
+import Verdict from '../../../components/Verdict.astro';
+
+Each annotation adds one modifier to the validator the generator derives from the field type. Most have a class form that takes arguments and a lowercase constant for the no-argument case: `@IsEmail()` and `@isEmail` are the same.
 
 ## Class-level
 
@@ -11,52 +14,53 @@ Each annotation adds one modifier to the validator the generator derives from th
 |---|---|
 | `@luthor` | Marks the class as a model. The generator emits the five generated items for it. |
 
-## Parameter-level
+## Field-level
 
 | Annotation | Constant | Applies to | Adds |
 |---|---|---|---|
-| `@HasMin(n)` | | `String` | [`.min(n)`](/reference/string/min), a minimum length |
-| `@HasMin(n)` | | `int` | [`.min(n)`](/reference/number/min), a minimum value |
+| `@HasMin(n)` | | `String` | [`.min(n)`](/reference/string/min), a minimum length; `n` must be integral |
+| `@HasMin(n)` | | `int`, `double`, `num` | [`.min(n)`](/reference/number/min), a minimum value; integral for `int` |
 | `@HasMax(n)` | | `String` | [`.max(n)`](/reference/string/max), a maximum length |
-| `@HasMax(n)` | | `int` | [`.max(n)`](/reference/number/max), a maximum value |
-| `@HasMinDouble(n)` | | `double` | `.min(n)` |
-| `@HasMaxDouble(n)` | | `double` | `.max(n)` |
-| `@HasMinNumber(n)` | | `num` | `.min(n)` |
-| `@HasMaxNumber(n)` | | `num` | `.max(n)` |
+| `@HasMax(n)` | | `int`, `double`, `num` | [`.max(n)`](/reference/number/max), a maximum value |
 | `@HasLength(n)` | | `String` | [`.length(n)`](/reference/string/length) |
 | `@Contains(s)` | | `String` | [`.contains(s)`](/reference/string/contains) |
 | `@StartsWith(s)` | | `String` | [`.startsWith(s)`](/reference/string/starts-with) |
 | `@EndsWith(s)` | | `String` | [`.endsWith(s)`](/reference/string/ends-with) |
-| `@MatchRegex(p)` | | `String` | [`.regex(p)`](/reference/string/regex) |
+| `@MatchRegex(p, caseSensitive:, multiLine:, unicode:, dotAll:)` | | `String` | [`.regex(RegExp(p, ...))`](/reference/string/regex) |
 | `@IsEmail()` | `@isEmail` | `String` | [`.email()`](/reference/string/email) |
-| `@IsUri(allowedSchemes: [...])` | `@isUri` | `String` | [`.uri()`](/reference/string/uri) |
-| `@IsUrl(allowedSchemes: [...])` | `@isUrl` | `String` | [`.url()`](/reference/string/url) |
-| `@IsIp(version: ...)` | | `String` | [`.ip()`](/reference/string/ip) |
+| `@IsUri(allowedSchemes:)` | `@isUri` | `String` | [`.uri()`](/reference/string/uri) |
+| `@IsUrl(allowedSchemes:)` | `@isUrl` | `String` | [`.url()`](/reference/string/url) |
+| `@IsIp(version:)` | `@isIp` | `String` | [`.ip()`](/reference/string/ip) |
 | `@IsUuid()` | `@isUuid` | `String` | [`.uuid()`](/reference/string/uuid) |
 | `@IsCuid()` | `@isCuid` | `String` | [`.cuid()`](/reference/string/cuid) |
 | `@IsCuid2()` | `@isCuid2` | `String` | [`.cuid2()`](/reference/string/cuid2) |
-| `@IsDateTime()` | `@isDateTime` | `String` | [`.dateTime()`](/reference/string/date-time). Added without annotation for `DateTime` parameters. |
+| `@IsDateTime()` | `@isDateTime` | `String` | [`.dateTime()`](/reference/string/date-time); `DateTime` fields get it without annotation |
 | `@IsEmoji()` | `@isEmoji` | `String` | [`.emoji()`](/reference/string/emoji) |
-| `@IsFile()` | `@isFile` | any | Replaces the type's validator with [`l.file()`](/reference/types/file) |
-| `@WithCustomValidator(fn)` | | any | [`.custom(fn)`](/reference/modifiers/custom) |
-| `@WithSchemaCustomValidator(fn)` | | any | [`.customWithSchema(fn)`](/reference/modifiers/custom-with-schema) |
-| `@luthorForwardRef` | | a model type | Wraps the reference in [`forwardRef()`](/reference/forward-ref) |
+| `@IsFile(accept:)` | `@isFile` | any, including package classes such as `MultipartFile` | Replaces the type's validator with [`l.file()`](/reference/types/file); on a `List<X>` field, `accept` receives the whole list |
+| `@WithCustomValidator(fn)` | | any except `Null` | [`.custom(fn)`](/reference/modifiers/custom) |
+| `@WithSchemaCustomValidator(fn)` | | any except `Null` | [`.customWithSchema(fn)`](/reference/modifiers/custom-with-schema) |
+| `@luthorForwardRef` | | a model type | Deprecated. It has no effect, because every nested reference is already a [forward reference](/reference/forward-ref). Remove it. |
 
-Every annotation except `@luthor` and `@luthorForwardRef` accepts `message` and `messageFn`, which pass through to the modifier. [Message functions](/concepts/messages) covers them.
+Every annotation except `@luthor` and `@luthorForwardRef` accepts `message` and `messageBuilder`, which pass through to the modifier. A `messageBuilder` has to be a top-level function or a static method. [Message builders](/concepts/messages) covers both.
 
 ## Rules
 
-Put annotations on constructor parameters. The generator reads the first constructor's parameters and nothing else. An annotation on a field declaration, as in `@HasMin(18) final int age;` with `required this.age`, is ignored without a warning.
+Annotations may sit on the constructor parameter or on the field, including fields reached through `super.` parameters. Before 1.0 only parameters were read.
 
-An annotation that does not match the parameter type is ignored. `@HasMin(2)` on a `double` adds nothing; use `@HasMinDouble(2)`. `@IsEmail()` on an `int` adds nothing.
+An annotation on a field type it does not apply to fails generation with an error naming the field. `@HasMin(2)` on a `bool`, `@IsEmail` on an `int`, and `@HasLength` on a `List` are errors, not silently ignored. A fractional `@HasMin` or `@HasMax` on an `int` or `String` field is also an error.
 
-Functions passed to `@WithCustomValidator`, `@WithSchemaCustomValidator`, and `messageFn` have to be top-level functions or static methods. The generated code refers to them by name.
+Functions passed to `@WithCustomValidator`, `@WithSchemaCustomValidator` and `messageBuilder` have to be top-level functions or static methods, and take the field's type: `bool isEven(int value)`, `bool matchesPassword(String value, SchemaData data)`.
 
-The order of generated string modifiers is fixed and does not follow annotation order. `@HasMin(2) @HasMax(50)` produces `.max(50).min(2)`. Because every validation runs, the order changes only the order of messages.
+Modifiers are generated in the order the annotations are written. `@HasMin(2) @HasMax(50)` generates `.min(2).max(50)`.
 
 ## Example
 
 ```dart
+bool matchesPassword(String value, SchemaData data) =>
+    value == data['password'];
+
+enum AccountType { personal, business }
+
 @luthor
 @freezed
 abstract class SignUp with _$SignUp {
@@ -68,22 +72,13 @@ abstract class SignUp with _$SignUp {
     required String confirm,
     @HasMin(18) int? age,
     @IsUrl(allowedSchemes: ['https']) String? website,
+    @Default(AccountType.personal) AccountType accountType,
   }) = _SignUp;
 
   factory SignUp.fromJson(Map<String, dynamic> json) => _$SignUpFromJson(json);
 }
 ```
 
-```dart title="Generated schema"
-Validator $SignUpSchema = l.withName('SignUp').schema({
-  SignUpSchemaKeys.name: l.string().max(50).min(2).required(),
-  SignUpSchemaKeys.email: l.string().email().required(),
-  SignUpSchemaKeys.password: l.string().min(8).required(),
-  SignUpSchemaKeys.confirm: l
-      .string()
-      .customWithSchema(matchesPassword, message: "Passwords must match")
-      .required(),
-  SignUpSchemaKeys.age: l.int().min(18),
-  SignUpSchemaKeys.website: l.string().url(allowedSchemes: ["https"]),
-});
-```
+<Generated file="registration.g.dart" from="final SchemaValidator $SignUpSchema" to='.withName("SignUp");' title="lib/sign_up.g.dart" />
+
+<Verdict id="gen.signUp" />

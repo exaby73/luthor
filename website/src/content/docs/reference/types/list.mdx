@@ -1,34 +1,35 @@
 ---
 title: 'l.list()'
-description: Requires a List, optionally validating each element.
+description: Requires a List and validates every element with one validator.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when the value is a `List` and, if `validators` is given, every element passes at least one of them. The list of validators is an any-of: `[l.int(), l.string()]` accepts a list that mixes integers and strings. Nested schemas and forward references are accepted as element validators.
+Passes when the value is a `List` and every element passes `element`. Each element's issues are reported at the element's index, so a bad second element appears at path `1`, or `tags.1` inside a schema. The output is a new `List<E>` of the validated elements, where `E` is the element validator's output: `l.list(l.int())` validates to `List<int?>` and `l.list(l.int().required())` to `List<int>`. Use `l.list(l.any())` to accept any elements and `l.list(l.union([...]))` for elements that may take several shapes.
 
 ## Signature
 
 ```dart wrap
-Validator list({List<ValidatorReference>? validators, String? message, String? Function()? messageFn})
+ListValidator<E, List<E>?> list<E>(ValidatorReference<E> element, {String? message, MessageBuilder? messageBuilder})
 ```
 
 ## Parameters
 
 | Parameter | Type | Meaning |
 |---|---|---|
-| `validators` | `List<ValidatorReference>?` | Each element must pass at least one of these. Omit to accept any list. |
+| `element` | `ValidatorReference<E>` | Runs on every element. A forward reference is accepted. |
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value must be a list` without element validators, and `value must be a list or does not match the validations` with them. The list reports one message for the whole list.
+Code `invalidType`. Default message: `value must be a list` when the value is not a list. Element failures carry the element validator's own code, at the element's index. `value` is replaced by the field name when there is one. Elements inherit the list's field name.
 
 ## Code generation
 
-A `List<T>` parameter maps to `l.list(validators: [...])` with the element validator derived from `T`. A non-nullable `T` gets `.required()` inside the list; a nullable `T?` does not. A `List<Comment>` inside `Comment` is wrapped in `forwardRef()`.
+A `List<T>`, `Set<T>` or `Iterable<T>` parameter maps to `l.list(e)` with `e` derived from `T`. A non-nullable `T` gets `.required()` inside the list; a nullable `T?` does not. Annotations on the field apply to the list itself, so `@HasLength` on a list fails generation. Element validators cannot be annotated yet.
 
 ## Example
 
@@ -36,27 +37,23 @@ A `List<T>` parameter maps to `l.list(validators: [...])` with the element valid
   <TabItem label="Hand-written">
 
 ```dart
-final tags = l.list(validators: [l.string().required()]);
+final tags = l.list(l.string().required());
 ```
 
   </TabItem>
   <TabItem label="Generated">
 
 ```dart wrap
-required List<String> tags,    // l.list(validators: [l.string().required()]).required()
-List<String?>? notes,          // l.list(validators: [l.string()])
-required List<Address> places, // l.list(validators: [$AddressSchema.required()]).required()
+required List<String> tags,    // l.list(l.string().required()).required()
+List<String?>? notes,          // l.list(l.string())
+required List<Address> places, // l.list(forwardRef(() => $AddressSchema.required())).required()
 ```
 
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="tags.validateValue(input)"
-  cases={[
-    { input: "['a', 'b']", pass: true },
-    { input: "[]", pass: true },
-    { input: "['a', 1]", pass: false, message: "value must be a list or does not match the validations" },
-    { input: "'a'", pass: false, message: "value must be a list or does not match the validations" },
-  ]}
-/>
+<Verdict id="type.list" />
+
+An optional element validator lets `null` elements through:
+
+<Output id="type.list.nullable" />

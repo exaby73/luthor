@@ -4,30 +4,34 @@ description: Requires a file-like value.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when the value's runtime type name contains one of `file`, `multipart`, `xfile`, `stream`, `bytes`, `uint8list`, or `bytedata`, compared in lowercase. That covers `dart:io` `File`, `Uint8List`, `ByteData`, `MultipartFile`, `XFile`, and streams. It is a name check, not a type check: a `List<int>` fails, and an unrelated class whose name happens to contain `file` passes. For stricter rules, use a [custom validator](/reference/modifiers/custom). `null` passes until you add `.required()`.
+Passes when the value is a `dart:io` `File` (where `dart:io` exists), `TypedData` such as `Uint8List`, a `ByteBuffer`, a `List<int>`, or a `Stream<List<int>>`, or when `accept` returns `true` for it. The check is structural, so it behaves the same in minified web builds and a class that happens to be named `UserProfile` fails. A list decoded from JSON is a `List<dynamic>`, not a `List<int>`, and fails. `null` passes until you add `.required()`.
 
 ## Signature
 
 ```dart wrap
-Validator file({String? message, String? Function()? messageFn})
+FileValidator<Object?> file({FileAcceptor? accept, String? message, MessageBuilder? messageBuilder})
+
+typedef FileAcceptor = bool Function(Object value);
 ```
 
 ## Parameters
 
 | Parameter | Type | Meaning |
 |---|---|---|
+| `accept` | `FileAcceptor?` | Accepts further values as files, such as `(value) => value is XFile`. An `accept` that throws rejects the value. |
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value must be a file`. `value` is replaced by the field name when there is one.
+Code `invalidType`. Default message: `value must be a file`. `value` is replaced by the field name when there is one.
 
 ## Code generation
 
-Annotate the parameter with `@IsFile()` or the constant `@isFile`. Without the annotation, a field typed `File` or `Object` is not mapped to `l.file()`.
+A `dart:io` `File` or `cross_file` `XFile` parameter maps to `l.file()`. Any other declared type, including a package class such as `MultipartFile` that the generator knows nothing about, needs `@IsFile()` or the constant `@isFile`. The annotation replaces the type's validator for the whole field, so a `List<MultipartFile>` field with `@IsFile(accept: fn)` generates one `l.file(accept: fn)` and `fn` receives the whole list. `message` and `messageBuilder` on the annotation pass through.
 
 ## Example
 
@@ -42,18 +46,15 @@ final upload = l.file();
   <TabItem label="Generated">
 
 ```dart wrap
-@IsFile() required Object avatar, // l.file().required()
+@IsFile() required Object avatar,                             // l.file().required()
+@IsFile(accept: isMultipart) required MultipartFile upload, // l.file(accept: isMultipart).required()
 ```
 
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="upload.validateValue(input)"
-  cases={[
-    { input: "Uint8List.fromList([1, 2, 3])", pass: true },
-    { input: "null", pass: true },
-    { input: "'avatar.png'", pass: false, message: "value must be a file" },
-    { input: "[1, 2, 3]", pass: false, message: "value must be a file" },
-  ]}
-/>
+<Verdict id="type.file" />
+
+`accept` extends the check to your own types:
+
+<Output id="type.file.accept" />

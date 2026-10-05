@@ -1,0 +1,64 @@
+---
+title: 'MessageBuilder'
+description: The function type that builds an error message from an issue, per validation or globally.
+---
+
+import Output from '../../../components/Output.astro';
+
+A message builder turns a `ValidationIssue` into the string stored in `issue.message`. [Message builders](/concepts/messages) explains when to use one; this page lists the facts.
+
+## Signature
+
+```dart
+typedef MessageBuilder = String Function(ValidationIssue issue);
+```
+
+The issue passed in already carries the default English message, its code, path, params and field name, so a builder can rewrite some codes and fall back to `issue.message` for the rest.
+
+## Where a builder goes
+
+| Place | Scope |
+|---|---|
+| `messageBuilder:` on any type or modifier, such as `l.string().min(8, messageBuilder: f)` | That one validation |
+| `messageBuilder:` on any annotation, such as `@HasMin(8, messageBuilder: f)` | That one validation in the generated schema; `f` has to be a top-level function or a static method |
+| `l.messageBuilder = f` | Every validation that has no `message` or `messageBuilder` of its own. Set it to `null` to restore the defaults. |
+
+## Precedence
+
+For each issue, the first of these that exists wins:
+
+1. `message:` on the validation.
+2. `messageBuilder:` on the validation.
+3. `l.messageBuilder`.
+4. The default message.
+
+<Output id="messages.precedence" />
+
+## Example
+
+```dart
+String short(ValidationIssue issue) => 'at least ${issue.params['min']} characters';
+
+l.string().min(8, messageBuilder: short).validate('ab').messages;
+l.string().min(8, messageBuilder: short).withName('password').validate('ab').messages;
+l.string().min(8, messageBuilder: (issue) => '${issue.fieldName}: ${issue.message}')
+    .withName('password')
+    .validate('ab')
+    .messages;
+```
+
+<Output id="messages.builder" />
+
+A global builder, switched on the code, with the default for everything else:
+
+```dart
+l.messageBuilder = (issue) => switch (issue.code) {
+  IssueCode.required => '${issue.fieldName ?? 'Wert'} fehlt',
+  IssueCode.invalidEmail => 'keine gültige E-Mail-Adresse',
+  _ => issue.message,
+};
+```
+
+<Output id="messages.global" />
+
+The third line shows a per-validation `message` winning over the global builder.

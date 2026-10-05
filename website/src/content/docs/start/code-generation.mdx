@@ -4,9 +4,11 @@ description: Annotate a freezed model with @luthor, run build_runner, and valida
 ---
 
 import { Steps } from '@astrojs/starlight/components';
+import Generated from '../../../components/Generated.astro';
+import Output from '../../../components/Output.astro';
 import Verdict from '../../../components/Verdict.astro';
 
-In this tutorial you turn the `User` model from [Your first schema](/start/first-schema) into an annotated class, generate its schema, and validate input with the generated function. It uses `freezed` and `json_serializable`. [Models without freezed](/generator/models) shows the other setups.
+In this tutorial you turn the `User` model from [Your first schema](/start/first-schema) into an annotated class, generate its schema, and validate input with the generated function. It uses `freezed` and `json_serializable`. [Models without freezed](/generator/models) shows the other setups. The generated code on this page is the real output of `luthor_generator` for the model shown.
 
 <Steps>
 
@@ -21,7 +23,7 @@ In this tutorial you turn the `User` model from [Your first schema](/start/first
 
 2. Write the model.
 
-   Annotate the class with `@luthor` next to `@freezed`. Put Luthor's annotations on the constructor parameters: `@IsEmail()` adds `.email()`, `@HasMin(18)` on an `int` adds `.min(18)`. Non-nullable parameters become required fields; nullable ones stay optional.
+   Annotate the class with `@luthor` next to `@freezed`. Put Luthor's annotations on the constructor parameters: `@IsEmail()` adds `.email()`, `@HasMin(18)` on an `int` adds `.min(18)`. Non-nullable parameters without a default become required fields; nullable ones stay optional.
 
    ```dart title="lib/user.dart"
    import 'package:freezed_annotation/freezed_annotation.dart';
@@ -51,20 +53,11 @@ In this tutorial you turn the `User` model from [Your first schema](/start/first
 
    `user.g.dart` now holds five generated items for `User`: the schema `$UserSchema`, the validate function `$UserValidate`, the `validateSelf` extension, the schema keys `UserSchemaKeys`, and the error keys `UserErrorKeys`. The schema is the one you would have written by hand:
 
-   ```dart title="lib/user.g.dart (excerpt)"
-   Validator $UserSchema = l.withName('User').schema({
-     UserSchemaKeys.name: l.string().min(2).required(),
-     UserSchemaKeys.email: l.string().email().required(),
-     UserSchemaKeys.age: l.int().min(18),
-   });
-
-   SchemaValidationResult<User> $UserValidate(Map<String, dynamic> json) =>
-       $UserSchema.validateSchema(json, fromJson: User.fromJson);
-   ```
+   <Generated file="tutorial_user.g.dart" from="final SchemaValidator $UserSchema" to="$UserSchema.validateSchema(json, fromJson: User.fromJson);" title="lib/user.g.dart (excerpt)" />
 
 4. Validate with the generated function.
 
-   `$UserValidate` validates the map and, on success, converts it with `User.fromJson`. You get a `User` back, not a map.
+   `$UserValidate` accepts any input, validates it, and on success converts it with `User.fromJson`. You get a `ValidationResult<User>`.
 
    ```dart title="bin/main.dart"
    import 'package:luthor/luthor.dart';
@@ -78,40 +71,28 @@ In this tutorial you turn the `User` model from [Your first schema](/start/first
      });
 
      switch (result) {
-       case SchemaValidationSuccess(data: final user):
-         print('+ ${user.name} <${user.email}>');
-       case SchemaValidationError(errors: final errors):
+       case ValidationSuccess(:final data):
+         print('+ ${data.name} <${data.email}>');
+       case ValidationFailure(:final errors):
          print('- $errors');
      }
    }
    ```
 
-   <Verdict
-     title="$UserValidate(input)"
-     cases={[
-       { input: "{'name': 'Ada', 'email': 'ada@example.com', 'age': 36}", pass: true },
-       { input: "{'name': 'Ada', 'email': 'ada@example.com'}", pass: true },
-       {
-         input: "{'name': 'A', 'email': 'ada', 'age': 12}",
-         pass: false,
-         message: [
-           'name must be at least 2 characters long',
-           'email must be a valid email address',
-           'age must be greater than or equal to 18',
-         ],
-       },
-     ]}
-   />
+   <Output id="gen.tutorial.switch" title="dart run bin/main.dart, valid then invalid input" />
+
+   <Verdict id="gen.tutorial" />
 
 5. Read errors with the error keys.
 
    `UserErrorKeys` is a record whose fields hold the error path of each model field. Use it with `getError` instead of a string, and a renamed field becomes a compile error instead of a `null`.
 
    ```dart
-   if (result case SchemaValidationError()) {
-     print(result.getError(UserErrorKeys.email)); // email must be a valid email address
-   }
+   print(result.getError(UserErrorKeys.email));
+   print(result.getError(UserErrorKeys.age));
    ```
+
+   <Output id="gen.tutorial.errorKeys" />
 
 6. Validate an existing instance.
 
@@ -119,8 +100,11 @@ In this tutorial you turn the `User` model from [Your first schema](/start/first
 
    ```dart
    final user = User(name: 'A', email: 'ada', age: 12);
-   user.validateSelf().isValid; // false
+   print(user.validateSelf().isValid);
+   print(user.validateSelf().errors);
    ```
+
+   <Output id="gen.tutorial.validateSelf" />
 
 </Steps>
 

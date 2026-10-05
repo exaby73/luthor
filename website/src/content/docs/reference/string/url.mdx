@@ -4,33 +4,32 @@ description: Requires the string to be a URL with a scheme and a host.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when the string parses as a URI that has both a scheme and a host, and, if `allowedSchemes` is given, the scheme is in that list. Schemes are compared case-insensitively. `'example.com'` fails because it has no scheme, and `'mailto:dev@example.com'` fails because it has no host.
+Passes when the string parses as a URI that has both a scheme and a host, and, with `allowedSchemes`, a scheme in that list, compared case-insensitively. The host and port are not checked further. `example.com` fails for lack of a scheme, `mailto:dev@example.com` for lack of a host.
 
 ## Signature
 
 ```dart wrap
-StringValidator url({List<String>? allowedSchemes, String? message, String? Function()? messageFn})
+StringValidator<O> url({List<String>? allowedSchemes, String? message, MessageBuilder? messageBuilder})
 ```
-
-Available on `l.string()`.
 
 ## Parameters
 
 | Parameter | Type | Meaning |
 |---|---|---|
-| `allowedSchemes` | `List<String>?` | Schemes to accept, such as `['https']`. |
+| `allowedSchemes` | `List<String>?` | Schemes to accept. `params['allowedSchemes']`. |
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value must be a valid URL`. With `allowedSchemes`, the message continues with `. Allowed scheme is https` or `. Allowed schemes are http, https`. `value` is replaced by the field name when there is one.
+Code `invalidUrl`. Default message: `value must be a valid URL`, continued with the same `. Allowed scheme is ...` suffix as `.uri()`. `value` is replaced by the field name when there is one.
 
 ## Code generation
 
-`@IsUrl(allowedSchemes: [...])`, or the constant `@isUrl`. Put the annotation on the constructor parameter.
+`@IsUrl(allowedSchemes: [...])`, or the constant `@isUrl`. Put the annotation on the constructor parameter or the field.
 
 ## Example
 
@@ -51,11 +50,6 @@ final avatar = l.string().url();
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="avatar.validateValue(input)"
-  cases={[
-    { input: "'https://example.com/docs'", pass: true },
-    { input: "'example.com'", pass: false, message: "value must be a valid URL" },
-    { input: "'mailto:dev@example.com'", pass: false, message: "value must be a valid URL" },
-  ]}
-/>
+<Verdict id="str.url" />
+
+<Output id="str.url.schemes" />

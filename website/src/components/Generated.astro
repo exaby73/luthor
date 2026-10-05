@@ -1,0 +1,44 @@
+---
+/**
+ * An excerpt of real generated code. `website/scripts/run.sh` builds the
+ * models under scripts/generated with luthor_generator and copies each
+ * LuthorGenerator section into src/data/generated/<file>.g.dart.
+ */
+import { Code } from '@astrojs/starlight/components';
+
+interface Props {
+  /** File name under src/data/generated, such as "user.g.dart". */
+  file: string;
+  /** Show only the lines between two markers (inclusive), matched as substrings. */
+  from?: string;
+  to?: string;
+  title?: string;
+}
+
+const { file, from, to, title = file } = Astro.props;
+const sources = import.meta.glob('../data/generated/*.g.dart', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+}) as Record<string, string>;
+const source = sources[`../data/generated/${file}`];
+if (source === undefined) {
+  throw new Error(`No generated file "${file}" in src/data/generated. Run website/scripts/run.sh.`);
+}
+
+let code = source.trimEnd();
+if (from) {
+  const lines = code.split('\n');
+  const start = lines.findIndex((line) => line.includes(from));
+  if (start < 0) throw new Error(`Marker "${from}" not found in ${file}.`);
+  let end = lines.length - 1;
+  if (to) {
+    const rel = lines.slice(start).findIndex((line) => line.includes(to));
+    if (rel < 0) throw new Error(`Marker "${to}" not found in ${file} after "${from}".`);
+    end = start + rel;
+  }
+  code = lines.slice(start, end + 1).join('\n');
+}
+---
+
+<Code code={code} lang="dart" title={title} />

@@ -4,32 +4,31 @@ description: Requires the string to be a CUID.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when the string matches the CUID pattern: a `c` followed by at least eight characters that are not whitespace or `-`.
+Passes when the whole string is a `c` followed by at least eight characters that are not whitespace or `-`, case-insensitively. This is a format check only.
 
 ## Signature
 
 ```dart wrap
-StringValidator cuid({String? message, String? Function()? messageFn})
+StringValidator<O> cuid({String? message, MessageBuilder? messageBuilder})
 ```
-
-Available on `l.string()`.
 
 ## Parameters
 
 | Parameter | Type | Meaning |
 |---|---|---|
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value must be a valid cuid`. `value` is replaced by the field name when there is one.
+Code `invalidCuid`. Default message: `value must be a valid cuid`. `value` is replaced by the field name when there is one.
 
 ## Code generation
 
-`@IsCuid()`, or the constant `@isCuid`. Put the annotation on the constructor parameter.
+`@IsCuid()`, or the constant `@isCuid`. Put the annotation on the constructor parameter or the field.
 
 ## Example
 
@@ -50,10 +49,4 @@ final id = l.string().cuid();
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="id.validateValue(input)"
-  cases={[
-    { input: "'cjld2cjxh0000qzrmn831i7rn'", pass: true },
-    { input: "'123'", pass: false, message: "value must be a valid cuid" },
-  ]}
-/>
+<Verdict id="str.cuid" />

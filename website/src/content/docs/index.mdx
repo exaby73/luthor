@@ -3,7 +3,7 @@ title: Luthor
 description: Luthor validates Dart values against schemas built with a chainable API. luthor_generator builds those schemas from annotated models.
 template: splash
 hero:
-  tagline: Build a validator by chaining <code>l.string().email().required()</code>. Validate a value or a map and get a sealed result back, with every error message keyed by field. Point <code>luthor_generator</code> at a <code>freezed</code> or <code>dart_mappable</code> model and it writes the schema for you.
+  tagline: Build a validator by chaining <code>l.string().email().required()</code>. Validate any input and get a sealed result back, typed, with every issue carrying a code, a path and a message. Point <code>luthor_generator</code> at a <code>freezed</code>, <code>json_serializable</code> or <code>dart_mappable</code> model and it writes the schema for you.
 ---
 
 import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
@@ -14,9 +14,9 @@ import Verdict from '../../components/Verdict.astro';
 
 <Steps>
 
-1. [Install `luthor`](/installation), and `luthor_generator` if you want generated schemas. Luthor needs Dart 3.11 or Flutter 3.41.
+1. [Install `luthor`](/installation), and `luthor_generator` if you want generated schemas. Luthor needs Dart 3.11 or Flutter 3.41 and has no dependencies of its own.
 
-2. [Write your first validator](/start/first-validator). Chain a type and some modifiers, call `validateValue`, and read the result.
+2. [Write your first validator](/start/first-validator). Chain a type and some modifiers, call `validate`, and read the typed result.
 
 3. [Write your first schema](/start/first-schema). Name the fields of a map, validate it, and look up errors by path.
 
@@ -24,29 +24,24 @@ import Verdict from '../../components/Verdict.astro';
 
 </Steps>
 
+Coming from 0.x? [Upgrading to 1.0](/guides/upgrading) lists every renamed call, and [What's new in 1.0](/guides/whats-new) has the additions.
+
 ## A result, not an exception
 
-`validateValue` returns a `SingleValidationResult`. `validateSchema` returns a `SchemaValidationResult`. Both are sealed, so a `switch` over them is exhaustive and the compiler tells you when you forgot the error case.
+`validate` returns a `ValidationResult<T>`. It is sealed, so a `switch` over it is exhaustive, and `T` follows the validator: `l.string().required()` succeeds with a `String`, `l.list(l.int().required())` with a `List<int>`.
 
 ```dart
-final result = l.string().email().required().validateValue(input);
+final result = l.string().email().required().validate(input);
 
 switch (result) {
-  case SingleValidationSuccess(data: final email):
-    sendTo(email);
-  case SingleValidationError(errors: final errors):
-    print(errors.first);
+  case ValidationSuccess(:final data):
+    sendTo(data); // data is a String
+  case ValidationFailure(:final issues):
+    print(issues.first.code); // IssueCode.invalidEmail
 }
 ```
 
-<Verdict
-  title="l.string().email().required().validateValue(input)"
-  cases={[
-    { input: "'dev@example.com'", pass: true },
-    { input: "'bad'", pass: false, message: 'value must be a valid email address' },
-    { input: 'null', pass: false, message: 'value is required' },
-  ]}
-/>
+<Verdict id="email" title="l.string().email().required().validate(input)" />
 
 Values are optional until you say otherwise. Drop `.required()` from the validator above and `null` passes. [Optional by default](/concepts/optional-by-default) explains why.
 
@@ -60,7 +55,7 @@ A schema is a map of field names to validators. You can write it by hand, or ann
 ```dart
 import 'package:luthor/luthor.dart';
 
-final userSchema = l.withName('User').schema({
+final userSchema = l.schema({
   'name': l.string().min(2).required(),
   'email': l.string().email().required(),
   'age': l.int().min(18),
@@ -99,6 +94,6 @@ final result = $UserValidate(json);
 
 ## Everything in the API
 
-Each entry links to a reference page with the signature, the parameters, the default error message, and the matching generator annotation.
+Each entry links to a reference page with the signature, the parameters, the issue code and default message, and the matching generator annotation. Every example output on this site comes from running the code in this repository.
 
 <ApiIndex />

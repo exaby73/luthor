@@ -1,19 +1,22 @@
 ---
 title: Schemas
-description: Nested schemas, reuse, naming, converting to a model, and forward references for schemas that refer to themselves.
+description: Nested schemas, reuse, unknown keys, converting to a model, object-level rules, and forward references for schemas that refer to themselves.
 ---
 
-A schema is a validator built with `l.schema()`. It checks that a value is a map and validates each named field with its own validator. This page covers the ways schemas combine. [Your first schema](/start/first-schema) is the tutorial; [`l.schema()`](/reference/types/schema) is the reference.
+import Output from '../../../components/Output.astro';
+import Verdict from '../../../components/Verdict.astro';
+
+A schema is a validator built with `l.schema()`. It checks that a value is a map, validates each named field with its own validator, and produces a new map of the validated values. This page covers the ways schemas combine. [Your first schema](/start/first-schema) is the tutorial; [`l.schema()`](/reference/types/schema) is the reference.
 
 ## Fields
 
-The argument to `l.schema()` is a `Map<String, ValidatorReference>`. Each entry is a field: the key is the name expected in the input map, the value is the validator for that field. Keys the input has but the schema does not list are ignored.
+The argument to `l.schema()` is a `Map<String, ValidatorReference<Object?>>`. Each entry is a field: the key is the name expected in the input, the value is the validator for that field. The output map holds every field that was present in the input, with its validated value.
 
 ```dart
 final address = l.schema({
   'street': l.string().required(),
   'city': l.string().required(),
-  'postcode': l.string().regex(r'^\d{5}$').required(),
+  'postcode': l.string().regex(RegExp(r'^\d{5}$')).required(),
 });
 ```
 
@@ -27,34 +30,90 @@ final person = l.schema({
   'home': address.required(),
   'work': address,
 });
+
+person.validate({'name': 'Ada', 'home': {'street': '1 Main St', 'city': 'Paris', 'postcode': '12'}}).errors;
+person.validate(...).getError('home.postcode');
 ```
 
-Errors from a nested schema arrive as a nested error map, and `getError('home.city')` reaches into it. [Results and errors](/concepts/results) describes the shape.
+<Output id="person.nested" />
+
+Errors from a nested schema arrive at a dotted path in the flat error map. [Errors and error paths](/concepts/errors) describes the shape.
+
+## Unknown keys
+
+By default a schema strips keys it does not declare from the output. That protects a `fromJson` from input it did not ask for, and keeps the output to the shape you described. Two modifiers change it: [`.passthrough()`](/reference/schema/passthrough) copies unknown keys into the output unvalidated, and [`.strict()`](/reference/schema/strict) reports each one as an `unrecognizedKey` issue at its path.
+
+```dart
+final user = l.schema({'name': l.string().required()});
+const input = {'name': 'Ada', 'role': 'admin'};
+
+user.validate(input);
+user.passthrough().validate(input);
+user.strict().validate(input);
+```
+
+<Output id="unknown.strip" title="strip, the default" />
+<Output id="unknown.passthrough" title="passthrough" />
+<Output id="unknown.strict" title="strict" />
+
+Generated schemas strip too, and declare every key the serializer reads, so a `freezed` or `json_serializable` `fromJson` sees what it expects. [What gets generated](/generator/output) covers the cases where the generator adds `.passthrough()` instead.
+
+## Object-level rules
+
+A `.custom()` on the schema itself receives the validated output map, runs only when every field passed, and reports at the schema's own path: `''` at the root. Use it for rules that involve several fields and belong to the object rather than to one of them.
+
+```dart
+bool endAfterStart(Map<String, Object?> data) {
+  final start = DateTime.tryParse('${data['start']}');
+  final end = DateTime.tryParse('${data['end']}');
+  return start != null && end != null && end.isAfter(start);
+}
+
+final dateRange = l.schema({
+  'start': l.string().dateTime().required(),
+  'end': l.string().dateTime().required(),
+}).custom(endAfterStart, message: 'end must be after start');
+```
+
+<Verdict id="schema.custom" />
+
+The third row shows the rule not running: a field failed, so the custom validator was skipped and only the field error is reported. Read the object-level message with `getError('')`.
+
+<Output id="schema.custom.getError" title="dateRange.validate({...}).getError('')" />
+
+To attach a rule to one field and read other fields, use [`.customWithSchema()`](/concepts/custom-validators) instead.
 
 ## Converting to a model
 
-`validateSchema` accepts a `fromJson` function. It runs only after every field passed, so your constructor can trust the shape it receives.
+`validateSchema` takes a `fromJson` and runs it on the output map after every field passed. If `fromJson` throws, the result is a failure with a `fromJsonFailed` issue rather than an exception.
 
 ```dart
-final result = user.validateSchema<User>(json, fromJson: User.fromJson);
+final result = user.validateSchema(json, fromJson: User.fromJson);
 ```
+
+Without `fromJson`, use `validate`, whose success data is the `Map<String, Object?>` output.
+
+## When the value is not a map
+
+The schema reports one `invalidType` issue. `message` and `messageBuilder` on `l.schema()` apply to this case only. A nested schema uses its field key as the field name.
+
+<Output id="schema.notmap" />
+<Output id="schema.nested.notmap" />
 
 ## Schemas that refer to themselves
 
 A tree node whose children are tree nodes needs its own validator while it is still being defined. A plain reference does not work: the variable has no value yet. Wrap the reference in `forwardRef()`, which takes a function and calls it at validation time, when the variable is assigned.
 
 ```dart
-late final Validator node;
+late final SchemaValidator node;
 node = l.schema({
   'value': l.string().required(),
-  'children': l.list(validators: [forwardRef(() => node.required())]),
+  'children': l.list(forwardRef(() => node.required())),
 });
 ```
 
-`forwardRef()` returns a `ValidatorReference`, the interface both validators and forward references implement. Anywhere Luthor accepts a validator inside a schema, a list, or a map, it accepts a forward reference too. The same mechanism covers two schemas that refer to each other: define both as `late final` and wrap each reference to the other.
+<Verdict id="node" />
 
-The generator detects a field whose type is the model's own class, directly or inside `List` or `Map`, and wraps it in `forwardRef()` for you. For a reference between two different models, annotate the parameter with `@luthorForwardRef`. [Type mapping](/generator/types) has the details.
+Every level is validated. The failing grandchild above is reported at `children.0.children.0.value`. Two schemas that refer to each other follow the same pattern: declare both as `late final` and wrap each reference to the other. Recursion is bounded by the input and by [`l.maxDepth`](/concepts/max-depth), so deeply nested input fails with a `tooDeep` issue instead of overflowing the stack.
 
-## Schema custom validators
-
-A field can be checked against its siblings with `.customWithSchema()`. The function receives the field's value and the whole input map. [Custom validators](/concepts/custom-validators) covers it.
+The generator wraps every reference to another model's schema in `forwardRef()`, so recursive models need no annotation. [`forwardRef()`](/reference/forward-ref) has the details.

@@ -3,58 +3,61 @@ title: Schema keys and error keys
 description: The two generated records that replace string literals when you read input maps and error maps.
 ---
 
-For a model `User`, the generator emits two records: `UserSchemaKeys` and `UserErrorKeys`. Both have one field per constructor parameter, named after the Dart parameter. They differ in what the field holds. The examples use the `User` and `Address` models from [What gets generated](/generator/output).
+import Generated from '../../../components/Generated.astro';
+import Output from '../../../components/Output.astro';
+
+For a model `User`, the generator emits two records: `UserSchemaKeys` and `UserErrorKeys`. Both have one field per schema field, named after the Dart parameter. They differ in what the field holds. The examples use the `User` and `Address` models from [What gets generated](/generator/output).
 
 ## Schema keys
 
-Each field of `UserSchemaKeys` holds the key of that field in the input map. That is the parameter name, or the `@JsonKey(name:)` value when there is one. The generated schema is written with these keys, and you can use them to read the raw map without repeating the string.
+Each field of `UserSchemaKeys` holds the key of that field in the input map: the parameter name, or the name the serializer uses after `@JsonKey(name:)`, `fieldRename`, `@MappableField(key:)` or `caseStyle`. The generated schema is written with these keys, and you can use them to read the raw map without repeating the string.
+
+<Generated file="user.g.dart" from="const UserSchemaKeys" to=");" title="lib/user.g.dart" />
 
 ```dart
-const UserSchemaKeys = (
-  name: "name",
-  email: "email_address", // from @JsonKey(name: 'email_address')
-  age: "age",
-  address: "address",
-);
-
-final raw = json[UserSchemaKeys.email];
+final raw = json[UserSchemaKeys.email]; // json['email_address']
 ```
 
 ## Error keys
 
-Each field of `UserErrorKeys` holds the error path of that field, the string you would pass to `getError`. A field whose type is another model becomes a nested record whose paths carry the prefix, so the record mirrors the error map.
+Each field of `UserErrorKeys` holds the error path of that field, the string you would pass to `getError`. A field whose type is another model becomes a nested record: its `$key` is the field's own path, and the other entries carry the prefix, so the record mirrors the flat error map.
 
-```dart
-const UserErrorKeys = (
-  name: "name",
-  email: "email_address",
-  age: "age",
-  address: (
-    street: "address.street",
-    city: "address.city",
-    postcode: "address.postcode",
-  ),
-);
-```
+<Generated file="user.g.dart" from="const UserErrorKeys" to=");" title="lib/user.g.dart" />
 
 Use them with `getError`:
 
 ```dart
 switch ($UserValidate(json)) {
-  case SchemaValidationSuccess(data: final user):
-    save(user);
-  case SchemaValidationError():
+  case ValidationSuccess(:final data):
+    save(data);
+  case ValidationFailure():
     final emailError = result.getError(UserErrorKeys.email);
     final postcodeError = result.getError(UserErrorKeys.address.postcode);
+    final addressError = result.getError(UserErrorKeys.address.$key);
 }
 ```
 
+<Output id="gen.user.keys" title="email, address.postcode, address.$key, UserSchemaKeys.email, UserErrorKeys.address.$key" />
+
+`address.$key` is `null` here because the address failed in a field, not as a whole. It is the path to use for `address must be a map` or for an object-level rule on `Address`.
+
 Rename `postcode` in `Address` and `UserErrorKeys.address.postcode` stops compiling, which is the point. A string literal would have kept compiling and started returning `null`.
+
+## Lists and maps
+
+A field whose type is a list or map of models holds a plain path, because the index or key is only known at runtime. Build the rest yourself:
+
+```dart
+// OrderErrorKeys.items is "items"; the index is only known at runtime.
+result.getError('items.1.qty');
+```
 
 ## Self-referential models
 
-When a model refers to itself, the nested record would be infinite. The generator stops at the first repeat and emits the path as a plain string for that field. For `Comment` with `Comment? parent`, `CommentErrorKeys.parent` is the string `"parent"`, and deeper paths are written by hand.
+When a model refers to itself, the nested record would be infinite. The generator emits the plain path for the recursive field instead:
+
+<Output id="gen.node.keys" title="NodeErrorKeys.children, NodeErrorKeys.parent" />
 
 ## Where the keys are used
 
-`UserSchemaKeys` appears in `$UserSchema`. `UserErrorKeys` is for your code. Neither record has a type name; both are anonymous Dart records, so pass them to functions as `({String name, String email, ...})` or let inference carry them.
+`UserSchemaKeys` appears in `$UserSchema`. `UserErrorKeys` is for your code. Neither record has a named type; both are anonymous Dart records, so let inference carry them or spell the record type out where you pass them around.

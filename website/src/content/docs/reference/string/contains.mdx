@@ -4,33 +4,32 @@ description: Requires the string to contain a given substring.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when `value.contains(string)` is true. The comparison is case-sensitive.
+Passes when `value.contains(substring)` is true. Case-sensitive.
 
 ## Signature
 
 ```dart wrap
-StringValidator contains(String string, {String? message, String? Function()? messageFn})
+StringValidator<O> contains(String substring, {String? message, MessageBuilder? messageBuilder})
 ```
-
-Available on `l.string()`.
 
 ## Parameters
 
 | Parameter | Type | Meaning |
 |---|---|---|
-| `string` | `String` | The substring that has to appear. |
+| `substring` | `String` | The text that has to appear. `params['substring']`. |
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value does not contain "@"`, with the substring quoted. `value` is replaced by the field name when there is one.
+Code `missingSubstring`. Default message: `value does not contain "@"`. `value` is replaced by the field name when there is one.
 
 ## Code generation
 
-`@Contains(s)`. Put the annotation on the constructor parameter.
+`@Contains(s)`. Put the annotation on the constructor parameter or the field.
 
 ## Example
 
@@ -51,10 +50,4 @@ final handle = l.string().contains('@');
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="handle.validateValue(input)"
-  cases={[
-    { input: "'dev@example.com'", pass: true },
-    { input: "'a'", pass: false, message: "value does not contain \"@\"" },
-  ]}
-/>
+<Verdict id="str.contains" />

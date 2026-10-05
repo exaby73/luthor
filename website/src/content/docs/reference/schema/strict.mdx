@@ -1,0 +1,52 @@
+---
+title: '.strict()'
+description: Reports every unknown key in a schema's input as an issue.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
+import Verdict from '../../../../components/Verdict.astro';
+
+Returns a copy of the schema that fails when the input has a key the schema does not declare. Each unknown key produces one `unrecognizedKey` issue at that key's path, with `params['key']`. Only `SchemaValidator` has this method.
+
+## Signature
+
+```dart wrap
+SchemaValidator<O> strict({String? message, MessageBuilder? messageBuilder})
+```
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `message` | `String?` | Replaces the default error message. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
+
+## Issue
+
+Code `unrecognizedKey`. Default message: `role is not an allowed key`, where `role` is the unknown key.
+
+## Code generation
+
+The generator does not emit `.strict()`. Apply it to a generated schema where you use it: `$UserSchema.strict()`.
+
+## Example
+
+<Tabs syncKey="codegen">
+  <TabItem label="Hand-written">
+
+```dart
+final user = l.schema({'name': l.string().required()}).strict();
+```
+
+  </TabItem>
+  <TabItem label="Generated">
+
+```dart wrap
+final result = $UserSchema.strict().validateSchema(json, fromJson: User.fromJson);
+```
+
+  </TabItem>
+</Tabs>
+
+<Verdict id="strict" />

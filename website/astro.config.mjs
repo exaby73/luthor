@@ -106,14 +106,20 @@ export default defineConfig({
           ],
         },
         {
+          label: 'Guides',
+          items: ['guides/whats-new', 'guides/upgrading', 'guides/ai-agents'],
+        },
+        {
           label: 'Concepts',
           items: [
             'concepts/validators',
             'concepts/optional-by-default',
             'concepts/results',
+            'concepts/errors',
             'concepts/messages',
             'concepts/schemas',
             'concepts/custom-validators',
+            'concepts/max-depth',
           ],
         },
         {
@@ -136,11 +142,13 @@ export default defineConfig({
                 'reference/types/string',
                 'reference/types/int',
                 'reference/types/double',
-                'reference/types/number',
-                'reference/types/boolean',
+                'reference/types/num',
+                'reference/types/bool',
                 'reference/types/list',
                 'reference/types/map',
                 'reference/types/schema',
+                'reference/types/union',
+                'reference/types/one-of',
                 'reference/types/file',
                 'reference/types/any',
                 'reference/types/null-value',
@@ -150,9 +158,14 @@ export default defineConfig({
               label: 'Modifiers',
               items: [
                 'reference/modifiers/required',
+                'reference/modifiers/with-name',
                 'reference/modifiers/custom',
                 'reference/modifiers/custom-with-schema',
               ],
+            },
+            {
+              label: 'Schema modifiers',
+              items: ['reference/schema/passthrough', 'reference/schema/strict'],
             },
             {
               label: 'String modifiers',
@@ -177,17 +190,21 @@ export default defineConfig({
             },
             {
               label: 'Number modifiers',
-              items: ['reference/number/min', 'reference/number/max'],
+              items: ['reference/number/min', 'reference/number/max', 'reference/number/finite'],
             },
             'reference/results',
+            'reference/issues',
             'reference/errors',
+            'reference/message-builder',
             'reference/forward-ref',
+            'reference/factory',
           ],
         },
       ],
     }),
   ],
-  // Old URLs from the previous site layout.
+  // Old URLs. The first block is the pre-1.0 site; the second is the 1.0
+  // redesign's first layout.
   redirects: {
     '/concepts': '/concepts/validators',
     '/result': '/concepts/results',
@@ -196,8 +213,8 @@ export default defineConfig({
     '/schemas/code-generation': '/generator/output',
     '/single-values/int': '/reference/types/int',
     '/single-values/double': '/reference/types/double',
-    '/single-values/num': '/reference/types/number',
-    '/single-values/bool': '/reference/types/boolean',
+    '/single-values/num': '/reference/types/num',
+    '/single-values/bool': '/reference/types/bool',
     '/single-values/string': '/reference/types/string',
     '/single-values/file': '/reference/types/file',
     '/single-values/null': '/reference/types/null-value',
@@ -223,5 +240,7 @@ export default defineConfig({
     '/modifiers/string-modifiers/uuid': '/reference/string/uuid',
     '/modifiers/string-modifiers/cuid': '/reference/string/cuid',
     '/modifiers/string-modifiers/cuid-2': '/reference/string/cuid2',
+    '/reference/types/number': '/reference/types/num',
+    '/reference/types/boolean': '/reference/types/bool',
   },
 });

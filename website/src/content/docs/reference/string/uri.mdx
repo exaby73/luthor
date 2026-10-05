@@ -1,36 +1,35 @@
 ---
 title: '.uri()'
-description: Requires the string to parse as a URI, optionally with one of a set of schemes.
+description: Requires the string to be an absolute URI, optionally with one of a set of schemes.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when `Uri.tryParse(value)` returns a value and, if `allowedSchemes` is given, the scheme is in that list. `Uri.tryParse` is lenient and accepts most strings, including `'not a uri at all'`. When you expect a web address, use [`.url()`](/reference/string/url), which also requires a host.
+Passes when the string parses as a URI with a scheme and contains no whitespace. `mailto:dev@example.com` passes; `example.com` and `not a uri at all` fail. With `allowedSchemes`, the scheme has to be in the list, compared case-insensitively. For a web address with a host, use [`.url()`](/reference/string/url).
 
 ## Signature
 
 ```dart wrap
-StringValidator uri({List<String>? allowedSchemes, String? message, String? Function()? messageFn})
+StringValidator<O> uri({List<String>? allowedSchemes, String? message, MessageBuilder? messageBuilder})
 ```
-
-Available on `l.string()`.
 
 ## Parameters
 
 | Parameter | Type | Meaning |
 |---|---|---|
-| `allowedSchemes` | `List<String>?` | Schemes to accept, such as `['https']`. Compared exactly, so list lowercase schemes. |
+| `allowedSchemes` | `List<String>?` | Schemes to accept, such as `['https']`. `params['allowedSchemes']`. |
 | `message` | `String?` | Replaces the default error message. |
-| `messageFn` | `String? Function()?` | Called on failure to produce the message. `message` wins when both are given. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
 
-## Error message
+## Issue
 
-`value must be a valid uri`. With `allowedSchemes`, the message continues with `. Allowed scheme is https` or `. Allowed schemes are http, https`. `value` is replaced by the field name when there is one.
+Code `invalidUri`. Default message: `value must be a valid uri`, continued with `. Allowed scheme is https` or `. Allowed schemes are http, https` when schemes are given. `value` is replaced by the field name when there is one.
 
 ## Code generation
 
-`@IsUri(allowedSchemes: [...])`, or the constant `@isUri` with no scheme restriction. Put the annotation on the constructor parameter.
+`@IsUri(allowedSchemes: [...])`, or the constant `@isUri`. A `Uri` field maps to `l.string()` without `.uri()`; add the annotation if you want the check. Put the annotation on the constructor parameter or the field.
 
 ## Example
 
@@ -45,16 +44,15 @@ final link = l.string().uri(allowedSchemes: ['https']);
   <TabItem label="Generated">
 
 ```dart wrap
-@IsUri(allowedSchemes: ['https']) required String homepage, // l.string().uri(allowedSchemes: ["https"]).required()
+@IsUri(allowedSchemes: ['https']) required String homepage,
+// l.string().uri(allowedSchemes: ["https"]).required()
 ```
 
   </TabItem>
 </Tabs>
 
-<Verdict
-  title="link.validateValue(input)"
-  cases={[
-    { input: "'https://example.com'", pass: true },
-    { input: "'mailto:dev@example.com'", pass: false, message: "value must be a valid uri. Allowed scheme is https" },
-  ]}
-/>
+<Verdict id="str.uri" />
+
+Without `allowedSchemes`, any scheme passes and a bare host fails:
+
+<Output id="str.uri.plain" />

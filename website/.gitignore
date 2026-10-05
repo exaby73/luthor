@@ -23,3 +23,12 @@ pnpm-debug.log*
 .vscode
 # impeccable review captures
 .impeccable/review/
+
+# Dart scratch state of the example runners
+scripts/**/.dart_tool/
+scripts/**/pubspec.lock
+scripts/**/build/
+scripts/*/snippets/
+scripts/generated/lib/*.g.dart
+scripts/generated/lib/*.freezed.dart
+scripts/generated/lib/*.mapper.dart

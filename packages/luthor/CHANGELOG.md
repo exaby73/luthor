@@ -23,6 +23,7 @@
 - **FEAT**: Add `.finite()` to number validators. `NaN` and infinity are doubles, so they pass `l.double()` and `l.num()` unless `.finite()` is present.
 - **FEAT**: Add an `accept:` predicate to `l.file()` for package types such as `XFile`.
 - **FEAT**: Add `message` and `messageBuilder` to `l.schema()` for the "must be a map" error.
+- **FEAT**: `ValidationFailure.toString()` shows object-level errors, whose error path is `''`, under `(root)`, so they no longer print as `{: [message]}`. `errors` and `getError('')` are unchanged.
 - **FEAT**: Add `l.maxDepth` (default 512). Input nested deeper fails with a `tooDeep` issue.
 
 ## Results and messages

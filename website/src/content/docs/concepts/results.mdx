@@ -94,6 +94,6 @@ Two things that used to throw are now failures: a `fromJson` that throws becomes
 
 ## Printing a result
 
-Both cases override `toString`. The failure form prints the error map.
+Both cases override `toString`. The failure form prints the error map, with object-level errors under `(root)` instead of the empty key. Only the printed form changes: `errors` and `getError('')` still use `''`.
 
 <Output id="result.toString" />

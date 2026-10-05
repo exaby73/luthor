@@ -108,6 +108,16 @@ void main() {
     test('Then the failure keeps the raw input', () {
       expect((result as ValidationFailure).input, {'email': 'bad'});
     });
+
+    test('Then toString shows the object-level errors under (root)', () {
+      expect(
+        result.toString(),
+        'ValidationFailure(errors: {(root): [form is invalid], '
+        'email: [email must be a valid email address, '
+        'email must be at least 5 characters long], '
+        'items.1.id: [id is required]})',
+      );
+    });
   });
 
   group('Given an issue', () {

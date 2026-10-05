@@ -113,6 +113,15 @@ final class ValidationFailure<T> extends ValidationResult<T> {
   @override
   bool get isValid => false;
 
+  /// A debug description of [errors]. Object-level errors, whose error path
+  /// is `''`, are shown under `(root)`. [errors] and [getError] still use
+  /// `''`.
   @override
-  String toString() => 'ValidationFailure(errors: $errors)';
+  String toString() {
+    final shown = {
+      for (final MapEntry(:key, :value) in errors.entries)
+        key.isEmpty ? '(root)' : key: value,
+    };
+    return 'ValidationFailure(errors: $shown)';
+  }
 }

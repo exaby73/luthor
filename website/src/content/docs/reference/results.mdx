@@ -17,7 +17,7 @@ Every validation returns a `ValidationResult<T>`: a `ValidationSuccess<T>` holdi
 | `errors` | `Map<String, List<String>>` | `{}` | messages grouped by error path |
 | `getError(path)` | `String?` | `null` | the first message at exactly `path`, or `null` |
 | `getErrors(path)` | `List<String>` | `[]` | every message at exactly `path` |
-| `toString()` | `String` | `ValidationSuccess(data: ...)` | `ValidationFailure(errors: {...})` |
+| `toString()` | `String` | `ValidationSuccess(data: ...)` | `ValidationFailure(errors: {...})`, with the empty path shown as `(root)` |
 
 `ValidationSuccess<T>` adds `data`, the output of type `T`. `ValidationFailure<T>` adds `input`, the raw value that was validated.
 

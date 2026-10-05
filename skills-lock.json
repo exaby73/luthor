@@ -76,7 +76,7 @@
     "luthor": {
       "source": "./skills/luthor",
       "sourceType": "local",
-      "computedHash": "ed92701c87d64b07cdd496e5d7f70e1be6876e7ed095674a4fe97a5a537fb741"
+      "computedHash": "bb50ab90e4d666dd81c5eeb8af18add841745451b3d0b3880c2be9a80287ed0b"
     },
     "no-comments": {
       "source": "cursor/plugins",

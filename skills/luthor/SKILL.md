@@ -113,6 +113,7 @@ The empty path also holds object-level errors from `.custom()` on a root schema.
 - `errors` is the error map: messages grouped by error path, as `Map<String, List<String>>`.
 - `getError(path)` returns the first message at exactly that path, or `null`. Paths match exactly: `getError('address')` ignores errors at `address.city`.
 - `getErrors(path)` returns every message at exactly that path.
+- `toString()` on a failure prints the error map with the empty path shown as `(root)`, such as `ValidationFailure(errors: {(root): [form is invalid]})`. Use `''` with `errors` and `getError`.
 
 ```dart
 final result = l.schema({

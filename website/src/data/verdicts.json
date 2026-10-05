@@ -1742,7 +1742,7 @@
     ],
     "result.toString": [
       "ValidationSuccess(data: dev@example.com)",
-      "ValidationFailure(errors: {: [value must be a valid email address]})",
+      "ValidationFailure(errors: {(root): [value must be a valid email address]})",
       "ValidationFailure(errors: {email: [email must be a valid email address]})"
     ],
     "no.shortcircuit": [
@@ -1796,8 +1796,8 @@
       "{profile: [profile must be a map]}"
     ],
     "fromJson.throws": [
-      "ValidationFailure(errors: {: [value could not be converted]})",
-      "ValidationFailure(errors: {: [value is required]})"
+      "ValidationFailure(errors: {(root): [value could not be converted]})",
+      "ValidationFailure(errors: {(root): [value is required]})"
     ],
     "depth.default": [
       "512",

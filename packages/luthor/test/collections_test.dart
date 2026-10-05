@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:luthor/luthor.dart';
 import 'package:test/test.dart';
 
@@ -318,4 +320,73 @@ void main() {
       );
     });
   });
+
+  group('Given a map without a value validator', () {
+    test('When an int value has the wrong type then the message reads '
+        '"an int"', () {
+      expect(
+        l.map<String, int>().validate({'a': 'x'}).getError('a'),
+        'value must be an int',
+      );
+    });
+
+    test('When an Object value is null then the message reads "an Object"', () {
+      expect(
+        l.map<String, Object>().validate({'a': null}).getError('a'),
+        'value must be an Object',
+      );
+    });
+
+    test('When an enum value has the wrong type then the message uses the '
+        'article of the enum name', () {
+      expect(
+        l.map<String, Answer>().validate({'a': 'x'}).getError('a'),
+        'value must be an Answer',
+      );
+      expect(
+        l.map<String, Element>().validate({'a': 'x'}).getError('a'),
+        'value must be an Element',
+      );
+    });
+
+    test('When a String value has the wrong type then the message reads '
+        '"a String"', () {
+      expect(
+        l.map<String, String>().validate({'a': 1}).getError('a'),
+        'value must be a String',
+      );
+    });
+
+    test('When a type name starts with a "you" sound then the message reads '
+        '"a"', () {
+      expect(
+        l.map<String, Uri>().validate({'a': 1}).getError('a'),
+        'value must be a Uri',
+      );
+      expect(
+        l.map<String, Uint8List>().validate({'a': 1}).getError('a'),
+        'value must be a Uint8List',
+      );
+    });
+
+    test('When a type name starts with an initialism then the message reads '
+        'the first letter aloud', () {
+      expect(
+        l.map<String, HTTPStatus>().validate({'a': 1}).getError('a'),
+        'value must be an HTTPStatus',
+      );
+      expect(
+        l.map<String, UTFText>().validate({'a': 1}).getError('a'),
+        'value must be a UTFText',
+      );
+    });
+  });
 }
+
+enum Answer { yes }
+
+enum Element { fire }
+
+enum HTTPStatus { ok }
+
+enum UTFText { eight }

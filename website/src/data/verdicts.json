@@ -1829,7 +1829,7 @@
     ],
     "type.map.plain": [
       "ValidationSuccess(data: {a: 1})",
-      "{a: [value must be a int]}"
+      "{a: [value must be an int]}"
     ],
     "type.schema.output": [
       "ValidationSuccess(data: {email: dev@example.com, age: 30})"

@@ -149,11 +149,28 @@ _Outcome _checkType<T>(Object? value, _Context context) {
     [
       context.issue(
         IssueCode.invalidType,
-        (field) => '$field must be a $T',
+        (field) => '$field must be ${_withArticle('$T')}',
         params: {'expected': '$T'},
       ),
     ],
   );
+}
+
+String _withArticle(String typeName) {
+  final name = typeName.replaceFirst(RegExp('^_+'), '');
+  return '${_startsWithVowelSound(name) ? 'an' : 'a'} $typeName';
+}
+
+bool _startsWithVowelSound(String name) {
+  if (RegExp('^[A-Z]{2}').hasMatch(name)) {
+    return 'AEFHILMNORSX'.contains(name[0]);
+  }
+  final lower = name.toLowerCase();
+  if (lower.startsWith('eu')) return false;
+  if (lower.startsWith('u')) {
+    return RegExp('^u[^aeiou][^aeiou]').hasMatch(lower);
+  }
+  return RegExp('^[aeio]').hasMatch(lower);
 }
 
 /// Accepts a value that passes any of its options. Created by `l.union()`.

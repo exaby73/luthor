@@ -60,6 +60,7 @@
 - **FIX**: Make error shapes independent of a map's runtime type arguments, so `Map<dynamic, dynamic>` input behaves like `Map<String, Object?>`.
 - **FIX**: Stop `customWithSchema()` from reusing data from an earlier validation.
 - **FIX**: Use the field name in the "must be a map" message of nested schemas.
+- **FIX**: Pick "a" or "an" by the type name in the message for a map key or value that fails its type argument, so `l.map<String, int>()` reports `value must be an int` instead of `value must be a int`.
 - **FIX**: Distinguish map key errors from value errors, and keep entry errors instead of replacing them with a `.custom()` error. Custom checks on schemas, lists, maps and unions now run only when every child passed.
 - **FIX**: Honour the message builder in `ip()`.
 - **FIX**: Anchor the `cuid()` pattern at the start of the string.

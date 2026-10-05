@@ -1,12 +1,6 @@
 // @ts-check
-import { basename, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-
-// The directory this site lives in inside the monorepo. Used only to build
-// the "Edit page" link, so renaming the directory needs no config change.
-const siteDir = basename(dirname(fileURLToPath(import.meta.url)));
 
 export default defineConfig({
   site: 'https://luthor.ex3.dev',
@@ -25,7 +19,7 @@ export default defineConfig({
         { icon: 'seti:dart', label: 'pub.dev', href: 'https://pub.dev/packages/luthor' },
       ],
       editLink: {
-        baseUrl: `https://github.com/exaby73/luthor/edit/main/${siteDir}/`,
+        baseUrl: 'https://github.com/exaby73/luthor/edit/main/website/',
       },
       components: {
         SiteTitle: './src/components/SiteTitle.astro',

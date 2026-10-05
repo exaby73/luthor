@@ -26,6 +26,7 @@
 - **FIX**: Apply `@JsonSerializable(fieldRename: ...)` on the class or the `freezed` factory (#49), `@JsonKey(name: ...)` on fields, `@MappableField(key: ...)` and `@MappableClass(caseStyle: ...)` to schema keys and error keys.
 - **FIX**: Treat fields with a constructor default or `@JsonKey(defaultValue: ...)` as optional, and leave fields with `@JsonKey(includeFromJson: false)` out of the schema.
 - **FIX**: Validate enums against their serialized values (names, `@JsonValue`, `@JsonEnum(fieldRename:, valueField:)`, `@MappableEnum`, `@MappableValue`), including in lists and as map keys.
+- **FIX**: An enum field with `@JsonKey(unknownEnumValue: ...)`, or a list of such enums, generates `l.string()` (`l.int()` for integer-valued enums) instead of `l.oneOf([...])`, since `json_serializable` maps unknown values to the fallback.
 - **FIX**: Support `Set` and `Iterable` like `List`, `Uri` as a string, and `Object`/`Object?` as `l.any()`.
 - **FIX**: Add `.dateTime()` to nullable `DateTime` fields and to `DateTime` values inside collections, and give nested maps their key and value validators, so invalid input is a validation error instead of an exception from `fromJson`.
 - **FIX**: Validate `Map` keys of type `int`, `double`, `num` and `BigInt` as strings that parse to that type, since JSON object keys are always strings.

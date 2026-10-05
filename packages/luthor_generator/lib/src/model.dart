@@ -42,6 +42,7 @@ final class ModelField {
     required this.hasDefault,
     required this.usesConverter,
     required this.readsWholeMap,
+    required this.acceptsUnknownEnumValues,
   });
 
   /// The constructor parameter or settable field the value is read into.
@@ -56,6 +57,10 @@ final class ModelField {
   /// Whether the serializer reads the value from the whole map, as
   /// `@JsonKey(readValue: ...)` does, instead of from [key] alone.
   final bool readsWholeMap;
+
+  /// Whether `@JsonKey(unknownEnumValue: ...)` maps a value that is not one
+  /// of the enum's serialized values to a fallback instead of throwing.
+  final bool acceptsUnknownEnumValues;
 }
 
 DartObject? firstAnnotation(
@@ -246,6 +251,8 @@ final class ModelReader {
           annotations.any(_isConverter) ||
           context.isConverted(type),
       readsWholeMap: !context.mappable && jsonKey.peek('readValue') != null,
+      acceptsUnknownEnumValues:
+          !context.mappable && jsonKey.peek('unknownEnumValue') != null,
     );
   }
 

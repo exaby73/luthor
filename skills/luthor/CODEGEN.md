@@ -106,6 +106,7 @@ A model needs a `fromJson` factory, constructor or static method, or a `@Mappabl
 | `File` (`dart:io`), `XFile` (`cross_file`) | `l.file()` |
 | A class with `@luthor`, a `fromJson` or `@MappableClass` | its schema |
 
+- A `json_serializable` enum field with `@JsonKey(unknownEnumValue: ...)` generates `l.string()` instead of `l.oneOf([...])`, because `json_serializable` maps an unknown value to the fallback instead of throwing. On a list of an enum, each element gets `l.string()`. An enum with integer serialized values gets `l.int()`. `.required()` follows the usual rules.
 - A `double` field rejects JSON integers such as `1`. Type the field as `num` when the backend may send whole numbers.
 - `Map` keys of type `int`, `double`, `num` and `BigInt` are validated as strings that parse to that type, since JSON object keys are strings. `String`, `DateTime`, `Uri` and enum keys work too.
 - A field with a `JsonConverter` or a `@JsonKey(fromJson: ...)` function is validated as `l.any()`, and only `@WithCustomValidator` and `@WithSchemaCustomValidator` apply to it. Give a type luthor can't validate, such as `Duration`, a converter.

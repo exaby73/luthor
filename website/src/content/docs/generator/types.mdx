@@ -45,6 +45,13 @@ enum Role { admin, member }
 required Role role,              // l.oneOf(["admin", "member"]).required()
 ```
 
+`json_serializable` maps a value it does not know to the fallback given in `@JsonKey(unknownEnumValue:)`, or to `null` with `JsonKey.nullForUndefinedEnumValue`, instead of throwing. Such a field accepts any value of the serialized type, so it generates `l.string()` instead of `l.oneOf()`, or `l.int()` for an enum whose serialized values are integers. On a list, set or iterable of an enum, this applies to each element. `.required()` follows the usual rules.
+
+```dart
+@JsonKey(unknownEnumValue: Role.member) required Role role,        // l.string().required()
+@JsonKey(unknownEnumValue: Role.member) required List<Role> roles, // l.list(l.string().required()).required()
+```
+
 ## Required
 
 After the type and its modifiers, the generator appends `.required()` when all of these hold: the type is not nullable, the type is not `dynamic`, and the parameter has no default. A default is a constructor default value, a `freezed` `@Default`, or `@JsonKey(defaultValue:)`. Dart's `required` keyword is not consulted.

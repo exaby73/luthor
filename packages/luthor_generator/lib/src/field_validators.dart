@@ -135,6 +135,9 @@ final class FieldValidators {
     }
     if (type.element case final EnumElement enumElement) {
       final values = serializedEnumValues(enumElement).nonNulls;
+      if (context.field.acceptsUnknownEnumValues) {
+        return (entry(_fallbackEntry(values)), FieldKind.enumeration);
+      }
       return (
         ValidatorExpr(
           AllowedValues(values.map(jsonLiteral).toList()),
@@ -166,6 +169,14 @@ final class FieldValidators {
       );
     }
     throw _unsupported(type, context);
+  }
+
+  runtime.EntryType _fallbackEntry(Iterable<Object> values) {
+    if (values.every((value) => value is String)) {
+      return runtime.EntryType.string;
+    }
+    if (values.every((value) => value is int)) return runtime.EntryType.int;
+    return runtime.EntryType.any;
   }
 
   InvalidGenerationSourceError _misplaced(

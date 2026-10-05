@@ -74,6 +74,73 @@ void main() {
     });
   });
 
+  group('Given a model with @JsonKey(unknownEnumValue:) enum fields', () {
+    late String output;
+
+    setUp(() async {
+      output = (await generateSharedPart(_unknownEnumSource)).output;
+    });
+
+    test('Then a string enum field accepts any string', () {
+      expectOutputContains(
+        output,
+        'FallbacksSchemaKeys.role: l.string().required(),',
+      );
+    });
+
+    test('Then each element of an enum list accepts any string', () {
+      expectOutputContains(
+        output,
+        'FallbacksSchemaKeys.roles: l.list(l.string().required()),',
+      );
+    });
+
+    test('Then a nullForUndefinedEnumValue field stays optional', () {
+      expectOutputContains(output, 'FallbacksSchemaKeys.maybe: l.string(),');
+    });
+
+    test('Then an integer enum field accepts any integer', () {
+      expectOutputContains(
+        output,
+        'FallbacksSchemaKeys.level: l.int().required(),',
+      );
+    });
+
+    test('Then an enum field without a fallback keeps its allowed values', () {
+      expectOutputContains(
+        output,
+        'FallbacksSchemaKeys.strict: l.oneOf(["admin", "member", "unknown"]).required(),',
+      );
+    });
+
+    group('When the validate function runs', () {
+      late Map<String, Object?> results;
+
+      setUpAll(() async {
+        results = await evaluateGenerated(_unknownEnumSource, {
+          'unknown':
+              r'''$FallbacksValidate({'role': 'owner', 'roles': ['guest'], 'maybe': 'other', 'level': 30, 'strict': 'admin'})''',
+          'missing':
+              r'''$FallbacksValidate({'level': 30, 'strict': 'admin'})''',
+        });
+      });
+
+      test('Then unknown values succeed', () {
+        expect(results['unknown'], 'success');
+      });
+
+      test('Then a missing non-nullable field is still required', () {
+        expect(results['missing'], {
+          'role': ['role is required'],
+        });
+      });
+    });
+
+    test('When generated code is analyzed then it compiles', () async {
+      await expectGeneratedCodeCompiles(_unknownEnumSource);
+    });
+  });
+
   group('Given a model with Set, Iterable, Uri and Object fields', () {
     late String output;
 
@@ -167,6 +234,54 @@ class Enums {
     color: Color.red,
     level: Level.low,
     size: Size.bigSize,
+  );
+
+  Map<String, dynamic> toJson() => {};
+}
+''';
+
+const _unknownEnumSource = '''
+import 'package:json_annotation/json_annotation.dart';
+import 'package:luthor/luthor.dart';
+
+part 'profile.g.dart';
+
+enum Role { admin, member, unknown }
+
+@JsonEnum(valueField: 'code')
+enum Level {
+  low(10),
+  high(20);
+
+  const Level(this.code);
+
+  final int code;
+}
+
+@luthor
+class Fallbacks {
+  @JsonKey(unknownEnumValue: Role.unknown)
+  final Role role;
+  @JsonKey(unknownEnumValue: Role.unknown)
+  final List<Role>? roles;
+  @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)
+  final Role? maybe;
+  @JsonKey(unknownEnumValue: Level.low)
+  final Level level;
+  final Role strict;
+
+  const Fallbacks({
+    required this.role,
+    this.roles,
+    this.maybe,
+    required this.level,
+    required this.strict,
+  });
+
+  factory Fallbacks.fromJson(Map<String, dynamic> json) => const Fallbacks(
+    role: Role.admin,
+    level: Level.low,
+    strict: Role.admin,
   );
 
   Map<String, dynamic> toJson() => {};

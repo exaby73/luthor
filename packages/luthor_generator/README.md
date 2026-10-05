@@ -108,6 +108,13 @@ JSON object keys are always strings, so `Map` keys of type `int`, `double`,
 enum (`l.oneOf()` of the serialized values as strings) and `String` keys are
 also supported. A key that fails is reported as an invalid key of the map.
 
+A `json_serializable` enum field with `@JsonKey(unknownEnumValue: ...)`
+generates `l.string()` instead of `l.oneOf([...])`, because
+`json_serializable` maps a value it does not know to the fallback instead of
+throwing. On a `List`, `Set` or `Iterable` of an enum, this applies to each
+element. An enum whose serialized values are integers generates `l.int()`.
+Non-nullable fields still get `.required()`.
+
 A `double` field generates `l.double()`, which rejects JSON integers. If your
 backend may send `1` instead of `1.0`, type the field as `num`.
 

@@ -261,10 +261,10 @@ packages:
     dependency: transitive
     description:
       name: lint
-      sha256: "6f19c77a94c8ef75cf5cb6a8d7d955a85ca88f22e2b0dd6cc11a19e2f66a4797"
+      sha256: "78b35cb79457c0cc12d96d0f7e5c283d2661850a70b0ae5332673207065b63c8"
       url: "https://pub.dev"
     source: hosted
-    version: "2.12.0"
+    version: "2.14.0"
   lints:
     dependency: transitive
     description:
@@ -549,9 +549,9 @@ packages:
     dependency: transitive
     description:
       name: yaml
-      sha256: b9da305ac7c39faa3f030eccd175340f968459dae4af175130b3fc47e40d76ce
+      sha256: f67cdd8e07d3c6329146aaef1ba043542b3134c12489f553ca9a7435d1068aea
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.3"
+    version: "3.1.4"
 sdks:
   dart: ">=3.11.0 <4.0.0"

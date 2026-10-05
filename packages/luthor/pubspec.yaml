@@ -11,5 +11,5 @@ environment:
   sdk: ^3.11.0
 
 dev_dependencies:
-  lint: ^2.12.0 # Configured via catalog
+  lint: ^2.14.0 # Configured via catalog
   test: ^1.31.1 # Configured via catalog

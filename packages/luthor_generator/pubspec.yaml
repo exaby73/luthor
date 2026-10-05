@@ -19,6 +19,6 @@ dev_dependencies:
   dart_mappable: ^4.10.0 # Configured via catalog
   freezed_annotation: ^3.1.0 # Configured via catalog
   json_annotation: ^4.12.0 # Configured via catalog
-  lint: ^2.12.0 # Configured via catalog
+  lint: ^2.14.0 # Configured via catalog
   test: ^1.31.1 # Configured via catalog
-  yaml: ^3.1.3 # Configured via catalog
+  yaml: ^3.1.4 # Configured via catalog

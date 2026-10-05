@@ -56,6 +56,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: "3.11.5"
       - uses: ./.github/actions/setup-luthor
       - name: Pubspecs match the dpk catalog
         run: dpk get --check
@@ -68,6 +71,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: "3.11.5"
       - uses: ./.github/actions/setup-luthor
       - run: dpk run format
 
@@ -78,6 +84,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: "3.11.5"
       - uses: ./.github/actions/setup-luthor
       - run: dpk run --filter luthor test
 
@@ -105,9 +114,10 @@ jobs:
             sdk: "3.13.4"
     steps:
       - uses: actions/checkout@v7
-      - uses: ./.github/actions/setup-luthor
+      - uses: dart-lang/setup-dart@v1
         with:
           sdk: ${{ matrix.sdk }}
+      - uses: ./.github/actions/setup-luthor
 
       # A dependency_overrides pin keeps build and dart_style on releases that
       # need a newer analyzer. Changing the root constraint re-resolves them.

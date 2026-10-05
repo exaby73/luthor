@@ -1,11 +1,7 @@
 name: Set up Luthor
-description: Installs the Dart SDK and dpk, then resolves the Luthor pub workspace with dpk get.
+description: Installs dpk and resolves the Luthor pub workspace with dpk get. Run dart-lang/setup-dart before it, because setup-dart can't load its problem matcher from inside a composite action.
 
 inputs:
-  sdk:
-    description: Dart SDK version. The default is the workspace floor from the root .tool-versions (Flutter 3.41.9).
-    required: false
-    default: "3.11.5"
   dpk-version:
     description: Version constraint for dpk. Keep it inside the `version` constraint in dpk.yaml.
     required: false
@@ -18,11 +14,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Set up Dart ${{ inputs.sdk }}
-      uses: dart-lang/setup-dart@v1
-      with:
-        sdk: ${{ inputs.sdk }}
-
     - name: Install dpk
       shell: bash
       env:

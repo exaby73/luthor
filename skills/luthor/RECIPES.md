@@ -88,7 +88,7 @@ final signup = l.schema({
 });
 ```
 
-- The function receives the typed value and a `SchemaData`: a read-only map of the sibling fields **as they appear in the input**, before validation, with keys turned into strings. A sibling may be missing or have the wrong type, so test it with `is` before using it as a type. `data.root` is the outermost schema's input, for rules that reach across nested schemas.
+- The function receives the typed value and a `SchemaData`: a read-only map of the sibling fields **as they appear in the input**, before validation, with keys turned into strings. A sibling may be missing, `null` or of the wrong type, and a sibling whose own validator fails still appears with its raw value. Test it with `is` before using it as a type, and return `true` when it has the wrong type, so only the sibling's own validator reports it. A cast such as `data['limit'] as int` throws, which counts as `false` and adds a misleading second error. `data.root` is the outermost schema's input, for rules that reach across nested schemas. To compare validated values, use `.custom()` on the schema instead.
 - It runs only when its own field is present, non-null and of the right type. On an optional field, a missing value skips it. Make the field `.required()`, or put the rule on a field that is always present, or on the schema.
 - Inside a list, it receives the data of the schema that holds the list.
 
@@ -98,10 +98,10 @@ With code generation, use `@WithSchemaCustomValidator(fn)` with a public top-lev
 bool passwordsMatch(String value, SchemaData data) =>
     value == data['password'];
 
-bool endsAfterStart(String value, SchemaData data) {
-  final start = data['start'];
-  return start is String &&
-      DateTime.parse(value).isAfter(DateTime.parse(start));
+bool atMostLimit(int value, SchemaData data) {
+  final limit = data['limit'];
+  if (limit is! int) return true;
+  return value <= limit;
 }
 ```
 

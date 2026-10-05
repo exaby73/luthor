@@ -29,7 +29,9 @@ typedef CustomValidator<T> = bool Function(T value);
 /// access to the data of the schema that contains it.
 ///
 /// It receives only values that passed the validator's type check, and never
-/// `null`. Returning `false` or throwing fails the value.
+/// `null`. Returning `false` or throwing fails the value. The [SchemaData]
+/// holds the raw input of the sibling fields, so check a sibling's type
+/// before you use it.
 typedef SchemaCustomValidator<T> = bool Function(T value, SchemaData data);
 
 /// Accepts a value as a file in `l.file(accept: ...)`.
@@ -206,6 +208,22 @@ base mixin _Modifiers<T extends Object, O, Self extends Validator<O>>
   /// holds it. Outside a schema, it receives empty [SchemaData]. A
   /// [validator] that returns `false` or throws reports an [IssueCode.custom]
   /// issue.
+  ///
+  /// The [SchemaData] holds the raw input of the sibling fields, not their
+  /// validated values. A sibling keeps its raw value even when its own
+  /// validator fails, so check its type before you use it. Passing when the
+  /// sibling has the wrong type leaves the error to the sibling's validator:
+  ///
+  /// ```dart
+  /// l.schema({
+  ///   'limit': l.int().required(),
+  ///   'used': l.int().customWithSchema((value, data) {
+  ///     final limit = data['limit'];
+  ///     if (limit is! int) return true;
+  ///     return value <= limit;
+  ///   }).required(),
+  /// });
+  /// ```
   Self customWithSchema(
     SchemaCustomValidator<T> validator, {
     String? message,

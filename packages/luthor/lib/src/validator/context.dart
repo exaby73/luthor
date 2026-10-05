@@ -6,6 +6,20 @@ part of '../validator.dart';
 /// It is a read-only view of the sibling fields as they appear in the input,
 /// with keys converted to strings. [root] holds the data of the outermost
 /// schema, so a field inside a nested schema or a list can reach any field.
+///
+/// The values are the raw input, not the validated output. A sibling can be
+/// missing, `null`, or of a type its own validator rejects, even when that
+/// validator fails in the same validation. Check a sibling's type before you
+/// use it. Passing when the sibling has the wrong type leaves the error to
+/// the sibling's own validator:
+///
+/// ```dart
+/// bool atMostLimit(int value, SchemaData data) {
+///   final limit = data['limit'];
+///   if (limit is! int) return true;
+///   return value <= limit;
+/// }
+/// ```
 final class SchemaData extends UnmodifiableMapView<String, Object?> {
   SchemaData._(super.map, {required this.root});
 

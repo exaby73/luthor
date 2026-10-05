@@ -9,6 +9,16 @@ import Verdict from '../../../../components/Verdict.astro';
 
 Runs `validator(value, data)` where `data` is a `SchemaData`: a read-only map of the sibling fields as they were received, with `data.root` holding the outermost schema's map. Passes when the function returns `true`. Like `.custom()`, it receives the typed value, is never called for `null`, treats a thrown exception as `false`, and runs on a schema or list only after every child passed. Inside a list, `data` is the schema that holds the list. Outside any schema, `data` is empty. A missing optional field is skipped before this runs, so put a rule on a field that is always present.
 
+`data` holds the raw input, not validated values. A sibling can be missing, `null` or of the wrong type, even when its own validator fails, so check its type before you use it. Passing when the sibling has the wrong type leaves the error to the sibling's own validator:
+
+```dart
+bool atMostLimit(int value, SchemaData data) {
+  final limit = data['limit'];
+  if (limit is! int) return true;
+  return value <= limit;
+}
+```
+
 ## Signature
 
 ```dart wrap

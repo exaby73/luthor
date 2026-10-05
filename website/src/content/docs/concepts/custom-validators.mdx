@@ -97,6 +97,28 @@ abstract class SignUp with _$SignUp {
 
 <Verdict id="signUp" />
 
+### Sibling values are raw input
+
+`data` holds the input, not the validated output. A sibling field can be missing, `null`, or of a type its own validator rejects, and it still appears in `data` with that raw value when its validator fails in the same validation. Comparing with `==`, as `matchesPassword` does, is safe with any value. Before you use a sibling as a type, check it with `is`:
+
+```dart
+bool atMostLimit(int value, SchemaData data) {
+  final limit = data['limit'];
+  if (limit is! int) return true;
+  return value <= limit;
+}
+
+final quota = l.schema({
+  'limit': l.int().required(),
+  'used': l
+      .int()
+      .customWithSchema(atMostLimit, message: 'used must not exceed limit')
+      .required(),
+});
+```
+
+When `limit` is not an `int`, its own validator reports that, so `atMostLimit` passes instead of adding a second error at `used`. A cast such as `data['limit'] as int` would throw for `{'limit': 'ten', 'used': 3}`, and a thrown exception counts as `false`, so `used` would report a misleading error next to the real one at `limit`. To compare validated values, use `.custom()` on the schema, which runs only when every field passed.
+
 ### A rule that depends on another field
 
 A missing optional field is skipped before any validator runs, so a rule such as "a business account needs a phone number" cannot live on `phone`. Put it on `accountType`, which is always present, and read `phone` from `data`.

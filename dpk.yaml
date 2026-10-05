@@ -13,8 +13,8 @@ catalog:
     sdk: ^3.11.0
 
   dependencies:
-    luthor: 1.0.0
-    luthor_generator: 1.0.0
+    luthor: ^1.0.0
+    luthor_generator: ^1.0.0
 
     analyzer: ">=10.0.0 <15.0.0"
     build: ^4.0.4

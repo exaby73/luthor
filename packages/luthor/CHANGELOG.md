@@ -1,4 +1,4 @@
-# 1.0.0 (WIP)
+# 1.0.0
 
 - **BREAKING**: Require Dart 3.11 or later (Flutter 3.41 or later).
 - **CHORE**: Drop the unused `meta` dependency, so `luthor` has no runtime dependencies.

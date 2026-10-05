@@ -15,3 +15,4 @@ pubspec.lock
 # luthor skill is reinstalled by post:get from skills/luthor
 .agents/skills/luthor
 .claude/skills/luthor
+.scratch/

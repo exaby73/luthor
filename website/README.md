@@ -29,10 +29,10 @@ It runs `scripts/verdicts` (the runtime examples, Dart 3.11) into `src/data/verd
 
 ## Deploy
 
-`Dockerfile` builds the site with Node 24 and serves `dist/` with nginx, using `nginx.conf`. That config serves `404.html` for unknown paths and redirects paths without a trailing slash. Build it with the `website/` directory as the context:
+`Dockerfile` builds the site with Node 24 and serves `dist/` with nginx, using `nginx.conf`. That config serves `404.html` for unknown paths and redirects paths without a trailing slash. Build it with the repository root as the context. `Dockerfile.dockerignore` limits that context to `website/`:
 
 ```sh
-docker build -t luthor-docs website
+docker build -f website/Dockerfile -t luthor-docs .
 docker run -p 8080:80 luthor-docs
 ```
 

@@ -1,0 +1,9 @@
+*
+!website/
+website/node_modules
+website/dist
+website/.astro
+website/.impeccable/review
+website/scripts/**/.dart_tool
+website/scripts/**/build
+website/scripts/*/snippets

@@ -1,9 +1,0 @@
-node_modules
-dist
-.astro
-.impeccable/review
-scripts/**/.dart_tool
-scripts/**/build
-scripts/*/snippets
-Dockerfile
-.dockerignore

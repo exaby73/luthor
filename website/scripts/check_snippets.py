@@ -20,7 +20,7 @@ import os, re, subprocess, sys, pathlib, shutil, textwrap
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DOCS = ROOT / 'src' / 'content' / 'docs'
 DART311 = os.environ.get('DART311', os.path.expanduser('~/.asdf/installs/flutter/3.41.9-stable/bin/cache/dart-sdk/bin/dart'))
-DART313 = os.environ.get('DART313', os.path.expanduser('~/.asdf/installs/flutter/3.47.5-stable/bin/cache/dart-sdk/bin/dart'))
+DART313 = os.environ.get('DART313', os.path.expanduser('~/.asdf/installs/flutter/3.47.9-stable/bin/cache/dart-sdk/bin/dart'))
 
 TOKEN = re.compile(r'^(#{2,4}) ([^\n]*)$|^```dart([^\n]*)\n(.*?)^```', re.M | re.S)
 PARAM_LINE = re.compile(r'^\s*(@\w+(\([^)]*\))?\s*)*(required\s+)?[A-Za-z_][\w<>?,\s]*?\s+\$?\w+(\s*=\s*[^,;]+)?,\s*(//.*)?$')

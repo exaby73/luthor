@@ -2,7 +2,7 @@
 
 The documentation site for [`luthor`](https://pub.dev/packages/luthor) and [`luthor_generator`](https://pub.dev/packages/luthor_generator), published at https://luthor.ex3.dev.
 
-Built with [Astro](https://astro.build) and [Starlight](https://starlight.astro.build). Package manager: npm. Node 24.16 or later (see `.tool-versions` at the repository root).
+Built with [Astro](https://astro.build) and [Starlight](https://starlight.astro.build). Package manager: npm. Node 26.13 or later (see `.tool-versions` at the repository root).
 
 ```sh
 npm install
@@ -29,7 +29,7 @@ It runs `scripts/verdicts` (the runtime examples, Dart 3.11) into `src/data/verd
 
 ## Deploy
 
-`Dockerfile` builds the site with Node 24 and serves `dist/` with nginx, using `nginx.conf`. That config serves `404.html` for unknown paths and redirects paths without a trailing slash. Build it with the repository root as the context. `Dockerfile.dockerignore` limits that context to `website/`:
+`Dockerfile` builds the site with Node 26 and serves `dist/` with nginx, using `nginx.conf`. That config serves `404.html` for unknown paths and redirects paths without a trailing slash. Build it with the repository root as the context. `Dockerfile.dockerignore` limits that context to `website/`:
 
 ```sh
 docker build -f website/Dockerfile -t luthor-docs .

@@ -3,6 +3,7 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
+import 'package:luthor/luthor.dart';
 import 'package:luthor_generator/src/checkers.dart';
 import 'package:luthor_generator/src/field_naming.dart';
 import 'package:source_gen/source_gen.dart';
@@ -16,7 +17,8 @@ final class Model {
     required this.fields,
     required this.serializer,
     required this.hasToJson,
-    required this.passthrough,
+    required this.unknownKeys,
+    this.unknownKeysWarning,
   });
 
   final ClassElement element;
@@ -25,9 +27,12 @@ final class Model {
   final ModelSerializer serializer;
   final bool hasToJson;
 
-  /// Whether the schema keeps unknown keys, because the serializer reads keys
-  /// that are not fields.
-  final bool passthrough;
+  /// How the schema handles unknown keys.
+  final UnknownKeys unknownKeys;
+
+  /// Why the schema passes unknown keys through instead of using the
+  /// `unknown_keys` builder option, logged as a build warning.
+  final String? unknownKeysWarning;
 
   String get name => element.name!;
 }
@@ -75,6 +80,11 @@ DartObject? firstAnnotation(
 }
 
 final class ModelReader {
+  ModelReader({this.unknownKeys});
+
+  /// The `unknown_keys` builder option.
+  final UnknownKeys? unknownKeys;
+
   final _models = <ClassElement, Model>{};
 
   static bool isSerializable(ClassElement element) {
@@ -122,6 +132,10 @@ final class ModelReader {
           if (!parameterNames.contains(field.name))
             ?_settableField(field, context),
     ];
+    final (mode, warning) = _unknownKeys(
+      element,
+      _unreadableKeys(element, context, fields),
+    );
     return Model(
       element: element,
       constructor: constructor,
@@ -130,10 +144,75 @@ final class ModelReader {
           ? ModelSerializer.mappable
           : ModelSerializer.json,
       hasToJson: context.mappable || _hasToJson(element, context),
-      passthrough:
-          context.readsPrivateField ||
-          fields.any((field) => field.readsWholeMap) ||
-          (context.mappable && context.hasMappableHook),
+      unknownKeys: mode,
+      unknownKeysWarning: warning,
+    );
+  }
+
+  /// What makes the serializer read keys that are not fields, as the element
+  /// responsible and a description of it, or `null` if nothing does.
+  (Element, String)? _unreadableKeys(
+    ClassElement element,
+    _ClassContext context,
+    List<ModelField> fields,
+  ) {
+    for (final field in fields) {
+      if (field.readsWholeMap) {
+        return (
+          field.element,
+          'field `${field.name}` uses `@JsonKey(readValue: ...)`',
+        );
+      }
+    }
+    if (context.privateFieldRead case final field?) {
+      return (
+        field,
+        'private field `${field.name}` uses '
+            '`@JsonKey(includeFromJson: true)`',
+      );
+    }
+    if (context.mappable && context.hasMappableHook) {
+      return (element, 'it uses `@MappableClass(hook: ...)`');
+    }
+    return null;
+  }
+
+  (UnknownKeys, String?) _unknownKeys(
+    ClassElement element,
+    (Element, String)? unreadableKeys,
+  ) {
+    final index = ConstantReader(
+      luthorChecker.firstAnnotationOf(element),
+    ).peek('unknownKeys')?.objectValue.getField('index')?.toIntValue();
+    if (index != null) {
+      final annotated = UnknownKeys.values[index];
+      if (unreadableKeys != null && annotated != UnknownKeys.passthrough) {
+        final (source, reason) = unreadableKeys;
+        throw InvalidGenerationSourceError(
+          '`${element.name}` sets `unknownKeys: .${annotated.name}`, but '
+          '$reason, which '
+          'can read keys the schema does not declare. Remove `unknownKeys`, '
+          'or set it to `.passthrough`.',
+          element: source,
+        );
+      }
+      return (annotated, null);
+    }
+    if (unreadableKeys == null) return (unknownKeys ?? UnknownKeys.strip, null);
+    final option = unknownKeys;
+    if (option == null || option == UnknownKeys.passthrough) {
+      return (UnknownKeys.passthrough, null);
+    }
+    final (_, reason) = unreadableKeys;
+    final hint = luthorChecker.hasAnnotationOf(element)
+        ? ' Annotate it `@Luthor(unknownKeys: .passthrough)` to silence this '
+              'warning.'
+        : '';
+    return (
+      UnknownKeys.passthrough,
+      '`${element.name}` passes unknown keys through instead of using the '
+          '`unknown_keys: ${option.name}` builder option, because $reason.'
+          '$hint',
     );
   }
 
@@ -188,7 +267,7 @@ final class ModelReader {
         firstAnnotation(annotations, jsonKeyChecker),
       );
       if (jsonKey.peek('includeFromJson')?.boolValue == true) {
-        context.readsPrivateField = true;
+        context.privateFieldRead ??= field;
       }
       return null;
     }
@@ -373,9 +452,9 @@ final class _ClassContext {
   final bool mappable;
   final ConstantReader _jsonSerializable;
 
-  /// Whether `json_serializable` reads a private field marked with
-  /// `@JsonKey(includeFromJson: true)`, which a schema key cannot name.
-  bool readsPrivateField = false;
+  /// A private field marked with `@JsonKey(includeFromJson: true)`, which
+  /// `json_serializable` reads but a schema key cannot name.
+  FieldElement? privateFieldRead;
 
   /// Whether a `@MappableClass(hook: ...)` may read the whole map before
   /// decoding.

@@ -38,7 +38,7 @@ Modifiers add validations:
 - Strings: `min`, `max`, `length` (in UTF-16 code units), `email`, `dateTime` (ISO 8601), `uri(allowedSchemes:)`, `url(allowedSchemes:)`, `emoji`, `uuid`, `cuid`, `cuid2`, `ip(version: IpVersion.v4)`, `regex(RegExp(...))`, `startsWith`, `endsWith`, `contains`. `regex` matches anywhere, so anchor with `^` and `$` to match the whole string.
 - Numbers: `min`, `max`, and `finite`, which rejects `NaN` and infinity (they pass `l.double()` and `l.num()` otherwise).
 - Every type: `withName(name)`, and except `l.nullValue()`, `required()`, `custom(fn)` and `customWithSchema(fn)`.
-- Schemas: `passthrough()`, `strict()`.
+- Schemas: `strip()`, `passthrough()`, `strict()`, `unknownKeys(mode)`.
 
 Lists and maps have no length modifiers: use `.custom((list) => list.isNotEmpty)`.
 
@@ -139,6 +139,8 @@ Unknown keys, keys the schema doesn't declare, follow the schema's mode:
 - Strip (default): left out of the output.
 - `.passthrough()`: copied to the output unvalidated.
 - `.strict()`: reported as an `unrecognizedKey` issue at the key's path.
+
+`.unknownKeys(mode)` takes the mode as an `UnknownKeys` value (`.strip`, `.passthrough` or `.strict`), and `.strip()` goes back to the default. The last call wins. `message:` and `messageBuilder:` apply only to strict mode; passing them with another mode throws an `ArgumentError`.
 
 ```dart
 final address = l.schema({

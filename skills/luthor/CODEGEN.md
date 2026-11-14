@@ -117,6 +117,23 @@ A generated schema strips unknown keys before `fromJson` runs, so `fromJson` see
 
 The generator switches to `.passthrough()` when the serializer may read keys it can't name: a `@JsonKey(readValue: ...)` field (validated as an optional `l.any()`), a private field with `@JsonKey(includeFromJson: true)`, or a `@MappableClass(hook: ...)`.
 
+To reject unknown keys, annotate the model `@Luthor(unknownKeys: .strict)` instead of `@luthor`. The generated schema gets `.strict()`, so `$XValidate`, `validateSelf()` and every model that nests it report each unknown key as an `unrecognizedKey` issue. `.passthrough` and `.strip` work too. The setting applies to that model only, not to the models it nests.
+
+To set a default for every generated schema in a package, including the private schemas of classes without `@luthor`, add the builder option to the package's `build.yaml`:
+
+```yaml
+targets:
+  $default:
+    builders:
+      luthor_generator:luthor:
+        options:
+          unknown_keys: strict # strip, passthrough or strict
+```
+
+A model's `unknownKeys` wins over the option. A model whose serializer reads keys the generator can't name always gets `.passthrough()`: setting `.strict` or `.strip` on its annotation fails the build, and under a `strict` or `strip` option the build logs a warning that names it. Annotate it `@Luthor(unknownKeys: .passthrough)` to silence the warning.
+
+A strict model fails its own `validateSelf()` when `toJson()` writes a key that `fromJson` doesn't read, such as a field with `@JsonKey(includeFromJson: false)`.
+
 ## Annotations
 
 Put validation annotations on the constructor parameter or on the field. They apply in the order they are written, so `@HasMin(8) @HasMax(200)` generates `.min(8).max(200)`. Custom validator annotations always come after the others.
@@ -239,3 +256,4 @@ The generator fails with an `InvalidGenerationSourceError` that names the class 
 | `` The function `f` used on ... is not visible from ... `` | Make `f` a public top-level or static function, and import its library in the model's library. |
 | `Luthor cannot write the annotation value ...` | Use a literal, a `const` value, an enum constant, or a top-level or static function as the annotation argument. |
 | `` `E` sets JsonEnum.valueField to `v`, but that is not a field of ... `` | Fix `valueField` to name a field of the enum. |
+| `` `X` sets `unknownKeys: .strict`, but ... which can read keys the schema does not declare. `` | The serializer reads keys the generator can't name, so the schema must pass unknown keys through. Remove `unknownKeys`, or set it to `.passthrough`. |

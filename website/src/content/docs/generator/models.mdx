@@ -154,7 +154,7 @@ The generator reads the serializer's annotations so the schema matches what `fro
 | `@JsonSerializable(createToJson: false)`, `@Freezed(toJson: false)` | No `validateSelf` |
 | Public settable fields on a `@JsonSerializable` class that are not constructor parameters | Schema fields, required unless nullable or defaulted |
 
-Global options in another builder's `build.yaml`, such as `json_serializable`'s `field_rename`, are not read. Put them on the class.
+Global options in another builder's `build.yaml`, such as `json_serializable`'s `field_rename`, are not read. Put them on the class. The generator's own builder option, `unknown_keys`, is covered in [Unknown keys](/generator/output#unknown-keys).
 
 ## Classes you do not annotate
 

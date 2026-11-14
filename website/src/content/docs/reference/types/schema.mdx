@@ -7,7 +7,7 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Passes when the value is a map and every declared field passes its validator. A missing field is skipped unless its validator is required. Unknown keys are stripped from the output by default; [`.passthrough()`](/reference/schema/passthrough) keeps them and [`.strict()`](/reference/schema/strict) rejects them. The output is a new `Map<String, Object?>` with the validated value of each present field. Validate with `validate`, or with `validateSchema` to convert the output with `fromJson`. [Schemas](/concepts/schemas) explains nesting, reuse and forward references.
+Passes when the value is a map and every declared field passes its validator. A missing field is skipped unless its validator is required. Unknown keys are stripped from the output by default; [`.passthrough()`](/reference/schema/passthrough) keeps them, [`.strict()`](/reference/schema/strict) rejects them, and [`.unknownKeys()`](/reference/schema/unknown-keys) picks the mode from a value. The output is a new `Map<String, Object?>` with the validated value of each present field. Validate with `validate`, or with `validateSchema` to convert the output with `fromJson`. [Schemas](/concepts/schemas) explains nesting, reuse and forward references.
 
 ## Signature
 

@@ -218,6 +218,48 @@
         }
       ]
     },
+    "strip": {
+      "title": "l.schema({'name': l.string().required()}).passthrough().strip().validate(input)",
+      "cases": [
+        {
+          "input": "{'name': 'Ada', 'role': 'admin'}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'role': 'admin'}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "name",
+              "code": "required",
+              "message": "name is required"
+            }
+          ]
+        }
+      ]
+    },
+    "unknownKeys": {
+      "title": "l.schema({'name': l.string().required()}).unknownKeys(.strict).validate(input)",
+      "cases": [
+        {
+          "input": "{'name': 'Ada'}",
+          "pass": true,
+          "issues": []
+        },
+        {
+          "input": "{'name': 'Ada', 'role': 'admin'}",
+          "pass": false,
+          "issues": [
+            {
+              "path": "role",
+              "code": "unrecognizedKey",
+              "message": "role is not an allowed key"
+            }
+          ]
+        }
+      ]
+    },
     "schema.custom": {
       "title": "dateRange.validate(input)",
       "cases": [
@@ -1778,6 +1820,12 @@
     "unknown.strict": [
       "ValidationFailure(errors: {role: [role is not an allowed key]})",
       "role is not an allowed key"
+    ],
+    "unknown.strip.reset": [
+      "ValidationSuccess(data: {name: Ada})"
+    ],
+    "unknown.mode": [
+      "remove extra keys"
     ],
     "schema.custom.getError": [
       "end must be after start"

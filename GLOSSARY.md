@@ -39,7 +39,7 @@ One named entry of a schema, pairing a key with the validator for its value.
 _Avoid_: property, attribute
 
 **Unknown key**:
-A key in a schema's input that the schema does not declare; stripped from the output by default, kept by `.passthrough()`, and reported by `.strict()`.
+A key in a schema's input that the schema does not declare; stripped from the output by default or by `.strip()`, kept by `.passthrough()`, and reported by `.strict()`. `.unknownKeys()`, `@Luthor(unknownKeys:)` and the `unknown_keys` builder option choose among these modes, the values of `UnknownKeys`.
 _Avoid_: extra field, additional property
 
 **Union**:

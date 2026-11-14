@@ -168,6 +168,107 @@ void main() {
         isIssue(code: IssueCode.unrecognizedKey, path: ['extra']),
       ]);
     });
+
+    test('When a passthrough schema is stripped then unknown keys are '
+        'dropped', () {
+      expect(
+        l.schema({'a': l.int()}).passthrough().strip().validate(input),
+        isValidWith({'a': 1}),
+      );
+    });
+
+    test('When a strict schema is stripped then unknown keys are dropped', () {
+      expect(
+        l.schema({'a': l.int()}).strict().strip().validate(input),
+        isValidWith({'a': 1}),
+      );
+    });
+
+    test('When a strict schema is made passthrough then the last modifier '
+        'wins', () {
+      expect(
+        l.schema({'a': l.int()}).strict().passthrough().validate(input),
+        isValidWith({'a': 1, 'evil': true}),
+      );
+    });
+
+    test('When unknownKeys is strip then unknown keys are dropped', () {
+      expect(
+        l
+            .schema({'a': l.int()})
+            .passthrough()
+            .unknownKeys(.strip)
+            .validate(input),
+        isValidWith({'a': 1}),
+      );
+    });
+
+    test('When unknownKeys is passthrough then unknown keys are kept', () {
+      expect(
+        l.schema({'a': l.int()}).unknownKeys(.passthrough).validate(input),
+        isValidWith({'a': 1, 'evil': true}),
+      );
+    });
+
+    test('When unknownKeys is strict then each unknown key is an issue', () {
+      expect(
+        l.schema({'a': l.int()}).unknownKeys(.strict).validate(input).issues,
+        [
+          isIssue(
+            code: IssueCode.unrecognizedKey,
+            path: ['evil'],
+            message: 'evil is not an allowed key',
+            params: {'key': 'evil'},
+          ),
+        ],
+      );
+    });
+
+    test(
+      'When unknownKeys is strict with a message then the issue uses it',
+      () {
+        expect(
+          l
+              .schema({'a': l.int()})
+              .unknownKeys(.strict, message: 'no extras')
+              .validate(input),
+          isInvalidWith(['no extras']),
+        );
+      },
+    );
+
+    test('When unknownKeys is strict with a message builder then the issue '
+        'uses it', () {
+      expect(
+        l
+            .schema({'a': l.int()})
+            .unknownKeys(
+              .strict,
+              messageBuilder: (issue) => '${issue.params['key']} is extra',
+            )
+            .validate(input),
+        isInvalidWith(['evil is extra']),
+      );
+    });
+
+    test('When unknownKeys is not strict with a message then it throws', () {
+      expect(
+        () => l
+            .schema({'a': l.int()})
+            .unknownKeys(.passthrough, message: 'no extras'),
+        throwsArgumentError,
+      );
+    });
+
+    test('When unknownKeys is not strict with a message builder then it '
+        'throws', () {
+      expect(
+        () => l
+            .schema({'a': l.int()})
+            .unknownKeys(.strip, messageBuilder: (issue) => issue.message),
+        throwsArgumentError,
+      );
+    });
   });
 
   group('Given a custom validator on a schema', () {

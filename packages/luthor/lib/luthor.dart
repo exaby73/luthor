@@ -42,6 +42,7 @@ export 'src/annotations/validators/uri.dart';
 export 'src/annotations/validators/url.dart';
 export 'src/annotations/validators/uuid.dart';
 export 'src/types/ip.dart';
+export 'src/unknown_keys.dart';
 export 'src/validation_issue.dart';
 export 'src/validation_result.dart';
 export 'src/validator.dart';

@@ -1,3 +1,4 @@
+import 'package:luthor/luthor.dart';
 import 'package:luthor_generator/src/dart_source.dart';
 import 'package:luthor_generator/src/validator_expr.dart';
 
@@ -15,11 +16,15 @@ String schemaDeclaration(String schemaName, String schema) {
 String schema(
   String name,
   Iterable<(String, String)> fields, {
-  bool passthrough = false,
+  UnknownKeys unknownKeys = UnknownKeys.strip,
 }) {
   final entries = fields.map((field) => '  ${field.$1}: ${field.$2},\n');
-  return 'l.schema({\n${entries.join()}})'
-      '${passthrough ? '.passthrough()' : ''}'
+  final mode = switch (unknownKeys) {
+    UnknownKeys.strip => '',
+    UnknownKeys.passthrough => '.passthrough()',
+    UnknownKeys.strict => '.strict()',
+  };
+  return 'l.schema({\n${entries.join()}})$mode'
       '.withName(${dartStringLiteral(name)})';
 }
 

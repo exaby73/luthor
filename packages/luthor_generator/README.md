@@ -81,6 +81,25 @@ with `.passthrough()` instead:
 A hand-written `fromJson` must read only the keys of its constructor
 parameters, or the settable fields above.
 
+To reject unknown keys, annotate the model `@Luthor(unknownKeys: .strict)`
+instead of `@luthor`, and its schema gets `.strict()`. `.passthrough` and
+`.strip` work too. To set a default for every generated schema in a package,
+use the builder option:
+
+```yaml
+targets:
+  $default:
+    builders:
+      luthor_generator:luthor:
+        options:
+          unknown_keys: strict # strip, passthrough or strict
+```
+
+A model's own `unknownKeys` wins over the option. A model that needs
+`.passthrough()`, for the reasons above, keeps it: setting `.strict` or
+`.strip` on its annotation fails generation, and the builder option falls back
+to `.passthrough()` with a build warning.
+
 Global options in another builder's `build.yaml`, such as
 `json_serializable`'s `field_rename`, are not read. Put them on the class.
 

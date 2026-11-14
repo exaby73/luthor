@@ -1,3 +1,9 @@
+# 1.1.0
+
+- **FEAT**: Read `@Luthor(unknownKeys: ...)` and add `.strict()` or `.passthrough()` to the generated schema. `.strip` adds nothing, since stripping is the default.
+- **FEAT**: Add the `unknown_keys` builder option (`strip`, `passthrough` or `strict`), the default for every generated schema in a package. A model's own `unknownKeys` wins over it. A model that needs `.passthrough()`, such as one with `@JsonKey(readValue: ...)`, fails generation when its annotation sets `.strict` or `.strip`. Under the builder option, it keeps `.passthrough()` and the build warns.
+- **CHORE**: Require `luthor` `^1.1.0`, which adds `Luthor.unknownKeys` and the `UnknownKeys` enum the generator uses.
+
 # 1.0.0
 
 - **BREAKING**: Require Dart 3.11 or later (Flutter 3.41 or later).

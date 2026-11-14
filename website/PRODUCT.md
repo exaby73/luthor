@@ -26,8 +26,8 @@ Read inside an editor or terminal session while writing Dart. Pages are opened f
 
 ## Capabilities and Constraints
 
-- Release 1.0.0. Requires Dart 3.11 or Flutter 3.41 or later. `luthor` has no dependencies. `luthor_generator` supports analyzer 10 through 14.
-- Install snippets use `^1.0.0`.
+- Release 1.1.0. Requires Dart 3.11 or Flutter 3.41 or later. `luthor` has no dependencies. `luthor_generator` supports analyzer 10 through 14.
+- Install snippets use `^1.1.0`.
 - Public API lives in `packages/luthor/lib`; generator behaviour in `packages/luthor_generator/lib`. Docs must not describe API that is not there.
 - Types on `l`: `any`, `bool`, `int`, `double`, `num`, `string`, `file`, `nullValue`, `list`, `map`, `schema`, `union`, `oneOf`. Shared modifiers: `required`, `withName`, `custom`, `customWithSchema`; schema modifiers `unknownKeys`, `strip`, `passthrough` and `strict`, with the `UnknownKeys` enum; `forwardRef()` for recursive schemas; global `l.messageBuilder` and `l.maxDepth`.
 - String modifiers: `min`, `max`, `length`, `contains`, `startsWith`, `endsWith`, `dateTime`, `email`, `emoji`, `regex`, `uri`, `url`, `uuid`, `cuid`, `cuid2`, `ip`.

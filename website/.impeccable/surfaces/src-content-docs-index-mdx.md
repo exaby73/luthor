@@ -9,7 +9,7 @@ related_targets: ["src/styles/theme.css","astro.config.mjs"]
 
 Scope: the whole docs site at https://luthor.ex3.dev. Visitor mode: Read. The landing page is the one Persuade-leaning route but stays inside the Read world.
 
-Audience and job: Dart and Flutter developers validating runtime input, many coming from Zod. Job: install, write a first validator and schema, adopt the generator, then look up one modifier at a time. Content: real API from packages/luthor/lib and packages/luthor_generator/lib. Constraints: Starlight stays, both themes, phone width, `^1.0.0`, Dart 3.11 / Flutter 3.41, analyzer 13 and 14.
+Audience and job: Dart and Flutter developers validating runtime input, many coming from Zod. Job: install, write a first validator and schema, adopt the generator, then look up one modifier at a time. Content: real API from packages/luthor/lib and packages/luthor_generator/lib. Constraints: Starlight stays, both themes, phone width, `^1.1.0`, Dart 3.11 / Flutter 3.41, analyzer 13 and 14.
 
 ## Direction contract
 

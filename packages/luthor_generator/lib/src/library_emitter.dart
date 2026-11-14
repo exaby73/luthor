@@ -1,4 +1,5 @@
 import 'package:analyzer/dart/element/element.dart';
+import 'package:build/build.dart';
 import 'package:luthor_generator/src/checkers.dart';
 import 'package:luthor_generator/src/dart_source.dart';
 import 'package:luthor_generator/src/field_validators.dart';
@@ -101,10 +102,11 @@ final class LibraryEmitter {
   }
 
   String _schema(Model model, String Function(ModelField field) keyOf) {
+    if (model.unknownKeysWarning case final warning?) log.warning(warning);
     return runtime.schema(model.name, [
       for (final field in model.fields)
         (keyOf(field), _validators.forField(field, model).emit()),
-    ], passthrough: model.passthrough);
+    ], unknownKeys: model.unknownKeys);
   }
 
   String _errorKeys(

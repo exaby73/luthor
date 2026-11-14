@@ -1,15 +1,18 @@
 import 'package:analyzer/dart/element/element.dart';
+import 'package:luthor/luthor.dart';
 import 'package:luthor_generator/src/checkers.dart';
 import 'package:luthor_generator/src/constant_source.dart';
 import 'package:luthor_generator/src/model.dart';
 import 'package:luthor_generator/src/references.dart';
 
 final class LibraryPlan {
-  LibraryPlan(this.library) : references = LibraryReferences(library);
+  LibraryPlan(this.library, {UnknownKeys? unknownKeys})
+    : references = LibraryReferences(library),
+      models = ModelReader(unknownKeys: unknownKeys);
 
   final LibraryElement library;
   final LibraryReferences references;
-  final models = ModelReader();
+  final ModelReader models;
   late final constants = ConstantSource(references);
 
   final _autoSchemas = <ClassElement, String>{};

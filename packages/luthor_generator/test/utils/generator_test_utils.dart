@@ -17,11 +17,15 @@ Future<TestBuilderResult> runBuilder(String source) {
   return runBuilderOn({_fixtureLibrary: source});
 }
 
-Future<TestBuilderResult> runBuilderOn(Map<String, String> libraries) async {
+Future<TestBuilderResult> runBuilderOn(
+  Map<String, String> libraries, {
+  Map<String, Object?> options = const {},
+  void Function(String warning)? onWarning,
+}) async {
   final readerWriter = TestReaderWriter(rootPackage: _package);
   await readerWriter.testing.loadIsolateSources();
   return testBuilder(
-    luthorBuilder(BuilderOptions.empty),
+    luthorBuilder(BuilderOptions(options)),
     {
       for (final MapEntry(:key, :value) in libraries.entries)
         '$_package|lib/$key': value,
@@ -29,18 +33,37 @@ Future<TestBuilderResult> runBuilderOn(Map<String, String> libraries) async {
     rootPackage: _package,
     readerWriter: readerWriter,
     flattenOutput: true,
+    onLog: onWarning == null
+        ? null
+        : (record) {
+            if (record.level.name == 'WARNING') onWarning(record.message);
+          },
   );
 }
 
-Future<GenerationResult> generateSharedPart(String source) async {
-  final parts = await generateSharedParts({_fixtureLibrary: source});
-  return GenerationResult(parts[_fixtureLibrary] ?? '');
+Future<GenerationResult> generateSharedPart(
+  String source, {
+  Map<String, Object?> options = const {},
+}) async {
+  final warnings = <String>[];
+  final parts = await generateSharedParts(
+    {_fixtureLibrary: source},
+    options: options,
+    onWarning: warnings.add,
+  );
+  return GenerationResult(parts[_fixtureLibrary] ?? '', warnings: warnings);
 }
 
 Future<Map<String, String>> generateSharedParts(
-  Map<String, String> libraries,
-) async {
-  final result = await runBuilderOn(libraries);
+  Map<String, String> libraries, {
+  Map<String, Object?> options = const {},
+  void Function(String warning)? onWarning,
+}) async {
+  final result = await runBuilderOn(
+    libraries,
+    options: options,
+    onWarning: onWarning,
+  );
   expect(result.errors, isEmpty, reason: result.errors.join('\n'));
   return {
     for (final library in libraries.keys)
@@ -218,7 +241,8 @@ String _stringLiteral(String value) =>
     jsonEncode(value).replaceAll(r'$', r'\$');
 
 class GenerationResult {
-  const GenerationResult(this.output);
+  const GenerationResult(this.output, {this.warnings = const []});
 
   final String output;
+  final List<String> warnings;
 }

@@ -4,6 +4,7 @@ import 'dart:core' as core;
 
 import 'package:luthor/src/formats.dart';
 import 'package:luthor/src/types/ip.dart';
+import 'package:luthor/src/unknown_keys.dart';
 import 'package:luthor/src/validation_issue.dart';
 import 'package:luthor/src/validation_result.dart';
 

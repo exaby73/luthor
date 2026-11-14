@@ -13,6 +13,7 @@ Each annotation adds one modifier to the validator the generator derives from th
 | Annotation | Effect |
 |---|---|
 | `@luthor` | Marks the class as a model. The generator emits the five generated items for it. |
+| `@Luthor(unknownKeys: .strict)` | Same as `@luthor`, and sets how the schema handles unknown keys: `.strip`, `.passthrough` or `.strict`. See [Unknown keys](/generator/output#unknown-keys). |
 
 ## Field-level
 

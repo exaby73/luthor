@@ -7,7 +7,7 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import Output from '../../../../components/Output.astro';
 import Verdict from '../../../../components/Verdict.astro';
 
-Returns a copy of the schema that fails when the input has a key the schema does not declare. Each unknown key produces one `unrecognizedKey` issue at that key's path, with `params['key']`. Only `SchemaValidator` has this method.
+Returns a copy of the schema that fails when the input has a key the schema does not declare. Each unknown key produces one `unrecognizedKey` issue at that key's path, with `params['key']`. It is the same as [`.unknownKeys(.strict)`](/reference/schema/unknown-keys). Only `SchemaValidator` has this method.
 
 ## Signature
 
@@ -28,7 +28,7 @@ Code `unrecognizedKey`. Default message: `role is not an allowed key`, where `ro
 
 ## Code generation
 
-The generator does not emit `.strict()`. Apply it to a generated schema where you use it: `$UserSchema.strict()`.
+The generator emits `.strict()` for a model annotated `@Luthor(unknownKeys: .strict)`. Under the `unknown_keys: strict` builder option, it also emits it for every model without its own `unknownKeys`, except a model whose serializer reads keys the generator cannot name, which gets `.passthrough()`. See [Unknown keys](/generator/output#unknown-keys).
 
 ## Example
 
@@ -43,7 +43,10 @@ final user = l.schema({'name': l.string().required()}).strict();
   <TabItem label="Generated">
 
 ```dart wrap
-final result = $UserSchema.strict().validateSchema(json, fromJson: User.fromJson);
+final SchemaValidator $InviteSchema = l
+    .schema({...})
+    .strict()
+    .withName("Invite");
 ```
 
   </TabItem>

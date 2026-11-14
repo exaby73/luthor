@@ -41,7 +41,7 @@ Errors from a nested schema arrive at a dotted path in the flat error map. [Erro
 
 ## Unknown keys
 
-By default a schema strips keys it does not declare from the output. That protects a `fromJson` from input it did not ask for, and keeps the output to the shape you described. Two modifiers change it: [`.passthrough()`](/reference/schema/passthrough) copies unknown keys into the output unvalidated, and [`.strict()`](/reference/schema/strict) reports each one as an `unrecognizedKey` issue at its path.
+By default a schema strips keys it does not declare from the output. That protects a `fromJson` from input it did not ask for, and keeps the output to the shape you described. Two modifiers change it: [`.passthrough()`](/reference/schema/passthrough) copies unknown keys into the output unvalidated, and [`.strict()`](/reference/schema/strict) reports each one as an `unrecognizedKey` issue at its path. [`.strip()`](/reference/schema/strip) goes back to the default, and [`.unknownKeys()`](/reference/schema/unknown-keys) takes the mode as an `UnknownKeys` value. The last call wins.
 
 ```dart
 final user = l.schema({'name': l.string().required()});
@@ -56,7 +56,7 @@ user.strict().validate(input);
 <Output id="unknown.passthrough" title="passthrough" />
 <Output id="unknown.strict" title="strict" />
 
-Generated schemas strip too, and declare every key the serializer reads, so a `freezed` or `json_serializable` `fromJson` sees what it expects. [What gets generated](/generator/output) covers the cases where the generator adds `.passthrough()` instead.
+Generated schemas strip too, and declare every key the serializer reads, so a `freezed` or `json_serializable` `fromJson` sees what it expects. [What gets generated](/generator/output#unknown-keys) covers the cases where the generator adds `.passthrough()` instead, and how a model or a package asks for `.strict()`.
 
 ## Object-level rules
 

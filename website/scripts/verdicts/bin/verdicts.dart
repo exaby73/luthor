@@ -291,6 +291,16 @@ void main() {
     ("{'name': 'Ada'}", {'name': 'Ada'}),
     ("{'name': 'Ada', 'role': 'admin'}", {'name': 'Ada', 'role': 'admin'}),
   ]);
+  verdict('strip', "l.schema({'name': l.string().required()}).passthrough().strip().validate(input)", strip.passthrough().strip(), [
+    ("{'name': 'Ada', 'role': 'admin'}", {'name': 'Ada', 'role': 'admin'}),
+    ("{'role': 'admin'}", {'role': 'admin'}),
+  ]);
+  verdict('unknownKeys', "l.schema({'name': l.string().required()}).unknownKeys(.strict).validate(input)", strip.unknownKeys(.strict), [
+    ("{'name': 'Ada'}", {'name': 'Ada'}),
+    ("{'name': 'Ada', 'role': 'admin'}", {'name': 'Ada', 'role': 'admin'}),
+  ]);
+  out('unknown.strip.reset', [strip.passthrough().strip().validate({'name': 'Ada', 'role': 'admin'})]);
+  out('unknown.mode', [strip.unknownKeys(.strict, message: 'remove extra keys').validate({'name': 'Ada', 'role': 'admin'}).getError('role')]);
   final dateRange = l.schema({
     'start': l.string().dateTime().required(),
     'end': l.string().dateTime().required(),

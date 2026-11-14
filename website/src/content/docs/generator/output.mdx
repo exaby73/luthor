@@ -118,6 +118,41 @@ A generated schema strips keys it does not declare before `fromJson` runs, like 
 
 Every key the serializer reads has to be a schema field, and the generator makes it one: for a `@JsonSerializable` class, public settable fields that are not constructor parameters are schema fields too. When the serializer may read keys the generator cannot name, the schema gets `.passthrough()` instead: a field with `@JsonKey(readValue:)`, a private field with `@JsonKey(includeFromJson: true)`, or a `@MappableClass(hook:)`.
 
+### Rejecting unknown keys
+
+To reject unknown keys instead, set `unknownKeys` on the model. The schema gets `.strict()`, so `$InviteValidate`, `validateSelf()` and every model that nests `Invite` report each unknown key as an `unrecognizedKey` issue at its path, and `fromJson` does not run:
+
+```dart
+@Luthor(unknownKeys: .strict)
+@JsonSerializable()
+class Invite {
+  ...
+}
+```
+
+`unknownKeys` takes an `UnknownKeys`: `.strip`, `.passthrough` or `.strict`. `UnknownKeys.strict` works too.
+
+To set a default for every generated schema in a package, including the private schemas of classes without `@luthor`, use the `unknown_keys` builder option in the package's `build.yaml`:
+
+```yaml
+targets:
+  $default:
+    builders:
+      luthor_generator:luthor:
+        options:
+          unknown_keys: strict # strip, passthrough or strict
+```
+
+The generator picks each schema's mode in this order:
+
+1. The model's `@Luthor(unknownKeys:)`.
+2. The `unknown_keys` builder option.
+3. Stripping, or `.passthrough()` when the serializer reads keys the generator cannot name.
+
+A model whose serializer reads keys the generator cannot name always needs `.passthrough()`. Setting `.strict` or `.strip` on its annotation fails the build with an error that names the field or class responsible. Under a `strict` or `strip` builder option, the model gets `.passthrough()` and the build logs a warning naming it. Annotate it `@Luthor(unknownKeys: .passthrough)` to silence the warning. An `unknown_keys` value other than the three modes, or any other option, fails the build.
+
+`validateSelf()` checks `toJson()` output against the same schema, so a strict model fails its own `validateSelf()` when `toJson()` writes a key that `fromJson` does not read, such as a field with `@JsonKey(includeFromJson: false)`.
+
 ## Auto-generated schemas
 
 When a field's type is a class without `@luthor` that has a `fromJson` or `@MappableClass` and a constructor with named parameters, the generator emits a private schema for it, `_$ClassSchema`, once per library. It gets no public keys, validate function or extension. Annotate the class with `@luthor` to get the public API.

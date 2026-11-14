@@ -1,0 +1,49 @@
+---
+title: '.unknownKeys()'
+description: Sets how a schema handles unknown keys from an UnknownKeys value.
+---
+
+import Output from '../../../../components/Output.astro';
+import Verdict from '../../../../components/Verdict.astro';
+
+Returns a copy of the schema that handles keys it does not declare by `mode`: `.strip` drops them, `.passthrough` copies them into the output, and `.strict` reports each one as an `unrecognizedKey` issue at its path. The last call wins, so `.strict().passthrough()` passes keys through. [`.strip()`](/reference/schema/strip), [`.passthrough()`](/reference/schema/passthrough) and [`.strict()`](/reference/schema/strict) are shortcuts for the three modes. Use `.unknownKeys()` when the mode is a value, such as one read from configuration. Only `SchemaValidator` has this method.
+
+## Signature
+
+```dart wrap
+SchemaValidator<O> unknownKeys(UnknownKeys mode, {String? message, MessageBuilder? messageBuilder})
+```
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `mode` | `UnknownKeys` | `strip`, `passthrough` or `strict`. |
+| `message` | `String?` | Replaces the default error message of `strict`. |
+| `messageBuilder` | `MessageBuilder?` | Builds the message of `strict` from the issue. `message` wins when both are given. See [Message builders](/concepts/messages). |
+
+Passing `message` or `messageBuilder` with a mode other than `strict` throws an `ArgumentError`.
+
+## Issue
+
+With `.strict`, code `unrecognizedKey`. Default message: `role is not an allowed key`, where `role` is the unknown key. The other modes add no validation.
+
+## Code generation
+
+The generator emits `.strict()` or `.passthrough()` instead of `.unknownKeys()`. A model picks its mode with `@Luthor(unknownKeys: .strict)`, and a package picks a default with the `unknown_keys` builder option. See [Unknown keys](/generator/output#unknown-keys).
+
+## Example
+
+```dart
+final user = l.schema({'name': l.string().required()}).unknownKeys(.strict);
+```
+
+<Verdict id="unknownKeys" />
+
+With a message:
+
+```dart
+user.unknownKeys(.strict, message: 'remove extra keys').validate({'name': 'Ada', 'role': 'admin'}).getError('role');
+```
+
+<Output id="unknown.mode" />

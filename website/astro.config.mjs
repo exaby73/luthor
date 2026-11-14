@@ -159,7 +159,12 @@ export default defineConfig({
             },
             {
               label: 'Schema modifiers',
-              items: ['reference/schema/passthrough', 'reference/schema/strict'],
+              items: [
+                'reference/schema/unknown-keys',
+                'reference/schema/strip',
+                'reference/schema/passthrough',
+                'reference/schema/strict',
+              ],
             },
             {
               label: 'String modifiers',

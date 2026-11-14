@@ -44,7 +44,7 @@ Two rules keep paths from colliding:
 
 ### Unknown keys are stripped by default
 
-`SchemaValidator._convert` builds its output from the declared fields only. An unknown key, including any non-string key, is dropped by default, copied unvalidated by `.passthrough()`, and reported as `unrecognizedKey` by `.strict()`.
+`SchemaValidator._convert` builds its output from the declared fields only. An unknown key, including any non-string key, is dropped by default, copied unvalidated by `.passthrough()`, and reported as `unrecognizedKey` by `.strict()`. The three modes are the public `UnknownKeys` enum, which `.unknownKeys()`, the `Luthor` annotation and the generator's `unknown_keys` builder option share.
 
 Stripping matters for the generator. `validateSchema` passes the stripped map to `fromJson`, so any key a serializer reads must be a schema field, or the schema must pass unknown keys through (see [The serializer defines the fields and their keys](#the-serializer-defines-the-fields-and-their-keys)).
 
@@ -82,7 +82,9 @@ A schema must describe what `fromJson` reads. `ModelReader._selectConstructor` p
 
 A field's key is the map key the serializer reads. `field_naming.dart` reimplements the `fieldRename` and `caseStyle` rules of both serializers, so it must stay in step with them.
 
-Some serializers read keys that are not fields, which stripping would remove before `fromJson` runs. The model gets `.passthrough()` when a field uses `@JsonKey(readValue:)`, when a private field has `@JsonKey(includeFromJson: true)`, or when the class has `@MappableClass(hook:)`. A field whose JSON shape a converter decides is validated as `l.any()`.
+Some serializers read keys that are not fields, which stripping would remove before `fromJson` runs. The model gets `.passthrough()` when a field uses `@JsonKey(readValue:)`, when a private field has `@JsonKey(includeFromJson: true)`, or when the class has `@MappableClass(hook:)`.
+
+`ModelReader` resolves one `UnknownKeys` mode per model: the model's `@Luthor(unknownKeys:)`, then the `unknown_keys` builder option, then the default above. A model that needs `.passthrough()` always gets it. An annotation that asks for `strip` or `strict` on such a model fails generation, because the user named that model. A builder option that asks for them falls back to `.passthrough()` and logs a warning, so one `readValue` field does not break a package-wide setting. A field whose JSON shape a converter decides is validated as `l.any()`.
 
 ### Nested classes get public or private schemas
 

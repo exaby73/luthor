@@ -14,7 +14,7 @@ A validator is an immutable object that holds a type check and an ordered list o
 ```dart
 l.string();          // StringValidator: .email(), .min(), .regex(), and the other string modifiers
 l.int();             // NumberValidator<int, int?>: .min(), .max(), .finite()
-l.schema({});        // SchemaValidator: .passthrough(), .strict(), validateSchema()
+l.schema({});        // SchemaValidator: .unknownKeys(), .strict(), validateSchema()
 l.list(l.string());  // ListValidator: only the shared modifiers
 ```
 

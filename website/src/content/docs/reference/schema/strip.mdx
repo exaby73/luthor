@@ -1,0 +1,35 @@
+---
+title: '.strip()'
+description: Drops unknown keys from a schema's output, the default.
+---
+
+import Output from '../../../../components/Output.astro';
+import Verdict from '../../../../components/Verdict.astro';
+
+Returns a copy of the schema that drops keys it does not declare from the output. Stripping is the default, so use `.strip()` to undo a [`.passthrough()`](/reference/schema/passthrough) or [`.strict()`](/reference/schema/strict) on a schema you received. It is the same as [`.unknownKeys(.strip)`](/reference/schema/unknown-keys). Only `SchemaValidator` has this method.
+
+## Signature
+
+```dart wrap
+SchemaValidator<O> strip()
+```
+
+## Issue
+
+Code `none`. Default message: Adds no validation.
+
+## Code generation
+
+A generated schema strips by default and emits no modifier for it. `@Luthor(unknownKeys: .strip)` and the `unknown_keys: strip` builder option ask for it explicitly. See [Unknown keys](/generator/output#unknown-keys).
+
+## Example
+
+```dart
+final user = l.schema({'name': l.string().required()}).passthrough().strip();
+```
+
+<Verdict id="strip" />
+
+The output drops the unknown key:
+
+<Output id="unknown.strip.reset" title="passthrough, then strip" />

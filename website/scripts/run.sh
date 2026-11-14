@@ -9,7 +9,7 @@
 set -eu
 cd "$(dirname "$0")"
 DART311="${DART311:-$HOME/.asdf/installs/flutter/3.41.9-stable/bin/cache/dart-sdk/bin/dart}"
-DART313="${DART313:-$HOME/.asdf/installs/flutter/3.47.5-stable/bin/cache/dart-sdk/bin/dart}"
+DART313="${DART313:-$HOME/.asdf/installs/flutter/3.47.9-stable/bin/cache/dart-sdk/bin/dart}"
 
 (cd verdicts && "$DART311" pub get >/dev/null && "$DART311" run bin/verdicts.dart)
 (cd generated \

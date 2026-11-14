@@ -4,7 +4,7 @@
 
 ## Steps
 
-1. Raise the SDK to Dart 3.11 (Flutter 3.41) or later, and set `luthor` and `luthor_generator` to `^1.0.0`. On Dart 3.11 with `freezed`, use `freezed: ^3.2.5`; on Dart 3.13 or later, `freezed: ^4.0.0` (see [CODEGEN.md](CODEGEN.md)).
+1. Raise the SDK to Dart 3.11 (Flutter 3.41) or later, and set `luthor` and `luthor_generator` to `^1.1.0`. On Dart 3.11 with `freezed`, use `freezed: ^3.2.5`; on Dart 3.13 or later, `freezed: ^4.0.0` (see [CODEGEN.md](CODEGEN.md)).
 2. Delete any `build.yaml` entries added only for `luthor_generator`: the builder applies itself.
 3. Run `dart run build_runner build --delete-conflicting-outputs` to regenerate models.
 4. Run `dart analyze` and fix every error with the [renames table](#renames).

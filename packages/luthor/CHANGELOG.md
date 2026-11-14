@@ -1,3 +1,9 @@
+# 1.1.0
+
+- **FEAT**: Add the `UnknownKeys` enum (`strip`, `passthrough`, `strict`) and `SchemaValidator.unknownKeys(mode, {message, messageBuilder})`, which sets how a schema handles keys it does not declare. The last call wins. `message` or `messageBuilder` with a mode other than `strict` throws an `ArgumentError`.
+- **FEAT**: Add `SchemaValidator.strip()`, which drops unknown keys from the output, the default. `.passthrough()` and `.strict()` are now shorthands for `unknownKeys(...)`, so a later `.strip()` undoes them.
+- **FEAT**: Add `unknownKeys` to `@Luthor`, so `@Luthor(unknownKeys: .strict)` sets how a generated schema handles unknown keys. It needs `luthor_generator` 1.1.0.
+
 # 1.0.0
 
 - **BREAKING**: Require Dart 3.11 or later (Flutter 3.41 or later).
